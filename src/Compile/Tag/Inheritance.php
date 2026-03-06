@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
@@ -28,7 +30,7 @@ abstract class Inheritance extends Base
      */
     public static function postCompile(\Smarty\Compiler\Template $compiler, $initChildSequence = false): void
     {
-        $compiler->prefixCompiledCode .= "<?php \$_smarty_tpl->getInheritance()->init(\$_smarty_tpl, " .
+        $compiler->prefixCompiledCode .= '<?php $_smarty_tpl->getInheritance()->init($_smarty_tpl, ' .
                                          var_export($initChildSequence, true) . ");\n?>\n";
     }
 

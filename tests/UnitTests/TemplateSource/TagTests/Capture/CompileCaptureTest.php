@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of capture tags
  *
@@ -9,18 +11,17 @@
 /**
  * class for capture tags tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class CompileCaptureTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addTemplateDir("./templates_tmp");
+        $this->smarty->addTemplateDir('./templates_tmp');
     }
-
 
     public function testInit()
     {
@@ -31,7 +32,7 @@ class CompileCaptureTest extends PHPUnit_Smarty
      * Test capture tags
      *
      * @not                 runInSeparateProcess
-     * 
+     *
      * @dataProvider        dataTestCapture
      */
     public function testCapture($code, $result, $testName, $testNumber)
@@ -39,7 +40,7 @@ class CompileCaptureTest extends PHPUnit_Smarty
         $file = "testCapture{$testNumber}.tpl";
         $this->makeTemplateFile($file, $code);
         $this->smarty->assignGlobal('file', $file);
-         $this->assertEquals($result, $this->smarty->fetch($file), "testCapture - {$code} - {$testName}");
+        $this->assertEquals($result, $this->smarty->fetch($file), "testCapture - {$code} - {$testName}");
     }
 
     /*
@@ -53,16 +54,16 @@ class CompileCaptureTest extends PHPUnit_Smarty
         * result
         * test name
         */
-        return array(// old format
-                     array('{assign var=foo value=bar}{capture assign=foo}hello world{/capture}{$foo}', 'hello world', '', $i ++),
-                     array('{capture name=foo}hello world{/capture}{$smarty.capture.foo}', 'hello world', '', $i ++),
-                     array('{capture name=foo assign=bar}hello world{/capture}{$smarty.capture.foo} {$bar}', 'hello world hello world', '', $i ++),
-                     array('{capture}hello world{/capture}{$smarty.capture.default}', 'hello world', '', $i ++),
-                     array('{capture short}hello shorttag{/capture}{$smarty.capture.short}', 'hello shorttag', '', $i ++),
-                     array('{capture append=foo}hello{/capture}bar{capture append=foo}world{/capture}{foreach $foo item} {$item@key} {$item}{/foreach}', 'bar 0 hello 1 world', '', $i ++),
-                     array('{capture assign=foo}hello {capture assign=bar}this is my {/capture}world{/capture}{$foo} {$bar}', 'hello world this is my ', '', $i ++),
-                     array('{capture name=foo}hello world{/capture}{capture name=Foo}Smarty 3{/capture}{$smarty.capture.foo} {$smarty.capture.Foo}', 'hello world Smarty 3', '', $i ++),
-                     );
+        return [// old format
+                     ['{assign var=foo value=bar}{capture assign=foo}hello world{/capture}{$foo}', 'hello world', '', $i++],
+                     ['{capture name=foo}hello world{/capture}{$smarty.capture.foo}', 'hello world', '', $i++],
+                     ['{capture name=foo assign=bar}hello world{/capture}{$smarty.capture.foo} {$bar}', 'hello world hello world', '', $i++],
+                     ['{capture}hello world{/capture}{$smarty.capture.default}', 'hello world', '', $i++],
+                     ['{capture short}hello shorttag{/capture}{$smarty.capture.short}', 'hello shorttag', '', $i++],
+                     ['{capture append=foo}hello{/capture}bar{capture append=foo}world{/capture}{foreach $foo item} {$item@key} {$item}{/foreach}', 'bar 0 hello 1 world', '', $i++],
+                     ['{capture assign=foo}hello {capture assign=bar}this is my {/capture}world{/capture}{$foo} {$bar}', 'hello world this is my ', '', $i++],
+                     ['{capture name=foo}hello world{/capture}{capture name=Foo}Smarty 3{/capture}{$smarty.capture.foo} {$smarty.capture.Foo}', 'hello world Smarty 3', '', $i++],
+                     ];
     }
     /*
      *  Test that capture results are global
@@ -83,8 +84,8 @@ class CompileCaptureTest extends PHPUnit_Smarty
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testCompileCaptureNocache2()
@@ -107,9 +108,9 @@ class CompileCaptureTest extends PHPUnit_Smarty
     /**
      * Test spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testSpacing($code, $result, $testName, $testNumber)
     {
@@ -118,9 +119,11 @@ class CompileCaptureTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "Spacing - {$file}");
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "Spacing - {$file}"
+        );
     }
 
     /*
@@ -135,15 +138,15 @@ class CompileCaptureTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array("A{capture}B{/capture}C{\$smarty.capture.default}", "ACB", 'Newline1', $i++),
-                     array("A{capture}\nB{/capture}C{\$smarty.capture.default}", "ACB", 'Newline2', $i++),
-                     array("A{capture}B\n{/capture}C{\$smarty.capture.default}", "ACB\n", 'Newline3', $i++),
-                     array("A\n{capture}\nB\n{/capture}C{\$smarty.capture.default}", "A\nCB\n", 'Newline4', $i++),
-                     array("{capture}B{/capture}A{\$smarty.capture.default}C", "ABC", 'Newline5', $i++),
-                     array("{capture}B{/capture}A\n{\$smarty.capture.default}C", "A\nBC", 'Newline6', $i++),
-                     array("{capture}B{/capture}A{\$smarty.capture.default}\nC", "AB\nC", 'Newline7', $i++),
-                     array("{capture}B{/capture}A\n{\$smarty.capture.default}\nC", "A\nB\nC", 'Newline8', $i++),
-        );
-   }
+        return [['A{capture}B{/capture}C{$smarty.capture.default}', 'ACB', 'Newline1', $i++],
+                     ["A{capture}\nB{/capture}C{\$smarty.capture.default}", 'ACB', 'Newline2', $i++],
+                     ["A{capture}B\n{/capture}C{\$smarty.capture.default}", "ACB\n", 'Newline3', $i++],
+                     ["A\n{capture}\nB\n{/capture}C{\$smarty.capture.default}", "A\nCB\n", 'Newline4', $i++],
+                     ['{capture}B{/capture}A{$smarty.capture.default}C', 'ABC', 'Newline5', $i++],
+                     ["{capture}B{/capture}A\n{\$smarty.capture.default}C", "A\nBC", 'Newline6', $i++],
+                     ["{capture}B{/capture}A{\$smarty.capture.default}\nC", "AB\nC", 'Newline7', $i++],
+                     ["{capture}B{/capture}A\n{\$smarty.capture.default}\nC", "A\nB\nC", 'Newline8', $i++],
+        ];
+    }
 
 }

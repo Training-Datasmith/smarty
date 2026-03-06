@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 /**
  * Smarty noprint modifier plugin
  * Type:     modifier
@@ -9,10 +13,11 @@ namespace Smarty\Compile\Modifier;
  * @author Uwe Tews
  */
 
-class NoPrintModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
-		return "''";
-	}
+class NoPrintModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
+        return "''";
+    }
 
 }

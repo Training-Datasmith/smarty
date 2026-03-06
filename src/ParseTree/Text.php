@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\ParseTree;
 
 /**
@@ -18,7 +20,6 @@ namespace Smarty\ParseTree;
  */
 class Text extends Base
 {
-
     /**
      * Wether this section should be stripped on output to smarty php
      * @var bool
@@ -41,7 +42,8 @@ class Text extends Base
      * Wether this section should be stripped on output to smarty php
      * @return bool
      */
-    public function isToBeStripped() {
+    public function isToBeStripped()
+    {
         return $this->toBeStripped;
     }
 

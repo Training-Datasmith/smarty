@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -11,9 +13,9 @@ require_once(__DIR__ . '/helpers/_object_tostring.php');
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 {
@@ -33,11 +35,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', 9904);
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -53,12 +55,12 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" values=$cust_ids output=$cust_names selected=$customer_id}');
         $tpl->assign('customer_id', 92);
-        $tpl->assign('cust_ids', array(56, 92, 13));
-        $tpl->assign('cust_names', array(
+        $tpl->assign('cust_ids', [56, 92, 13]);
+        $tpl->assign('cust_names', [
             'Joe Schmoe',
             'Jane Johnson',
             'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -74,11 +76,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', 9904);
-        $tpl->assign('myOptions', new ArrayIterator(array(
+        $tpl->assign('myOptions', new ArrayIterator([
                                                         1800 => 'Joe Schmoe',
                                                         9904 => 'Jack Smith',
                                                         2003 => 'Charlie Brown',
-                                                    )));
+                                                    ]));
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -100,17 +102,17 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$lookups selected=$fav}');
         $tpl->assign('fav', 7);
-        $tpl->assign('lookups', array(
-            'Sport' => array(
+        $tpl->assign('lookups', [
+            'Sport' => [
                 6 => 'Golf',
                 9 => 'Cricket',
-                7 => 'Swim'
-            ),
-            'Rest'  => array(
+                7 => 'Swim',
+            ],
+            'Rest'  => [
                 3 => 'Sauna',
-                1 => 'Massage'
-            ),
-        ));
+                1 => 'Massage',
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -132,19 +134,19 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '</select>' . $n;
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
-        $tpl->assign('selected', "null");
-        $tpl->assign('array', array(
+        $tpl->assign('selected', 'null');
+        $tpl->assign('array', [
             'null'     => 'null',
             0          => 'zero',
             1          => 'one',
             2          => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -169,20 +171,20 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
         $tpl->assign('selected', null);
-        $tpl->assign('array', array(
+        $tpl->assign('array', [
             ''         => 'empty string',
             'null'     => 'null',
             0          => 'zero',
             1          => 'one',
             2          => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 ''     => 'empty string',
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -205,18 +207,18 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
         $tpl->assign('selected', 0);
-        $tpl->assign('array', array(
+        $tpl->assign('array', [
             'null'     => 'null',
             0          => 'zero',
             1          => 'one',
             2          => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -238,19 +240,19 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '</select>' . $n;
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
-        $tpl->assign('selected', "0");
-        $tpl->assign('array', array(
-            'null'     => "null",
+        $tpl->assign('selected', '0');
+        $tpl->assign('array', [
+            'null'     => 'null',
             0          => 'zero',
             1          => 'one',
             2          => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -272,19 +274,19 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '</select>' . $n;
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
-        $tpl->assign('selected', "");
-        $tpl->assign('array', array(
+        $tpl->assign('selected', '');
+        $tpl->assign('array', [
             'null'     => 'null',
             '0'        => 'zero',
             '1'        => 'one',
             '2'        => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -308,21 +310,21 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '</select>' . $n;
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name=foo options=$array selected=$selected}');
-        $tpl->assign('selected', "");
-        $tpl->assign('array', array(
+        $tpl->assign('selected', '');
+        $tpl->assign('array', [
             ''         => 'empty string',
             'null'     => 'null',
             '0'        => 'zero',
             '1'        => 'one',
             '2'        => 'two',
-            'optgroup' => array(
+            'optgroup' => [
                 ''     => 'empty string',
                 'null' => 'null',
                 0      => 'zero',
                 1      => 'one',
                 2      => 'two',
-            ),
-        ));
+            ],
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -338,11 +340,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -358,26 +360,26 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => new _object_toString('Joe Schmoe'),
             9904 => new _object_toString('Jack Smith'),
             2003 => new _object_toString('Charlie Brown'),
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
 
-    protected $_errors = array();
+    protected $_errors = [];
 
-    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = array())
+    public function error_handler($errno, $errstr, $errfile, $errline, $errcontext = [])
     {
         $this->_errors[] = $errstr;
     }
 
     public function testObjectNoString()
     {
-        $this->_errors = array();
-        set_error_handler(array($this, 'error_handler'));
+        $this->_errors = [];
+        set_error_handler([$this, 'error_handler']);
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -387,23 +389,23 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', new _object_noString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $tpl->fetch();
         $this->assertEquals(1, count($this->_errors));
-        $this->assertStringEndsWith("without __toString() method", $this->_errors[0]);
+        $this->assertStringEndsWith('without __toString() method', $this->_errors[0]);
 
         restore_error_handler();
     }
 
     public function testObjectListNoString()
     {
-        $this->_errors = array();
-        set_error_handler(array($this, 'error_handler'));
+        $this->_errors = [];
+        set_error_handler([$this, 'error_handler']);
         $n = "\n";
         $expected = '<select name="foo">'
             . $n . '<option value="1800">Joe Schmoe</option>'
@@ -413,15 +415,15 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => new _object_toString('Joe Schmoe'),
             9904 => new _object_noString('Jack Smith'),
             2003 => new _object_toString('Charlie Brown'),
-        ));
+        ]);
 
         $tpl->fetch();
         $this->assertEquals(1, count($this->_errors));
-        $this->assertStringEndsWith("without __toString() method", $this->_errors[0]);
+        $this->assertStringEndsWith('without __toString() method', $this->_errors[0]);
 
         restore_error_handler();
     }
@@ -437,11 +439,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=1}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }
@@ -457,11 +459,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=1 strict=true}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
 
@@ -474,11 +476,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=true strict=true}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
 
@@ -491,11 +493,11 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
 
         $tpl = $this->smarty->createTemplate('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled="disabled" strict=true}');
         $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', array(
+        $tpl->assign('myOptions', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
-        ));
+        ]);
 
         $this->assertEquals($expected, $tpl->fetch());
     }

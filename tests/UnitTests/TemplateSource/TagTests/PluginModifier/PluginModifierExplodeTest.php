@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\TemplateSource\TagTests\PluginModifier;
 
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginModifierExplodeTest extends \PHPUnit_Smarty
 {

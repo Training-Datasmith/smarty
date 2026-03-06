@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource mysql
  *
@@ -18,11 +20,10 @@ if (MysqlCacheEnable == true) {
      */
     class CacheResourceCustomMysqlTest extends CacheResourceTestCommon
     {
-
         public function setUp()
         {
 
-         if (MysqlCacheEnable != true) {
+            if (MysqlCacheEnable != true) {
                 $this->markTestSkipped('mysql tests are disabled');
             }
             if (self::$init) {
@@ -40,4 +41,3 @@ if (MysqlCacheEnable == true) {
         }
     }
 }
-

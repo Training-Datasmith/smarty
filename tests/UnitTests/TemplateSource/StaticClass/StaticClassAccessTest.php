@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests static class access to constants, variables and methods
  *
@@ -9,9 +11,9 @@
 /**
  * class for static class access to constants, variables and methods tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class StaticClassAccessTest extends PHPUnit_Smarty
 {
@@ -20,7 +22,6 @@ class StaticClassAccessTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
         $this->smarty->disableSecurity();
     }
-
 
     public function testInit()
     {
@@ -64,20 +65,20 @@ class StaticClassAccessTest extends PHPUnit_Smarty
         $this->assertEquals('3', $this->smarty->fetch($tpl));
     }
 
-	/**
-	 * test static class constant chain
-	 */
-	public function testRegisteredBackedEnum()
-	{
-		if (PHP_VERSION_ID < 80100) {
-			$this->markTestSkipped('Enums only available after PHP >= 8.1');
-			return;
-		} else {
-			$this->smarty->registerClass('RegisteredBackedEnum', MyBackedEnum::class);
-			$tpl = $this->smarty->createTemplate('eval:{RegisteredBackedEnum::A->value}');
-			$this->assertEquals('3', $this->smarty->fetch($tpl));
-		}
-	}
+    /**
+     * test static class constant chain
+     */
+    public function testRegisteredBackedEnum()
+    {
+        if (PHP_VERSION_ID < 80100) {
+            $this->markTestSkipped('Enums only available after PHP >= 8.1');
+            return;
+        } else {
+            $this->smarty->registerClass('RegisteredBackedEnum', MyBackedEnum::class);
+            $tpl = $this->smarty->createTemplate('eval:{RegisteredBackedEnum::A->value}');
+            $this->assertEquals('3', $this->smarty->fetch($tpl));
+        }
+    }
 
     /**
      * test static class method
@@ -141,15 +142,15 @@ class StaticClassAccessTest extends PHPUnit_Smarty
 
 class mystaticclass
 {
-    const STATIC_CONSTANT_VALUE = 3;
-    static $static_var = 5;
+    public const STATIC_CONSTANT_VALUE = 3;
+    public static $static_var = 5;
 
-    static function square($i)
+    public static function square($i)
     {
         return $i * $i;
     }
 }
 
 if (PHP_VERSION_ID >= 80100) {
-	eval('enum MyBackedEnum: int { case A = 3; }');
+    eval('enum MyBackedEnum: int { case A = 3; }');
 }

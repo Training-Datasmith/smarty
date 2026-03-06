@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for object chain functionality after function calls
  * Tests the new feature: {$x = collect($data)->filter()->values()->toJson()}
@@ -59,14 +61,17 @@ function smarty_modifier_collect($data)
  */
 function smarty_modifier_create_object($value = null)
 {
-    return new class {
-        public function getName() {
+    return new class () {
+        public function getName()
+        {
             return 'TestObject';
         }
 
-        public function getNext() {
-            return new class {
-                public function getValue() {
+        public function getNext()
+        {
+            return new class () {
+                public function getValue()
+                {
                     return 'ChainedValue';
                 }
             };

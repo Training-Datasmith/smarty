@@ -1,10 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Template;
 
 use Smarty\Smarty;
-use Smarty\Template;
-use Smarty\Exception;
 
 /**
  * Smarty Config Resource Data Object
@@ -12,25 +12,27 @@ use Smarty\Exception;
  *
  * @author     Uwe Tews
  */
-class Config extends Source {
+class Config extends Source
+{
+    /**
+     * Flag that source is a config file
+     *
+     * @var bool
+     */
+    public $isConfig = true;
 
-	/**
-	 * Flag that source is a config file
-	 *
-	 * @var bool
-	 */
-	public $isConfig = true;
+    /**
+     * @var array
+     */
+    protected static $_incompatible_resources = ['extends' => true];
 
-	/**
-	 * @var array
-	 */
-	static protected $_incompatible_resources = ['extends' => true];
+    public function createCompiler(): \Smarty\Compiler\BaseCompiler
+    {
+        return new \Smarty\Compiler\Configfile($this->smarty);
+    }
 
-	public function createCompiler(): \Smarty\Compiler\BaseCompiler {
-		return new \Smarty\Compiler\Configfile($this->smarty);
-	}
-
-	protected static function getDefaultHandlerFunc(Smarty $smarty) {
-		return $smarty->default_config_handler_func;
-	}
+    protected static function getDefaultHandlerFunc(Smarty $smarty)
+    {
+        return $smarty->default_config_handler_func;
+    }
 }

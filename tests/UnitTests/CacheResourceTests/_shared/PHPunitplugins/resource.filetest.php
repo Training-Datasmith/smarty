@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Smarty\Resource\FilePlugin;
 use Smarty\Template;
 use Smarty\Template\Source;
@@ -23,4 +25,3 @@ class Smarty_Resource_FiletestPlugin extends FilePlugin
     }
 
 }
-

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of {nocache} tag
  *
@@ -9,8 +11,8 @@
 /**
  * class for {nocache} tag tests
  *
- * 
- * 
+ *
+ *
  *
  */
 class CompileNocacheTest extends PHPUnit_Smarty
@@ -19,7 +21,6 @@ class CompileNocacheTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -34,13 +35,13 @@ class CompileNocacheTest extends PHPUnit_Smarty
         $this->smarty->assign('foo', 0);
         $this->smarty->assign('bar', 'A');
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
-        $this->assertStringContainsString("root 2A", $content);
-        $this->assertStringContainsString("include 4A", $content);
+        $this->assertStringContainsString('root 2A', $content);
+        $this->assertStringContainsString('include 4A', $content);
         $this->smarty->assign('foo', 2);
         $this->smarty->assign('bar', 'B');
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
-        $this->assertStringContainsString("root 4B", $content);
-        $this->assertStringContainsString("include 6B", $content);
+        $this->assertStringContainsString('root 4B', $content);
+        $this->assertStringContainsString('include 6B', $content);
     }
 
     /**
@@ -52,15 +53,15 @@ class CompileNocacheTest extends PHPUnit_Smarty
         $this->smarty->assign('foo', 0);
         $this->smarty->assign('bar', 'A');
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
-        $this->assertStringContainsString("root 2A", $content);
-        $this->assertStringContainsString("include 4A", $content);
+        $this->assertStringContainsString('root 2A', $content);
+        $this->assertStringContainsString('include 4A', $content);
 
     }
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testNocacheCachingYes2()
@@ -69,7 +70,7 @@ class CompileNocacheTest extends PHPUnit_Smarty
         $this->smarty->assign('foo', 2);
         $this->smarty->assign('bar', 'B');
         $content = $this->smarty->fetch('test_nocache_tag.tpl');
-        $this->assertStringContainsString("root 4A", $content);
-        $this->assertStringContainsString("include 6A", $content);
+        $this->assertStringContainsString('root 4A', $content);
+        $this->assertStringContainsString('include 6A', $content);
     }
 }

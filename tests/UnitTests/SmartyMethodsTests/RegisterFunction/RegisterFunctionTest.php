@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests register/unregister function plugins
  *
@@ -11,9 +13,9 @@ use Smarty\Smarty;
 /**
  * class for register/unregister function plugins methods tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  *
  */
 class RegisterFunctionTest extends PHPUnit_Smarty
@@ -34,8 +36,10 @@ class RegisterFunctionTest extends PHPUnit_Smarty
     public function testRegisterFunction()
     {
         $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction', 'myfunction');
-        $this->assertEquals('myfunction',
-                            $this->smarty->getRegisteredPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction')[0]);
+        $this->assertEquals(
+            'myfunction',
+            $this->smarty->getRegisteredPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction')[0]
+        );
         $this->assertEquals('hello world 1', $this->smarty->fetch('eval:{testfunction value=1}'));
     }
 
@@ -45,8 +49,10 @@ class RegisterFunctionTest extends PHPUnit_Smarty
     public function testRegisterFunctionCaseInsensitive()
     {
         $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testFunction', 'myfunction');
-        $this->assertEquals('myfunction',
-            $this->smarty->getRegisteredPlugin(Smarty::PLUGIN_FUNCTION, 'testFunction')[0]);
+        $this->assertEquals(
+            'myfunction',
+            $this->smarty->getRegisteredPlugin(Smarty::PLUGIN_FUNCTION, 'testFunction')[0]
+        );
         $this->assertEquals('hello world 1', $this->smarty->fetch('eval:{testFunction value=1}'));
     }
 
@@ -55,7 +61,7 @@ class RegisterFunctionTest extends PHPUnit_Smarty
      */
     public function testRegisterFunctionClass()
     {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction', array('myfunctionclass', 'execute'));
+        $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction', ['myfunctionclass', 'execute']);
         $this->assertEquals('hello world 2', $this->smarty->fetch('eval:{testfunction value=2}'));
     }
 
@@ -64,16 +70,16 @@ class RegisterFunctionTest extends PHPUnit_Smarty
      */
     public function testRegisterFunctionObject()
     {
-        $myfunction_object = new myfunctionclass;
-        $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction', array($myfunction_object, 'execute'));
+        $myfunction_object = new myfunctionclass();
+        $this->smarty->registerPlugin(Smarty::PLUGIN_FUNCTION, 'testfunction', [$myfunction_object, 'execute']);
         $this->assertEquals('hello world 3', $this->smarty->fetch('eval:{testfunction value=3}'));
     }
 
     /**
      * test registerPlugin method for function cached
      *
-     * 
-     * 
+     *
+     *
      */
     public function testRegisterFunctionCaching1()
     {
@@ -89,8 +95,8 @@ class RegisterFunctionTest extends PHPUnit_Smarty
     /**
      * test registerPlugin method for function cached
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRegisterFunctionCaching2()
@@ -106,8 +112,8 @@ class RegisterFunctionTest extends PHPUnit_Smarty
     /**
      * test registerPlugin method for function not cached
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRegisterFunctionCaching3()
@@ -124,8 +130,8 @@ class RegisterFunctionTest extends PHPUnit_Smarty
     /**
      * test registerPlugin method for function not cached
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRegisterFunctionCaching4()
@@ -167,7 +173,6 @@ class RegisterFunctionTest extends PHPUnit_Smarty
         $this->assertIsArray($this->smarty->getRegisteredPlugin(Smarty::PLUGIN_BLOCK, 'testfunction'));
     }
 
-
     /**
      * Test case (in)sensitivy of plugin functions
      * @param $registerName
@@ -177,15 +182,20 @@ class RegisterFunctionTest extends PHPUnit_Smarty
      * @group issue907
      * @dataProvider dataProviderForCaseSensitivity
      */
-    public function testCaseSensitivity($registerName, $templateString) {
+    public function testCaseSensitivity($registerName, $templateString)
+    {
         $this->smarty->registerPlugin(
             Smarty::PLUGIN_FUNCTION,
             $registerName,
-            function($params, $smarty) { return 'function-output'; });
+            function ($params, $smarty) {
+                return 'function-output';
+            }
+        );
         $this->assertEquals('function-output', $this->smarty->fetch('string:' . $templateString));
     }
 
-    public function dataProviderForCaseSensitivity() {
+    public function dataProviderForCaseSensitivity()
+    {
         return [
             ['customTag', '{customTag}'],
             ['customtag', '{customtag}'],
@@ -210,7 +220,7 @@ function myfunction($params, $smarty)
 
 class myfunctionclass
 {
-    static function execute($params, $smarty)
+    public static function execute($params, $smarty)
     {
         return "hello world $params[value]";
     }

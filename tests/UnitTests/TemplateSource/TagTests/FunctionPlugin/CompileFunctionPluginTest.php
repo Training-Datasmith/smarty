@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of function plugins
  *
@@ -10,22 +12,21 @@
  * class for function plugin tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class CompileFunctionPluginTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
     }
 
     public function testInit()
     {
         $this->cleanDirs();
     }
-
 
     /**
      * test function plugin tag in compiled template file
@@ -34,7 +35,7 @@ class CompileFunctionPluginTest extends PHPUnit_Smarty
     {
         $this->smarty->setForceCompile(false);
         $tpl = $this->smarty->createTemplate('functionplugintest.tpl', $this->smarty);
-        $this->assertEquals("10", $this->smarty->fetch($tpl));
+        $this->assertEquals('10', $this->smarty->fetch($tpl));
     }
 
     /**
@@ -44,7 +45,7 @@ class CompileFunctionPluginTest extends PHPUnit_Smarty
     {
         $this->smarty->registerPlugin(\Smarty\Smarty::PLUGIN_FUNCTION, 'plugintest', 'myplugintest');
         $tpl = $this->smarty->createTemplate('string:{plugintest foo=bar}', $this->smarty);
-        $this->assertEquals("plugin test called bar", $this->smarty->fetch($tpl));
+        $this->assertEquals('plugin test called bar', $this->smarty->fetch($tpl));
     }
 
     /**
@@ -52,7 +53,7 @@ class CompileFunctionPluginTest extends PHPUnit_Smarty
      */
     public function testMultiLineTags()
     {
-        $this->assertEquals("10", $this->smarty->fetch("string:{counter\n\tstart=10}"));
+        $this->assertEquals('10', $this->smarty->fetch("string:{counter\n\tstart=10}"));
     }
 }
 

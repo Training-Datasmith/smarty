@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource file
  *
@@ -13,7 +15,6 @@ include_once __DIR__ . '/../_shared/CacheResourceTestCommon.php';
  */
 class CacheResourceFileTest extends CacheResourceTestCommon
 {
-
     private $directorySeparator;
 
     public function setUp(): void
@@ -24,9 +25,7 @@ class CacheResourceFileTest extends CacheResourceTestCommon
         $this->smarty->setCachingType('filetest');
     }
 
-
     public function testInit()
-
     {
         $this->cleanDirs();
     }
@@ -377,7 +376,6 @@ class CacheResourceFileTest extends CacheResourceTestCommon
         clearstatcache();
         $this->assertEquals(1, $this->smarty->clearAllCache(500));
     }
-
 
     private function writeCachedContent($tpl)
     {

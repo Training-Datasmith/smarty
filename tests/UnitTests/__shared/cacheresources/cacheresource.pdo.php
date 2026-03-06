@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Smarty\Exception;
 
 /**
@@ -33,7 +35,7 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
     /**
      * @var string[]
      */
-    protected $fetchStatements = array('default' => 'SELECT %2$s
+    protected $fetchStatements = ['default' => 'SELECT %2$s
                                                                                     FROM %1$s 
                                                                                     WHERE 1 
                                                                                     AND id          = :id 
@@ -56,7 +58,7 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
                                                                                 WHERE 1 
                                                                                 AND id          = :id 
                                                                                 AND cache_id    = :cache_id 
-                                                                                AND compile_id  = :compile_id');
+                                                                                AND compile_id  = :compile_id', ];
 
     /**
      * @var string
@@ -164,17 +166,17 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
      */
     protected function getFetchStatement($columns, $id, $cache_id = null, $compile_id = null)
     {
-        $args = array();
+        $args = [];
         if (!is_null($cache_id) && !is_null($compile_id)) {
             $query = $this->fetchStatements[ 'withCacheIdAndCompileId' ] and
-            $args = array('id' => $id, 'cache_id' => $cache_id, 'compile_id' => $compile_id);
+            $args = ['id' => $id, 'cache_id' => $cache_id, 'compile_id' => $compile_id];
         } elseif (is_null($cache_id) && !is_null($compile_id)) {
             $query = $this->fetchStatements[ 'withCompileId' ] and
-            $args = array('id' => $id, 'compile_id' => $compile_id);
+            $args = ['id' => $id, 'compile_id' => $compile_id];
         } elseif (!is_null($cache_id) && is_null($compile_id)) {
-            $query = $this->fetchStatements[ 'withCacheId' ] and $args = array('id' => $id, 'cache_id' => $cache_id);
+            $query = $this->fetchStatements[ 'withCacheId' ] and $args = ['id' => $id, 'cache_id' => $cache_id];
         } else {
-            $query = $this->fetchStatements[ 'default' ] and $args = array('id' => $id);
+            $query = $this->fetchStatements[ 'default' ] and $args = ['id' => $id];
         }
         $query = sprintf($query, $columns);
         $stmt = $this->pdo->prepare($query);
@@ -304,7 +306,7 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
             return -1;
         }
         // build the filter
-        $where = array();
+        $where = [];
         // equal test name
         if ($name !== null) {
             $where[] = 'name = ' . $this->pdo->quote($name);

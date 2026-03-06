@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Smarty\Exception;
 use Smarty\Template;
 use Smarty\Template\Source;
@@ -25,12 +27,15 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
     public function populate(Source $source, ?Template $_template = null)
     {
         $uid = '';
-        $sources = array();
+        $sources = [];
         $timestamp = 0;
         foreach ($source->getSmarty()->getTemplateDir() as $key => $directory) {
             try {
-                $s = \Smarty\Template\Source::load(null, $source->getSmarty(),
-	                'file:' . '[' . $key . ']' . $source->name);
+                $s = \Smarty\Template\Source::load(
+                    null,
+                    $source->getSmarty(),
+                    'file:' . '[' . $key . ']' . $source->name
+                );
                 if (!$s->exists) {
                     continue;
                 }

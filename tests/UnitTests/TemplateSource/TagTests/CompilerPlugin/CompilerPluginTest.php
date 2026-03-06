@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compiler plugin
  *
@@ -16,7 +18,6 @@ class CompilerPluginTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
     }
 
-
     public function testInit()
     {
         $this->cleanDirs();
@@ -26,7 +27,7 @@ class CompilerPluginTest extends PHPUnit_Smarty
      */
     public function testCompilerPlugin()
     {
-        $this->smarty->addPluginsDir(__DIR__ . "/PHPunitplugins/");
+        $this->smarty->addPluginsDir(__DIR__ . '/PHPunitplugins/');
         $this->assertEquals('test output', $this->smarty->fetch('eval:{test data="test output"}{/test}'));
     }
 }

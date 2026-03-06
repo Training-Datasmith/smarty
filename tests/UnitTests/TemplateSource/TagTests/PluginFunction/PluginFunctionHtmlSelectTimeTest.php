@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -9,9 +11,9 @@
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
 {
@@ -22,7 +24,7 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
     }
 
     protected $now = null;
-    protected $hours = array(
+    protected $hours = [
         'none'              => '<option value="00">00</option>
 <option value="01">01</option>
 <option value="02">02</option>
@@ -131,8 +133,8 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
 <option value="021">21</option>
 <option value="022">22</option>
 <option value="023">23</option>',
-    );
-    protected $minutes = array(
+    ];
+    protected $minutes = [
         'none'              => '<option value="00">00</option>
 <option value="01">01</option>
 <option value="02">02</option>
@@ -397,8 +399,8 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
 <option value="057">57</option>
 <option value="058">58</option>
 <option value="059">59</option>',
-    );
-    protected $seconds = array(
+    ];
+    protected $seconds = [
         'none'              => '<option value="00">00</option>
 <option value="01">01</option>
 <option value="02">02</option>
@@ -663,11 +665,11 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
 <option value="057">57</option>
 <option value="058">58</option>
 <option value="059">59</option>',
-    );
-    protected $meridians = array(
+    ];
+    protected $meridians = [
         'default' => '<option value="am">AM</option>
 <option value="pm" selected="selected">PM</option>',
-    );
+    ];
 
     public function testDefault()
     {
@@ -1093,13 +1095,13 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
     public function testTimeArray1()
     {
         $n = "\n";
-        $time_array = array(
-            'namorized' => array(
+        $time_array = [
+            'namorized' => [
                 'foobar_Hour'   => '16',
                 'foobar_Minute' => '15',
                 'foobar_Second' => '11',
-            ),
-        );
+            ],
+        ];
         $result = '<select name="namorized[foobar_Hour]">' . $n . $this->hours['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Minute]">' . $n . $this->minutes['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Second]">' . $n . $this->seconds['default'] . $n . '</select>';
@@ -1111,13 +1113,13 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
     public function testTimeArray2()
     {
         $n = "\n";
-        $time_array = array(
-            'namorized' => array(
+        $time_array = [
+            'namorized' => [
                 'foobar_Hour'   => '16',
                 'foobar_Minute' => '15',
                 'foobar_Second' => '11',
-            ),
-        );
+            ],
+        ];
         $result = '<select name="namorized[foobar_Hour]">' . $n . $this->hours['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Minute]">' . $n . $this->minutes['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Second]">' . $n . $this->seconds['default'] . $n . '</select>';
@@ -1135,14 +1137,14 @@ class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
             . $n . '<select name="namorized[foobar_Second]">' . $n . $this->seconds['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Meridian]">' . $n . $this->meridians['default'] . $n . '</select>';
 
-        $time_array = array(
-            'namorized' => array(
+        $time_array = [
+            'namorized' => [
                 'foobar_Hour'     => '04',
                 'foobar_Minute'   => '15',
                 'foobar_Second'   => '11',
                 'foobar_Meridian' => 'pm',
-            ),
-        );
+            ],
+        ];
 
         $tpl = $this->smarty->createTemplate('eval:{html_select_time time=$time_array use_24_hours=false field_array="namorized" prefix="foobar_"}');
         $tpl->assign('time_array', $time_array);

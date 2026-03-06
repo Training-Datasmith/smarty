@@ -1,21 +1,25 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\FunctionHandler;
 
 use Smarty\Template;
 
-class Base implements FunctionHandlerInterface {
+class Base implements FunctionHandlerInterface
+{
+    /**
+     * @var bool
+     */
+    protected $cacheable = true;
 
-	/**
-	 * @var bool
-	 */
-	protected $cacheable = true;
+    public function isCacheable(): bool
+    {
+        return $this->cacheable;
+    }
 
-	public function isCacheable(): bool {
-		return $this->cacheable;
-	}
-
-	public function handle($params, Template $template): void {
-		// TODO: Implement handle() method.
-	}
+    public function handle($params, Template $template): void
+    {
+        // TODO: Implement handle() method.
+    }
 }

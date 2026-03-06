@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests {$smarty.ldelim} {$smarty.rdelim}
  *
@@ -9,9 +11,9 @@
 /**
  * class for {$smarty.ldelim} {$smarty.rdelim} tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class SmartyDelimiterTest extends PHPUnit_Smarty
 {
@@ -28,7 +30,8 @@ class SmartyDelimiterTest extends PHPUnit_Smarty
      * test {$smarty.ldelim} {$smarty.rdelim}
      *
      */
-    public function testSmartyDelimiter() {
+    public function testSmartyDelimiter()
+    {
         $this->assertEquals('left = { right = }', $this->smarty->fetch('delimiter.tpl'));
     }
- }
+}

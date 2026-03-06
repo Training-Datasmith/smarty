@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compiler errors
  *
@@ -9,9 +11,9 @@
 /**
  * class for compiler tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class ModifierIssue327Test extends PHPUnit_Smarty
 {
@@ -28,7 +30,7 @@ class ModifierIssue327Test extends PHPUnit_Smarty
 
     public function testModifier327()
     {
-          $this->assertEquals('hello you', $this->smarty->fetch('string:{"hello world"|substr:0:-5|cat:"you"}'));
+        $this->assertEquals('hello you', $this->smarty->fetch('string:{"hello world"|substr:0:-5|cat:"you"}'));
     }
 
 }

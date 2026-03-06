@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 /**
  * Smarty strlen modifier plugin
  * Type:     modifier
@@ -9,10 +12,11 @@ namespace Smarty\Compile\Modifier;
  *
  */
 
-class StrlenModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
-		return 'strlen((string) ' . $params[0] . ')';
-	}
+class StrlenModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
+        return 'strlen((string) ' . $params[0] . ')';
+    }
 
 }

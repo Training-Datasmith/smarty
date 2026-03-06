@@ -1,73 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Runtime;
 
 use Smarty\Exception;
 
-class DefaultPluginHandlerRuntime {
+class DefaultPluginHandlerRuntime
+{
+    /**
+     * @var callable
+     */
+    private $defaultPluginHandler;
 
-	/**
-	 * @var callable
-	 */
-	private $defaultPluginHandler;
+    public function __construct(?callable $defaultPluginHandler = null)
+    {
+        $this->defaultPluginHandler = $defaultPluginHandler;
+    }
 
-	public function __construct(?callable $defaultPluginHandler = null) {
-		$this->defaultPluginHandler = $defaultPluginHandler;
-	}
+    public function hasPlugin($tag, $plugin_type): bool
+    {
+        if ($this->defaultPluginHandler === null) {
+            return false;
+        }
 
-	public function hasPlugin($tag, $plugin_type): bool {
-		if ($this->defaultPluginHandler === null) {
-			return false;
-		}
+        $callback = null;
 
-		$callback = null;
+        // these are not used here
+        $script = null;
+        $cacheable = null;
 
-		// these are not used here
-		$script = null;
-		$cacheable = null;
+        return (\call_user_func_array(
+            $this->defaultPluginHandler,
+            [
+                    $tag,
+                    $plugin_type,
+                    null, // This used to pass $this->template, but this parameter has been removed in 5.0
+                    &$callback,
+                    &$script,
+                    &$cacheable,
+                ]
+        ) && $callback);
+    }
 
-		return (\call_user_func_array(
-				$this->defaultPluginHandler,
-				[
-					$tag,
-					$plugin_type,
-					null, // This used to pass $this->template, but this parameter has been removed in 5.0
-					&$callback,
-					&$script,
-					&$cacheable,
-				]
-			) && $callback);
-	}
+    /**
+     * @throws Exception
+     */
+    public function getCallback($tag, $plugin_type)
+    {
 
-	/**
-	 * @throws Exception
-	 */
-	public function getCallback($tag, $plugin_type) {
+        if ($this->defaultPluginHandler === null) {
+            return false;
+        }
 
-		if ($this->defaultPluginHandler === null) {
-			return false;
-		}
+        $callback = null;
 
-		$callback = null;
+        // these are not used here
+        $script = null;
+        $cacheable = null;
 
-		// these are not used here
-		$script = null;
-		$cacheable = null;
-
-		if (\call_user_func_array(
-				$this->defaultPluginHandler,
-				[
-					$tag,
-					$plugin_type,
-					null, // This used to pass $this->template, but this parameter has been removed in 5.0
-					&$callback,
-					&$script,
-					&$cacheable,
-				]
-			) && $callback) {
-			return $callback;
-		}
-		throw new Exception("Default plugin handler: Returned callback for '{$tag}' not callable at runtime");
-	}
+        if (\call_user_func_array(
+            $this->defaultPluginHandler,
+            [
+                    $tag,
+                    $plugin_type,
+                    null, // This used to pass $this->template, but this parameter has been removed in 5.0
+                    &$callback,
+                    &$script,
+                    &$cacheable,
+                ]
+        ) && $callback) {
+            return $callback;
+        }
+        throw new Exception("Default plugin handler: Returned callback for '{$tag}' not callable at runtime");
+    }
 
 }

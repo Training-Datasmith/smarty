@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of {break} tag
  *
@@ -20,7 +22,6 @@ class CompileBreakTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
     }
 
-
     public function testInit()
     {
         $this->cleanDirs();
@@ -30,7 +31,7 @@ class CompileBreakTest extends PHPUnit_Smarty
      */
     public function testBreakForeach()
     {
-        $this->smarty->assign('array', array(1,2,3));
+        $this->smarty->assign('array', [1,2,3]);
         $this->assertEquals('1', $this->smarty->fetch('break_foreach.tpl'));
     }
     /**
@@ -38,7 +39,7 @@ class CompileBreakTest extends PHPUnit_Smarty
      */
     public function testBreakForeachNocache()
     {
-        $this->smarty->assign('array', array(1,2,3), true);
+        $this->smarty->assign('array', [1,2,3], true);
         $this->smarty->caching = true;
         $this->assertEquals('1', $this->smarty->fetch('break_foreach.tpl'));
     }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests literals true false null
  *
@@ -9,9 +11,9 @@
 /**
  * class for {$smarty.ldelim} {$smarty.rdelim} tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class BooleanNullTest extends PHPUnit_Smarty
 {
@@ -28,7 +30,8 @@ class BooleanNullTest extends PHPUnit_Smarty
      * test true
      *
      */
-    public function testTrue() {
+    public function testTrue()
+    {
         $this->smarty->assign('value', true);
         $this->assertEquals('true', $this->smarty->fetch('eval:{if $value === true}true{else}false{/if}'));
     }
@@ -36,7 +39,8 @@ class BooleanNullTest extends PHPUnit_Smarty
      * test false
      *
      */
-    public function testFalse() {
+    public function testFalse()
+    {
         $this->smarty->assign('value', false);
         $this->assertEquals('true', $this->smarty->fetch('eval:{if $value === false}true{else}false{/if}'));
     }
@@ -44,8 +48,9 @@ class BooleanNullTest extends PHPUnit_Smarty
      * test null
      *
      */
-    public function testNull() {
+    public function testNull()
+    {
         $this->smarty->assign('value', null);
         $this->assertEquals('true', $this->smarty->fetch('eval:{if $value === null}true{else}false{/if}'));
     }
- }
+}

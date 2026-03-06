@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for File resources
  *
@@ -11,9 +13,9 @@ use Smarty\Exception;
 /**
  * class for file resource tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class FileResourceTest extends PHPUnit_Smarty
 {
@@ -30,7 +32,7 @@ class FileResourceTest extends PHPUnit_Smarty
 
     protected function relative($path)
     {
-        $path = str_replace(str_replace("\\", "/", __DIR__), '.', str_replace("\\", "/", $path));
+        $path = str_replace(str_replace('\\', '/', __DIR__), '.', str_replace('\\', '/', $path));
 
         return $path;
     }
@@ -93,7 +95,7 @@ class FileResourceTest extends PHPUnit_Smarty
     public function testUsesCompiler()
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-	    $this->markTestIncomplete();
+        $this->markTestIncomplete();
     }
 
     public function testIsEvaluated()
@@ -137,17 +139,17 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->assertTrue($tpl->mustCompile());
     }
 
-	/**
-	 * @group slow
-	 */
-	public function testMustCompileTouchedSource()
+    /**
+     * @group slow
+     */
+    public function testMustCompileTouchedSource()
     {
-	    // touch to prepare next test
-	    sleep(2);
-	    $this->smarty->createTemplate('helloworld.tpl');
-	    touch(__DIR__ . '/templates/helloworld.tpl');
+        // touch to prepare next test
+        sleep(2);
+        $this->smarty->createTemplate('helloworld.tpl');
+        touch(__DIR__ . '/templates/helloworld.tpl');
 
-		$this->setUp();
+        $this->setUp();
 
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertTrue($tpl->mustCompile());
@@ -165,22 +167,20 @@ class FileResourceTest extends PHPUnit_Smarty
     public function testGetCachedTimestamp()
     {
         // create dummy cache file for the following test
-	    $this->smarty->caching = true;
-	    $this->smarty->cache_lifetime = 1000;
-	    $tpl = $this->smarty->createTemplate('helloworld.tpl');
-		$tpl->fetch();
-		$timestamp = $tpl->getCached()->timestamp;
+        $this->smarty->caching = true;
+        $this->smarty->cache_lifetime = 1000;
+        $tpl = $this->smarty->createTemplate('helloworld.tpl');
+        $tpl->fetch();
+        $timestamp = $tpl->getCached()->timestamp;
 
-
-		$this->smarty = new \Smarty\Smarty();
-	    $this->smarty->caching = true;
-	    $this->smarty->cache_lifetime = 1000;
+        $this->smarty = new \Smarty\Smarty();
+        $this->smarty->caching = true;
+        $this->smarty->cache_lifetime = 1000;
 
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertTrue(is_integer($tpl->getCached()->timestamp));
         $this->assertEquals($timestamp, $tpl->getCached()->timestamp);
     }
-
 
     public function testGetRenderedTemplate()
     {
@@ -197,7 +197,7 @@ class FileResourceTest extends PHPUnit_Smarty
     /**
      *
      * @run InSeparateProcess
-     * 
+     *
      *
      */
     public function testRelativeIncludeSub()
@@ -215,8 +215,8 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->fetch('relative_sub.tpl');
     }
     /**
-     * 
-     * 
+     *
+     *
      *
      * test relative include fail other dir
      */
@@ -226,44 +226,44 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->expectExceptionMessage('./hello.tpl');
         $this->smarty->addTemplateDir('./templates_2');
         $this->smarty->fetch('relative_notexist.tpl');
-     }
+    }
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRelativeFetch()
     {
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           __DIR__ . '/does-not-exist/',
                                           __DIR__ . '/templates/sub/',
-                                      ));
+                                      ]);
         $this->smarty->security_policy = null;
         $this->assertEquals('hello world', $this->smarty->fetch('./relative.tpl'));
     }
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRelativeFetch2()
     {
-         $this->smarty->setTemplateDir(array(
-                                          __DIR__ . '/does-not-exist/',
-                                          __DIR__ . '/templates/sub/',
-                                      ));
+        $this->smarty->setTemplateDir([
+                                         __DIR__ . '/does-not-exist/',
+                                         __DIR__ . '/templates/sub/',
+                                     ]);
         $this->smarty->security_policy = null;
         $this->assertEquals('hello world', $this->smarty->fetch('../helloworld.tpl'));
     }
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRelativeFetchCwd()
@@ -273,9 +273,9 @@ class FileResourceTest extends PHPUnit_Smarty
         $dn = __DIR__;
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           __DIR__ . '/does-not-exist/',
-                                      ));
+                                      ]);
         $this->smarty->security_policy = null;
         $this->assertEquals('hello world', $this->smarty->fetch('./relative.tpl'));
         chdir($cwd);
@@ -283,8 +283,8 @@ class FileResourceTest extends PHPUnit_Smarty
 
     /**
      *
-     * 
-     * 
+     *
+     *
      *
      */
     public function testRelativeFetchCwd2()
@@ -294,9 +294,9 @@ class FileResourceTest extends PHPUnit_Smarty
         $dn = __DIR__;
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           __DIR__ . '/does-not-exist/',
-                                      ));
+                                      ]);
         $this->smarty->security_policy = null;
         $this->assertEquals('hello world', $this->smarty->fetch('../helloworld.tpl'));
         chdir($cwd);
@@ -318,16 +318,14 @@ class FileResourceTest extends PHPUnit_Smarty
                     $this->fail('Exception expected for ' . $file);
 
                     return;
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     // this was expected to fail
                 }
             } else {
                 try {
                     $_res = $this->smarty->fetch($file);
                     $this->assertEquals(str_replace("\r", '', $result), $_res, $file);
-                }
-                catch (Exception $e) {
+                } catch (Exception $e) {
                     if ($cwd !== null) {
                         chdir($cwd);
                     }
@@ -350,13 +348,13 @@ class FileResourceTest extends PHPUnit_Smarty
         $dn = __DIR__;
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array($dn . '/templates/relativity/theory/',));
+        $this->smarty->setTemplateDir([$dn . '/templates/relativity/theory/',]);
 
-        $map = array('foo.tpl' => 'theory', './foo.tpl' => 'theory', '././foo.tpl' => 'theory',
+        $map = ['foo.tpl' => 'theory', './foo.tpl' => 'theory', '././foo.tpl' => 'theory',
                       '.././foo.tpl' => 'relativity', './../foo.tpl' => 'relativity',
                      'einstein/foo.tpl' => 'einstein', './einstein/foo.tpl' => 'einstein',
                      '../theory/einstein/foo.tpl' => 'einstein', 'templates/relativity/relativity.tpl' => 'relativity',
-                     './templates/relativity/relativity.tpl' => 'relativity',);
+                     './templates/relativity/relativity.tpl' => 'relativity',];
 
         $this->_relativeMap($map);
     }
@@ -370,12 +368,11 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
 
-
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           './templates/relativity/theory/',
-                                      ));
+                                      ]);
 
-        $map = array(
+        $map = [
             'foo.tpl'                               => 'theory',
             './foo.tpl'                             => 'theory',
             '././foo.tpl'                           => 'theory',
@@ -387,7 +384,7 @@ class FileResourceTest extends PHPUnit_Smarty
             '../theory/einstein/foo.tpl'            => 'einstein',
             'templates/relativity/relativity.tpl'   => 'relativity',
             './templates/relativity/relativity.tpl' => 'relativity',
-        );
+        ];
 
         $this->_relativeMap($map);
     }
@@ -402,11 +399,11 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
         chdir($dn . '/templates/relativity/theory/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           $dn . '/templates/',
-                                      ));
+                                      ]);
 
-        $map = array(
+        $map = [
             'foo.tpl'                    => 'theory',
             './foo.tpl'                  => 'theory',
             '././foo.tpl'                => 'theory',
@@ -416,7 +413,7 @@ class FileResourceTest extends PHPUnit_Smarty
             'einstein/foo.tpl'           => 'einstein',
             './einstein/foo.tpl'         => 'einstein',
             '../theory/einstein/foo.tpl' => 'einstein',
-        );
+        ];
 
         $this->_relativeMap($map, $cwd);
     }
@@ -430,14 +427,14 @@ class FileResourceTest extends PHPUnit_Smarty
 
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array($dn . '/templates/relativity/theory/einstein/',));
+        $this->smarty->setTemplateDir([$dn . '/templates/relativity/theory/einstein/',]);
 
-        $map = array('foo.tpl' => 'einstein', './foo.tpl' => 'einstein', '././foo.tpl' => 'einstein',
+        $map = ['foo.tpl' => 'einstein', './foo.tpl' => 'einstein', '././foo.tpl' => 'einstein',
                      '../foo.tpl' => 'theory', '.././foo.tpl' => 'theory', './../foo.tpl' => 'theory',
-                     '../../foo.tpl' => 'relativity',);
+                     '../../foo.tpl' => 'relativity',];
 
         chdir($dn . '/templates/relativity/theory/');
-        $this->smarty->setTemplateDir(array($dn . '/templates/relativity/theory/einstein/',));
+        $this->smarty->setTemplateDir([$dn . '/templates/relativity/theory/einstein/',]);
         $this->_relativeMap($map, $cwd);
     }
 
@@ -450,12 +447,11 @@ class FileResourceTest extends PHPUnit_Smarty
 
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           $dn . '/templates/relativity/theory/einstein/',
-                                      ));
+                                      ]);
 
-
-        $map = array(
+        $map = [
             '../theory.tpl'           => 'theory',
             './theory.tpl'            => 'theory',
             '../../relativity.tpl'    => 'relativity',
@@ -463,12 +459,12 @@ class FileResourceTest extends PHPUnit_Smarty
             './einstein.tpl'          => 'einstein',
             'einstein/einstein.tpl'   => 'einstein',
             './einstein/einstein.tpl' => 'einstein',
-        );
+        ];
 
         chdir($dn . '/templates/relativity/theory/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           $dn . '/templates/relativity/theory/einstein/',
-                                      ));
+                                      ]);
         $this->_relativeMap($map, $cwd);
     }
 
@@ -481,12 +477,12 @@ class FileResourceTest extends PHPUnit_Smarty
 
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array('../..',));
+        $this->smarty->setTemplateDir(['../..',]);
 
-        $map = array('foo.tpl' => 'relativity', './foo.tpl' => 'relativity', '././foo.tpl' => 'relativity',);
+        $map = ['foo.tpl' => 'relativity', './foo.tpl' => 'relativity', '././foo.tpl' => 'relativity',];
 
         chdir($dn . '/templates/relativity/theory/einstein');
-        $this->smarty->setTemplateDir(array('../..',));
+        $this->smarty->setTemplateDir(['../..',]);
         $this->_relativeMap($map, $cwd);
     }
 
@@ -499,14 +495,14 @@ class FileResourceTest extends PHPUnit_Smarty
 
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array('../..',));
+        $this->smarty->setTemplateDir(['../..',]);
 
         $map =
-            array('relativity.tpl' => 'relativity', './relativity.tpl' => 'relativity', 'theory/theory.tpl' => 'theory',
-                  './theory/theory.tpl' => 'theory',);
+            ['relativity.tpl' => 'relativity', './relativity.tpl' => 'relativity', 'theory/theory.tpl' => 'theory',
+                  './theory/theory.tpl' => 'theory',];
 
         chdir($dn . '/templates/relativity/theory/einstein/');
-        $this->smarty->setTemplateDir(array('../..',));
+        $this->smarty->setTemplateDir(['../..',]);
         $this->_relativeMap($map, $cwd);
     }
     public function testRelativityRelRel3()
@@ -518,12 +514,11 @@ class FileResourceTest extends PHPUnit_Smarty
 
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           '../..',
-                                      ));
+                                      ]);
 
-
-        $map = array(
+        $map = [
             'foo.tpl'                         => 'theory',
             './foo.tpl'                       => 'theory',
             'theory.tpl'                      => 'theory',
@@ -534,12 +529,12 @@ class FileResourceTest extends PHPUnit_Smarty
             '../relativity.tpl'               => 'relativity',
             './../relativity.tpl'             => 'relativity',
             '.././relativity.tpl'             => 'relativity',
-        );
+        ];
 
         chdir($dn . '/templates/relativity/theory/einstein/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           '..',
-                                      ));
+                                      ]);
         $this->_relativeMap($map, $cwd);
     }
 
@@ -551,11 +546,11 @@ class FileResourceTest extends PHPUnit_Smarty
         $dn = __DIR__;
         $this->smarty->setCompileDir($dn . '/templates_c/');
         $this->smarty->setCacheDir($dn . '/cache/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           '..',
-                                      ));
+                                      ]);
 
-        $map = array(
+        $map = [
             'foo.tpl'                         => 'theory',
             './foo.tpl'                       => 'theory',
             'theory.tpl'                      => 'theory',
@@ -566,12 +561,12 @@ class FileResourceTest extends PHPUnit_Smarty
             '../relativity.tpl'               => 'relativity',
             './../relativity.tpl'             => 'relativity',
             '.././relativity.tpl'             => 'relativity',
-        );
+        ];
 
         chdir($dn . '/templates/relativity/theory/einstein/');
-        $this->smarty->setTemplateDir(array(
+        $this->smarty->setTemplateDir([
                                           '..',
-                                      ));
+                                      ]);
         $this->_relativeMap($map, $cwd);
     }
 
@@ -579,14 +574,16 @@ class FileResourceTest extends PHPUnit_Smarty
      * test {$smarty.template}
      *
      */
-    public function testSmartyTemplate() {
+    public function testSmartyTemplate()
+    {
         $this->assertEquals('template = 001_smarty_template.tpl', $this->smarty->fetch('001_smarty_template.tpl'));
     }
     /**
      * test {$smarty.current_dir}
      *
      */
-    public function testSmartyCurrentDir() {
+    public function testSmartyCurrentDir()
+    {
         $dirname = __DIR__ . DIRECTORY_SEPARATOR . 'templates';
         $this->assertEquals('current_dir = ' . $dirname, $this->smarty->fetch('001_smarty_current_dir.tpl'));
     }

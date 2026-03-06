@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests clearing assigned variables
  *
@@ -9,9 +11,9 @@
 /**
  * class for clearing assigned variables tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class ClearAssignTest extends PHPUnit_Smarty
 {
@@ -47,7 +49,7 @@ class ClearAssignTest extends PHPUnit_Smarty
     public function testArrayClearAssign()
     {
         $this->smarty->setErrorReporting(error_reporting() & ~(E_NOTICE | E_USER_NOTICE | E_WARNING));
-        $this->smarty->clearAssign(array('blar', 'foo'));
+        $this->smarty->clearAssign(['blar', 'foo']);
         $this->assertEquals('bar', $this->smarty->fetch('eval:{$foo}{$bar}{$blar}'));
     }
 }

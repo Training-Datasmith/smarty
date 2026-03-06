@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Smarty\Template;
 use Smarty\Template\Cached;
 
@@ -22,8 +24,8 @@ class Smarty_CacheResource_Memcachetest extends Smarty_CacheResource_Memcache
 
     public function get(Template $_template)
     {
-        $this->contents = array();
-        $this->timestamps = array();
+        $this->contents = [];
+        $this->timestamps = [];
         $t = $this->getContent($_template);
 
         return $t ? $t : null;

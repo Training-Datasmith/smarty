@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests {$smarty.version}
  *
@@ -9,9 +11,9 @@
 /**
  * class for {$smarty.version} tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class SmartyVersionTest extends PHPUnit_Smarty
 {
@@ -28,7 +30,8 @@ class SmartyVersionTest extends PHPUnit_Smarty
      * test {$smarty.version}
      *
      */
-    public function testSmartyVersion() {
+    public function testSmartyVersion()
+    {
         $this->assertEquals(\Smarty\Smarty::SMARTY_VERSION, $this->smarty->fetch('version.tpl'));
     }
- }
+}

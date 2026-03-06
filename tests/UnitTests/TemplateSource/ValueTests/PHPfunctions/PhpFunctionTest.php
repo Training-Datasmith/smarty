@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -13,7 +15,7 @@
  *
  *
  *
- * 
+ *
  */
 class PhpFunctionTest extends PHPUnit_Smarty
 {
@@ -33,12 +35,12 @@ class PhpFunctionTest extends PHPUnit_Smarty
     public function testEmpty1()
     {
         $this->smarty->disableSecurity();
-        $this->smarty->assign('var', array(null,
+        $this->smarty->assign('var', [null,
                                            false,
                                            (int) 0,
                                            (float) 0.0,
                                            '',
-                                           array()));
+                                           []]);
         $expected = ' true , true , true , true , true , true , true , true ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if empty($var[0])} true {else} false {/IF}
         ,{if empty($var[1])} true {else} false {/IF}
@@ -57,13 +59,15 @@ class PhpFunctionTest extends PHPUnit_Smarty
     public function testEmpty2()
     {
         $this->smarty->disableSecurity();
-        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) { return $v; });
-        $this->smarty->assign('var', array(null,
+        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) {
+            return $v;
+        });
+        $this->smarty->assign('var', [null,
                                            false,
                                            (int) 0,
                                            (float) 0.0,
                                            '',
-                                           array()));
+                                           []]);
         $expected = ' true , true , true , true , true , true ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if empty(pass($var[0]))} true {else} false {/IF}
         ,{if empty(pass($var[1]))} true {else} false {/IF}
@@ -79,12 +83,14 @@ class PhpFunctionTest extends PHPUnit_Smarty
     public function testEmpty3()
     {
         $this->smarty->disableSecurity();
-        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) { return $v; });
-        $this->smarty->assign('var', array(true,
+        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) {
+            return $v;
+        });
+        $this->smarty->assign('var', [true,
                                            (int) 1,
                                            (float) 0.1,
                                            ' ',
-                                           array(1)));
+                                           [1]]);
         $expected = ' false , false , false , false , false ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if empty(pass($var[0]))} true {else} false {/IF}
         ,{if empty(pass($var[1]))} true {else} false {/IF}
@@ -99,7 +105,9 @@ class PhpFunctionTest extends PHPUnit_Smarty
     public function testEmpty4()
     {
         $this->smarty->disableSecurity();
-        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) { return $v; });
+        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) {
+            return $v;
+        });
         $this->smarty->assign('var', new TestIsset());
         $expected = ' true , false , false , true , true , true , false ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if empty($var->isNull)} true {else} false {/IF}
@@ -117,10 +125,12 @@ class PhpFunctionTest extends PHPUnit_Smarty
     public function testIsset1()
     {
         $this->smarty->disableSecurity();
-        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) { return $v; });
+        $this->getSmarty()->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) {
+            return $v;
+        });
         $this->smarty->assign('isNull', null);
         $this->smarty->assign('isSet', 1);
-        $this->smarty->assign('arr', array('isNull' => null, 'isSet' => 1));
+        $this->smarty->assign('arr', ['isNull' => null, 'isSet' => 1]);
         $expected = ' false , true , false , true , false , false , false , true ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if isset($isNull)} true {else} false {/IF}
         ,{if isset($isSet)} true {else} false {/IF}
@@ -139,7 +149,9 @@ class PhpFunctionTest extends PHPUnit_Smarty
     {
         $this->smarty->disableSecurity();
         $this->smarty->assign('var', new TestIsset());
-        $this->smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) { return $v; });
+        $this->smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'pass', function ($v) {
+            return $v;
+        });
         $expected = ' false , true , true , false , false , false , true ';
         $this->assertEquals($expected, $this->smarty->fetch('string:{strip}{if isset($var->isNull)} true {else} false {/IF}
         ,{if isset($var->isSet)} true {else} false {/IF}
@@ -163,11 +175,11 @@ class PhpFunctionTest extends PHPUnit_Smarty
         $this->smarty->registerPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'intval', 'intval');
 
         $this->smarty->assign('varobject', new TestIsset());
-        $this->smarty->assign('vararray', $vararray = array(
+        $this->smarty->assign('vararray', $vararray = [
             'keythatexists' => false,
-            'keywitharray' => array(1 => 1),
-            'keywithobject' => new TestIsset()
-        ));
+            'keywitharray' => [1 => 1],
+            'keywithobject' => new TestIsset(),
+        ]);
 
         $this->smarty->assign('key', 'A');
         $this->smarty->assign('_varsimpleA', 1);
@@ -182,42 +194,44 @@ class PhpFunctionTest extends PHPUnit_Smarty
      */
     public function dataTestIsset3()
     {
-        return array(
-            array('{if isset($varobject->arr)}true{else}false{/if}', 'true'),
-            array('{if isset($vararray["keywitharray"])}true{else}false{/if}', 'true'),
-            array('{if isset($vararray["keythatexists"])}true{else}false{/if}', 'true'),
-            array('{if isset($vararray["nonexistingkey"])}true{else}false{/if}', 'false'),
-            array('{if isset($_GET["sscr6hr6cz34j6"])}true{else}false{/if}', 'false'),
-            array('{if isset(count([\'hi\']))}true{else}false{/if}', 'true'),
-            array('{if isset($vararray[\'keywitharray\'][intval(\'1\')])}true{else}false{/if}', 'true'),
-            array('{if isset($vararray[\'keywithobject\']->arr[\'isSet\'])}true{else}false{/if}', 'true'),
-            array('{if isset($vararray[\'keywithobject\']->arr[\'isNull\'])}true{else}false{/if}', 'false'),
-            array('{if isset($varobject->arr[\'isSet\'])}true{else}false{/if}', 'true'),
-            array('{if isset($varobject->arr[\'isNull\'])}true{else}false{/if}', 'false'),
-            array('{if isset($_varsimpleA)}true{else}false{/if}', 'true'),
-            array('{if isset($varsimpleB)}true{else}false{/if}', 'true'),
-            array('{if isset($varsimpleC)}true{else}false{/if}', 'false'),
-            array('{if isset($_varsimpleA && varsimpleB)}true{else}false{/if}', 'true'),
-            array('{if isset($_varsimpleA && varsimpleC)}true{else}false{/if}', 'true'),
-            array('{if isset($_varsimple{$key})}true{else}false{/if}', 'true'),
-        );
+        return [
+            ['{if isset($varobject->arr)}true{else}false{/if}', 'true'],
+            ['{if isset($vararray["keywitharray"])}true{else}false{/if}', 'true'],
+            ['{if isset($vararray["keythatexists"])}true{else}false{/if}', 'true'],
+            ['{if isset($vararray["nonexistingkey"])}true{else}false{/if}', 'false'],
+            ['{if isset($_GET["sscr6hr6cz34j6"])}true{else}false{/if}', 'false'],
+            ['{if isset(count([\'hi\']))}true{else}false{/if}', 'true'],
+            ['{if isset($vararray[\'keywitharray\'][intval(\'1\')])}true{else}false{/if}', 'true'],
+            ['{if isset($vararray[\'keywithobject\']->arr[\'isSet\'])}true{else}false{/if}', 'true'],
+            ['{if isset($vararray[\'keywithobject\']->arr[\'isNull\'])}true{else}false{/if}', 'false'],
+            ['{if isset($varobject->arr[\'isSet\'])}true{else}false{/if}', 'true'],
+            ['{if isset($varobject->arr[\'isNull\'])}true{else}false{/if}', 'false'],
+            ['{if isset($_varsimpleA)}true{else}false{/if}', 'true'],
+            ['{if isset($varsimpleB)}true{else}false{/if}', 'true'],
+            ['{if isset($varsimpleC)}true{else}false{/if}', 'false'],
+            ['{if isset($_varsimpleA && varsimpleB)}true{else}false{/if}', 'true'],
+            ['{if isset($_varsimpleA && varsimpleC)}true{else}false{/if}', 'true'],
+            ['{if isset($_varsimple{$key})}true{else}false{/if}', 'true'],
+        ];
     }
 }
 
 /**
  * Class TestIsset
  */
-class TestIsset {
+class TestIsset
+{
     public $isNull = null;
     public $isSet = 1;
-    public $arr = array('isNull' => null, 'isSet' => 1);
+    public $arr = ['isNull' => null, 'isSet' => 1];
 
     /**
      * @param mixed $v
      *
      * @return mixed
      */
-    public function pass($v) {
+    public function pass($v)
+    {
         return $v;
     }
 }

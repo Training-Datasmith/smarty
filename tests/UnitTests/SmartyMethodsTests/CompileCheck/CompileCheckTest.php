@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for compile check
  */
@@ -34,7 +36,8 @@ class CompileCheckTest extends PHPUnit_Smarty
      * reset, but leave the files alone
      * @return void
      */
-    private function softResetSmarty() {
+    private function softResetSmarty()
+    {
         $this->smarty = new \Smarty\Smarty();
         $this->smarty->addTemplateDir('./templates_tmp');
     }

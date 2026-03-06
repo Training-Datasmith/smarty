@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource memcache
  *
@@ -12,8 +14,8 @@ include_once __DIR__ . '/../_shared/CacheResourceTestCommon.php';
  * class for cache resource memcache tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class CacheResourceCustomMemcacheTest extends CacheResourceTestCommon
 {

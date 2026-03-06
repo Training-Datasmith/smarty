@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of function calls
  *
@@ -9,9 +11,9 @@
 /**
  * class for function tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class FunctionTest extends PHPUnit_Smarty
 {

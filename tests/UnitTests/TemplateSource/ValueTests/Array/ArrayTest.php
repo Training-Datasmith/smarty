@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests array definitions and access
  *
@@ -9,8 +11,8 @@
 /**
  * class for array tests
  *
- * 
- * 
+ *
+ *
  *
  */
 class ArrayTest extends PHPUnit_Smarty
@@ -27,9 +29,9 @@ class ArrayTest extends PHPUnit_Smarty
     /**
      * Test array access
      *
-     * 
+     *
      * @dataProvider        dataTestArray
-     * 
+     *
      */
     public function testArray($code, $result, $testName, $testNumber)
     {
@@ -38,9 +40,11 @@ class ArrayTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('foo', 3);
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            $file);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            $file
+        );
     }
 
     /*
@@ -55,23 +59,23 @@ class ArrayTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('{$foo=[1,2,3,4,5]}{foreach $foo as $bar}{$bar}{/foreach}', '12345', 'T1', $i++),
-                     array('{$foo=[1,2,3,4,5]}{$foo.0}{$foo.1}{$foo.2}', '123', 'T2', $i++),
-                     array('{$foo=[1,2,3,4,5]}{$foo[0]}{$foo[1]}{$foo[2]}', '123', 'T3', $i++),
-                     array('{$x=\'d\'}{$foo=[a=>1,\'b\'=>2,"c"=>3,$x=>4]}{$foo[\'a\']}{$foo[\'b\']}{$foo[\'c\']}{$foo[\'d\']}', '1234', 'T4', $i++),
-                     array('{$foo=[1,2,[a,b,c],4,5]}{$foo[2][1]}', 'b', 'T5', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$foo[2][1]+1}', '9', 'T6', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$foo.2.1+1}', '9', 'T7', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{2+$foo[2][1]}', '10', 'T8', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{2+$foo.2.1}', '10', 'T9', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$foo[2][0]+$foo[2][1]}', '15', 'T10', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$foo.2.0+$foo.2.1}', '15', 'T11', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$x=2}{$y=0}{$foo.$x.$y}', '7', 'T12', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$x=2}{$foo.$x.0}', '7', 'T13', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$x=0}{$foo.2.$x}', '7', 'T14', $i++),
-                     array('{$foo=[1,2,[7,8,9],4,5]}{$x=[1,0]}{$foo.2.{$x.1}}', '7', 'T15', $i++),
-                     array('{$foo=[1,2,3,4,5,]}{foreach $foo as $bar}{$bar}{/foreach}', '12345', 'T16', $i++),
-                     array('{$foo=[1,2,3,4,5,[6,7,8,],]}{$foo[5][2]}', '8', 'T17', $i++),
-        );
+        return [['{$foo=[1,2,3,4,5]}{foreach $foo as $bar}{$bar}{/foreach}', '12345', 'T1', $i++],
+                     ['{$foo=[1,2,3,4,5]}{$foo.0}{$foo.1}{$foo.2}', '123', 'T2', $i++],
+                     ['{$foo=[1,2,3,4,5]}{$foo[0]}{$foo[1]}{$foo[2]}', '123', 'T3', $i++],
+                     ['{$x=\'d\'}{$foo=[a=>1,\'b\'=>2,"c"=>3,$x=>4]}{$foo[\'a\']}{$foo[\'b\']}{$foo[\'c\']}{$foo[\'d\']}', '1234', 'T4', $i++],
+                     ['{$foo=[1,2,[a,b,c],4,5]}{$foo[2][1]}', 'b', 'T5', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$foo[2][1]+1}', '9', 'T6', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$foo.2.1+1}', '9', 'T7', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{2+$foo[2][1]}', '10', 'T8', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{2+$foo.2.1}', '10', 'T9', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$foo[2][0]+$foo[2][1]}', '15', 'T10', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$foo.2.0+$foo.2.1}', '15', 'T11', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$x=2}{$y=0}{$foo.$x.$y}', '7', 'T12', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$x=2}{$foo.$x.0}', '7', 'T13', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$x=0}{$foo.2.$x}', '7', 'T14', $i++],
+                     ['{$foo=[1,2,[7,8,9],4,5]}{$x=[1,0]}{$foo.2.{$x.1}}', '7', 'T15', $i++],
+                     ['{$foo=[1,2,3,4,5,]}{foreach $foo as $bar}{$bar}{/foreach}', '12345', 'T16', $i++],
+                     ['{$foo=[1,2,3,4,5,[6,7,8,],]}{$foo[5][2]}', '8', 'T17', $i++],
+        ];
     }
 }

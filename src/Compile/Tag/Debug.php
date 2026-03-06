@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty Internal Plugin Compile Debug
  * Compiles the {debug} tag.
@@ -19,26 +21,26 @@ use Smarty\Compile\Base;
 
 
  */
-class Debug extends Base {
+class Debug extends Base
+{
+    /**
+     * Compiles code for the {debug} tag
+     *
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     *
+     * @return string compiled code
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+    {
+        // check and get attributes, may trigger errors
+        $this->getAttributes($compiler, $args);
 
-	/**
-	 * Compiles code for the {debug} tag
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param object $compiler compiler object
-	 *
-	 * @return string compiled code
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
-		// check and get attributes, may trigger errors
-		$this->getAttributes($compiler, $args);
-
-		// compile always as nocache
-		$compiler->tag_nocache = true;
-		// display debug template
-		$_output =
-			"<?php \$_smarty_debug = new \\Smarty\\Debug;\n \$_smarty_debug->display_debug(\$_smarty_tpl);\n";
-		return $_output . "unset(\$_smarty_debug);\n?>";
-	}
+        // compile always as nocache
+        $compiler->tag_nocache = true;
+        // display debug template
+        $_output =
+            "<?php \$_smarty_debug = new \\Smarty\\Debug;\n \$_smarty_debug->display_debug(\$_smarty_tpl);\n";
+        return $_output . "unset(\$_smarty_debug);\n?>";
+    }
 }

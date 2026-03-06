@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  */
@@ -8,9 +10,9 @@ use Smarty\Smarty;
 /**
  * class for protected $template_dir, $compile_dir, $cache_dir, $config_dir, $plugins_dir property tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class ProtectedFolderVarsTest extends PHPUnit_Smarty
 {
@@ -37,7 +39,7 @@ class ProtectedFolderVarsTest extends PHPUnit_Smarty
     public function testTemplateDirDirectRelativeArray()
     {
         $s = new Smarty();
-        $s->setTemplateDir(array('./foo', './bar/'));
+        $s->setTemplateDir(['./foo', './bar/']);
         $d = $s->getTemplateDir();
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR, $d[ 0 ]);
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR, $d[ 1 ]);
@@ -83,7 +85,7 @@ class ProtectedFolderVarsTest extends PHPUnit_Smarty
     public function testConfigDirDirectRelativeArray()
     {
         $s = new Smarty();
-        $s->setConfigDir(array('./foo', './bar/'));
+        $s->setConfigDir(['./foo', './bar/']);
         $d = $s->getConfigDir();
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR, $d[ 0 ]);
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR, $d[ 1 ]);
@@ -162,7 +164,7 @@ class ProtectedFolderVarsTest extends PHPUnit_Smarty
     public function testCacheDirDirectRelativeExtends2()
     {
         $s = new FolderT();
-	    $s->setCacheDir('./bar');
+        $s->setCacheDir('./bar');
         $d = $s->getCacheDir();
         $this->assertEquals(__DIR__ . DIRECTORY_SEPARATOR . 'bar' . DIRECTORY_SEPARATOR, $d);
     }
@@ -178,6 +180,6 @@ class FolderT extends \Smarty\Smarty
 
     protected $cache_dir = './cache/';
 
-    protected $config_dir = array('./conf/');
+    protected $config_dir = ['./conf/'];
 
 }

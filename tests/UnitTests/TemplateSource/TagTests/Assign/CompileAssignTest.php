@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of assign tags
  *
@@ -9,7 +11,7 @@
 /**
  * class for assign tags tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
  *
  */
@@ -18,9 +20,9 @@ class CompileAssignTest extends PHPUnit_Smarty
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
-        $this->smarty->addTemplateDir("../../../__shared/templates/");
-        $this->smarty->addTemplateDir("./templates_tmp");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
+        $this->smarty->addTemplateDir('../../../__shared/templates/');
+        $this->smarty->addTemplateDir('./templates_tmp');
         $this->smarty->registerPlugin('modifier', 'var_export', 'var_export');
     }
 
@@ -33,7 +35,7 @@ class CompileAssignTest extends PHPUnit_Smarty
      * Test assign tags
      *
      * @not                 runInSeparateProcess
-     * 
+     *
      * @dataProvider        dataTestAssign
      */
     public function testAssign($code, $result, $testName, $testNumber)
@@ -56,46 +58,46 @@ class CompileAssignTest extends PHPUnit_Smarty
         * result
         * test name
         */
-        return array(// old format
-                     array('{assign var=foo value=1}{$foo}', '1', '', $i++),
-                     array('{assign var=\'foo\' value=2}{$foo}', '2', '', $i++),
-                     array('{assign var="foo" value=3}{$foo}', '3', '', $i++),
-                     array('{assign var=foo value=$bar}{$foo}', 'buh', '', $i++),
-                     array('{assign var=$bar value=11}{$buh}', '11', '', $i++),
-                     array('{assign var=foo value=bar}{$foo}', 'bar', '', $i++),
-                     array('{assign var=foo value=1+2}{$foo}', '3', '', $i++),
-                     array('{assign var=foo value=strlen(\'barbuh\')}{$foo}', '6', '', $i++),
-                     array('{assign var=foo value=\'barr\'|strlen}{$foo}', '4', '', $i++),
-                     array('{assign var=foo value=[9,8,7,6]}{$foo|var_export:true}',
-                           var_export(array(9, 8, 7, 6), true), '', $i++),
-                     array(
+        return [// old format
+                     ['{assign var=foo value=1}{$foo}', '1', '', $i++],
+                     ['{assign var=\'foo\' value=2}{$foo}', '2', '', $i++],
+                     ['{assign var="foo" value=3}{$foo}', '3', '', $i++],
+                     ['{assign var=foo value=$bar}{$foo}', 'buh', '', $i++],
+                     ['{assign var=$bar value=11}{$buh}', '11', '', $i++],
+                     ['{assign var=foo value=bar}{$foo}', 'bar', '', $i++],
+                     ['{assign var=foo value=1+2}{$foo}', '3', '', $i++],
+                     ['{assign var=foo value=strlen(\'barbuh\')}{$foo}', '6', '', $i++],
+                     ['{assign var=foo value=\'barr\'|strlen}{$foo}', '4', '', $i++],
+                     ['{assign var=foo value=[9,8,7,6]}{$foo|var_export:true}',
+                           var_export([9, 8, 7, 6], true), '', $i++],
+                     [
                          '{assign var=foo value=[\'a\'=>9,\'b\'=>8,\'c\'=>7,\'d\'=>6]}{$foo|var_export:true}',
-                         var_export(array('a' => 9, 'b' => 8, 'c' => 7, 'd' => 6,), true), '', $i++,),
-                     array('{assign foo  value=1}{$foo}', '1', '', $i++),
-                     array('{assign foo 1}{$foo}', '1', '', $i++),
+                         var_export(['a' => 9, 'b' => 8, 'c' => 7, 'd' => 6,], true), '', $i++,],
+                     ['{assign foo  value=1}{$foo}', '1', '', $i++],
+                     ['{assign foo 1}{$foo}', '1', '', $i++],
                      // new format
-                     array('{$foo=1}{$foo}', '1', '', $i++),
-                     array('{$foo =2}{$foo}', '2', '', $i++),
-                     array('{$foo=bar}{$foo}', 'bar', '', $i++),
-                     array('{$foo=1+2}{$foo}', '3', '', $i++),
-                     array('{$foo = 1+3}{$foo}', '4', '', $i++),
-                     array('{$foo = 1 + 4}{$foo}', '5', '', $i++),
-                     array('{$foo=strlen(\'bar\')}{$foo}', '3', '', $i++),
-                     array('{$foo=\'bar\'|strlen}{$foo}', '3', '', $i++),
-                     array('{$foo[\'a\'][4]=1}{$foo[\'a\'][4]}', '1', '', $i++),
-                     array('{$foo=[9,8,7,6]}{$foo|var_export:true}', var_export(array(9, 8, 7, 6), true), '', $i++),
-                     array(
+                     ['{$foo=1}{$foo}', '1', '', $i++],
+                     ['{$foo =2}{$foo}', '2', '', $i++],
+                     ['{$foo=bar}{$foo}', 'bar', '', $i++],
+                     ['{$foo=1+2}{$foo}', '3', '', $i++],
+                     ['{$foo = 1+3}{$foo}', '4', '', $i++],
+                     ['{$foo = 1 + 4}{$foo}', '5', '', $i++],
+                     ['{$foo=strlen(\'bar\')}{$foo}', '3', '', $i++],
+                     ['{$foo=\'bar\'|strlen}{$foo}', '3', '', $i++],
+                     ['{$foo[\'a\'][4]=1}{$foo[\'a\'][4]}', '1', '', $i++],
+                     ['{$foo=[9,8,7,6]}{$foo|var_export:true}', var_export([9, 8, 7, 6], true), '', $i++],
+                     [
                          '{$foo=[\'a\'=>9,\'b\'=>8,\'c\'=>7,\'d\'=>6]}{$foo|var_export:true}',
-                         var_export(array('a' => 9, 'b' => 8, 'c' => 7, 'd' => 6,), true), '', $i++),
-        );
+                         var_export(['a' => 9, 'b' => 8, 'c' => 7, 'd' => 6,], true), '', $i++],
+        ];
     }
 
     /**
      * Test Assign spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testAssignSpacing($code, $result, $testName, $testNumber)
     {
@@ -104,16 +106,18 @@ class CompileAssignTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output nocache spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testAssignSpacingNocache($code, $result, $testName, $testNumber)
     {
@@ -122,17 +126,19 @@ class CompileAssignTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->setTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'bar',true);
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'bar', true);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output nocache spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testAssignSpacingNocache2($code, $result, $testName, $testNumber)
     {
@@ -141,10 +147,12 @@ class CompileAssignTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->setTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'foo',true);
-        $this->assertEquals(str_replace('bar','foo',$result),
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'foo', true);
+        $this->assertEquals(
+            str_replace('bar', 'foo', $result),
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
 
     /*
@@ -159,11 +167,11 @@ class CompileAssignTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(
-                     array("A{assign var=buh value=\$foo}B{\$buh}", "ABbar", 'Text1', $i++),
-                     array("A\n{assign var=buh value=\$foo}\nB{\$buh}", "A\nBbar", 'Newline1', $i++),
-                     array("E{assign var=buh value=\$foo}\nF{\$buh}", "EFbar", 'Newline2', $i++),
-                     array("G\n{assign var=buh value=\$foo}H{\$buh}", "G\nHbar", 'Newline3', $i++),
-        );
+        return [
+                     ['A{assign var=buh value=$foo}B{$buh}', 'ABbar', 'Text1', $i++],
+                     ["A\n{assign var=buh value=\$foo}\nB{\$buh}", "A\nBbar", 'Newline1', $i++],
+                     ["E{assign var=buh value=\$foo}\nF{\$buh}", 'EFbar', 'Newline2', $i++],
+                     ["G\n{assign var=buh value=\$foo}H{\$buh}", "G\nHbar", 'Newline3', $i++],
+        ];
     }
 }

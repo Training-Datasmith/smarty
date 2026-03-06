@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests deault template handler
  *
@@ -9,9 +11,9 @@
 /**
  * class for block plugin tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class DefaultTemplateHandlerTest extends PHPUnit_Smarty
 {
@@ -21,7 +23,6 @@ class DefaultTemplateHandlerTest extends PHPUnit_Smarty
         $this->smarty->setForceCompile(true);
         $this->smarty->disableSecurity();
     }
-
 
     public function testInit()
     {
@@ -34,8 +35,7 @@ class DefaultTemplateHandlerTest extends PHPUnit_Smarty
     {
         try {
             $this->smarty->fetch('foo.tpl');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->assertStringContainsString('Unable to load', $e->getMessage());
 
             return;
@@ -50,10 +50,9 @@ class DefaultTemplateHandlerTest extends PHPUnit_Smarty
     {
         try {
             $this->smarty->registerDefaultTemplateHandler('foo');
-        }
-        catch (Exception $e) {
-            $this->assertStringContainsString("Default template handler", $e->getMessage());
-            $this->assertStringContainsString("not callable", $e->getMessage());
+        } catch (Exception $e) {
+            $this->assertStringContainsString('Default template handler', $e->getMessage());
+            $this->assertStringContainsString('not callable', $e->getMessage());
 
             return;
         }
@@ -72,7 +71,7 @@ class DefaultTemplateHandlerTest extends PHPUnit_Smarty
     public function testDefaultTemplateHandlerReplacementByTemplateFile()
     {
         $this->smarty->registerDefaultTemplateHandler('my_template_handler_file');
-        $this->assertEquals("hello world", $this->smarty->fetch('foo.tpl'));
+        $this->assertEquals('hello world', $this->smarty->fetch('foo.tpl'));
     }
 
     /**
@@ -83,8 +82,7 @@ class DefaultTemplateHandlerTest extends PHPUnit_Smarty
         $this->smarty->registerDefaultTemplateHandler('my_false');
         try {
             $this->smarty->fetch('foo.tpl');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->assertStringContainsString('Default handler: No template default content for \'file:foo.tpl\'', $e->getMessage());
 
             return;

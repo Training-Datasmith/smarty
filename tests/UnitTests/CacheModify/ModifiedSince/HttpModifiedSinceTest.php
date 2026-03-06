@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource file
  *
@@ -9,17 +11,16 @@
 /**
  * class for cache resource file tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class HttpModifiedSinceTest extends PHPUnit_Smarty
 {
-
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-     }
+    }
 
     public function testInit()
     {
@@ -32,7 +33,7 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
     public function testDisabled()
     {
         $_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'] = true;
-        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = array();
+        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = [];
 
         $this->smarty->setCacheModifiedCheck(false);
         $this->smarty->caching = true;
@@ -55,7 +56,7 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
     public function testEnabledUncached()
     {
         $_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'] = true;
-        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = array();
+        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = [];
 
         $this->smarty->setCacheModifiedCheck(true);
         $this->smarty->caching = false;
@@ -78,7 +79,7 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
     public function testEnabledCached()
     {
         $_SERVER['SMARTY_PHPUNIT_DISABLE_HEADERS'] = true;
-        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = array();
+        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = [];
 
         $this->smarty->setCacheModifiedCheck(true);
         $this->smarty->caching = true;
@@ -92,8 +93,8 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
         ob_end_clean();
         $this->assertEquals('hello world', $output);
         $t1 = time();
-        $t2 = strtotime(substr( $_SERVER['SMARTY_PHPUNIT_HEADERS'][0],15));
-        $this->assertTrue(($t2-$t1) <= 1);
+        $t2 = strtotime(substr($_SERVER['SMARTY_PHPUNIT_HEADERS'][0], 15));
+        $this->assertTrue(($t2 - $t1) <= 1);
     }
 
     /**
@@ -102,7 +103,7 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
     public function testEnabledCached2()
     {
 
-        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = array();
+        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = [];
         $_SERVER['HTTP_IF_MODIFIED_SINCE'] = gmdate('D, d M Y H:i:s', time() - 3600) . ' GMT';
         $this->smarty->setCacheModifiedCheck(true);
         $this->smarty->caching = true;
@@ -115,8 +116,8 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
         ob_end_clean();
         $this->assertEquals('hello world', $output);
         $t1 = time();
-        $t2 = strtotime(substr( $_SERVER['SMARTY_PHPUNIT_HEADERS'][0],15));
-        $this->assertTrue(($t2-$t1) <= 1);
+        $t2 = strtotime(substr($_SERVER['SMARTY_PHPUNIT_HEADERS'][0], 15));
+        $this->assertTrue(($t2 - $t1) <= 1);
     }
 
     /**
@@ -126,7 +127,7 @@ class HttpModifiedSinceTest extends PHPUnit_Smarty
     {
 
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
-        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = array();
+        $_SERVER['SMARTY_PHPUNIT_HEADERS'] = [];
         $_SERVER['HTTP_IF_MODIFIED_SINCE'] = gmdate('D, d M Y H:i:s', time() + 10) . ' GMT';
         $this->smarty->setCacheModifiedCheck(true);
         $this->smarty->caching = true;

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of registered object functions
  *
@@ -9,9 +11,9 @@
 /**
  * class for registered object function tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class CompileRegisteredObjectFunctionTest extends PHPUnit_Smarty
 {
@@ -26,11 +28,10 @@ class CompileRegisteredObjectFunctionTest extends PHPUnit_Smarty
 
         $this->smarty->setForceCompile(true);
         $this->smarty->disableSecurity();
-        $this->object = new RegObject;
+        $this->object = new RegObject();
         $this->smarty->registerObject('objecttest', $this->object, 'myhello', true, 'myblock');
         $this->smarty->registerObject('objectprop', $this->object);
     }
-
 
     public function testInit()
     {
@@ -91,7 +92,7 @@ class CompileRegisteredObjectFunctionTest extends PHPUnit_Smarty
      */
 }
 
-Class RegObject
+class RegObject
 {
     public $prop = 'hello world';
 

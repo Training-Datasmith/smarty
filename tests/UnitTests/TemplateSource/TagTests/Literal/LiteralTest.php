@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests appendByRef method
  *
@@ -9,9 +11,9 @@
 /**
  * class for appendByRef tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class LiteralTest extends PHPUnit_Smarty
 {
@@ -19,7 +21,6 @@ class LiteralTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -30,7 +31,7 @@ class LiteralTest extends PHPUnit_Smarty
      */
     public function testLiteralTag()
     {
-        $tpl = $this->smarty->createTemplate("string:{literal} {\$foo} {/literal}");
+        $tpl = $this->smarty->createTemplate('string:{literal} {$foo} {/literal}');
         $this->assertEquals(' {$foo} ', $this->smarty->fetch($tpl));
     }
 
@@ -39,7 +40,7 @@ class LiteralTest extends PHPUnit_Smarty
     */
     public function testAutoLiteralSpace()
     {
-        $tpl = $this->smarty->createTemplate("string: { \$foo} ");
+        $tpl = $this->smarty->createTemplate('string: { $foo} ');
         $tpl->assign('foo', 'literal');
         $this->assertEquals(' { $foo} ', $this->smarty->fetch($tpl));
     }
@@ -60,7 +61,7 @@ class LiteralTest extends PHPUnit_Smarty
     public function testAutoLiteralDisabled()
     {
         $this->smarty->setAutoLiteral(false);
-        $tpl = $this->smarty->createTemplate("string:  { \$foo} ");
+        $tpl = $this->smarty->createTemplate('string:  { $foo} ');
         $tpl->assign('foo', 'literal');
         $this->assertEquals('  literal ', $this->smarty->fetch($tpl));
     }

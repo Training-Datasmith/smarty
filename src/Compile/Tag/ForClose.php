@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty Internal Plugin Compile For
  * Compiles the {for} {forelse} {/for} tags
@@ -18,34 +20,34 @@ use Smarty\Compile\Base;
 
 
  */
-class ForClose extends Base {
+class ForClose extends Base
+{
+    /**
+     * Compiles code for the {/for} tag
+     *
+     * @param array $args array with attributes from parser
+     * @param object $compiler compiler object
+     * @param array $parameter array with compilation parameter
+     *
+     * @return string compiled code
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+    {
+        $compiler->loopNesting--;
 
-	/**
-	 * Compiles code for the {/for} tag
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param object $compiler compiler object
-	 * @param array $parameter array with compilation parameter
-	 *
-	 * @return string compiled code
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
-		$compiler->loopNesting--;
+        [$openTag, $nocache_pushed] = $this->closeTag($compiler, ['for', 'forelse']);
+        $output = "<?php }\n";
+        if ($openTag !== 'forelse') {
+            $output .= "}\n";
+        }
+        $output .= '?>';
 
-		[$openTag, $nocache_pushed] = $this->closeTag($compiler, ['for', 'forelse']);
-		$output = "<?php }\n";
-		if ($openTag !== 'forelse') {
-			$output .= "}\n";
-		}
-		$output .= "?>";
+        if ($nocache_pushed) {
+            // pop the pushed virtual nocache tag
+            $this->closeTag($compiler, 'nocache');
+            $compiler->tag_nocache = true;
+        }
 
-		if ($nocache_pushed) {
-			// pop the pushed virtual nocache tag
-			$this->closeTag($compiler, 'nocache');
-			$compiler->tag_nocache = true;
-		}
-
-		return $output;
-	}
+        return $output;
+    }
 }

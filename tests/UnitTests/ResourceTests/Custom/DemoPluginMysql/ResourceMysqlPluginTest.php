@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests resource plugins
  *
@@ -9,9 +11,9 @@ if (MysqlResourceEnable == true) {
     /**
      * class for resource plugins tests
      *
-     * 
-     * 
-     * 
+     *
+     *
+     *
      */
     class ResourceMysqlPluginTest extends PHPUnit_Smarty
     {
@@ -20,11 +22,11 @@ if (MysqlResourceEnable == true) {
             if (MysqlResourceEnable != true) {
                 $this->markTestSkipped('Msqlresource tests are disabled');
             }
-                if (self::$init) {
+            if (self::$init) {
                 $this->getConnection();
             }
             $this->setUpSmarty(__DIR__);
-            $this->smarty->addPluginsDir("./PHPunitplugins/");
+            $this->smarty->addPluginsDir('./PHPunitplugins/');
         }
 
         /**
@@ -42,16 +44,16 @@ if (MysqlResourceEnable == true) {
         */
         public function testResourcePluginMysql()
         {
-             $this->assertEquals('hello world', $this->smarty->fetch('mysqltest:test.tpl'));
+            $this->assertEquals('hello world', $this->smarty->fetch('mysqltest:test.tpl'));
         }
 
-       /**
-        * test must compile
-        */
+        /**
+         * test must compile
+         */
         public function testMustCompile()
         {
-           $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
-           $this->assertFalse($tpl->mustCompile());
+            $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
+            $this->assertFalse($tpl->mustCompile());
         }
 
         /**
@@ -71,10 +73,10 @@ if (MysqlResourceEnable == true) {
         */
         public function testResourcePluginMysql2()
         {
-             $this->assertEquals('hello smarty', $this->smarty->fetch('mysqltest:test.tpl'));
+            $this->assertEquals('hello smarty', $this->smarty->fetch('mysqltest:test.tpl'));
         }
 
-         /**
+        /**
         * test clear compiled
         */
         public function testClearCompiled()
@@ -82,13 +84,13 @@ if (MysqlResourceEnable == true) {
             $this->assertEquals(1, $this->smarty->clearCompiledTemplate('mysqltest:test.tpl'));
         }
 
-       /**
-        * test must compile
-        */
+        /**
+         * test must compile
+         */
         public function testMustCompile3()
         {
-           $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
-           $this->assertTrue($tpl->mustCompile());
+            $tpl = $this->smarty->createTemplate('mysqltest:test.tpl');
+            $this->assertTrue($tpl->mustCompile());
         }
 
         /**
@@ -115,7 +117,8 @@ if (MysqlResourceEnable == true) {
         /**
         * test unknown template
         */
-        public function testUnknownTemplate() {
+        public function testUnknownTemplate()
+        {
             $this->expectException(\Smarty\Exception::class);
             $this->expectExceptionMessage('Unable to load \'mysqlstest:foo.tpl\'');
             $this->assertEquals('foo', $this->smarty->fetch('mysqlstest:foo.tpl'));

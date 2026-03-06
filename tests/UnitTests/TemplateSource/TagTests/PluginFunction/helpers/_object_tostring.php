@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 class _object_toString
 {
     protected $string = null;

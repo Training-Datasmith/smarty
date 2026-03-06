@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests double quoted strings
  *
@@ -9,18 +11,18 @@
 /**
  * class for double quoted string tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
 */
 class DoubleQuotedStringTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
-        $this->smarty->addTemplateDir("../../../__shared/templates/");
-        $this->smarty->addTemplateDir("./templates_tmp");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
+        $this->smarty->addTemplateDir('../../../__shared/templates/');
+        $this->smarty->addTemplateDir('./templates_tmp');
     }
 
     public function testInit()
@@ -31,7 +33,7 @@ class DoubleQuotedStringTest extends PHPUnit_Smarty
     /**
      * Test double qouted strings
      *
-     * 
+     *
      * @dataProvider        dataTestDoubleQuoted
      */
     public function testDoubleQuoted($code, $result, $testName, $testNumber)
@@ -41,8 +43,11 @@ class DoubleQuotedStringTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->assignGlobal('file', $file);
         $this->smarty->assign('bar', 'buh');
-        $this->assertEquals($result, $this->smarty->fetch($file),
-                            "testDoubleQuoted - {$code} - {$name}");
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testDoubleQuoted - {$code} - {$name}"
+        );
     }
 
     /*
@@ -57,27 +62,26 @@ class DoubleQuotedStringTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('{$foo="Hello World"}{$foo}', 'Hello World', 'simple', $i ++),
-                     array('{$bar=1}{$foo="Hello {$bar+2} World"}{$foo}', 'Hello 3 World', 'withExpression', $i ++),
-                     array('{$bar=\'blah\'}{$foo="Hello $bar World"}{$foo}', 'Hello blah World', 'withVariable', $i ++),
-                     array('{$bar=\'blah\'}{$buh=\'wow\'}{$foo="Hello $bar$buh World"}{$foo}', 'Hello blahwow World', 'with2Variables', $i ++),
-                     array('{$bar=\'blah\'}{$foo="Hello `$bar`.test World"}{$foo}', 'Hello blah.test World', 'withVarBacktick', $i ++),
-                     array('{$bar=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar``$buh`.test World"}{$foo}', 'Hello blahbuh.test World', 'with2VarBacktick', $i ++),
-                     array('{$barbuh=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar{$buh}`.test World"}{$foo}', 'Hello blah.test World', 'withVariableVarBacktick', $i ++),
-                     array('{$bar[1][2]=\'blah\'}{$foo="Hello `$bar.1.2`.test World"}{$foo}', 'Hello blah.test World', 'withVarIndexSmartyBacktick', $i ++),
-                     array('{$bar[1][2]=\'blah\'}{$foo="Hello `$bar[1][2]`.test World"}{$foo}', 'Hello blah.test World', 'withVarIndexPhPBacktick', $i ++),
-                     array('{$a=1}{"`$a+1`"}', '2', 'withExpressionBacktick', $i ++),
-                     array('{$foo="Hello {counter start=3} World"}{$foo}', 'Hello 3 World', 'withCounterTag', $i ++),
-                     array('{$foo="Hello {counter start=2}{counter} World"}{$foo}', 'Hello 23 World', 'with2CounterTag', $i ++),
-                     array('{$x=1}{$y=2}{$z=true}{"Hello{if $z} {$x} {else}{$y}{/if}World"}', 'Hello 1 World', 'withIfTag', $i ++),
-                     array('{$bar=\'blah\'}{$foo="Hello {$bar}.test World"}{$foo}', 'Hello blah.test World', 'withDelimiter', $i ++),
-                     array('{$foo="Hello \" World"}{$foo}', 'Hello " World', 'escaped', $i ++),
-                     array('{$foo="Hello \'World\'"}{$foo}', 'Hello \'World\'', 'withSingleQuotes', $i ++),
-                     array('{$foo="Hello {\'World\'} Test"}{$foo}', 'Hello World Test', 'withSingleQuoteTag', $i ++),
-                     array('{$foo=""}{$foo}', '', 'empty', $i ++),
-        );
+        return [['{$foo="Hello World"}{$foo}', 'Hello World', 'simple', $i++],
+                     ['{$bar=1}{$foo="Hello {$bar+2} World"}{$foo}', 'Hello 3 World', 'withExpression', $i++],
+                     ['{$bar=\'blah\'}{$foo="Hello $bar World"}{$foo}', 'Hello blah World', 'withVariable', $i++],
+                     ['{$bar=\'blah\'}{$buh=\'wow\'}{$foo="Hello $bar$buh World"}{$foo}', 'Hello blahwow World', 'with2Variables', $i++],
+                     ['{$bar=\'blah\'}{$foo="Hello `$bar`.test World"}{$foo}', 'Hello blah.test World', 'withVarBacktick', $i++],
+                     ['{$bar=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar``$buh`.test World"}{$foo}', 'Hello blahbuh.test World', 'with2VarBacktick', $i++],
+                     ['{$barbuh=\'blah\'}{$buh=\'buh\'}{$foo="Hello `$bar{$buh}`.test World"}{$foo}', 'Hello blah.test World', 'withVariableVarBacktick', $i++],
+                     ['{$bar[1][2]=\'blah\'}{$foo="Hello `$bar.1.2`.test World"}{$foo}', 'Hello blah.test World', 'withVarIndexSmartyBacktick', $i++],
+                     ['{$bar[1][2]=\'blah\'}{$foo="Hello `$bar[1][2]`.test World"}{$foo}', 'Hello blah.test World', 'withVarIndexPhPBacktick', $i++],
+                     ['{$a=1}{"`$a+1`"}', '2', 'withExpressionBacktick', $i++],
+                     ['{$foo="Hello {counter start=3} World"}{$foo}', 'Hello 3 World', 'withCounterTag', $i++],
+                     ['{$foo="Hello {counter start=2}{counter} World"}{$foo}', 'Hello 23 World', 'with2CounterTag', $i++],
+                     ['{$x=1}{$y=2}{$z=true}{"Hello{if $z} {$x} {else}{$y}{/if}World"}', 'Hello 1 World', 'withIfTag', $i++],
+                     ['{$bar=\'blah\'}{$foo="Hello {$bar}.test World"}{$foo}', 'Hello blah.test World', 'withDelimiter', $i++],
+                     ['{$foo="Hello \" World"}{$foo}', 'Hello " World', 'escaped', $i++],
+                     ['{$foo="Hello \'World\'"}{$foo}', 'Hello \'World\'', 'withSingleQuotes', $i++],
+                     ['{$foo="Hello {\'World\'} Test"}{$foo}', 'Hello World Test', 'withSingleQuoteTag', $i++],
+                     ['{$foo=""}{$foo}', '', 'empty', $i++],
+        ];
     }
-
 
     /**
      * test unclosed block tag

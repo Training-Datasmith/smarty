@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  */
@@ -7,7 +9,7 @@
  * class for path normalization tests
  *
  *
- * 
+ *
  *
  */
 class PathNormalizationTest extends PHPUnit_Smarty
@@ -20,7 +22,8 @@ class PathNormalizationTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
     }
 
-    public function testNormalizeToAbsolute() {
+    public function testNormalizeToAbsolute()
+    {
         $d = $this->smarty->_realpath('./foo/a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
@@ -36,41 +39,49 @@ class PathNormalizationTest extends PHPUnit_Smarty
         }
     }
  * */
-    public function testNormalizeToAbsoluteNoStart() {
+    public function testNormalizeToAbsoluteNoStart()
+    {
         $d = $this->smarty->_realpath('foo/a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsoluteNoStart2() {
+    public function testNormalizeToAbsoluteNoStart2()
+    {
         $d = $this->smarty->_realpath('a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsolutePathLeadingDot() {
+    public function testNormalizeToAbsolutePathLeadingDot()
+    {
         $d = $this->smarty->_realpath('.foo/a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . '.foo' . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsolutePathTrailingDot() {
+    public function testNormalizeToAbsolutePathTrailingDot()
+    {
         $d = $this->smarty->_realpath('./foo./a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo.' . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsolutePathBubbleUp() {
+    public function testNormalizeToAbsolutePathBubbleUp()
+    {
         $ds = '\\' . DIRECTORY_SEPARATOR;
         $prefix = preg_replace("#[{$ds}][^{$ds}]+$#", '', getcwd());
         $d = $this->smarty->_realpath('./../a.foo', true);
         $this->assertEquals($prefix . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsolutePathBubbleUp2() {
+    public function testNormalizeToAbsolutePathBubbleUp2()
+    {
         $ds = '\\' . DIRECTORY_SEPARATOR;
         $prefix = preg_replace("#[{$ds}][^{$ds}]+$#", '', getcwd());
         $d = $this->smarty->_realpath('././../././a.foo', true);
         $this->assertEquals($prefix . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsolutePathBubbleUp3() {
+    public function testNormalizeToAbsolutePathBubbleUp3()
+    {
         $ds = '\\' . DIRECTORY_SEPARATOR;
         $prefix = preg_replace("#[{$ds}][^{$ds}]+[{$ds}][^{$ds}]+$#", '', getcwd());
         $d = $this->smarty->_realpath('././.././.././a.foo', true);
         $this->assertEquals($prefix . DIRECTORY_SEPARATOR . 'a.foo', $d);
     }
-    public function testNormalizeToAbsoluteKomplex() {
+    public function testNormalizeToAbsoluteKomplex()
+    {
         $d = $this->smarty->_realpath('./foo/\\./bar/jo/wie/so/../..///.././././../aa/bb/cc/../../go/a.foo', true);
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR . 'aa'. DIRECTORY_SEPARATOR . 'go' . DIRECTORY_SEPARATOR .'a.foo', $d);
     }

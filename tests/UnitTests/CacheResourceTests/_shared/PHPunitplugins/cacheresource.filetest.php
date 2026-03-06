@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 class Smarty_CacheResource_Filetest extends \Smarty\Cacheresource\File
 {

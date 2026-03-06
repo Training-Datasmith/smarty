@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of delimiter tags
  *
@@ -10,8 +12,8 @@
  * class for delimiter tags tests
  *
  * @run TestsInSeparateProcess
- * 
- * 
+ *
+ *
  */
 class CompileDelimiterTest extends PHPUnit_Smarty
 {
@@ -19,7 +21,6 @@ class CompileDelimiterTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -29,7 +30,7 @@ class CompileDelimiterTest extends PHPUnit_Smarty
     /**
      * test delimiter tag test
      */
-     public function testLeftDelimiter()
+    public function testLeftDelimiter()
     {
         $tpl = $this->smarty->createTemplate('string:x{ldelim}x');
         $this->assertEquals('x{x', $this->smarty->fetch($tpl));
@@ -48,6 +49,5 @@ class CompileDelimiterTest extends PHPUnit_Smarty
         $tpl = $this->smarty->createTemplate('string:x{ldelim nocache}x');
         $this->assertEquals('x{x', $this->smarty->fetch($tpl));
     }
-
 
 }

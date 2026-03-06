@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests variable variables
  *
@@ -9,9 +11,9 @@
 /**
  * class for variable variables tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class VariableVariableTest extends PHPUnit_Smarty
 {

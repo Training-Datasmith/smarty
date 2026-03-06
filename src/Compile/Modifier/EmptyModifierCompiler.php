@@ -1,19 +1,24 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 use Smarty\CompilerException;
 
 /**
  * Smarty empty modifier plugin
  */
-class EmptyModifierCompiler extends Base {
+class EmptyModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
+        if (count($params) !== 1) {
+            throw new CompilerException('Invalid number of arguments for empty. empty expects exactly 1 parameter.');
+        }
 
-		if (count($params) !== 1) {
-			throw new CompilerException("Invalid number of arguments for empty. empty expects exactly 1 parameter.");
-		}
-
-		return 'empty(' . $params[0] . ')';
-	}
+        return 'empty(' . $params[0] . ')';
+    }
 
 }

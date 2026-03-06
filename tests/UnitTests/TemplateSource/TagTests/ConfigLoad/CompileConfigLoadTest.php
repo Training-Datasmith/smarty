@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of the {config_load} tag
  *
@@ -9,9 +11,9 @@
 /**
  * class for config variable tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class CompileConfigLoadTest extends PHPUnit_Smarty
 {
@@ -23,9 +25,9 @@ class CompileConfigLoadTest extends PHPUnit_Smarty
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
-        $this->smarty->addTemplateDir("../../../__shared/templates/");
-        $this->smarty->addTemplateDir("./templates_tmp");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
+        $this->smarty->addTemplateDir('../../../__shared/templates/');
+        $this->smarty->addTemplateDir('./templates_tmp');
     }
 
     /**
@@ -37,83 +39,83 @@ class CompileConfigLoadTest extends PHPUnit_Smarty
     }
 
     /**
-     * 
-     * 
+     *
+     *
      *
      * test {load_config} loading section2
      */
     public function testConfigVariableSection2Template_001()
     {
-        $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('001_section2.tpl'));
+        $this->assertEquals('Welcome to Smarty! Global Section1 Hello Section2', $this->smarty->fetch('001_section2.tpl'));
     }
     /**
-     * 
-     * 
+     *
+     *
      *
      * test {load_config} loading section2
      */
     public function testConfigVariableSection2Template_0012()
     {
         $this->smarty->caching = true;
-        $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('001_section2.tpl'));
+        $this->assertEquals('Welcome to Smarty! Global Section1 Hello Section2', $this->smarty->fetch('001_section2.tpl'));
     }
 
     /**
-     * 
-     * 
+     *
+     *
      *
      * test {load_config} loading section2
      */
     public function testConfigVariableInclude_003()
     {
-        $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('003_section2.tpl'));
+        $this->assertEquals('Welcome to Smarty! Global Section1 Hello Section2', $this->smarty->fetch('003_section2.tpl'));
     }
 
     /**
-     * 
-     * 
+     *
+     *
      *
      * test {load_config} loading section2 shorttags
      */
     public function testConfigVariableSection2TemplateShorttags()
     {
-        $this->assertEquals("Welcome to Smarty! Global Section1 Hello Section2", $this->smarty->fetch('002_section2.tpl'));
+        $this->assertEquals('Welcome to Smarty! Global Section1 Hello Section2', $this->smarty->fetch('002_section2.tpl'));
     }
 
     /**
      * test config varibales loading all sections from template
      *
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableAllSectionsTemplate_004()
     {
         $this->smarty->setConfigOverwrite(true);
-        $this->assertEquals("Welcome to Smarty! Global Section1 Global Section2", $this->smarty->fetch('004_allsection.tpl'));
+        $this->assertEquals('Welcome to Smarty! Global Section1 Global Section2', $this->smarty->fetch('004_allsection.tpl'));
     }
 
     /**
      * test config varibales overwrite
      *
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableOverwrite_005()
     {
-        $this->assertEquals("Overwrite2", $this->smarty->fetch('005_overwrite.tpl'));
+        $this->assertEquals('Overwrite2', $this->smarty->fetch('005_overwrite.tpl'));
     }
 
     /**
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableOverwrite_006()
     {
-        $this->assertEquals("Welcome to Smarty! Overwrite3", $this->smarty->fetch('006_overwrite.tpl'));
+        $this->assertEquals('Welcome to Smarty! Overwrite3', $this->smarty->fetch('006_overwrite.tpl'));
     }
     /**
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableOverwrite_0061()
     {
@@ -125,39 +127,39 @@ class CompileConfigLoadTest extends PHPUnit_Smarty
     /**
      * test config varibales overwrite false
      *
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableOverwrite_007()
     {
         $this->smarty->setConfigOverwrite(false);
-        $this->assertEquals("Overwrite1 Overwrite2 Overwrite3 ", $this->smarty->fetch('007_overwrite.tpl'));
+        $this->assertEquals('Overwrite1 Overwrite2 Overwrite3 ', $this->smarty->fetch('007_overwrite.tpl'));
     }
 
     /**
      * test config varibales booleanize on
      *
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableBooleanizeOn_008()
     {
         $this->smarty->setConfigBooleanize(true);
         $this->smarty->assign('expected', true);
-        $this->assertEquals("passed", $this->smarty->fetch('008_booleanize.tpl'));
+        $this->assertEquals('passed', $this->smarty->fetch('008_booleanize.tpl'));
     }
 
     /**
      * test config varibales booleanize off
      *
-     * 
-     * 
+     *
+     *
      */
     public function testConfigVariableBooleanizeOff_008()
     {
         $this->smarty->setConfigBooleanize(false);
         $this->smarty->assign('expected', 'on');
-        $this->assertEquals("passed", $this->smarty->fetch('008_booleanize.tpl'));
+        $this->assertEquals('passed', $this->smarty->fetch('008_booleanize.tpl'));
     }
 
     /**

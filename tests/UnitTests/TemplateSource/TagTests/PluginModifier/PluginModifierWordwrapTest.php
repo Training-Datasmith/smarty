@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -10,8 +12,8 @@
  * class for modifier tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class PluginModifierWordwrapTest extends PHPUnit_Smarty
 {

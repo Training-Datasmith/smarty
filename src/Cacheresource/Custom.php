@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Cacheresource;
 
 /**
@@ -124,19 +126,19 @@ abstract class Custom extends Base
         $cached->exists = !!$cached->timestamp;
     }
 
-	/**
-	 * Read the cached template and process the header
-	 *
-	 * @param Template $_smarty_tpl do not change variable name, is used by compiled template
-	 * @param Cached|null $cached cached object
-	 * @param boolean $update flag if called because cache update
-	 *
-	 * @return boolean                 true or false if the cached content does not exist
-	 */
+    /**
+     * Read the cached template and process the header
+     *
+     * @param Template $_smarty_tpl do not change variable name, is used by compiled template
+     * @param Cached|null $cached cached object
+     * @param boolean $update flag if called because cache update
+     *
+     * @return boolean                 true or false if the cached content does not exist
+     */
     public function process(
-	    Template               $_smarty_tpl,
-	    ?\Smarty\Template\Cached $cached = null,
-	                           $update = false
+        Template               $_smarty_tpl,
+        ?\Smarty\Template\Cached $cached = null,
+        $update = false
     ) {
         if (!$cached) {
             $cached = $_smarty_tpl->getCached();
@@ -191,7 +193,7 @@ abstract class Custom extends Base
     public function retrieveCachedContent(Template $_template)
     {
         $content = $_template->getCached()->content ?: null;
-	    if ($content === null) {
+        if ($content === null) {
             $timestamp = null;
             $this->fetch(
                 $_template->getCached()->filepath,
@@ -205,14 +207,14 @@ abstract class Custom extends Base
         return $content ?? false;
     }
 
-	/**
-	 * Empty cache
-	 *
-	 * @param \Smarty\Smarty $smarty Smarty object
-	 * @param null $exp_time expiration time (number of seconds, not timestamp)
-	 *
-	 * @return integer number of cache files deleted
-	 */
+    /**
+     * Empty cache
+     *
+     * @param \Smarty\Smarty $smarty Smarty object
+     * @param null $exp_time expiration time (number of seconds, not timestamp)
+     *
+     * @return integer number of cache files deleted
+     */
     public function clearAll(\Smarty\Smarty $smarty, $exp_time = null)
     {
         return $this->delete(null, null, null, $exp_time);
@@ -244,14 +246,14 @@ abstract class Custom extends Base
         return $this->delete($cache_name, $cache_id, $compile_id, $exp_time);
     }
 
-	/**
-	 * Check is cache is locked for this template
-	 *
-	 * @param Smarty $smarty Smarty object
-	 * @param Cached $cached cached object
-	 *
-	 * @return boolean               true or false if cache is locked
-	 */
+    /**
+     * Check is cache is locked for this template
+     *
+     * @param Smarty $smarty Smarty object
+     * @param Cached $cached cached object
+     *
+     * @return boolean               true or false if cache is locked
+     */
     public function hasLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
     {
         $id = $cached->lock_id;

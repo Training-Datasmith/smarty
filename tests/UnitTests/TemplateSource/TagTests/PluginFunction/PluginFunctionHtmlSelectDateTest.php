@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -9,15 +11,15 @@
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
 {
     public $now = null;
-    protected $years = array();
-    protected $months = array(
+    protected $years = [];
+    protected $months = [
         'none'            => '<option value="01">January</option>
 <option value="02">February</option>
 <option value="03">March</option>
@@ -78,9 +80,9 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
 <option value="10">juliet</option>
 <option value="11">kilo</option>
 <option value="12">lima</option>',
-    );
+    ];
 
-    protected $days = array(
+    protected $days = [
         'none'              => '<option value="1">01</option>
 <option value="2">02</option>
 <option value="3">03</option>
@@ -205,7 +207,7 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
 <option value="029">29</option>
 <option value="030">30</option>
 <option value="031">31</option>',
-    );
+    ];
 
     public function setUp(): void
     {
@@ -215,7 +217,7 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $year = date('Y');
         $this->now = mktime(15, 0, 0, 2, 20, $year);
         $o = '';
-        for ($i = 2005; $i < $year; $i ++) {
+        for ($i = 2005; $i < $year; $i++) {
             $o .= "<option value=\"{$i}\">{$i}</option>\n";
         }
         $o .= "<option value=\"{$year}\" selected=\"selected\">{$year}</option>";
@@ -223,14 +225,14 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $this->years['end_2005'] = $o;
 
         $o = "<option value=\"{$year}\" selected=\"selected\">{$year}</option>";
-        for ($i = $year + 1; $i < $year + 6; $i ++) {
+        for ($i = $year + 1; $i < $year + 6; $i++) {
             $o .= "\n<option value=\"{$i}\">{$i}</option>";
         }
         $this->years['start_+5'] = $o;
         $this->years['end_+5'] = $o;
 
         $o = '';
-        for ($i = $year - 5; $i < $year; $i ++) {
+        for ($i = $year - 5; $i < $year; $i++) {
             $o .= "<option value=\"{$i}\">{$i}</option>\n";
         }
         $o .= "<option value=\"{$year}\" selected=\"selected\">{$year}</option>";
@@ -396,7 +398,8 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $this->assertEquals($result, $tpl->fetch());
     }
 
-    public function testEmptyDayWithDateString() {
+    public function testEmptyDayWithDateString()
+    {
         $n = "\n";
         $result = '<select name="Date_Month">' . $n . $this->months['default'] . $n . '</select>'
             . $n . '<select name="Date_Day">' . $n . '<option value="">day</option>' . $n . $this->days['none'] . $n . '</select>'
@@ -405,7 +408,8 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $this->assertEquals($result, $tpl->fetch());
     }
 
-    public function testEmptyMonthWithDateStrings() {
+    public function testEmptyMonthWithDateStrings()
+    {
         $n = "\n";
         $result = '<select name="Date_Month">' . $n . '<option value="">month</option>' . $n . $this->months['none'] . $n . '</select>'
             . $n . '<select name="Date_Day">' . $n . $this->days['default'] . $n . '</select>'
@@ -414,7 +418,8 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $this->assertEquals($result, $tpl->fetch());
     }
 
-    public function testEmptyYearWithDateStrings() {
+    public function testEmptyYearWithDateStrings()
+    {
         $n = "\n";
         $result = '<select name="Date_Month">' . $n . $this->months['default'] . $n . '</select>'
             . $n . '<select name="Date_Day">' . $n . $this->days['default'] . $n . '</select>'
@@ -614,13 +619,13 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
             . $n . '<select name="namorized[foobar_Day]">' . $n . $this->days['default'] . $n . '</select>'
             . $n . '<select name="namorized[foobar_Year]">' . $n . $this->years['default'] . $n . '</select>';
 
-        $date_array = array(
-            'namorized' => array(
+        $date_array = [
+            'namorized' => [
                 'foobar_Month' => '02',
                 'foobar_Day'   => '20',
                 'foobar_Year'  => date('Y'),
-            ),
-        );
+            ],
+        ];
 
         $tpl = $this->smarty->createTemplate('eval:{html_select_date time=$date_array.namorized field_array="namorized" prefix="foobar_"}');
         $tpl->assign('date_array', $date_array);

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests comments in templates
  *
@@ -11,7 +13,7 @@
  *
  *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class CommentsTest extends PHPUnit_Smarty
 {
@@ -37,9 +39,11 @@ class CommentsTest extends PHPUnit_Smarty
         $file = "testComments_{$name}.tpl";
         $this->makeTemplateFile($file, $code);
         $this->smarty->setTemplateDir('./templates_tmp');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            $file);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            $file
+        );
     }
 
     /*
@@ -54,26 +58,26 @@ class CommentsTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('{* this is a comment *}', '', 'T1', $i++),
-                     array('{* another $foo comment *}', '', 'T2', $i++),
-                     array('{* another  comment *}some in between{* another  comment *}', 'some in between',
-                           'T3', $i++),
-                     array("{* multi line \n comment *}", '', 'T4', $i++),
-                     array('{* /* foo * / *}', '', 'T5', $i++),
-                     array("A{* comment *}B\nC", "AB\nC", 'T6', $i++),
-                     array("D{* comment *}\n{* comment *}E\nF", "DE\nF", 'T7', $i++),
-                     array("G{* multi \nline *}H", "GH", 'T8', $i++),
-                     array("I{* multi \nline *}\nJ", "IJ", 'T9', $i++),
-                     array("=\n{* comment *}\n{* comment *}\n    b\n{* comment *}\n{* comment *}\n=", "=\n    b\n=", 'T10', $i++),
-                     array("=\na\n{* comment 1 *}\n{* comment 2 *}\n{* comment 3 *}\nb\n=", "=\na\nb\n=", 'T11', $i++),
-                     array("=\na\n{* comment 1 *}\n {* comment 2 *}\n{* comment 3 *}\nb\n=", "=\na\n b\n=", 'T12', $i++),
-                     array("=\na\n{* comment 1 *}\n{* comment 2 *} \n{* comment 3 *}\nb\n=", "=\na\n \nb\n=", 'T13', $i++),
-                     array("=\na\n{* comment 1 *}\n {* comment 2 *} \n{* comment 3 *}\nb\n=", "=\na\n  \nb\n=", 'T14', $i++),
-        );
+        return [['{* this is a comment *}', '', 'T1', $i++],
+                     ['{* another $foo comment *}', '', 'T2', $i++],
+                     ['{* another  comment *}some in between{* another  comment *}', 'some in between',
+                           'T3', $i++],
+                     ["{* multi line \n comment *}", '', 'T4', $i++],
+                     ['{* /* foo * / *}', '', 'T5', $i++],
+                     ["A{* comment *}B\nC", "AB\nC", 'T6', $i++],
+                     ["D{* comment *}\n{* comment *}E\nF", "DE\nF", 'T7', $i++],
+                     ["G{* multi \nline *}H", 'GH', 'T8', $i++],
+                     ["I{* multi \nline *}\nJ", 'IJ', 'T9', $i++],
+                     ["=\n{* comment *}\n{* comment *}\n    b\n{* comment *}\n{* comment *}\n=", "=\n    b\n=", 'T10', $i++],
+                     ["=\na\n{* comment 1 *}\n{* comment 2 *}\n{* comment 3 *}\nb\n=", "=\na\nb\n=", 'T11', $i++],
+                     ["=\na\n{* comment 1 *}\n {* comment 2 *}\n{* comment 3 *}\nb\n=", "=\na\n b\n=", 'T12', $i++],
+                     ["=\na\n{* comment 1 *}\n{* comment 2 *} \n{* comment 3 *}\nb\n=", "=\na\n \nb\n=", 'T13', $i++],
+                     ["=\na\n{* comment 1 *}\n {* comment 2 *} \n{* comment 3 *}\nb\n=", "=\na\n  \nb\n=", 'T14', $i++],
+        ];
     }
 
     public function testTextComment5()
     {
-        $this->assertEquals("IJ", $this->smarty->fetch("longcomment.tpl"), 'Comments longcomment.tpl');
+        $this->assertEquals('IJ', $this->smarty->fetch('longcomment.tpl'), 'Comments longcomment.tpl');
     }
 }

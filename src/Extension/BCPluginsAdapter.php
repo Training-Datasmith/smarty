@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Extension;
 
 use Smarty\BlockHandler\BlockPluginWrapper;
@@ -9,220 +11,240 @@ use Smarty\Compile\Tag\BCPluginWrapper as TagPluginWrapper;
 use Smarty\Filter\FilterPluginWrapper;
 use Smarty\FunctionHandler\BCPluginWrapper as FunctionPluginWrapper;
 
-class BCPluginsAdapter extends Base {
+class BCPluginsAdapter extends Base
+{
+    /**
+     * @var \Smarty\Smarty
+     */
+    private $smarty;
 
-	/**
-	 * @var \Smarty\Smarty
-	 */
-	private $smarty;
+    public function __construct(\Smarty\Smarty $smarty)
+    {
+        $this->smarty = $smarty;
+    }
 
-	public function __construct(\Smarty\Smarty $smarty) {
-		$this->smarty = $smarty;
-	}
+    private function findPlugin(string $type, string $name): ?array
+    {
+        if (null !== $plugin = $this->smarty->getRegisteredPlugin($type, $name)) {
+            return $plugin;
+        }
 
-	private function findPlugin(string $type, string $name): ?array {
-		if (null !== $plugin = $this->smarty->getRegisteredPlugin($type, $name)) {
-			return $plugin;
-		}
+        return null;
+    }
 
-		return null;
-	}
+    public function getTagCompiler(string $tag): ?\Smarty\Compile\CompilerInterface
+    {
 
-	public function getTagCompiler(string $tag): ?\Smarty\Compile\CompilerInterface {
-
-		$plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_COMPILER, $tag);
-		if ($plugin === null) {
-			return null;
-		}
+        $plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_COMPILER, $tag);
+        if ($plugin === null) {
+            return null;
+        }
         if (is_callable($plugin[0])) {
             $callback = $plugin[0];
             $cacheable = (bool) $plugin[1] ?? true;
             return new TagPluginWrapper($callback, $cacheable);
         }
 
-		if (class_exists($plugin[0])) {
-            $compiler = new $plugin[0];
+        if (class_exists($plugin[0])) {
+            $compiler = new $plugin[0]();
             if ($compiler instanceof CompilerInterface) {
-				return $compiler;
-			}
+                return $compiler;
+            }
         }
 
-		return null;
-	}
+        return null;
+    }
 
-	public function getFunctionHandler(string $functionName): ?\Smarty\FunctionHandler\FunctionHandlerInterface {
-		$plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_FUNCTION, $functionName);
-		if ($plugin === null) {
-			return null;
-		}
-		$callback = $plugin[0];
-		$cacheable = (bool) $plugin[1] ?? true;
+    public function getFunctionHandler(string $functionName): ?\Smarty\FunctionHandler\FunctionHandlerInterface
+    {
+        $plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_FUNCTION, $functionName);
+        if ($plugin === null) {
+            return null;
+        }
+        $callback = $plugin[0];
+        $cacheable = (bool) $plugin[1] ?? true;
 
-		return new FunctionPluginWrapper($callback, $cacheable);
+        return new FunctionPluginWrapper($callback, $cacheable);
 
-	}
+    }
 
-	public function getBlockHandler(string $blockTagName): ?\Smarty\BlockHandler\BlockHandlerInterface {
-		$plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_BLOCK, $blockTagName);
-		if ($plugin === null) {
-			return null;
-		}
-		$callback = $plugin[0];
-		$cacheable = (bool) $plugin[1] ?? true;
+    public function getBlockHandler(string $blockTagName): ?\Smarty\BlockHandler\BlockHandlerInterface
+    {
+        $plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_BLOCK, $blockTagName);
+        if ($plugin === null) {
+            return null;
+        }
+        $callback = $plugin[0];
+        $cacheable = (bool) $plugin[1] ?? true;
 
-		return new BlockPluginWrapper($callback, $cacheable);
-	}
+        return new BlockPluginWrapper($callback, $cacheable);
+    }
 
-	public function getModifierCallback(string $modifierName) {
+    public function getModifierCallback(string $modifierName)
+    {
 
-		$plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, $modifierName);
-		if ($plugin === null) {
-			return null;
-		}
-		return $plugin[0];
-	}
+        $plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_MODIFIER, $modifierName);
+        if ($plugin === null) {
+            return null;
+        }
+        return $plugin[0];
+    }
 
-	public function getModifierCompiler(string $modifier): ?\Smarty\Compile\Modifier\ModifierCompilerInterface {
-		$plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_MODIFIERCOMPILER, $modifier);
-		if ($plugin === null) {
-			return null;
-		}
-		$callback = $plugin[0];
+    public function getModifierCompiler(string $modifier): ?\Smarty\Compile\Modifier\ModifierCompilerInterface
+    {
+        $plugin = $this->findPlugin(\Smarty\Smarty::PLUGIN_MODIFIERCOMPILER, $modifier);
+        if ($plugin === null) {
+            return null;
+        }
+        $callback = $plugin[0];
 
-		return new ModifierCompilerPluginWrapper($callback);
-	}
+        return new ModifierCompilerPluginWrapper($callback);
+    }
 
-	/**
-	 * @var array
-	 */
-	private $preFilters = [];
+    /**
+     * @var array
+     */
+    private $preFilters = [];
 
-	public function getPreFilters(): array {
-		return $this->preFilters;
-	}
+    public function getPreFilters(): array
+    {
+        return $this->preFilters;
+    }
 
-	public function addPreFilter(\Smarty\Filter\FilterInterface $filter): void {
-		$this->preFilters[] = $filter;
-	}
+    public function addPreFilter(\Smarty\Filter\FilterInterface $filter): void
+    {
+        $this->preFilters[] = $filter;
+    }
 
-	public function addCallableAsPreFilter(callable $callable, ?string $name = null): void {
-		if ($name === null) {
-			$this->preFilters[] = new FilterPluginWrapper($callable);
-		} else {
-			$this->preFilters[$name] = new FilterPluginWrapper($callable);
-		}
-	}
+    public function addCallableAsPreFilter(callable $callable, ?string $name = null): void
+    {
+        if ($name === null) {
+            $this->preFilters[] = new FilterPluginWrapper($callable);
+        } else {
+            $this->preFilters[$name] = new FilterPluginWrapper($callable);
+        }
+    }
 
-	public function removePrefilter(string $name): void {
-		unset($this->preFilters[$name]);
-	}
+    public function removePrefilter(string $name): void
+    {
+        unset($this->preFilters[$name]);
+    }
 
-	/**
-	 * @var array
-	 */
-	private $postFilters = [];
+    /**
+     * @var array
+     */
+    private $postFilters = [];
 
-	public function getPostFilters(): array {
-		return $this->postFilters;
-	}
+    public function getPostFilters(): array
+    {
+        return $this->postFilters;
+    }
 
-	public function addPostFilter(\Smarty\Filter\FilterInterface $filter): void {
-		$this->postFilters[] = $filter;
-	}
+    public function addPostFilter(\Smarty\Filter\FilterInterface $filter): void
+    {
+        $this->postFilters[] = $filter;
+    }
 
-	public function addCallableAsPostFilter(callable $callable, ?string $name = null): void {
-		if ($name === null) {
-			$this->postFilters[] = new FilterPluginWrapper($callable);
-		} else {
-			$this->postFilters[$name] = new FilterPluginWrapper($callable);
-		}
-	}
+    public function addCallableAsPostFilter(callable $callable, ?string $name = null): void
+    {
+        if ($name === null) {
+            $this->postFilters[] = new FilterPluginWrapper($callable);
+        } else {
+            $this->postFilters[$name] = new FilterPluginWrapper($callable);
+        }
+    }
 
-	public function removePostFilter(string $name): void {
-		unset($this->postFilters[$name]);
-	}
+    public function removePostFilter(string $name): void
+    {
+        unset($this->postFilters[$name]);
+    }
 
+    /**
+     * @var array
+     */
+    private $outputFilters = [];
 
-	/**
-	 * @var array
-	 */
-	private $outputFilters = [];
+    public function getOutputFilters(): array
+    {
+        return $this->outputFilters;
+    }
 
-	public function getOutputFilters(): array {
-		return $this->outputFilters;
-	}
+    public function addOutputFilter(\Smarty\Filter\FilterInterface $filter): void
+    {
+        $this->outputFilters[] = $filter;
+    }
 
-	public function addOutputFilter(\Smarty\Filter\FilterInterface $filter): void {
-		$this->outputFilters[] = $filter;
-	}
+    public function addCallableAsOutputFilter(callable $callable, ?string $name = null): void
+    {
+        if ($name === null) {
+            $this->outputFilters[] = new FilterPluginWrapper($callable);
+        } else {
+            $this->outputFilters[$name] = new FilterPluginWrapper($callable);
+        }
+    }
 
-	public function addCallableAsOutputFilter(callable $callable, ?string $name = null): void {
-		if ($name === null) {
-			$this->outputFilters[] = new FilterPluginWrapper($callable);
-		} else {
-			$this->outputFilters[$name] = new FilterPluginWrapper($callable);
-		}
-	}
+    public function removeOutputFilter(string $name): void
+    {
+        unset($this->outputFilters[$name]);
+    }
 
-	public function removeOutputFilter(string $name): void {
-		unset($this->outputFilters[$name]);
-	}
+    public function loadPluginsFromDir(string $path): void
+    {
+        foreach ([
+            'function',
+            'modifier',
+            'block',
+            'compiler',
+            'prefilter',
+            'postfilter',
+            'outputfilter',
+            'modifiercompiler',
+        ] as $type) {
+            foreach (glob($path  . $type . '.?*.php') as $filename) {
+                $pluginName = $this->getPluginNameFromFilename($filename);
+                if ($pluginName !== null) {
+                    require_once $filename;
+                    $functionOrClassName = 'smarty_' . $type . '_' . $pluginName;
+                    if (function_exists($functionOrClassName) || class_exists($functionOrClassName)) {
+                        $this->smarty->registerPlugin($type, $pluginName, $functionOrClassName, true);
+                    }
+                }
+            }
+        }
 
-	public function loadPluginsFromDir(string $path): void {
-		foreach([
-			'function',
-			'modifier',
-		    'block',
-		    'compiler',
-		    'prefilter',
-		    'postfilter',
-		    'outputfilter',
-		    'modifiercompiler',
-		] as $type) {
-			foreach (glob($path  . $type . '.?*.php') as $filename) {
-				$pluginName = $this->getPluginNameFromFilename($filename);
-				if ($pluginName !== null) {
-					require_once $filename;
-					$functionOrClassName = 'smarty_' . $type . '_' . $pluginName;
-					if (function_exists($functionOrClassName) || class_exists($functionOrClassName)) {
-						$this->smarty->registerPlugin($type, $pluginName, $functionOrClassName, true);
-					}
-				}
-			}
-		}
+        $type = 'resource';
+        foreach (glob($path  . $type . '.?*.php') as $filename) {
+            $pluginName = $this->getPluginNameFromFilename($filename);
+            if ($pluginName !== null) {
+                require_once $filename;
+                if (class_exists($className = 'smarty_' . $type . '_' . $pluginName)) {
+                    $this->smarty->registerResource($pluginName, new $className());
+                }
+            }
+        }
 
-		$type = 'resource';
-		foreach (glob($path  . $type . '.?*.php') as $filename) {
-			$pluginName = $this->getPluginNameFromFilename($filename);
-			if ($pluginName !== null) {
-				require_once $filename;
-				if (class_exists($className = 'smarty_' . $type . '_' . $pluginName)) {
-					$this->smarty->registerResource($pluginName, new $className());
-				}
-			}
-		}
+        $type = 'cacheresource';
+        foreach (glob($path  . $type . '.?*.php') as $filename) {
+            $pluginName = $this->getPluginNameFromFilename($filename);
+            if ($pluginName !== null) {
+                require_once $filename;
+                if (class_exists($className = 'smarty_' . $type . '_' . $pluginName)) {
+                    $this->smarty->registerCacheResource($pluginName, new $className());
+                }
+            }
+        }
 
-		$type = 'cacheresource';
-		foreach (glob($path  . $type . '.?*.php') as $filename) {
-			$pluginName = $this->getPluginNameFromFilename($filename);
-			if ($pluginName !== null) {
-				require_once $filename;
-				if (class_exists($className = 'smarty_' . $type . '_' . $pluginName)) {
-					$this->smarty->registerCacheResource($pluginName, new $className());
-				}
-			}
-		}
+    }
 
-	}
-
-	/**
+    /**
      * @param $filename
      */
-    private function getPluginNameFromFilename(string $filename): ?string {
-		if (!preg_match('/.*\.([a-z_A-Z0-9]+)\.php$/',$filename,$matches)) {
-			return null;
-		}
-		return $matches[1];
-	}
+    private function getPluginNameFromFilename(string $filename): ?string
+    {
+        if (!preg_match('/.*\.([a-z_A-Z0-9]+)\.php$/', $filename, $matches)) {
+            return null;
+        }
+        return $matches[1];
+    }
 
 }

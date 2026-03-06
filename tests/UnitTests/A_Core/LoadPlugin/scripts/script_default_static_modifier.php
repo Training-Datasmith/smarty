@@ -1,8 +1,10 @@
 <?php
+
+declare(strict_types=1);
 if (!class_exists('DefModifier')) {
-    Class DefModifier
+    class DefModifier
     {
-        static function default_static_modifier($input)
+        public static function default_static_modifier($input)
         {
             return 'staticmodifier ' . $input;
         }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests single quoted strings
  *
@@ -9,9 +11,9 @@
 /**
  * class for single quoted string tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class SingleQuotedStringTest extends PHPUnit_Smarty
 {
@@ -76,6 +78,6 @@ class SingleQuotedStringTest extends PHPUnit_Smarty
     public function testEmptySingleQuotedString()
     {
         $tpl = $this->smarty->createTemplate('eval:{$foo=\'\'}{$foo}');
-        $this->assertEquals("", $this->smarty->fetch($tpl));
+        $this->assertEquals('', $this->smarty->fetch($tpl));
     }
 }

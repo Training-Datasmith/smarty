@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
@@ -10,16 +12,16 @@ use Smarty\Compile\Base;
 
 
  */
-class Nocache extends Base {
+class Nocache extends Base
+{
+    /**
+     * Array of names of valid option flags
+     *
+     * @var array
+     */
+    protected $option_flags = [];
 
-	/**
-	 * Array of names of valid option flags
-	 *
-	 * @var array
-	 */
-	protected $option_flags = [];
-
-	/**
+    /**
      * Compiles code for the {nocache} tag
      * This tag does not generate compiled output. It only sets a compiler flag.
      *
@@ -27,8 +29,8 @@ class Nocache extends Base {
      * @param \Smarty\Compiler\Template $compiler compiler object
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
-		$this->openTag($compiler, 'nocache');
-		return '';
-	}
+    {
+        $this->openTag($compiler, 'nocache');
+        return '';
+    }
 }

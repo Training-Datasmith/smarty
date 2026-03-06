@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests append method
  *
@@ -9,8 +11,8 @@
 /**
  * class for append tests
  *
- * 
- * 
+ *
+ *
  *
  */
 class AppendTest extends PHPUnit_Smarty
@@ -19,7 +21,6 @@ class AppendTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -49,8 +50,8 @@ class AppendTest extends PHPUnit_Smarty
      */
     public function testAppendMerge()
     {
-        $this->smarty->assign('foo', array('a' => 'a', 'b' => 'b', 'c' => 'c'));
-        $this->smarty->append('foo', array('b' => 'd'), true);
+        $this->smarty->assign('foo', ['a' => 'a', 'b' => 'b', 'c' => 'c']);
+        $this->smarty->append('foo', ['b' => 'd'], true);
         $this->assertEquals('a d c', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]}'));
     }
 
@@ -59,8 +60,8 @@ class AppendTest extends PHPUnit_Smarty
      */
     public function testAppendArrayMerge()
     {
-        $this->smarty->assign('foo', array('b' => 'd'));
-        $this->smarty->append('foo', array('a' => 'a', 'b' => 'b', 'c' => 'c'), true);
+        $this->smarty->assign('foo', ['b' => 'd']);
+        $this->smarty->append('foo', ['a' => 'a', 'b' => 'b', 'c' => 'c'], true);
         $this->assertEquals('a b c', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]}'));
     }
 
@@ -70,7 +71,7 @@ class AppendTest extends PHPUnit_Smarty
     public function testArrayAppend()
     {
         $this->smarty->assign('foo', 'foo');
-        $this->smarty->append(array('bar' => 'bar2', 'foo' => 'foo2'));
+        $this->smarty->append(['bar' => 'bar2', 'foo' => 'foo2']);
         $this->assertEquals('foo foo2 bar2', $this->smarty->fetch('eval:{$foo[0]} {$foo[1]} {$bar[0]}'));
     }
 
@@ -79,8 +80,8 @@ class AppendTest extends PHPUnit_Smarty
      */
     public function testArrayAppendArrayMerge()
     {
-        $this->smarty->assign('foo', array('b' => 'd'));
-        $this->smarty->append(array('bar' => 'bar', 'foo' => array('a' => 'a', 'b' => 'b', 'c' => 'c')), null, true);
+        $this->smarty->assign('foo', ['b' => 'd']);
+        $this->smarty->append(['bar' => 'bar', 'foo' => ['a' => 'a', 'b' => 'b', 'c' => 'c']], null, true);
         $this->assertEquals('a b c bar', $this->smarty->fetch('eval:{$foo["a"]} {$foo["b"]} {$foo["c"]} {$bar[0]}'));
     }
 }

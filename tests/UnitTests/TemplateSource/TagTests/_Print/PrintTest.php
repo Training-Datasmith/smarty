@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests variable output with nocache attribute
  *
@@ -11,7 +13,7 @@
  *
  *
  *
- * 
+ *
  */
 class PrintTest extends PHPUnit_Smarty
 {
@@ -19,7 +21,6 @@ class PrintTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -30,7 +31,7 @@ class PrintTest extends PHPUnit_Smarty
      *
      *
      * @dataProvider        dataTestOutputSpacing
-     * 
+     *
      */
     public function testOutputSpacing($code, $result, $testName, $testNumber)
     {
@@ -39,16 +40,18 @@ class PrintTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output nocache spacings
      *
      *
      * @dataProvider        dataTestOutputSpacing
-     * 
+     *
      */
     public function testOutputSpacingNocache($code, $result, $testName, $testNumber)
     {
@@ -57,17 +60,19 @@ class PrintTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->setTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'bar',true);
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'bar', true);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output nocache spacings
      *
      *
      * @dataProvider        dataTestOutputSpacing
-     * 
+     *
      */
     public function testOutputSpacingNocache2($code, $result, $testName, $testNumber)
     {
@@ -76,10 +81,12 @@ class PrintTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->setTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'foo',true);
-        $this->assertEquals(str_replace('bar','foo',$result),
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'foo', true);
+        $this->assertEquals(
+            str_replace('bar', 'foo', $result),
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
 
     /*
@@ -94,15 +101,15 @@ class PrintTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('{$foo}', 'bar', 'Variable', $i++),
-                     array('{$foo}{$foo}', 'barbar', 'twoVariables', $i++),
-                     array('A{$foo}{$foo}B', 'AbarbarB', 'twoVariablesInText', $i++),
-                     array('{$foo} {$foo}', 'bar bar', 'twoVariablesWithSpace', $i++),
-                     array('A{$foo}B', 'AbarB', 'VariableInText1', $i++),
-                     array('A {$foo}B', 'A barB', 'VariableInText2', $i++),
-                     array('A{$foo} B', 'Abar B', 'VariableInText3', $i++),
-                     array("A{\$foo}\nB", "Abar\nB", 'VariableInTextNewline1', $i++),
-                     array("A{\$foo}B\nC", "AbarB\nC", 'VariableInTextNewline2', $i++),
-        );
+        return [['{$foo}', 'bar', 'Variable', $i++],
+                     ['{$foo}{$foo}', 'barbar', 'twoVariables', $i++],
+                     ['A{$foo}{$foo}B', 'AbarbarB', 'twoVariablesInText', $i++],
+                     ['{$foo} {$foo}', 'bar bar', 'twoVariablesWithSpace', $i++],
+                     ['A{$foo}B', 'AbarB', 'VariableInText1', $i++],
+                     ['A {$foo}B', 'A barB', 'VariableInText2', $i++],
+                     ['A{$foo} B', 'Abar B', 'VariableInText3', $i++],
+                     ["A{\$foo}\nB", "Abar\nB", 'VariableInTextNewline1', $i++],
+                     ["A{\$foo}B\nC", "AbarB\nC", 'VariableInTextNewline2', $i++],
+        ];
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -9,8 +11,8 @@
 /**
  * class for modifier tests
  *
- * 
- * 
+ *
+ *
  *
  */
 class PluginModifierUpperTest extends PHPUnit_Smarty

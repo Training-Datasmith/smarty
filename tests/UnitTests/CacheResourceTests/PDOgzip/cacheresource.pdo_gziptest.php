@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Smarty\Template\Cached;
 
 require_once __DIR__ . '/../../__shared/cacheresources/cacheresource.pdo_gzip.php';

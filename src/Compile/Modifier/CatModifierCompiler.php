@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -14,12 +16,11 @@ namespace Smarty\Compile\Modifier;
  * @author Uwe Tews
  */
 
-class CatModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
-		return '(' . implode(').(', $params) . ')';
-	}
+class CatModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
+        return '(' . implode(').(', $params) . ')';
+    }
 
 }
-
-

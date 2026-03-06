@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty plugin for testing scopes in config vars
  *
@@ -19,7 +21,7 @@ use Smarty\Template;
 function smarty_function_checkconfigvar($params, $template)
 {
     $output = '';
-    $types = array('template', 'data', 'global');
+    $types = ['template', 'data', 'global'];
     if (isset($params['types'])) {
         $types = (array)$params['types'];
     }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for templateExists method
  *
@@ -10,8 +12,8 @@
  * class for templateExists tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class TemplateExistsTest extends PHPUnit_Smarty
 {
@@ -19,7 +21,6 @@ class TemplateExistsTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {

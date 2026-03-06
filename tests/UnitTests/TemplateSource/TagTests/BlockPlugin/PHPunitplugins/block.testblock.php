@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty plugin for testing block plugins
  *
@@ -20,13 +22,13 @@ function smarty_block_testblock($params, $content, $template, &$repeat)
 {
     static $loop = 0;
     if (isset($content)) {
-        $loop ++;
+        $loop++;
         if ($loop < 5) {
             $repeat = true;
         } else {
             $repeat = false;
         }
-       return $loop;
+        return $loop;
     } else {
         $loop = 0;
     }

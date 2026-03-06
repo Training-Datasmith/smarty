@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of delimiter
  *
@@ -9,9 +11,9 @@
 /**
  * class for delimiter tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class UserliteralTest extends PHPUnit_Smarty
 {
@@ -43,7 +45,7 @@ class UserliteralTest extends PHPUnit_Smarty
     public function testUserLiteral2()
     {
         $this->smarty->setAutoLiteral(false);
-        $this->smarty->setLiterals(array('{{','}}'));
+        $this->smarty->setLiterals(['{{','}}']);
         $this->assertEquals('{{1}}', $this->smarty->fetch('userliteral1.tpl'));
     }
     public function testUserLiteral3()
@@ -51,7 +53,7 @@ class UserliteralTest extends PHPUnit_Smarty
         $this->smarty->setAutoLiteral(false);
         $this->smarty->setLeftDelimiter('<-');
         $this->smarty->setRightDelimiter('->');
-        $this->smarty->setLiterals(array('<--','-->'));
+        $this->smarty->setLiterals(['<--','-->']);
         $this->assertEquals('1 <--1-->', $this->smarty->fetch('userliteral2.tpl'));
     }
     public function testUserLiteral4()
@@ -60,13 +62,13 @@ class UserliteralTest extends PHPUnit_Smarty
         $this->smarty->setLeftDelimiter('<-');
         $this->smarty->setRightDelimiter('->');
         $this->smarty->setCompileId(1);
-        $this->smarty->setLiterals(array('<--','-->'));
+        $this->smarty->setLiterals(['<--','-->']);
         $this->assertEquals('<- 1 -> <--1-->', $this->smarty->fetch('userliteral2.tpl'));
     }
     public function testUserLiteral5()
     {
         $this->smarty->setAutoLiteral(true);
-        $this->smarty->setLiterals(array('{%'));
+        $this->smarty->setLiterals(['{%']);
         $this->assertEquals(' output: double {%counter} quote', $this->smarty->fetch('userliteraldoublequote.tpl'));
     }
 }

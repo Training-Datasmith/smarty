@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests assign method
  *
@@ -15,11 +17,10 @@
  */
 class AssignTest extends PHPUnit_Smarty
 {
-     public function setUp(): void
+    public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -39,18 +40,18 @@ class AssignTest extends PHPUnit_Smarty
      */
     public function testArrayAssign()
     {
-        $this->smarty->assign(array('foo' => 'bar', 'foo2' => 'bar2'));
+        $this->smarty->assign(['foo' => 'bar', 'foo2' => 'bar2']);
         $this->assertEquals('bar bar2', $this->smarty->fetch('eval:{$foo} {$foo2}'));
     }
 
-	/**
-	 * Test that assign returns this.
-	 */
-	public function testAssignReturnsThis()
-	{
-		$this->assertEquals(
-			'data',
-			$this->smarty->assign(['dummy' => 'data'])->fetch('eval:{$dummy}')
-		);
-	}
+    /**
+     * Test that assign returns this.
+     */
+    public function testAssignReturnsThis()
+    {
+        $this->assertEquals(
+            'data',
+            $this->smarty->assign(['dummy' => 'data'])->fetch('eval:{$dummy}')
+        );
+    }
 }

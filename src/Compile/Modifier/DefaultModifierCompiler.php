@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 /**
  * Smarty default modifier plugin
  * Type:     modifier
@@ -9,18 +13,19 @@ namespace Smarty\Compile\Modifier;
  * @author Uwe Tews
  */
 
-class DefaultModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
-		$output = $params[ 0 ];
-		if (!isset($params[ 1 ])) {
-			$params[ 1 ] = "''";
-		}
-		array_shift($params);
-		foreach ($params as $param) {
-			$output = '(($tmp = ' . $output . ' ?? null)===null||$tmp===\'\' ? ' . $param . ' ?? null : $tmp)';
-		}
-		return $output;
-	}
+class DefaultModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler)
+    {
+        $output = $params[ 0 ];
+        if (!isset($params[ 1 ])) {
+            $params[ 1 ] = "''";
+        }
+        array_shift($params);
+        foreach ($params as $param) {
+            $output = '(($tmp = ' . $output . ' ?? null)===null||$tmp===\'\' ? ' . $param . ' ?? null : $tmp)';
+        }
+        return $output;
+    }
 
 }

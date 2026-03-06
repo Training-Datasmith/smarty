@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPUnit tests default config handler
  *
@@ -11,13 +13,12 @@ use Smarty\Smarty;
 /**
  * class for default config handler test
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class DefaultConfigHandlerTest extends PHPUnit_Smarty
 {
-
     /**
      * Sets up the fixture
      * This method is called before a test is executed.
@@ -60,7 +61,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
     {
         $this->smarty->registerDefaultConfigHandler('configHandlerData');
         $this->smarty->configLoad('foo.conf');
-        $this->assertEquals("bar", $this->smarty->fetch('foo.tpl'));
+        $this->assertEquals('bar', $this->smarty->fetch('foo.tpl'));
     }
 
     /**
@@ -73,7 +74,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
     {
         $this->smarty->registerDefaultConfigHandler('configHandlerFile');
         $this->smarty->configLoad('foo.conf');
-        $this->assertEquals("123.4", $this->smarty->fetch('number.tpl'));
+        $this->assertEquals('123.4', $this->smarty->fetch('number.tpl'));
     }
 
     public function testDefaultConfigHandlerReplacementByConfigFileFail()
@@ -82,7 +83,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
         $this->expectExceptionMessage("Unable to load default file 'no.conf' for 'file:fo.conf'");
         $this->smarty->registerDefaultConfigHandler('configHandlerFile');
         $this->smarty->configLoad('fo.conf');
-        $this->assertEquals("123.4", $this->smarty->fetch('number.tpl'));
+        $this->assertEquals('123.4', $this->smarty->fetch('number.tpl'));
     }
 
     /**

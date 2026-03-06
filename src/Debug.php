@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty;
 
 /**
@@ -236,7 +238,7 @@ class Debug extends Data
         $config_vars = [];
         foreach ($obj->config_vars as $key => $var) {
             $config_vars[$key]['value'] = $var;
-	        $config_vars[$key]['scope'] = get_class($obj) . ':' . spl_object_id($obj);
+            $config_vars[$key]['scope'] = get_class($obj) . ':' . spl_object_id($obj);
         }
         $tpl_vars = [];
         foreach ($obj->tpl_vars as $key => $var) {
@@ -255,7 +257,7 @@ class Debug extends Data
                     }
                 }
             }
-	        $tpl_vars[$key]['scope'] = get_class($obj) . ':' . spl_object_id($obj);
+            $tpl_vars[$key]['scope'] = get_class($obj) . ':' . spl_object_id($obj);
         }
         if (isset($obj->parent)) {
             $parent = $this->get_debug_vars($obj->parent);
@@ -333,15 +335,16 @@ class Debug extends Data
         }
     }
 
-	private function saveTemplateData(array $_is_stringy, Template $template, string $key): void {
-		if (isset($_is_stringy[$template->getSource()->type])) {
-			$this->template_data[$this->index][$key]['name'] =
-				'\'' . substr($template->getSource()->name, 0, 25) . '...\'';
-		} else {
-			$this->template_data[$this->index][$key]['name'] = $template->getSource()->getResourceName();
-		}
-		$this->template_data[$this->index][$key]['compile_time'] = 0;
-		$this->template_data[$this->index][$key]['render_time'] = 0;
-		$this->template_data[$this->index][$key]['cache_time'] = 0;
-	}
+    private function saveTemplateData(array $_is_stringy, Template $template, string $key): void
+    {
+        if (isset($_is_stringy[$template->getSource()->type])) {
+            $this->template_data[$this->index][$key]['name'] =
+                '\'' . substr($template->getSource()->name, 0, 25) . '...\'';
+        } else {
+            $this->template_data[$this->index][$key]['name'] = $template->getSource()->getResourceName();
+        }
+        $this->template_data[$this->index][$key]['compile_time'] = 0;
+        $this->template_data[$this->index][$key]['render_time'] = 0;
+        $this->template_data[$this->index][$key]['cache_time'] = 0;
+    }
 }

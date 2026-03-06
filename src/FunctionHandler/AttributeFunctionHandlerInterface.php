@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\FunctionHandler;
 
 /**
@@ -7,9 +9,9 @@ namespace Smarty\FunctionHandler;
  */
 interface AttributeFunctionHandlerInterface extends FunctionHandlerInterface
 {
-	/**
-	 * Returns an array with the supported attributes, flags, and shorttags
-	 * @return array<string, array>
-	 */
-	public function getSupportedAttributes(): array;
+    /**
+     * Returns an array with the supported attributes, flags, and shorttags
+     * @return array<string, array>
+     */
+    public function getSupportedAttributes(): array;
 }

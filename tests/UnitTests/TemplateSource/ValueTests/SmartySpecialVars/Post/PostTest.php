@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests {$smarty.post.foo}
  *
@@ -10,8 +12,8 @@
  * class for {$smarty.post.foo} tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class PostTest extends PHPUnit_Smarty
 {
@@ -27,11 +29,12 @@ class PostTest extends PHPUnit_Smarty
     /**
      * test $_POST
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider dataProvider
      */
-    public function testPost($caching, $value) {
+    public function testPost($caching, $value)
+    {
         $_POST['fooBar'] = $value;
         $this->smarty->caching = $caching;
         $this->assertEquals($value, $this->smarty->fetch('post.tpl'));
@@ -40,11 +43,12 @@ class PostTest extends PHPUnit_Smarty
     /**
      * test $_POST with modifier
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider dataProviderModifier
      */
-    public function testPostModifier($caching, $value, $result) {
+    public function testPostModifier($caching, $value, $result)
+    {
         $_POST['fooBar'] = $value;
         $this->smarty->caching = $caching;
         $this->assertEquals($result, $this->smarty->fetch('post_modifier.tpl'));
@@ -54,7 +58,8 @@ class PostTest extends PHPUnit_Smarty
      * test variable post
      *
      */
-    public function testPostVariable() {
+    public function testPostVariable()
+    {
         $_POST['fooBarVar'] = 'fooBarVarValue';
         $this->smarty->assign('foo', 'fooBarVar');
         $this->assertEquals('fooBarVarValue', $this->smarty->fetch('post_variable.tpl'));
@@ -64,21 +69,21 @@ class PostTest extends PHPUnit_Smarty
      */
     public function dataProvider()
     {
-        return array(
-            'compile' => array(false, 'buh'),
-            'compiled' => array(false, 'bar'),
-            'create cache' => array(true, 'cached buh'),
-            'cacheded' => array(true, 'cached bar'),
-        );
+        return [
+            'compile' => [false, 'buh'],
+            'compiled' => [false, 'bar'],
+            'create cache' => [true, 'cached buh'],
+            'cacheded' => [true, 'cached bar'],
+        ];
     }
     public function dataProviderModifier()
     {
-        return array(
-            'compile' => array(false, 'buh', 3),
-            'compiled' => array(false, 'bar1', 4),
-            'create cache' => array(true, 'cached buh', 10),
-            'cacheded' => array(true, 'cached bar1', 11),
-        );
+        return [
+            'compile' => [false, 'buh', 3],
+            'compiled' => [false, 'bar1', 4],
+            'create cache' => [true, 'cached buh', 10],
+            'cacheded' => [true, 'cached bar1', 11],
+        ];
     }
 
 }

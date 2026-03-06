@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /**
  * Memcache CacheResource
  * CacheResource Implementation based on the KeyValueStore API to use
@@ -19,20 +21,21 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\KeyValueStore
      */
     private $memcache = null;
 
-	/**
-	 * @return Memcache|Memcached
-	 */
-	public function getMemcache() {
-		if ($this->memcache ===  null) {
-			if (class_exists('Memcached')) {
-				$this->memcache = new Memcached();
-			} else {
-				$this->memcache = new Memcache();
-			}
-			$this->memcache->addServer('127.0.0.1', 11211);
-		}
-		return $this->memcache;
-	}
+    /**
+     * @return Memcache|Memcached
+     */
+    public function getMemcache()
+    {
+        if ($this->memcache ===  null) {
+            if (class_exists('Memcached')) {
+                $this->memcache = new Memcached();
+            } else {
+                $this->memcache = new Memcache();
+            }
+            $this->memcache->addServer('127.0.0.1', 11211);
+        }
+        return $this->memcache;
+    }
 
     /**
      * Read values for a set of keys from cache
@@ -44,7 +47,7 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\KeyValueStore
      */
     protected function read(array $keys)
     {
-        $res = array();
+        $res = [];
         foreach ($keys as $key) {
             $k = sha1($key);
             $res[$key] = $this->getMemcache()->get($k);

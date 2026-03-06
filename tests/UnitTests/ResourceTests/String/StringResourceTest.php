@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for string resources
  *
@@ -9,9 +11,9 @@
 /**
  * class for string resource tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class StringResourceTest extends PHPUnit_Smarty
 {
@@ -19,7 +21,6 @@ class StringResourceTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -29,8 +30,8 @@ class StringResourceTest extends PHPUnit_Smarty
     protected function relative($path)
     {
         $path = str_replace(__DIR__, '.', $path);
-        if (DIRECTORY_SEPARATOR == "\\") {
-            $path = str_replace("\\", "/", $path);
+        if (DIRECTORY_SEPARATOR == '\\') {
+            $path = str_replace('\\', '/', $path);
         }
 
         return $path;
@@ -83,7 +84,7 @@ class StringResourceTest extends PHPUnit_Smarty
     public function testUsesCompiler()
     {
         $tpl = $this->smarty->createTemplate('string:hello world');
-	    $this->markTestIncomplete();
+        $this->markTestIncomplete();
     }
 
     /**

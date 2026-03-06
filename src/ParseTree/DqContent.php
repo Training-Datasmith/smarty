@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\ParseTree;
+
 /**
  * Smarty Internal Plugin Templateparser Parse Tree
  * These are classes to build parse tree  in the template parser

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource Pdo
  *
@@ -12,13 +14,12 @@ include_once __DIR__ . '/cacheresource.pdotest.php';
 /**
  * class for cache resource file tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class CacheResourceCustomPDOTest extends CacheResourceTestCommon
 {
-
     public function setUp($dir = null, $clear = true): void
     {
         if (PdoCacheEnable != true) {
@@ -29,8 +30,10 @@ class CacheResourceCustomPDOTest extends CacheResourceTestCommon
         }
         $this->setUpSmarty(__DIR__);
         parent::setUp();
-        $this->smarty->registerCacheResource('pdo',
-                                             new Smarty_CacheResource_Pdotest($this->getPDO(), 'output_cache'));
+        $this->smarty->registerCacheResource(
+            'pdo',
+            new Smarty_CacheResource_Pdotest($this->getPDO(), 'output_cache')
+        );
     }
 
     public function testInit()
@@ -39,4 +42,3 @@ class CacheResourceCustomPDOTest extends CacheResourceTestCommon
         $this->initMysqlCache();
     }
 }
-

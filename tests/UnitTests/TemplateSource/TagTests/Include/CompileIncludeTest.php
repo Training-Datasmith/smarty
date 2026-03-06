@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compilation of the {include} tag
  *
@@ -9,19 +11,18 @@
 /**
  * class for {include} tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class CompileIncludeTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
-        $this->smarty->addTemplateDir("./templates_tmp");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
+        $this->smarty->addTemplateDir('./templates_tmp');
     }
-
 
     public function testInit()
     {
@@ -31,8 +32,8 @@ class CompileIncludeTest extends PHPUnit_Smarty
     /**
      * test spacing
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProviderCaching
      */
     public function testSpacing_001($merge, $caching, $text)
@@ -49,8 +50,8 @@ class CompileIncludeTest extends PHPUnit_Smarty
     /**
      * test spacing
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProviderCaching
      */
     public function testSpacing_001V2($merge, $caching, $text)
@@ -67,8 +68,8 @@ class CompileIncludeTest extends PHPUnit_Smarty
     /**
      * test spacing
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProviderCaching
      */
     public function testSpacing_001V3($merge, $caching, $text)
@@ -91,14 +92,14 @@ class CompileIncludeTest extends PHPUnit_Smarty
         $this->expectExceptionMessageMatches('/Unable to load.*/');
         $tpl = $this->smarty->createTemplate('test_include_security.tpl');
         $content = $this->smarty->fetch($tpl);
-        $this->assertEquals("hello world", $content);
+        $this->assertEquals('hello world', $content);
     }
 
     /**
      * test standard output
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludeStandard_001($merge, $text)
@@ -106,14 +107,14 @@ class CompileIncludeTest extends PHPUnit_Smarty
         $this->smarty->setMergeCompiledIncludes($merge);
         $tpl = $this->smarty->createTemplate('test_include_standard.tpl');
         $content = $this->smarty->fetch($tpl);
-        $this->assertEquals("hello world", $content, $text);
+        $this->assertEquals('hello world', $content, $text);
     }
 
     /**
      * test standard output var
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludeStandardNocacheVar($merge, $text)
@@ -129,36 +130,36 @@ class CompileIncludeTest extends PHPUnit_Smarty
     /**
      * Test that assign attribute does not create standard output
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludeAssign1($merge, $text)
     {
         $this->smarty->setMergeCompiledIncludes($merge);
         $tpl = $this->smarty->createTemplate('test_include_assign1.tpl');
-        $this->assertEquals("", $this->smarty->fetch($tpl), $text);
+        $this->assertEquals('', $this->smarty->fetch($tpl), $text);
     }
 
     /**
      * Test that assign attribute does load variable
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludeAssign2($merge, $text)
     {
         $this->smarty->setMergeCompiledIncludes($merge);
         $tpl = $this->smarty->createTemplate('test_include_assign2.tpl');
-        $this->assertEquals("hello world", $this->smarty->fetch($tpl), $text);
+        $this->assertEquals('hello world', $this->smarty->fetch($tpl), $text);
     }
 
     /**
      * Test passing local vars eval
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludePassVars($merge, $text)
@@ -166,31 +167,28 @@ class CompileIncludeTest extends PHPUnit_Smarty
         //$this->smarty->caching = true;
         $this->smarty->setMergeCompiledIncludes($merge);
         $tpl = $this->smarty->createTemplate('test_include_pass_vars.tpl');
-        $this->assertEquals("12", $this->smarty->fetch($tpl), $text);
+        $this->assertEquals('12', $this->smarty->fetch($tpl), $text);
     }
 
     /**
      * Test passing local vars include
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testIncludePassVars2($merge, $text)
     {
         $this->smarty->setMergeCompiledIncludes($merge);
         $tpl = $this->smarty->createTemplate('test_include_pass_vars2.tpl');
-        $this->assertEquals("12", $this->smarty->fetch($tpl), $text);
+        $this->assertEquals('12', $this->smarty->fetch($tpl), $text);
     }
-
-
-
 
     /**
      * Test  recursive includes
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testRecursiveIncludes1($merge, $text)
@@ -205,8 +203,8 @@ class CompileIncludeTest extends PHPUnit_Smarty
     /**
      * Test  recursive includes 2
      *
-     * 
-     * 
+     *
+     *
      * @dataProvider includeProvider
      */
     public function testRecursiveIncludes2($merge, $text)
@@ -223,10 +221,10 @@ class CompileIncludeTest extends PHPUnit_Smarty
      */
     public function includeProvider()
     {
-        return array(
-            array(false, 'normal'),
-            array(true, 'merged'),
-        );
+        return [
+            [false, 'normal'],
+            [true, 'merged'],
+        ];
     }
 
     /**
@@ -236,29 +234,29 @@ class CompileIncludeTest extends PHPUnit_Smarty
      */
     public function includeProviderCaching($file)
     {
-        return array(
-            array(false, false, 'normal'),
-            array(true, false, 'merged'),
-            array(false, true, 'normal cached 1'),
-            array(false, true, 'normal cached 2'),
-            array(true, true, 'merged cached 1'),
-            array(true, true, 'merged cached 2'),
-        );
+        return [
+            [false, false, 'normal'],
+            [true, false, 'merged'],
+            [false, true, 'normal cached 1'],
+            [false, true, 'normal cached 2'],
+            [true, true, 'merged cached 1'],
+            [true, true, 'merged cached 2'],
+        ];
     }
 
     public function fileProvider()
     {
-        return array(
-            array('normal'),
-            array('merged'),
-        );
+        return [
+            ['normal'],
+            ['merged'],
+        ];
     }
     /**
      * Test Include spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testIncludeSpacing($code, $result, $testName, $testNumber)
     {
@@ -267,16 +265,18 @@ class CompileIncludeTest extends PHPUnit_Smarty
         $this->makeTemplateFile($file, $code);
         $this->smarty->addTemplateDir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testIncludeSpacingNocache($code, $result, $testName, $testNumber)
     {
@@ -285,17 +285,19 @@ class CompileIncludeTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->addTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'bar',true);
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'bar', true);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
     /**
      * Test Output spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testIncludeSpacingNocache2($code, $result, $testName, $testNumber)
     {
@@ -304,10 +306,12 @@ class CompileIncludeTest extends PHPUnit_Smarty
         $this->smarty->setCompileId('1');
         $this->smarty->setCaching(1);
         $this->smarty->addTemplateDir('./templates_tmp');
-        $this->smarty->assign('foo', 'foo',true);
-        $this->assertEquals(str_replace('bar','foo',$result),
-                            $this->smarty->fetch($file),
-                            "testSpacing - {$file}");
+        $this->smarty->assign('foo', 'foo', true);
+        $this->assertEquals(
+            str_replace('bar', 'foo', $result),
+            $this->smarty->fetch($file),
+            "testSpacing - {$file}"
+        );
     }
 
     /*
@@ -322,25 +326,26 @@ class CompileIncludeTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('A{include file=\'include_spacing2.tpl\'}B', 'A barB', '2_Text1', $i++),
-                     array('A {include file=\'include_spacing2.tpl\'}B', 'A  barB', '2_Text2', $i++),
-                     array('A{include file=\'include_spacing2.tpl\'}B', 'A barB', '2_Text3', $i++),
-                     array("A{include file='include_spacing2.tpl'}\nB", "A barB", '2_Newline1', $i++),
-                     array("A\n{include file='include_spacing2.tpl'}\nB", "A\n barB", '2_Newline2', $i++),
-                     array("A{include file='include_spacing2.tpl'}B\nC", "A barB\nC", '2_Newline3', $i++),
-                     array('A{include file=\'include_spacing3.tpl\'}B', "AbarB", '3_Text1', $i++),
-                     array('A {include file=\'include_spacing3.tpl\'}B', "A barB", '3_Text2', $i++),
-                     array('A{include file=\'include_spacing3.tpl\'}B', "AbarB", '3_Text3', $i++),
-                     array("A{include file='include_spacing3.tpl'}\nB", "AbarB", '3_Newline1', $i++),
-                     array("A\n{include file='include_spacing3.tpl'}\nB", "A\nbarB", '3_Newline2', $i++),
-                     array("A{include file='include_spacing3.tpl'}B\nC", "AbarB\nC", '3_Newline3', $i++),
-        );
+        return [['A{include file=\'include_spacing2.tpl\'}B', 'A barB', '2_Text1', $i++],
+                     ['A {include file=\'include_spacing2.tpl\'}B', 'A  barB', '2_Text2', $i++],
+                     ['A{include file=\'include_spacing2.tpl\'}B', 'A barB', '2_Text3', $i++],
+                     ["A{include file='include_spacing2.tpl'}\nB", 'A barB', '2_Newline1', $i++],
+                     ["A\n{include file='include_spacing2.tpl'}\nB", "A\n barB", '2_Newline2', $i++],
+                     ["A{include file='include_spacing2.tpl'}B\nC", "A barB\nC", '2_Newline3', $i++],
+                     ['A{include file=\'include_spacing3.tpl\'}B', 'AbarB', '3_Text1', $i++],
+                     ['A {include file=\'include_spacing3.tpl\'}B', 'A barB', '3_Text2', $i++],
+                     ['A{include file=\'include_spacing3.tpl\'}B', 'AbarB', '3_Text3', $i++],
+                     ["A{include file='include_spacing3.tpl'}\nB", 'AbarB', '3_Newline1', $i++],
+                     ["A\n{include file='include_spacing3.tpl'}\nB", "A\nbarB", '3_Newline2', $i++],
+                     ["A{include file='include_spacing3.tpl'}B\nC", "AbarB\nC", '3_Newline3', $i++],
+        ];
     }
 
-	public function testModifierWrongPlace() {
-		$this->smarty->debugging = true;
-		$this->expectException(\Smarty\CompilerException::class);
-		$this->expectExceptionMessage('No modifiers allowed');
-		$this->smarty->fetch('include_with_modifier.tpl');
-	}
+    public function testModifierWrongPlace()
+    {
+        $this->smarty->debugging = true;
+        $this->expectException(\Smarty\CompilerException::class);
+        $this->expectExceptionMessage('No modifiers allowed');
+        $this->smarty->fetch('include_with_modifier.tpl');
+    }
 }

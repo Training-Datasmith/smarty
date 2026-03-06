@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for tag attributes
  *
@@ -9,18 +11,17 @@
 /**
  * class for tag attribute tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class AttributeTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../../__shared/PHPunitplugins/");
+        $this->smarty->addPluginsDir('../../../__shared/PHPunitplugins/');
     }
-
 
     public function testInit()
     {
@@ -74,6 +75,5 @@ class AttributeTest extends PHPUnit_Smarty
     {
         $this->assertEquals('array(\'a\'=>\'pa\',0=>\'isnull\',)', $this->strip($this->smarty->fetch('string:{getparams a=\'pa\' 0=isnull}')));
     }
-
 
 }

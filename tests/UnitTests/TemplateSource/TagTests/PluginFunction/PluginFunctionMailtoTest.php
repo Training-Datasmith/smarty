@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -9,13 +11,13 @@
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginFunctionMailtoTest extends PHPUnit_Smarty
 {
-     public function setUp(): void
+    public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
     }
@@ -83,20 +85,20 @@ class PluginFunctionMailtoTest extends PHPUnit_Smarty
         $this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
     }
 
-	public function testJavascriptChars()
-	{
-		$result = '<script>document.write(unescape(\'%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%71%75%6f%74%3b%26%67%74%3b%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%23%30%33%39%3b%29%3b%20%61%6c%65%72%74%28%26%71%75%6f%74%3b%69%6e%6a%65%63%74%69%6f%6e%26%71%75%6f%74%3b%29%3b%20%2f%2f%22%20%3e%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%71%75%6f%74%3b%26%67%74%3b%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%23%30%33%39%3b%29%3b%20%61%6c%65%72%74%28%26%71%75%6f%74%3b%69%6e%6a%65%63%74%69%6f%6e%26%71%75%6f%74%3b%29%3b%20%2f%2f%3c%2f%61%3e\'))</script>';
-		$this->smarty->assign('address', 'me@example.com">me@example.com\'); alert("injection"); //');
-		$tpl = $this->smarty->createTemplate('eval:{mailto address=$address encode=javascript}');
-		$this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
-	}
+    public function testJavascriptChars()
+    {
+        $result = '<script>document.write(unescape(\'%3c%61%20%68%72%65%66%3d%22%6d%61%69%6c%74%6f%3a%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%71%75%6f%74%3b%26%67%74%3b%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%23%30%33%39%3b%29%3b%20%61%6c%65%72%74%28%26%71%75%6f%74%3b%69%6e%6a%65%63%74%69%6f%6e%26%71%75%6f%74%3b%29%3b%20%2f%2f%22%20%3e%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%71%75%6f%74%3b%26%67%74%3b%6d%65%40%65%78%61%6d%70%6c%65%2e%63%6f%6d%26%23%30%33%39%3b%29%3b%20%61%6c%65%72%74%28%26%71%75%6f%74%3b%69%6e%6a%65%63%74%69%6f%6e%26%71%75%6f%74%3b%29%3b%20%2f%2f%3c%2f%61%3e\'))</script>';
+        $this->smarty->assign('address', 'me@example.com">me@example.com\'); alert("injection"); //');
+        $tpl = $this->smarty->createTemplate('eval:{mailto address=$address encode=javascript}');
+        $this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
+    }
 
-	public function testHtmlChars()
-	{
-		$result = '<a href="mailto:me@example.com&quot;&gt;&lt;h1&gt;" class="email">me@example.com&quot;&gt;&lt;h1&gt;</a>';
-		$this->smarty->assign('address', 'me@example.com"><h1>');
-		$tpl = $this->smarty->createTemplate('eval:{mailto address=$address extra=\'class="email"\'}');
-		$this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
-	}
+    public function testHtmlChars()
+    {
+        $result = '<a href="mailto:me@example.com&quot;&gt;&lt;h1&gt;" class="email">me@example.com&quot;&gt;&lt;h1&gt;</a>';
+        $this->smarty->assign('address', 'me@example.com"><h1>');
+        $tpl = $this->smarty->createTemplate('eval:{mailto address=$address extra=\'class="email"\'}');
+        $this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
+    }
 
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty plugin for testing block plugins
  *
@@ -19,6 +21,6 @@
 function smarty_block_nooutput($params, $content, $template, &$repeat)
 {
     if (isset($content)) {
-           $repeat = false;
+        $repeat = false;
     }
 }

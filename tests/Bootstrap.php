@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
 * This file is part of the Smarty PHPUnit tests.
 *
@@ -13,6 +15,3 @@ require_once 'PHPUnit_Smarty.php';
 if (!ini_get('date.timezone')) {
     ini_set('date.timezone', 'Europe/Berlin');
 }
-
-
-

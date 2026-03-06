@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compiler errors
  *
@@ -9,7 +11,7 @@
 /**
  * class for compiler tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
  *
  */

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compiler errors
  *
@@ -9,7 +11,7 @@
 /**
  * class for compiler tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
  *
  *
@@ -29,14 +31,13 @@ class SectionPropertiesShortSyntaxIssue428Test extends PHPUnit_Smarty
 
     public function testSection_001()
     {
-        $this->smarty->assign('foo', array('a', 'b', 'c'));
+        $this->smarty->assign('foo', ['a', 'b', 'c']);
         $this->assertEquals('abc', $this->smarty->fetch('001_section.tpl'));
     }
     public function testSection_002()
     {
-        $this->smarty->assign('foo', array('a', 'b', 'c'));
+        $this->smarty->assign('foo', ['a', 'b', 'c']);
         $this->assertEquals('abc', $this->smarty->fetch('002_section.tpl'));
     }
-
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\ParseTree;
 
 /**
@@ -119,7 +121,8 @@ class Template extends Base
     /**
      * @return array{mode: ('other' | 'tag' | 'text' | 'textstripped' | null), subtrees: list}[]
      */
-    private function getChunkedSubtrees(): array {
+    private function getChunkedSubtrees(): array
+    {
         $chunks = [];
         $currentMode = null;
         $currentChunk = [];
@@ -145,7 +148,7 @@ class Template extends Base
             } else {
                 $chunks[] = [
                     'mode' => $currentMode,
-                    'subtrees' => $currentChunk
+                    'subtrees' => $currentChunk,
                 ];
                 $currentMode = $newMode;
                 $currentChunk = [$this->subtrees[ $key ]];
@@ -154,7 +157,7 @@ class Template extends Base
         if ($currentMode && $currentChunk) {
             $chunks[] = [
                 'mode' => $currentMode,
-                'subtrees' => $currentChunk
+                'subtrees' => $currentChunk,
             ];
         }
         return $chunks;

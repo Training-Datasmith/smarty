@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty plugin params
  *
@@ -24,7 +26,7 @@ class smarty_compiler_getparamsshort extends Base
      * @var array
      * @see Base
      */
-    public $required_attributes = array();
+    public $required_attributes = [];
 
     /**
      * Attribute definition: Overwrites base class.
@@ -32,25 +34,25 @@ class smarty_compiler_getparamsshort extends Base
      * @var array
      * @see Base
      */
-    public $optional_attributes = array('_any');
+    public $optional_attributes = ['_any'];
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
      * @see Base
      */
-    public $shorttag_order = array('s1', 's2', 's3');
+    public $shorttag_order = ['s1', 's2', 's3'];
 
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
+    {
         $_attr = $this->getAttributes($compiler, $args);
         $output = '<?php echo "array(';
-             foreach ($_attr as $key => $value) {
-                $output .= "'{$key}'=>\" . ";
-                $output .= is_string($value) ? "({$value})" : ("'" . var_export($value, true). "'");
-                $output .= ' . ",';
+        foreach ($_attr as $key => $value) {
+            $output .= "'{$key}'=>\" . ";
+            $output .= is_string($value) ? "({$value})" : ("'" . var_export($value, true). "'");
+            $output .= ' . ",';
 
-            }
+        }
 
         $output .= ")\";?>\n";
         return $output;

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests {$smarty.template_objects}
  *
@@ -10,7 +12,7 @@
  * class for {$smarty.template_objects} tests
  *
  *
- * 
+ *
  *
  */
 class SmartyTemplateObjectTest extends PHPUnit_Smarty
@@ -28,7 +30,8 @@ class SmartyTemplateObjectTest extends PHPUnit_Smarty
      * test {$smarty.template_objects}
      *
      */
-    public function testSmartyTempalteObject() {
+    public function testSmartyTempalteObject()
+    {
         $this->assertEquals('okay', $this->smarty->fetch('template_object.tpl'));
     }
- }
+}

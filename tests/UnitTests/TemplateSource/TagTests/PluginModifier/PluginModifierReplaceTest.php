@@ -1,13 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\TemplateSource\TagTests\PluginModifier;
 
 /**
  * class for modifier tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class PluginModifierReplaceTest extends \PHPUnit_Smarty
 {
@@ -36,18 +38,18 @@ class PluginModifierReplaceTest extends \PHPUnit_Smarty
         return [
             'default'  => [
                 'template'      => 'string:{$subject|replace:",":"-"}',
-                'subject'       => "a,b,c,d",
-                'expectedString' => "a-b-c-d",
+                'subject'       => 'a,b,c,d',
+                'expectedString' => 'a-b-c-d',
             ],
             'doNothing'  => [
                 'template'      => 'string:{$subject|replace:"":""}',
-                'subject'       => "a,b,c,d",
-                'expectedString' => "a,b,c,d",
+                'subject'       => 'a,b,c,d',
+                'expectedString' => 'a,b,c,d',
             ],
             'withNull' => [
                 'template'      => 'string:{$subject|replace:"":""}',
                 'subject'       => null,
-                'expectedString' => "",
+                'expectedString' => '',
             ],
         ];
     }

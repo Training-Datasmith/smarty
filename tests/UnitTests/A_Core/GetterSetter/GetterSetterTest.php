@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of generic getter/setter
  *
@@ -10,12 +12,12 @@
  * class for generic getter/setter tests
  *
  *
- * 
- * 
+ *
+ *
  */
 class GetterSetterTest extends PHPUnit_Smarty
 {
-     public function setUp(): void
+    public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
     }

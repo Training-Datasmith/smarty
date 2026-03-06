@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for stream resources
  *
@@ -9,9 +11,9 @@
 /**
  * class for stream resource tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class StreamResourceTest extends PHPUnit_Smarty
 {
@@ -20,9 +22,9 @@ class StreamResourceTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
 
         $this->smarty->assign('foo', 'bar');
-        stream_wrapper_register("global", "ResourceStream")
-        or die("Failed to register protocol");
-        $fp = fopen("global://mytest", "r+");
+        stream_wrapper_register('global', 'ResourceStream')
+        or die('Failed to register protocol');
+        $fp = fopen('global://mytest', 'r+');
         fwrite($fp, 'hello world {$foo}');
         fclose($fp);
     }
@@ -34,7 +36,7 @@ class StreamResourceTest extends PHPUnit_Smarty
     public function tearDown(): void
     {
         parent::tearDown();
-        stream_wrapper_unregister("global");
+        stream_wrapper_unregister('global');
     }
 
     /**
@@ -70,7 +72,7 @@ class StreamResourceTest extends PHPUnit_Smarty
     public function testUsesCompiler()
     {
         $tpl = $this->smarty->createTemplate('global:mytest');
-	    $this->markTestIncomplete();
+        $this->markTestIncomplete();
     }
 
     /**
@@ -137,8 +139,8 @@ class StreamResourceTest extends PHPUnit_Smarty
         $this->assertFalse($this->smarty->templateExists('global:notthere'));
     }
     /**
-     * 
-     * 
+     *
+     *
      *
      * test not existing template
      */
@@ -214,7 +216,7 @@ class ResourceStream
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url($path);
-        $this->varname = $url["host"];
+        $this->varname = $url['host'];
         $this->position = 0;
 
         return true;

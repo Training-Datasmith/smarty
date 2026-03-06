@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  */
@@ -6,7 +8,7 @@
 /**
  * class for protected $template_dir, $compile_dir, $cache_dir, $config_dir, $plugins_dir property tests
  *
- * 
+ *
  */
 class UndefinedTemplateVarTest extends PHPUnit_Smarty
 {
@@ -93,24 +95,27 @@ class UndefinedTemplateVarTest extends PHPUnit_Smarty
         $this->assertEquals($e1, $e2);
     }
 
-    public function testUndefinedSimpleVar() {
+    public function testUndefinedSimpleVar()
+    {
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $undef}def{/if}b');
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-    public function testUndefinedArrayIndex() {
+    public function testUndefinedArrayIndex()
+    {
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $ar.undef}def{/if}b');
         $tpl->assign('ar', []);
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-    public function testUndefinedArrayIndexDeep() {
+    public function testUndefinedArrayIndexDeep()
+    {
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $ar.undef.nope.neither}def{/if}b');
         $tpl->assign('ar', []);
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
     public function testUndefinedArrayIndexError()
@@ -136,46 +141,48 @@ class UndefinedTemplateVarTest extends PHPUnit_Smarty
         $this->assertTrue($exceptionThrown);
     }
 
-    public function testUsingNullAsAnArrayIsMuted() {
+    public function testUsingNullAsAnArrayIsMuted()
+    {
         $this->smarty->setErrorReporting(E_ALL);
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $undef.k}def{/if}b');
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-    public function testUsingFalseAsAnArrayIsMuted() {
+    public function testUsingFalseAsAnArrayIsMuted()
+    {
         $this->smarty->setErrorReporting(E_ALL);
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $nottrue.k}def{/if}b');
         $this->smarty->assign('nottrue', false);
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-
-    public function testDereferenceOnNull() {
+    public function testDereferenceOnNull()
+    {
         $this->smarty->setErrorReporting(E_ALL & ~E_WARNING & ~E_NOTICE);
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $object->myprop}def{/if}b');
         $this->smarty->assign('object', null);
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-
-    public function testDereferenceOnBool() {
+    public function testDereferenceOnBool()
+    {
         $this->smarty->setErrorReporting(E_ALL & ~E_NOTICE);
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $object->myprop}def{/if}b');
         $this->smarty->assign('object', false);
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
-
-    public function testDereferenceOnString() {
+    public function testDereferenceOnString()
+    {
         $this->smarty->setErrorReporting(E_ALL & ~E_NOTICE);
         $this->smarty->muteUndefinedOrNullWarnings();
         $tpl = $this->smarty->createTemplate('string:a{if $object->myprop}def{/if}b');
         $this->smarty->assign('object', 'xyz');
-        $this->assertEquals("ab", $this->smarty->fetch($tpl));
+        $this->assertEquals('ab', $this->smarty->fetch($tpl));
     }
 
 }

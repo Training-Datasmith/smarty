@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for eval resources
  *
@@ -10,16 +12,15 @@
  * class for eval resource tests
  *
  *
- * 
+ *
  *
  */
 class EvalResourceTest extends PHPUnit_Smarty
 {
-   public function setUp(): void
+    public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -176,7 +177,7 @@ class EvalResourceTest extends PHPUnit_Smarty
      */
     public function testClearCompiled()
     {
-         $this->assertEquals(0, $this->smarty->clearCompiledTemplate('eval:hello world'));
+        $this->assertEquals(0, $this->smarty->clearCompiledTemplate('eval:hello world'));
     }
 
 }

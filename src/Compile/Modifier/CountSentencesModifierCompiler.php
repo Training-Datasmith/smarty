@@ -1,5 +1,9 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 /**
  * Smarty count_sentences modifier plugin
  * Type:     modifier
@@ -9,11 +13,12 @@ namespace Smarty\Compile\Modifier;
  * @author Uwe Tews
  */
 
-class CountSentencesModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
-		// find periods, question marks, exclamation marks with a word before but not after.
-		return 'preg_match_all("#\w[\.\?\!](\W|$)#S' . \Smarty\Smarty::$_UTF8_MODIFIER . '", ' . $params[ 0 ] . ', $tmp)';
-	}
+class CountSentencesModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
+        // find periods, question marks, exclamation marks with a word before but not after.
+        return 'preg_match_all("#\w[\.\?\!](\W|$)#S' . \Smarty\Smarty::$_UTF8_MODIFIER . '", ' . $params[ 0 ] . ', $tmp)';
+    }
 
 }

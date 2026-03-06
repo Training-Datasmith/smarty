@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  */
@@ -6,7 +8,7 @@
 /**
  * class for path normalization tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
  *
  */
@@ -94,13 +96,15 @@ class TemplateNormalizationTest extends PHPUnit_Smarty
         $this->smarty->setTemplateDir('../foo');
         $result = $this->smarty->getTemplateDir();
         $this->assertEquals(1, count($result));
-        $this->assertEquals(substr(getcwd(), 0, - strlen(basename(getcwd()))) . 'foo' . DIRECTORY_SEPARATOR,
-                            $result[ 0 ]);
+        $this->assertEquals(
+            substr(getcwd(), 0, - strlen(basename(getcwd()))) . 'foo' . DIRECTORY_SEPARATOR,
+            $result[ 0 ]
+        );
     }
 
     public function testSetTemplateDir8()
     {
-        $this->smarty->setTemplateDir(array('foo', 'bah'));
+        $this->smarty->setTemplateDir(['foo', 'bah']);
         $result = $this->smarty->getTemplateDir();
         $this->assertEquals(2, count($result));
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR, $result[ 0 ]);
@@ -109,7 +113,7 @@ class TemplateNormalizationTest extends PHPUnit_Smarty
 
     public function testSetTemplateDir9()
     {
-        $this->smarty->setTemplateDir(array('foo', 'bah'));
+        $this->smarty->setTemplateDir(['foo', 'bah']);
         $result = $this->smarty->getTemplateDir();
         $this->assertEquals(2, count($result));
         $this->smarty->addTemplateDir('blar');
@@ -122,10 +126,10 @@ class TemplateNormalizationTest extends PHPUnit_Smarty
 
     public function testSetTemplateDir10()
     {
-        $this->smarty->setTemplateDir(array('foo', 'bah'));
+        $this->smarty->setTemplateDir(['foo', 'bah']);
         $result = $this->smarty->getTemplateDir();
         $this->assertEquals(2, count($result));
-        $this->smarty->addTemplateDir(array('blar', 'smarty'));
+        $this->smarty->addTemplateDir(['blar', 'smarty']);
         $result = $this->smarty->getTemplateDir();
         $this->assertEquals(4, count($result));
         $this->assertEquals(getcwd() . DIRECTORY_SEPARATOR . 'foo' . DIRECTORY_SEPARATOR, $result[ 0 ]);

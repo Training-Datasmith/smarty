@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  */
@@ -6,9 +8,9 @@
 /**
  * class for 'escapeHtml' property tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class AutoEscapeTest extends PHPUnit_Smarty
 {
@@ -28,7 +30,7 @@ class AutoEscapeTest extends PHPUnit_Smarty
     {
         $tpl = $this->smarty->createTemplate('eval:{$foo}');
         $tpl->assign('foo', '<a@b.c>');
-        $this->assertEquals("&lt;a@b.c&gt;", $this->smarty->fetch($tpl));
+        $this->assertEquals('&lt;a@b.c&gt;', $this->smarty->fetch($tpl));
     }
 
     /**
@@ -40,10 +42,12 @@ class AutoEscapeTest extends PHPUnit_Smarty
         $this->smarty->registerPlugin(
             \Smarty\Smarty::PLUGIN_FUNCTION,
             'horizontal_rule',
-            function ($params, $smarty)	{ return "<hr>"; }
+            function ($params, $smarty) {
+                return '<hr>';
+            }
         );
         $tpl = $this->smarty->createTemplate('eval:{horizontal_rule}');
-        $this->assertEquals("<hr>", $this->smarty->fetch($tpl));
+        $this->assertEquals('<hr>', $this->smarty->fetch($tpl));
     }
 
     /**
@@ -55,71 +59,79 @@ class AutoEscapeTest extends PHPUnit_Smarty
         $this->smarty->registerPlugin(
             \Smarty\Smarty::PLUGIN_BLOCK,
             'paragraphify',
-            function ($params, $content)	{ return $content == null ? null :  "<p>".$content."</p>"; }
+            function ($params, $content) {
+                return $content == null ? null : '<p>'.$content.'</p>';
+            }
         );
         $tpl = $this->smarty->createTemplate('eval:{paragraphify}hi{/paragraphify}');
-        $this->assertEquals("<p>hi</p>", $this->smarty->fetch($tpl));
+        $this->assertEquals('<p>hi</p>', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + raw modifier
      */
-    public function testAutoEscapeRaw() {
+    public function testAutoEscapeRaw()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|raw}');
         $tpl->assign('foo', '<a@b.c>');
-        $this->assertEquals("<a@b.c>", $this->smarty->fetch($tpl));
+        $this->assertEquals('<a@b.c>', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + escape modifier = no double-escaping
      */
-    public function testAutoEscapeNoDoubleEscape() {
+    public function testAutoEscapeNoDoubleEscape()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape}');
         $tpl->assign('foo', '<a@b.c>');
-        $this->assertEquals("&lt;a@b.c&gt;", $this->smarty->fetch($tpl));
+        $this->assertEquals('&lt;a@b.c&gt;', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + escape modifier = force double-escaping
      */
-    public function testAutoEscapeForceDoubleEscape() {
+    public function testAutoEscapeForceDoubleEscape()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape:\'force\'}');
         $tpl->assign('foo', '<a@b.c>');
-        $this->assertEquals("&amp;lt;a@b.c&amp;gt;", $this->smarty->fetch($tpl));
+        $this->assertEquals('&amp;lt;a@b.c&amp;gt;', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + escape modifier = special escape
      */
-    public function testAutoEscapeSpecialEscape() {
+    public function testAutoEscapeSpecialEscape()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape:\'url\'}');
         $tpl->assign('foo', 'aa bb');
-        $this->assertEquals("aa%20bb", $this->smarty->fetch($tpl));
+        $this->assertEquals('aa%20bb', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + escape modifier = special escape
      */
-    public function testAutoEscapeSpecialEscape2() {
+    public function testAutoEscapeSpecialEscape2()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape:\'url\'}');
         $tpl->assign('foo', '<BR>');
-        $this->assertEquals("%3CBR%3E", $this->smarty->fetch($tpl));
+        $this->assertEquals('%3CBR%3E', $this->smarty->fetch($tpl));
     }
 
     /**
      * test autoescape + escape modifier = special escape
      */
-    public function testAutoEscapeSpecialEscape3() {
+    public function testAutoEscapeSpecialEscape3()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape:\'htmlall\'}');
         $tpl->assign('foo', '<BR>');
-        $this->assertEquals("&lt;BR&gt;", $this->smarty->fetch($tpl));
+        $this->assertEquals('&lt;BR&gt;', $this->smarty->fetch($tpl));
     }
-
 
     /**
      * test autoescape + escape modifier = special escape
      */
-    public function testAutoEscapeSpecialEscape4() {
+    public function testAutoEscapeSpecialEscape4()
+    {
         $tpl = $this->smarty->createTemplate('eval:{$foo|escape:\'javascript\'}');
         $tpl->assign('foo', '<\'');
         $this->assertEquals("<\\'", $this->smarty->fetch($tpl));

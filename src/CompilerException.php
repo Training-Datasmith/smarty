@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty;
 
 /**
@@ -7,64 +9,66 @@ namespace Smarty;
  *
 
  */
-class CompilerException extends Exception {
+class CompilerException extends Exception
+{
+    /**
+     * The constructor of the exception
+     *
+     * @param string $message The Exception message to throw.
+     * @param int $code The Exception code.
+     * @param string|null $filename The filename where the exception is thrown.
+     * @param int|null $line The line number where the exception is thrown.
+     * @param \Throwable|null $previous The previous exception used for the exception chaining.
+     */
+    public function __construct(
+        string    $message = '',
+        int       $code = 0,
+        ?string   $filename = null,
+        ?int      $line = null,
+        ?\Throwable $previous = null
+    ) {
+        parent::__construct($message, $code, $previous);
 
-	/**
-	 * The constructor of the exception
-	 *
-	 * @param string $message The Exception message to throw.
-	 * @param int $code The Exception code.
-	 * @param string|null $filename The filename where the exception is thrown.
-	 * @param int|null $line The line number where the exception is thrown.
-	 * @param \Throwable|null $previous The previous exception used for the exception chaining.
-	 */
-	public function __construct(
-		string    $message = "",
-		int       $code = 0,
-		?string   $filename = null,
-		?int      $line = null,
-		?\Throwable $previous = null
-	) {
-		parent::__construct($message, $code, $previous);
+        // These are optional parameters, should be be overridden only when present!
+        if ($filename) {
+            $this->file = $filename;
+        }
+        if ($line) {
+            $this->line = $line;
+        }
+    }
 
-		// These are optional parameters, should be be overridden only when present!
-		if ($filename) {
-			$this->file = $filename;
-		}
-		if ($line) {
-			$this->line = $line;
-		}
-	}
+    public function __toString(): string
+    {
+        return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
+    }
 
-	public function __toString(): string {
-		return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
-	}
+    /**
+     * @param int $line
+     */
+    public function setLine($line): void
+    {
+        $this->line = $line;
+    }
 
-	/**
-	 * @param int $line
-	 */
-	public function setLine($line): void {
-		$this->line = $line;
-	}
+    /**
+     * The template source snippet relating to the error
+     *
+     * @type string|null
+     */
+    public $source;
 
-	/**
-	 * The template source snippet relating to the error
-	 *
-	 * @type string|null
-	 */
-	public $source;
+    /**
+     * The raw text of the error message
+     *
+     * @type string|null
+     */
+    public $desc;
 
-	/**
-	 * The raw text of the error message
-	 *
-	 * @type string|null
-	 */
-	public $desc;
-
-	/**
-	 * The resource identifier or template name
-	 *
-	 * @type string|null
-	 */
-	public $template;
+    /**
+     * The resource identifier or template name
+     *
+     * @type string|null
+     */
+    public $template;
 }

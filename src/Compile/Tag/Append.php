@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Tag;
 
 /**
@@ -19,11 +21,10 @@ namespace Smarty\Compile\Tag;
  */
 class Append extends Assign
 {
-
-	/**
-	 * @inheritdoc
-	 */
-	protected $optional_attributes = ['scope', 'index'];
+    /**
+     * @inheritdoc
+     */
+    protected $optional_attributes = ['scope', 'index'];
 
     /**
      * Compiles code for the {append} tag
@@ -35,8 +36,8 @@ class Append extends Assign
      * @return string compiled code
      * @throws \Smarty\CompilerException
      */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+    {
 
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);

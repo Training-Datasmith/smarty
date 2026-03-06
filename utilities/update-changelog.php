@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // This takes the *.md files in changelog/ dir and inserts them
 // right below the '## [Unreleased]' marker in CHANGELOG.md
 
@@ -25,7 +27,6 @@ foreach (glob($changelog_files_pattern) as $filename) {
     unlink($filename);
 }
 
-
 // add the version number and date
 $file_contents = str_replace(
     $marker,
@@ -34,7 +35,6 @@ $file_contents = str_replace(
 );
 
 file_put_contents($path_to_main_changelog, $file_contents);
-
 
 function endsWithNewline($str): bool
 {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Resource;
 
 use Smarty\Exception;
@@ -14,7 +16,6 @@ use Smarty\Template\Source;
  */
 class ExtendsPlugin extends BasePlugin
 {
-
     /**
      * populate Source Object with metadata from Resource
      *

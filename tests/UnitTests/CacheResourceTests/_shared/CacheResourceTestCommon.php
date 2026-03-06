@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests for cache resource file
  *
@@ -11,7 +13,7 @@ use Smarty\Template;
 /**
  * class for cache resource file tests
  *
- * 
+ *
  */
 abstract class CacheResourceTestCommon extends PHPUnit_Smarty
 {
@@ -21,9 +23,8 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
     {
         $this->smarty->setTemplateDir(__DIR__ . '/templates');
         $this->smarty->addPluginsDir(__DIR__ . '/PHPunitplugins');
-        $this->smarty->registerFilter('pre', array($this, 'compiledPrefilter'));
+        $this->smarty->registerFilter('pre', [$this, 'compiledPrefilter']);
     }
-
 
     protected function doClearCacheAssertion($a, $b)
     {
@@ -346,7 +347,7 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
     /**
      * @group slow
      */
-   public function testClearCacheExpired()
+    public function testClearCacheExpired()
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
@@ -367,12 +368,12 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
         $tpl4->writeCachedContent('something else 4');
 
         // test number of deleted caches
-        $this->doClearCacheAssertion(3,$this->smarty->clearAllCache(2));
+        $this->doClearCacheAssertion(3, $this->smarty->clearAllCache(2));
 
-	    $tpl = $this->smarty->createTemplate('helloworld.tpl');
-	    $tpl2 = $this->smarty->createTemplate('helloworld.tpl', null, 'bar');
-	    $tpl3 = $this->smarty->createTemplate('helloworld.tpl', 'buh|blar');
-	    $tpl4 = $this->smarty->createTemplate('helloworld2.tpl');
+        $tpl = $this->smarty->createTemplate('helloworld.tpl');
+        $tpl2 = $this->smarty->createTemplate('helloworld.tpl', null, 'bar');
+        $tpl3 = $this->smarty->createTemplate('helloworld.tpl', 'buh|blar');
+        $tpl4 = $this->smarty->createTemplate('helloworld2.tpl');
 
         // test that caches are deleted properly
         $this->assertEquals('hello world', $tpl->getCachedContent());
@@ -430,11 +431,11 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
             sleep(1);
             $filepath = $this->buildSourcePath(null, 'cacheresource.tpl', 'file');
             touch($filepath, $t = time());
-             clearstatcache();
+            clearstatcache();
         }
         $tpl = $this->smarty->createTemplate('cacheresource.tpl', $this->smarty);
         if ($update) {
-            $this->assertEquals($t,$tpl->getSource()->getTimeStamp(), $testName . ' - source touch');
+            $this->assertEquals($t, $tpl->getSource()->getTimeStamp(), $testName . ' - source touch');
         }
         if ($lockTime) {
             $tpl->getCached()->handler->acquireLock($this->smarty, $tpl->getCached());
@@ -460,8 +461,9 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
         $this->assertFalse($tpl->getCached()->handler->hasLock($this->smarty, $tpl->getCached(), $testName . ' - lock not removed'));
     }
 
-    public function data(){
-        return array(
+    public function data()
+    {
+        return [
             /*
              * lock time
              * locking_timeout 0 = no cache_locking
@@ -478,39 +480,39 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
              * result render nr
              * text
              */
-            array(0, 0, null, null, false, 0, 0, false, false, false, 1, 1, 1, 'locking off - create cache'),
-            array(0, 0, 1, null, false, 0, 0, false, false, false, 2, 2, 2, 'locking off - create cache compile_id'),
-            array(0, 0, null, 2, false, 0, 0, false, false, false, 3, 1, 3, 'locking off - create cache cache_id'),
-            array(0, 0, 3, 4, false, 0, 0, false, false, false, 4, 4, 4, 'locking off - create cache cache_id & compile_id'),
-            array(0, 0, null, null, null, 0, 0, false, false, false, 5, 1, 1, 'locking off - fetch'),
-            array(0, 0, 1, null, null, 0, 0, false, false, false, 6, 2, 2, 'locking off - fetch compile_id'),
-            array(0, 0, null, 2, null, 0, 0, false, false, false, 7, 1, 3, 'locking off - fetch cache_id'),
-            array(0, 0, 3, 4, null, 0, 0, false, false, false, 8, 4, 4, 'locking off - fetch cache_id & compile_id'),
-            array(0, 0, null, null, true,0, 0, false, false, false, 9, 1, 1, 'locking off - isCached & fetch'),
-            array(0, 0, 1, null, true, 0, 0, false, false, false, 10, 2, 2, 'locking off - isCached & fetch compile_id'),
-            array(0, 0, null, 2, true, 0, 0, false, false, false, 11, 1, 3, 'locking off - isCached & fetch cache_id'),
-            array(0, 0, 3, 4, true, 0, 0, false, false, false, 12, 4, 4, 'locking off - isCached & fetch cache_id & compile_id'),
-            array(0, 0, null, null, false, 0, 0, true, false, false, 13, 13, 13, 'locking off - force compile'),
-            array(0, 0, null, null, true, 0, 0, false, false, false, 14, 13, 13, 'locking off - after force compile'),
-            array(0, 0, null, null, false, 0, 0, false, true, false, 15, 13, 15, 'locking off - force cache'),
-            array(0, 0, null, null, true, 0, 0, false, false, false, 16, 13, 15, 'locking off - after force cache'),
-            array(0, 0, null, null, false, 0, 0, false, false, true, 17, 17, 17, 'locking off - new source'),
-            array(0, 0, null, null, true, 0, 0, false, false, false, 18, 17, 17, 'locking off - after new source'),
-            array(0, 5, null, null, null, 0, 1, false, false, false, 19, 17, 17, 'not locked - fetch'),
-            array(0, 5, null, null, true, 0, 1, false, false, false, 20, 17, 17, 'not locked - isCached & fetch'),
-            array(0, 5, null, null, false, 0, 1, false, false, true, 21, 21, 21, 'not locked - new source'),
-            array(0, 5, null, null, true, 0, 1, false, false, false, 22, 21, 21, 'not locked - after new source'),
-            array(4, 10, null, null, null, 2, 10, false, false, false, 23, 21, 21, 'locked - fetch'),
-            array(4, 10, null, null, true, 2, 10, false, false, false, 24, 21, 21, 'locked - isCached & fetch'),
-            array(4, 10, null, null, false, 2, 10, false, false, true, 25, 25, 25, 'locked - new source'),
-            array(4, 10, null, null, true, 2, 10, false, false, false, 26, 25, 25, 'locked - after new source'),
-            array(10, 4, null, null, null, 2, 10, false, false, false, 27, 25, 25, 'lock timeout - fetch'),
-            array(10, 4, null, null, true, 2, 10, false, false, false, 28, 25, 25, 'lock timeout - isCached & fetch'),
-            array(10, 4, null, null, false, 2, 10, false, false, true, 29, 29, 29, 'lock timeout - new source'),
-            array(10, 4, null, null, true, 2, 10, false, false, false, 30, 29, 29, 'lock timeout - after new source'),
-            array(4, 10, 5, null, false, 2, 10, false, false, false, 31, 31, 31, 'locked - new compiled'),
-            array(10, 4, 6, null, false, 2, 10, false, false, false, 32, 32, 32, 'lock timeout - new compiled'),
-        );
+            [0, 0, null, null, false, 0, 0, false, false, false, 1, 1, 1, 'locking off - create cache'],
+            [0, 0, 1, null, false, 0, 0, false, false, false, 2, 2, 2, 'locking off - create cache compile_id'],
+            [0, 0, null, 2, false, 0, 0, false, false, false, 3, 1, 3, 'locking off - create cache cache_id'],
+            [0, 0, 3, 4, false, 0, 0, false, false, false, 4, 4, 4, 'locking off - create cache cache_id & compile_id'],
+            [0, 0, null, null, null, 0, 0, false, false, false, 5, 1, 1, 'locking off - fetch'],
+            [0, 0, 1, null, null, 0, 0, false, false, false, 6, 2, 2, 'locking off - fetch compile_id'],
+            [0, 0, null, 2, null, 0, 0, false, false, false, 7, 1, 3, 'locking off - fetch cache_id'],
+            [0, 0, 3, 4, null, 0, 0, false, false, false, 8, 4, 4, 'locking off - fetch cache_id & compile_id'],
+            [0, 0, null, null, true,0, 0, false, false, false, 9, 1, 1, 'locking off - isCached & fetch'],
+            [0, 0, 1, null, true, 0, 0, false, false, false, 10, 2, 2, 'locking off - isCached & fetch compile_id'],
+            [0, 0, null, 2, true, 0, 0, false, false, false, 11, 1, 3, 'locking off - isCached & fetch cache_id'],
+            [0, 0, 3, 4, true, 0, 0, false, false, false, 12, 4, 4, 'locking off - isCached & fetch cache_id & compile_id'],
+            [0, 0, null, null, false, 0, 0, true, false, false, 13, 13, 13, 'locking off - force compile'],
+            [0, 0, null, null, true, 0, 0, false, false, false, 14, 13, 13, 'locking off - after force compile'],
+            [0, 0, null, null, false, 0, 0, false, true, false, 15, 13, 15, 'locking off - force cache'],
+            [0, 0, null, null, true, 0, 0, false, false, false, 16, 13, 15, 'locking off - after force cache'],
+            [0, 0, null, null, false, 0, 0, false, false, true, 17, 17, 17, 'locking off - new source'],
+            [0, 0, null, null, true, 0, 0, false, false, false, 18, 17, 17, 'locking off - after new source'],
+            [0, 5, null, null, null, 0, 1, false, false, false, 19, 17, 17, 'not locked - fetch'],
+            [0, 5, null, null, true, 0, 1, false, false, false, 20, 17, 17, 'not locked - isCached & fetch'],
+            [0, 5, null, null, false, 0, 1, false, false, true, 21, 21, 21, 'not locked - new source'],
+            [0, 5, null, null, true, 0, 1, false, false, false, 22, 21, 21, 'not locked - after new source'],
+            [4, 10, null, null, null, 2, 10, false, false, false, 23, 21, 21, 'locked - fetch'],
+            [4, 10, null, null, true, 2, 10, false, false, false, 24, 21, 21, 'locked - isCached & fetch'],
+            [4, 10, null, null, false, 2, 10, false, false, true, 25, 25, 25, 'locked - new source'],
+            [4, 10, null, null, true, 2, 10, false, false, false, 26, 25, 25, 'locked - after new source'],
+            [10, 4, null, null, null, 2, 10, false, false, false, 27, 25, 25, 'lock timeout - fetch'],
+            [10, 4, null, null, true, 2, 10, false, false, false, 28, 25, 25, 'lock timeout - isCached & fetch'],
+            [10, 4, null, null, false, 2, 10, false, false, true, 29, 29, 29, 'lock timeout - new source'],
+            [10, 4, null, null, true, 2, 10, false, false, false, 30, 29, 29, 'lock timeout - after new source'],
+            [4, 10, 5, null, false, 2, 10, false, false, false, 31, 31, 31, 'locked - new compiled'],
+            [10, 4, 6, null, false, 2, 10, false, false, false, 32, 32, 32, 'lock timeout - new compiled'],
+        ];
     }
 
     public function testCachingDisabled1()
@@ -537,9 +539,9 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
     {
         $this->smarty->setCaching(true);
         if ($folder == 0) {
-            $this->smarty->setTemplateDir(array(__DIR__ . '/../_shared/templates', __DIR__ . '/../_shared/templates/a'));
+            $this->smarty->setTemplateDir([__DIR__ . '/../_shared/templates', __DIR__ . '/../_shared/templates/a']);
         } else {
-            $this->smarty->setTemplateDir(array(__DIR__ . '/../_shared/templates', __DIR__ . '/../_shared/templates/b'));
+            $this->smarty->setTemplateDir([__DIR__ . '/../_shared/templates', __DIR__ . '/../_shared/templates/b']);
         }
         if ($merge) {
             $this->smarty->setCompileId(1);
@@ -550,16 +552,17 @@ abstract class CacheResourceTestCommon extends PHPUnit_Smarty
         $this->assertStringContainsString($result, $tpl->fetch());
     }
 
-    public function dataDir(){
-        return array(
-            array(0,false,0, 'include a'),
-            array(0,true,0, 'include a'),
-            array(1,false,0, 'include b'),
-            array(1,true,0, 'include b'),
-            array(0,false,1, 'include a'),
-            array(0,true,1, 'include a'),
-            array(1,false,1, 'include b'),
-            array(1,true,1, 'include b'),
-            );
+    public function dataDir()
+    {
+        return [
+            [0,false,0, 'include a'],
+            [0,true,0, 'include a'],
+            [1,false,0, 'include b'],
+            [1,true,0, 'include b'],
+            [0,false,1, 'include a'],
+            [0,true,1, 'include a'],
+            [1,false,1, 'include b'],
+            [1,true,1, 'include b'],
+            ];
     }
 }

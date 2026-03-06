@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\BlockHandler;
 
 use Smarty\Smarty;
@@ -29,82 +31,84 @@ use Smarty\Template;
  * @author Monte Ohrt <monte at ohrt dot com>
  * @throws \Smarty\Exception
  */
-class TextFormat implements BlockHandlerInterface {
+class TextFormat implements BlockHandlerInterface
+{
+    public function handle($params, $content, Template $template, &$repeat)
+    {
+        if (is_null($content)) {
+            return;
+        }
+        $style = null;
+        $indent = 0;
+        $indent_first = 0;
+        $indent_char = ' ';
+        $wrap = 80;
+        $wrap_char = "\n";
+        $wrap_cut = false;
+        $assign = null;
+        foreach ($params as $_key => $_val) {
+            switch ($_key) {
+                case 'style':
+                case 'indent_char':
+                case 'wrap_char':
+                case 'assign':
+                    ${$_key} = (string)$_val;
+                    break;
+                case 'indent':
+                case 'indent_first':
+                case 'wrap':
+                    ${$_key} = (int)$_val;
+                    break;
+                case 'wrap_cut':
+                    ${$_key} = (bool)$_val;
+                    break;
+                default:
+                    trigger_error("textformat: unknown attribute '{$_key}'");
+            }
+        }
+        if ($style === 'email') {
+            $wrap = 72;
+        }
+        // split into paragraphs
+        $_paragraphs = preg_split('![\r\n]{2}!', $content);
+        foreach ($_paragraphs as &$_paragraph) {
+            if (!$_paragraph) {
+                continue;
+            }
+            // convert mult. spaces & special chars to single space
+            $_paragraph =
+                preg_replace(
+                    [
+                        '!\s+!' . Smarty::$_UTF8_MODIFIER,
+                        '!(^\s+)|(\s+$)!' . Smarty::$_UTF8_MODIFIER,
+                    ],
+                    [
+                        ' ',
+                        '',
+                    ],
+                    $_paragraph
+                );
+            // indent first line
+            if ($indent_first > 0) {
+                $_paragraph = str_repeat($indent_char, $indent_first) . $_paragraph;
+            }
+            // wordwrap sentences
+            $_paragraph = smarty_mb_wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
+            // indent lines
+            if ($indent > 0) {
+                $_paragraph = preg_replace('!^!m', str_repeat($indent_char, $indent), $_paragraph);
+            }
+        }
+        $_output = implode($wrap_char . $wrap_char, $_paragraphs);
+        if ($assign) {
+            $template->assign($assign, $_output);
+        } else {
+            return $_output;
+        }
+    }
 
-	public function handle($params, $content, Template $template, &$repeat) {
-		if (is_null($content)) {
-			return;
-		}
-		$style = null;
-		$indent = 0;
-		$indent_first = 0;
-		$indent_char = ' ';
-		$wrap = 80;
-		$wrap_char = "\n";
-		$wrap_cut = false;
-		$assign = null;
-		foreach ($params as $_key => $_val) {
-			switch ($_key) {
-				case 'style':
-				case 'indent_char':
-				case 'wrap_char':
-				case 'assign':
-					${$_key} = (string)$_val;
-					break;
-				case 'indent':
-				case 'indent_first':
-				case 'wrap':
-					${$_key} = (int)$_val;
-					break;
-				case 'wrap_cut':
-					${$_key} = (bool)$_val;
-					break;
-				default:
-					trigger_error("textformat: unknown attribute '{$_key}'");
-			}
-		}
-		if ($style === 'email') {
-			$wrap = 72;
-		}
-		// split into paragraphs
-		$_paragraphs = preg_split('![\r\n]{2}!', $content);
-		foreach ($_paragraphs as &$_paragraph) {
-			if (!$_paragraph) {
-				continue;
-			}
-			// convert mult. spaces & special chars to single space
-			$_paragraph =
-				preg_replace(
-					[
-						'!\s+!' . Smarty::$_UTF8_MODIFIER,
-						'!(^\s+)|(\s+$)!' . Smarty::$_UTF8_MODIFIER
-					],
-					[
-						' ',
-						''
-					],
-					$_paragraph
-				);
-			// indent first line
-			if ($indent_first > 0) {
-				$_paragraph = str_repeat($indent_char, $indent_first) . $_paragraph;
-			}
-			// wordwrap sentences
-			$_paragraph = smarty_mb_wordwrap($_paragraph, $wrap - $indent, $wrap_char, $wrap_cut);
-			// indent lines
-			if ($indent > 0) {
-				$_paragraph = preg_replace('!^!m', str_repeat($indent_char, $indent), $_paragraph);
-			}
-		}
-		$_output = implode($wrap_char . $wrap_char, $_paragraphs);
-		if ($assign) {
-			$template->assign($assign, $_output);
-		} else {
-			return $_output;
-		}
-	}
-
-	public function isCacheable(): bool {
-		return true;
-	}
+    public function isCacheable(): bool
+    {
+        return true;
+    }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -8,8 +10,8 @@
 
 /**
  * class for modifier tests
- * 
- * 
+ *
+ *
  *
  */
 class PluginModifierLowerTest extends PHPUnit_Smarty
@@ -21,14 +23,14 @@ class PluginModifierLowerTest extends PHPUnit_Smarty
 
     public function testDefault()
     {
-        $result = "two convicts evade noose, jury hung.";
+        $result = 'two convicts evade noose, jury hung.';
         $tpl = $this->smarty->createTemplate('string:{"Two Convicts Evade Noose, Jury Hung."|lower}');
         $this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
     }
 
     public function testUmlauts()
     {
-        $result = "two convicts eväde nööse, jury hung.";
+        $result = 'two convicts eväde nööse, jury hung.';
         $tpl = $this->smarty->createTemplate('string:{"Two Convicts Eväde NöÖse, Jury Hung."|lower}');
         $this->assertEquals(str_replace("\r", '', $result), $this->smarty->fetch($tpl));
     }

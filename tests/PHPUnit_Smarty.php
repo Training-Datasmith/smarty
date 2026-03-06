@@ -1,19 +1,20 @@
 <?php
+
+declare(strict_types=1);
 /*
  * This file is part of the Smarty PHPUnit tests.
  *
  */
 
 use Smarty\Exception;
-use Smarty\TemplateBase;
 use Smarty\Template;
+use Smarty\TemplateBase;
 
 /**
  * Smarty Test Case Fixture
  */
 class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
 {
-
     /**
      * Smarty object
      *
@@ -66,7 +67,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
     {
         error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
         self::$init = true;
-        self::$pluginsdir =self::getSmartyPluginsDir();
+        self::$pluginsdir = self::getSmartyPluginsDir();
     }
 
     /**
@@ -86,7 +87,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      * @param array  $data
      * @param string $dataName
      */
-    public function __construct($name = null, array $data = array(), $dataName = '')
+    public function __construct($name = null, array $data = [], $dataName = '')
     {
         date_default_timezone_set('Europe/Berlin');
         if (!defined('individualFolders')) {
@@ -155,13 +156,11 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
         if (PHPUnit_Smarty::$pdo == null) {
             try {
                 PHPUnit_Smarty::$pdo = new PDO(DB_DSN, DB_USER, DB_PASSWD);
-            }
-            catch (PDOException $e) {
+            } catch (PDOException $e) {
                 throw new Exception('Mysql Resource failed: ' . $e->getMessage());
             }
             $timezone = date_default_timezone_get();
             $j = PHPUnit_Smarty::$pdo->exec("SET time_zone = '{$timezone}';");
-
 
         }
     }
@@ -173,13 +172,13 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
     public function initMysqlResource()
     {
         $this->getConnection();
-        PHPUnit_Smarty::$pdo->exec("DROP TABLE `templates`");
-        PHPUnit_Smarty::$pdo->exec("CREATE TABLE IF NOT EXISTS `templates` (
+        PHPUnit_Smarty::$pdo->exec('DROP TABLE `templates`');
+        PHPUnit_Smarty::$pdo->exec('CREATE TABLE IF NOT EXISTS `templates` (
  `name` varchar(100) NOT NULL,
  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
  `source` text,
 PRIMARY KEY (`name`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8');
 
     }
 
@@ -190,8 +189,8 @@ PRIMARY KEY (`name`)
     public function initMysqlCache()
     {
         $this->getConnection();
-        PHPUnit_Smarty::$pdo->exec("DROP TABLE `output_cache`");
-         PHPUnit_Smarty::$pdo->exec("CREATE TABLE IF NOT EXISTS `output_cache` (
+        PHPUnit_Smarty::$pdo->exec('DROP TABLE `output_cache`');
+        PHPUnit_Smarty::$pdo->exec('CREATE TABLE IF NOT EXISTS `output_cache` (
  `name` varchar(256) NOT NULL,
  `id` char(40) NOT NULL,
  `cache_id` varchar(250) DEFAULT NULL,
@@ -203,22 +202,22 @@ KEY `cache_id` (`cache_id`),
 KEY `compile_id` (`compile_id`),
 KEY `modified` (`modified`),
 KEY `name` (`name`)
- ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
-//     PHPUnit_Smarty::$pdo->exec("CREATE TABLE IF NOT EXISTS `output_cache` (
-//`id` char(40) NOT NULL,
-//`name` varchar(250) NOT NULL,
-//`cache_id` varchar(250) DEFAULT NULL,
-//`compile_id` varchar(250) DEFAULT NULL,
-//`modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-//`expire` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
-//`content` mediumblob NOT NULL,
-///PRIMARY KEY (`id`),
-//KEY `name` (`name`),
-//KEY `cache_id` (`cache_id`),
-//KEY `compile_id` (`compile_id`),
-//KEY `modified` (`modified`),
-//KEY `expire` (`expire`)
-//) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+ ) ENGINE=InnoDB DEFAULT CHARSET=utf8');
+        //     PHPUnit_Smarty::$pdo->exec("CREATE TABLE IF NOT EXISTS `output_cache` (
+        //`id` char(40) NOT NULL,
+        //`name` varchar(250) NOT NULL,
+        //`cache_id` varchar(250) DEFAULT NULL,
+        //`compile_id` varchar(250) DEFAULT NULL,
+        //`modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        //`expire` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
+        //`content` mediumblob NOT NULL,
+        ///PRIMARY KEY (`id`),
+        //KEY `name` (`name`),
+        //KEY `cache_id` (`cache_id`),
+        //KEY `compile_id` (`compile_id`),
+        //KEY `modified` (`modified`),
+        //KEY `expire` (`expire`)
+        //) ENGINE=InnoDB DEFAULT CHARSET=utf8");
 
     }
 
@@ -234,7 +233,7 @@ KEY `name` (`name`)
             $this->cleanDir(self::$cwd . '/templates_tmp');
         }
         $this->assertTrue(true);
-   }
+    }
 
     /**
      * Make temporary template file
@@ -273,7 +272,7 @@ KEY `name` (`name`)
         if (isset($smarty)) {
             $dir = $smarty->getCacheDir();
             $this->cleanDir($dir);
-         }
+        }
     }
 
     /**
@@ -286,7 +285,7 @@ KEY `name` (`name`)
         $di = new RecursiveDirectoryIterator($dir);
         $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($ri as $file) {
-            if (substr(basename($file->getPathname()), 0, 1) === '.' || substr((string)$file,-4) === '.txt') {
+            if (substr(basename($file->getPathname()), 0, 1) === '.' || substr((string)$file, -4) === '.txt') {
                 continue;
             }
             // directory ?
@@ -319,7 +318,7 @@ KEY `name` (`name`)
     public function normalizeString($in)
     {
         if (is_string($in)) {
-            return str_replace(array("\r", "\t"), array('', '    '), $in);
+            return str_replace(["\r", "\t"], ['', '    '], $in);
         } else {
             return $in;
         }
@@ -417,7 +416,7 @@ KEY `name` (`name`)
      *
      * @return string
      */
-    public function normalizePath($path, $ds =null ,$absolute = true)
+    public function normalizePath($path, $ds = null, $absolute = true)
     {
         $ds = isset($ds) ? $ds : DIRECTORY_SEPARATOR;
         $nds = $ds == '/' ? '\\' : '/';
@@ -428,18 +427,21 @@ KEY `name` (`name`)
         if ($match[1] === '') {
             if ($match[ 2 ] !== '' || $match[ 2 ] . $match[ 3 ] . $match[ 4 ] === '') {
                 $path = $getcwd . $ds . $path;
-            } else if (\Smarty\Smarty::$_IS_WINDOWS && $match[ 3 ] !== '') {
+            } elseif (\Smarty\Smarty::$_IS_WINDOWS && $match[ 3 ] !== '') {
                 $path = substr($getcwd, 0, 2) . $path;
             }
         }
         $path = preg_replace('#[\\\/]+([.][\\\/]+)*#', $ds, $path);
         while (strrpos($path, '.' . $ds) !== false) {
             $path =
-                preg_replace('#([\\\/]([^\\\/]+[\\\/]){2}([.][.][\\\/]){2})|([\\\/][^\\\/]+[\\\/][.][.][\\\/])#', $ds,
-                             $path);
+                preg_replace(
+                    '#([\\\/]([^\\\/]+[\\\/]){2}([.][.][\\\/]){2})|([\\\/][^\\\/]+[\\\/][.][.][\\\/])#',
+                    $ds,
+                    $path
+                );
         }
         $cwd  = preg_replace('#[\\\/]#', $ds, $getcwd);
-        $path = str_ireplace($cwd,$getcwd, $path);
+        $path = str_ireplace($cwd, $getcwd, $path);
         if (!$absolute) {
             $path = preg_replace('#'.$getcwd.'#', '', $path);
         }
@@ -490,9 +492,15 @@ KEY `name` (`name`)
      * @return string
      * @throws \Exception
      */
-    public function buildCompiledPath(Template $tpl, $sub = true, $caching = false, $compile_id = null,
-                                               $name = null, $type = null, $dir = null)
-    {
+    public function buildCompiledPath(
+        Template $tpl,
+        $sub = true,
+        $caching = false,
+        $compile_id = null,
+        $name = null,
+        $type = null,
+        $dir = null
+    ) {
         $sep = DIRECTORY_SEPARATOR;
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
         $sp = $this->buildSourcePath($tpl, $name, $type, $dir);
@@ -550,9 +558,16 @@ KEY `name` (`name`)
      * @return string
      * @throws \Exception
      */
-    public function buildCachedPath(TemplateBase $tpl, $sub = true, $cache_id = null, $compile_id = null, $name = null, $type = null,
-                                    $dir = null, $cacheType = null)
-    {
+    public function buildCachedPath(
+        TemplateBase $tpl,
+        $sub = true,
+        $cache_id = null,
+        $compile_id = null,
+        $name = null,
+        $type = null,
+        $dir = null,
+        $cacheType = null
+    ) {
         $cacheType = $cacheType ?? $tpl->getSmarty()->getCachingType();
         switch ($cacheType) {
             case 'file':
@@ -580,7 +595,7 @@ KEY `name` (`name`)
                 } else {
                     $_compile_id = '';
                 }
-	            return $tpl->getSmarty()->getCacheDir() . $_cache_id . $_compile_id . $_filepath . '.' . basename($sp) . '.php';
+                return $tpl->getSmarty()->getCacheDir() . $_cache_id . $_compile_id . $_filepath . '.' . basename($sp) . '.php';
             case 'mysqltest':
             case 'pdo':
             case 'foobar':
@@ -613,22 +628,27 @@ KEY `name` (`name`)
      */
     public function prefilterTest($source, Template $tpl)
     {
-        return str_replace('#test#', "test:{\$test nocache} compiled:{$tpl->getTemplateVars('test')} rendered:{\$test}",
-                           $source);
+        return str_replace(
+            '#test#',
+            "test:{\$test nocache} compiled:{$tpl->getTemplateVars('test')} rendered:{\$test}",
+            $source
+        );
     }
 
     /**
      *  Gat Smarty object
      * @return null|\Smarty
      */
-    public function getSmarty(){
+    public function getSmarty()
+    {
         return $this->smarty;
     }
 
-    public static function getSmartyPluginsDir(){
+    public static function getSmartyPluginsDir()
+    {
         if (is_dir(__DIR__ . '/../smarty/src/plugins')) {
             return __DIR__ . '/../smarty/src/plugins';
-        } else if(is_dir(__DIR__ . '/../libs/plugins')) {
+        } elseif (is_dir(__DIR__ . '/../libs/plugins')) {
             return __DIR__ . '/../libs/plugins';
         }
     }

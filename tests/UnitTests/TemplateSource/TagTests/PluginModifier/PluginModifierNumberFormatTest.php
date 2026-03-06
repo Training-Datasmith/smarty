@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace UnitTests\TemplateSource\TagTests\PluginModifier;
 
 /**
@@ -7,7 +9,7 @@ namespace UnitTests\TemplateSource\TagTests\PluginModifier;
  *
  *
  *
- * 
+ *
  */
 class PluginModifierNumberFormatTest extends \PHPUnit_Smarty
 {
@@ -37,17 +39,17 @@ class PluginModifierNumberFormatTest extends \PHPUnit_Smarty
             'default'  => [
                 'template'      => 'string:{$subject|number_format}',
                 'subject'       => 12345,
-                'expectedString' => "12,345",
+                'expectedString' => '12,345',
             ],
             'withDecimalDefault'  => [
                 'template'      => 'string:{$subject|number_format}',
                 'subject'       => 12345.6789,
-                'expectedString' => "12,346",
+                'expectedString' => '12,346',
             ],
             'withDecimalAndExtras'  => [
                 'template'      => 'string:{$subject|number_format:2:"-":"~"}',
                 'subject'       => 12345.6789,
-                'expectedString' => "12~345-68",
+                'expectedString' => '12~345-68',
             ],
             'withNull' => [
                 'template'      => 'string:{$subject|number_format}',

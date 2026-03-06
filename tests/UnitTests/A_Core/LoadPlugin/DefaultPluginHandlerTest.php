@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests deault plugin handler
  *
@@ -9,9 +11,9 @@
 /**
  * class for plugin handler tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class DefaultPluginHandlerTest extends PHPUnit_Smarty
 {
@@ -23,33 +25,32 @@ class DefaultPluginHandlerTest extends PHPUnit_Smarty
         $this->smarty->registerDefaultPluginHandler('my_plugin_handler');
     }
 
-
     public function testInit()
     {
         $this->cleanDirs();
     }
     public function testDefaultFunctionScript()
     {
-        $this->assertEquals("scriptfunction foo bar", $this->smarty->fetch('test_default_function_script.tpl'));
+        $this->assertEquals('scriptfunction foo bar', $this->smarty->fetch('test_default_function_script.tpl'));
     }
 
     public function testDefaultFunctionScriptNotCachable1()
     {
         $this->smarty->assign('foo', 'foo');
         $this->smarty->caching = 1;
-        $this->assertEquals("scriptfunction foo", $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
+        $this->assertEquals('scriptfunction foo', $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
     }
 
     public function testDefaultFunctionScriptNotCachable2()
     {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->caching = 1;
-        $this->assertEquals("scriptfunction bar", $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
+        $this->assertEquals('scriptfunction bar', $this->smarty->fetch('test_default_function_script_notcachable.tpl'));
     }
 
     public function testDefaultFunctionLocal()
     {
-        $this->assertEquals("localfunction foo bar", $this->smarty->fetch('test_default_function_local.tpl'));
+        $this->assertEquals('localfunction foo bar', $this->smarty->fetch('test_default_function_local.tpl'));
     }
 
     public function testDefaultCompilerFunctionScript()
@@ -63,33 +64,33 @@ class DefaultPluginHandlerTest extends PHPUnit_Smarty
 
     public function testDefaultBlockScript()
     {
-        $this->assertEquals("scriptblock foo bar", $this->smarty->fetch('test_default_block_script.tpl'));
+        $this->assertEquals('scriptblock foo bar', $this->smarty->fetch('test_default_block_script.tpl'));
     }
 
     public function testDefaultModifierScript()
     {
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals("scriptmodifier default bar", $this->smarty->fetch('test_default_modifier_script.tpl'));
+        $this->assertEquals('scriptmodifier default bar', $this->smarty->fetch('test_default_modifier_script.tpl'));
     }
 
     public function testDefaultModifier()
     {
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals("localmodifier bar", $this->smarty->fetch('test_default_modifier.tpl'));
+        $this->assertEquals('localmodifier bar', $this->smarty->fetch('test_default_modifier.tpl'));
     }
 
     public function testDefaultModifierStaticClassMethodCaching1()
     {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->caching = 1;
-        $this->assertEquals("staticmodifier bar", $this->smarty->fetch('test_default_static_modifier.tpl'));
+        $this->assertEquals('staticmodifier bar', $this->smarty->fetch('test_default_static_modifier.tpl'));
     }
 
     public function testDefaultModifierStaticClassMethodCaching2()
     {
         $this->smarty->assign('foo', 'bar');
         $this->smarty->caching = 1;
-        $this->assertEquals("staticmodifier bar", $this->smarty->fetch('test_default_static_modifier.tpl'));
+        $this->assertEquals('staticmodifier bar', $this->smarty->fetch('test_default_static_modifier.tpl'));
     }
 }
 
@@ -116,6 +117,7 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                 default:
                     return false;
             }
+            // no break
         case \Smarty\Smarty::PLUGIN_COMPILER:
             switch ($tag) {
                 case 'scriptcompilerfunction':
@@ -123,11 +125,12 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                     $callback = 'default_script_compiler_function_tag';
                     return true;
                 case 'compilerobject':
-                     $callback = array(new CompilerDefaultPluginClass, 'compile');
+                    $callback = [new CompilerDefaultPluginClass(), 'compile'];
                     return true;
                 default:
                     return false;
             }
+            // no break
         case \Smarty\Smarty::PLUGIN_BLOCK:
             switch ($tag) {
                 case 'scriptblock':
@@ -138,6 +141,7 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                 default:
                     return false;
             }
+            // no break
         case \Smarty\Smarty::PLUGIN_MODIFIER:
             switch ($tag) {
                 case 'scriptmodifier':
@@ -151,12 +155,13 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                     return true;
                 case 'mydefaultstaticmodifier':
                     $script = './scripts/script_default_static_modifier.php';
-                    $callback = array('DefModifier', 'default_static_modifier');
+                    $callback = ['DefModifier', 'default_static_modifier'];
 
                     return true;
                 default:
                     return false;
             }
+            // no break
         default:
             return false;
     }
@@ -173,10 +178,12 @@ function default_local_modifier($input)
 }
 class CompilerDefaultPluginClass
 {
-    static function statCompile ($params, $compiler) {
+    public static function statCompile($params, $compiler)
+    {
         return '<?php echo \'Static World\';?>';
     }
-    public function compile ($params, $compiler) {
+    public function compile($params, $compiler)
+    {
         return '<?php echo \'Public World\';?>';
     }
 }

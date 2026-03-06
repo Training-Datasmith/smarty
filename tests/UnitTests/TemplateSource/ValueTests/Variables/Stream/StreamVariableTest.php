@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests stream variables
  *
@@ -9,9 +11,9 @@
 /**
  * class for stream variables tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class StreamVariableTest extends PHPUnit_Smarty
 {
@@ -19,9 +21,9 @@ class StreamVariableTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
 
-        stream_wrapper_register("var", "VariableStream")
-        or die("Failed to register protocol");
-        $fp = fopen("var://foo", "r+");
+        stream_wrapper_register('var', 'VariableStream')
+        or die('Failed to register protocol');
+        $fp = fopen('var://foo', 'r+');
         fwrite($fp, 'hello world');
         fclose($fp);
     }
@@ -34,7 +36,7 @@ class StreamVariableTest extends PHPUnit_Smarty
     protected function tearDown(): void
     {
         parent::tearDown();
-        stream_wrapper_unregister("var");
+        stream_wrapper_unregister('var');
     }
 
     /**
@@ -77,7 +79,7 @@ class VariableStream
     public function stream_open($path, $mode, $options, &$opened_path)
     {
         $url = parse_url($path);
-        $this->varname = $url["host"];
+        $this->varname = $url['host'];
         $this->position = 0;
 
         return true;

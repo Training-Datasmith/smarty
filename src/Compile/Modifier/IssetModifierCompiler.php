@@ -1,25 +1,32 @@
 <?php
+
+declare(strict_types=1);
+
 namespace Smarty\Compile\Modifier;
+
 use Smarty\CompilerException;
 
 /**
  * Smarty isset modifier plugin
  */
-class IssetModifierCompiler extends Base {
+class IssetModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler): string {
+        $params = array_filter($params, function ($v): bool {
+            return !empty($v);
+        });
 
-		$params = array_filter($params, function($v): bool { return !empty($v); });
+        if (count($params) < 1) {
+            throw new CompilerException('Invalid number of arguments for isset. isset expects at least one parameter.');
+        }
 
-		if (count($params) < 1) {
-			throw new CompilerException("Invalid number of arguments for isset. isset expects at least one parameter.");
-		}
-
-		$tests = [];
-		foreach ($params as $param) {
-			$tests[] = 'null !== (' . $param . ' ?? null)';
-		}
-		return '(' . implode(' && ', $tests) . ')';
-	}
+        $tests = [];
+        foreach ($params as $param) {
+            $tests[] = 'null !== (' . $param . ' ?? null)';
+        }
+        return '(' . implode(' && ', $tests) . ')';
+    }
 
 }

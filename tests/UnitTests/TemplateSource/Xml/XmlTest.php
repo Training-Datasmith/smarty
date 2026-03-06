@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests  of the <?xml...> tag handling
  *
@@ -9,9 +11,9 @@
 /**
  * class for <?xml...> tests
  *
- * 
- * 
- * 
+ *
+ *
+ *
  */
 class XmlTest extends PHPUnit_Smarty
 {
@@ -21,7 +23,6 @@ class XmlTest extends PHPUnit_Smarty
         $this->smarty->enableSecurity();
         $this->smarty->setForceCompile(true);
     }
-
 
     public function testInit()
     {
@@ -66,13 +67,12 @@ class XmlTest extends PHPUnit_Smarty
         $this->assertEquals('<?xml version="1.0" encoding="UTF-8"?>', $content);
     }
 
-
     /**
      * test xml with variable
      */
     public function testXmlVariable()
     {
-        $this->smarty->assign('foo','bar');
+        $this->smarty->assign('foo', 'bar');
         $content = $this->smarty->fetch('xmlvar.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="bar"?>', $content);
     }
@@ -83,7 +83,7 @@ class XmlTest extends PHPUnit_Smarty
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('foo','bar',true);
+        $this->smarty->assign('foo', 'bar', true);
         $content = $this->smarty->fetch('xmlvar.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="bar"?>', $content);
     }
@@ -91,7 +91,7 @@ class XmlTest extends PHPUnit_Smarty
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('foo','foo',true);
+        $this->smarty->assign('foo', 'foo', true);
         $content = $this->smarty->fetch('xmlvar.tpl');
         $this->assertEquals('<?xml version="1.0" encoding="foo"?>', $content);
     }

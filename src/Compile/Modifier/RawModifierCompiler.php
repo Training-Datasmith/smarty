@@ -1,7 +1,8 @@
 <?php
-namespace Smarty\Compile\Modifier;
 
-use Smarty\Exception;
+declare(strict_types=1);
+
+namespace Smarty\Compile\Modifier;
 
 /**
  * Smarty raw modifier plugin
@@ -12,10 +13,11 @@ use Smarty\Exception;
  * @author Amaury Bouchard
  */
 
-class RawModifierCompiler extends Base {
-
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
-		$compiler->setRawOutput(true);
-		return ($params[0]);
-	}
+class RawModifierCompiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler)
+    {
+        $compiler->setRawOutput(true);
+        return ($params[0]);
+    }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests spacing in template output
  *
@@ -9,9 +11,9 @@
 /**
  * class for spacing test
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class SpacingTest extends PHPUnit_Smarty
 {
@@ -28,9 +30,9 @@ class SpacingTest extends PHPUnit_Smarty
     /**
      * Test spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testSpacing($code, $result, $testName, $testNumber)
     {
@@ -40,9 +42,11 @@ class SpacingTest extends PHPUnit_Smarty
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('file', $file);
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            $file);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            $file
+        );
     }
 
     /*
@@ -57,21 +61,21 @@ class SpacingTest extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(array('{$foo}', 'bar', 'T1', $i++),
-                     array('{$foo}{$foo}', 'barbar', 'T2', $i++),
-                     array('A{$foo}{$foo}B', 'AbarbarB', 'T3', $i++),
-                     array('{$foo} {$foo}', 'bar bar', 'T4', $i++),
-                     array('A{$foo}B', 'AbarB', 'T5', $i++),
-                     array('A{counter}B', 'A1B', 'T6', $i++),
-                     array('A {$foo}B', 'A barB', 'T7', $i++),
-                     array('A{$foo} B', 'Abar B', 'T8', $i++),
-                     array("A{\$foo}\nB", "Abar\nB", 'T9', $i++),
-                     array("A{counter start=1}\nB", "A1\nB", 'T10', $i++),
-                     array("A{\$foo}B\nC", "AbarB\nC", 'T11', $i++),
-                     array("A{assign var=zoo value='blah'}B", "AB", 'T12', $i++),
-                     array("A\n{assign var=zoo value='blah'}\nB", "A\nB", 'T13', $i++),
-                     array("E{assign var=zoo value='blah'}\nF", "EF", 'T14', $i++),
-                     array("G\n{assign var=zoo value='blah'}H", "G\nH", 'T15', $i++),
-        );
+        return [['{$foo}', 'bar', 'T1', $i++],
+                     ['{$foo}{$foo}', 'barbar', 'T2', $i++],
+                     ['A{$foo}{$foo}B', 'AbarbarB', 'T3', $i++],
+                     ['{$foo} {$foo}', 'bar bar', 'T4', $i++],
+                     ['A{$foo}B', 'AbarB', 'T5', $i++],
+                     ['A{counter}B', 'A1B', 'T6', $i++],
+                     ['A {$foo}B', 'A barB', 'T7', $i++],
+                     ['A{$foo} B', 'Abar B', 'T8', $i++],
+                     ["A{\$foo}\nB", "Abar\nB", 'T9', $i++],
+                     ["A{counter start=1}\nB", "A1\nB", 'T10', $i++],
+                     ["A{\$foo}B\nC", "AbarB\nC", 'T11', $i++],
+                     ["A{assign var=zoo value='blah'}B", 'AB', 'T12', $i++],
+                     ["A\n{assign var=zoo value='blah'}\nB", "A\nB", 'T13', $i++],
+                     ["E{assign var=zoo value='blah'}\nF", 'EF', 'T14', $i++],
+                     ["G\n{assign var=zoo value='blah'}H", "G\nH", 'T15', $i++],
+        ];
     }
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of modifier
  *
@@ -22,10 +24,10 @@ class PluginBlockTextformatTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
     }
 
-	public function testInit()
-	{
-		$this->cleanDirs();
-	}
+    public function testInit()
+    {
+        $this->cleanDirs();
+    }
 
     public function testDefault()
     {
@@ -64,7 +66,7 @@ class PluginBlockTextformatTest extends PHPUnit_Smarty
 
     public function testWrapchar()
     {
-        $result = "    This is foo. This is foo. This is#foo. This is foo. This is foo. This#is foo.##    This is bar.##    bar foo bar foo foo. bar foo bar foo#foo. bar foo bar foo foo. bar foo#bar foo foo. bar foo bar foo foo.#bar foo bar foo foo. bar foo bar foo#foo.##";
+        $result = '    This is foo. This is foo. This is#foo. This is foo. This is foo. This#is foo.##    This is bar.##    bar foo bar foo foo. bar foo bar foo#foo. bar foo bar foo foo. bar foo#bar foo foo. bar foo bar foo foo.#bar foo bar foo foo. bar foo bar foo#foo.##';
         $tpl = $this->smarty->createTemplate('string:{textformat wrap=40 indent=4 wrap_char="#"}' . $this->string . '{/textformat}');
         $this->assertEquals($result, $this->smarty->fetch($tpl));
     }

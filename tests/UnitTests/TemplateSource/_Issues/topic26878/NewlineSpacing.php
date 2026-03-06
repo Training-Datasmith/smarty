@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests compiler errors
  *
@@ -9,9 +11,9 @@
 /**
  * class for compiler tests
  *
- * 
+ *
  * @preserveGlobalState    disabled
- * 
+ *
  */
 class NewlineSpacing extends PHPUnit_Smarty
 {
@@ -28,9 +30,9 @@ class NewlineSpacing extends PHPUnit_Smarty
     /**
      * Test spacings
      *
-     * 
+     *
      * @dataProvider        dataTestSpacing
-     * 
+     *
      */
     public function testSpacing($code, $result, $testName, $testNumber)
     {
@@ -40,9 +42,11 @@ class NewlineSpacing extends PHPUnit_Smarty
         $this->smarty->setTemplateDir('./templates_tmp');
         $this->smarty->assign('file', $file);
         $this->smarty->assign('foo', 'bar');
-        $this->assertEquals($result,
-                            $this->smarty->fetch($file),
-                            $file);
+        $this->assertEquals(
+            $result,
+            $this->smarty->fetch($file),
+            $file
+        );
     }
 
     /*
@@ -57,13 +61,13 @@ class NewlineSpacing extends PHPUnit_Smarty
                     * test name
                     * test number
                     */
-        return array(
-            array("=====================\n{if true}\n{foreach from=array(1) item='i'}\n    <htmltag />\n{/foreach}\n{/if}\n=====================", "=====================\n    <htmltag />\n=====================", 'T1', $i++),
-            array("=====================\n{if true}\n{if true}\n    <htmltag />\n{/if}\n{/if}\n=====================", "=====================\n    <htmltag />\n=====================", 'T2', $i++),
-            array("=====================\n{* comment *}\n{* comment *}\n    <htmltag />\n{* comment *}\n{* comment *}\n=====================", "=====================\n    <htmltag />\n=====================", 'T3', $i++),
-            array("=====================\na\n{* comment 1 *}\n{* comment 2 *}\n{* comment 3 *}\nb\n=====================", "=====================\na\nb\n=====================", 'T4', $i++),
-            array("=====================\na\nb{if true}\nd<span></span>\nf{/if}\nh\n=====================", "=====================\na\nbd<span></span>\nfh\n=====================", 'T5', $i++),
-        );
+        return [
+            ["=====================\n{if true}\n{foreach from=array(1) item='i'}\n    <htmltag />\n{/foreach}\n{/if}\n=====================", "=====================\n    <htmltag />\n=====================", 'T1', $i++],
+            ["=====================\n{if true}\n{if true}\n    <htmltag />\n{/if}\n{/if}\n=====================", "=====================\n    <htmltag />\n=====================", 'T2', $i++],
+            ["=====================\n{* comment *}\n{* comment *}\n    <htmltag />\n{* comment *}\n{* comment *}\n=====================", "=====================\n    <htmltag />\n=====================", 'T3', $i++],
+            ["=====================\na\n{* comment 1 *}\n{* comment 2 *}\n{* comment 3 *}\nb\n=====================", "=====================\na\nb\n=====================", 'T4', $i++],
+            ["=====================\na\nb{if true}\nd<span></span>\nf{/if}\nh\n=====================", "=====================\na\nbd<span></span>\nfh\n=====================", 'T5', $i++],
+        ];
     }
 
 }

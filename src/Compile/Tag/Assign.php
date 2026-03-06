@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
@@ -22,20 +24,20 @@ use Smarty\Smarty;
  */
 class Assign extends Base
 {
-	/**
-	 * @inheritdoc
-	 */
-	protected $required_attributes = ['var', 'value'];
+    /**
+     * @inheritdoc
+     */
+    protected $required_attributes = ['var', 'value'];
 
-	/**
-	 * @inheritdoc
-	 */
-	protected $optional_attributes = ['scope'];
+    /**
+     * @inheritdoc
+     */
+    protected $optional_attributes = ['scope'];
 
-	/**
-	 * @inheritdoc
-	 */
-	protected $shorttag_order = ['var', 'value'];
+    /**
+     * @inheritdoc
+     */
+    protected $shorttag_order = ['var', 'value'];
 
     /**
      * Attribute definition: Overwrites base class.
@@ -55,8 +57,8 @@ class Assign extends Base
      * @return string compiled code
      * @throws \Smarty\CompilerException
      */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
-	{
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+    {
 
         $_nocache = false;
         // check and get attributes
@@ -86,9 +88,9 @@ class Assign extends Base
             $output .= "settype(\$_tmp_array, 'array');\n";
             $output .= "}\n";
             $output .= "\$_tmp_array{$parameter['smarty_internal_index']} = {$_attr['value']};\n";
-            $output .= "\$_smarty_tpl->assign({$_var}, \$_tmp_array, " . var_export($_nocache, true) . ", " . var_export($_scope, true) . ");?>";
+            $output .= "\$_smarty_tpl->assign({$_var}, \$_tmp_array, " . var_export($_nocache, true) . ', ' . var_export($_scope, true) . ');?>';
         } else {
-            $output = "<?php \$_smarty_tpl->assign({$_var}, {$_attr['value']}, " . var_export($_nocache, true) . ", " . var_export($_scope, true) . ");?>";
+            $output = "<?php \$_smarty_tpl->assign({$_var}, {$_attr['value']}, " . var_export($_nocache, true) . ', ' . var_export($_scope, true) . ');?>';
         }
         return $output;
     }

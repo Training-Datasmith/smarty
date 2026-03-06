@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests of delimiter
  *
@@ -9,15 +11,15 @@
 /**
  * class for delimiter tests
  *
- * 
- * 
+ *
+ *
  */
 class AutoliteralTest extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         $this->setUpSmarty(__DIR__);
-        $this->smarty->addPluginsDir("../../__shared/PHPunitplugins/");
+        $this->smarty->addPluginsDir('../../__shared/PHPunitplugins/');
     }
 
     public function testInit()
@@ -31,7 +33,7 @@ class AutoliteralTest extends PHPUnit_Smarty
     public function testSetAutoliteral()
     {
         $this->smarty->setAutoLiteral(true);
-        $this->smarty->assign('i','foo');
+        $this->smarty->assign('i', 'foo');
         $this->assertEquals('{ $i}foo', $this->smarty->fetch('autoliteral.tpl'));
     }
 
@@ -39,7 +41,7 @@ class AutoliteralTest extends PHPUnit_Smarty
     {
         $this->smarty->setAutoLiteral(false);
         $this->smarty->setCompileId(1);
-        $this->smarty->assign('i','bar');
+        $this->smarty->assign('i', 'bar');
         $this->assertEquals('barbar', $this->smarty->fetch('autoliteral.tpl'));
     }
     /**

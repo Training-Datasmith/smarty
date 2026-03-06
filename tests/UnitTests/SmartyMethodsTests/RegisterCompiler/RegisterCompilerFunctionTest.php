@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Smarty PHPunit tests register->compilerFunction / unregister->compilerFunction methods
  *
@@ -11,8 +13,8 @@ use Smarty\Smarty;
 /**
  * class for register->compilerFunction / unregister->compilerFunction methods tests
  *
- * 
- * 
+ *
+ *
  *
  */
 class RegisterCompilerFunctionTest extends PHPUnit_Smarty
@@ -21,7 +23,6 @@ class RegisterCompilerFunctionTest extends PHPUnit_Smarty
     {
         $this->setUpSmarty(__DIR__);
     }
-
 
     public function testInit()
     {
@@ -53,7 +54,7 @@ class RegisterCompilerFunctionTest extends PHPUnit_Smarty
      */
     public function testRegisterCompilerFunctionClass()
     {
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction', array('mycompilerfunctionclass', 'execute'));
+        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction', ['mycompilerfunctionclass', 'execute']);
         $this->assertEquals('hello world 2', $this->smarty->fetch('eval:{testcompilerfunction var1=2}'));
     }
 
@@ -62,8 +63,8 @@ class RegisterCompilerFunctionTest extends PHPUnit_Smarty
      */
     public function testRegisterCompilerFunctionObject()
     {
-        $obj = new mycompilerfunctionclass;
-        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction', array($obj, 'compile'));
+        $obj = new mycompilerfunctionclass();
+        $this->smarty->registerPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction', [$obj, 'compile']);
         $this->assertEquals('hello world 3', $this->smarty->fetch('eval:{testcompilerfunction var2=3}'));
     }
 
@@ -83,7 +84,7 @@ class RegisterCompilerFunctionTest extends PHPUnit_Smarty
     public function testUnregisterCompilerFunctionNotRegistered()
     {
         $this->smarty->unregisterPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction');
-	    $this->assertNull($this->smarty->getRegisteredPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction'));
+        $this->assertNull($this->smarty->getRegisteredPlugin(Smarty::PLUGIN_COMPILER, 'testcompilerfunction'));
     }
 
     /**
@@ -114,7 +115,7 @@ function mycompilerfunctionclose($params, $smarty)
 
 class mycompilerfunctionclass
 {
-    static function execute($params, $smarty)
+    public static function execute($params, $smarty)
     {
         return "<?php echo 'hello world {$params['var1']}';?>";
     }

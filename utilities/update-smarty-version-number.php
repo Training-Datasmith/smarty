@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // This takes the Smarty class file and updates the SMARTY_VERSION constant
 
 $path_to_smarty_class = 'src/Smarty.php';
