@@ -39,7 +39,7 @@ abstract class ForeachSection extends Base {
 	 *
 	 * @var array
 	 */
-	protected $itemProperties = null;
+	protected $itemProperties;
 
 	/**
 	 * {section} tag has always name attribute
@@ -75,14 +75,12 @@ abstract class ForeachSection extends Base {
 	private $startOffset = 0;
 
 	/**
-	 * Scan sources for used tag attributes
-	 *
-	 * @param array $attributes
-	 * @param \Smarty\Compiler\Template $compiler
-	 *
-	 * @throws \Smarty\Exception
-	 */
-	protected function scanForProperties($attributes, \Smarty\Compiler\Template $compiler) {
+     * Scan sources for used tag attributes
+     *
+     *
+     * @throws \Smarty\Exception
+     */
+    protected function scanForProperties(array $attributes, \Smarty\Compiler\Template $compiler) {
 		$this->propertyPreg = '~(';
 		$this->startOffset = 1;
 		$this->resultOffsets = [];
@@ -104,12 +102,9 @@ abstract class ForeachSection extends Base {
 	}
 
 	/**
-	 * Build property preg string
-	 *
-	 * @param bool $named
-	 * @param array $attributes
-	 */
-	private function buildPropertyPreg($named, $attributes) {
+     * Build property preg string
+     */
+    private function buildPropertyPreg(bool $named, array $attributes): void {
 		if ($named) {
 			$this->resultOffsets['named'] = $this->startOffset = $this->startOffset + 3;
 			$this->propertyPreg .= "(([\$]smarty[.]{$this->tagName}[.]" .
@@ -137,7 +132,7 @@ abstract class ForeachSection extends Base {
 	 *
 	 * @param string $source
 	 */
-	private function matchProperty($source) {
+	private function matchProperty($source): void {
 		preg_match_all($this->propertyPreg, $source, $match);
 		foreach ($this->resultOffsets as $key => $offset) {
 			foreach ($match[$offset] as $m) {
@@ -149,22 +144,19 @@ abstract class ForeachSection extends Base {
 	}
 
 	/**
-	 * Find matches in template source
-	 *
-	 * @param \Smarty\Compiler\Template $compiler
-	 */
-	private function matchTemplateSource(\Smarty\Compiler\Template $compiler) {
+     * Find matches in template source
+     */
+    private function matchTemplateSource(\Smarty\Compiler\Template $compiler): void {
 		$this->matchProperty($compiler->getParser()->lex->data);
 	}
 
 	/**
-	 * Find matches in all parent template source
-	 *
-	 * @param \Smarty\Compiler\Template $compiler
-	 *
-	 * @throws \Smarty\Exception
-	 */
-	private function matchParentTemplateSource(\Smarty\Compiler\Template $compiler) {
+     * Find matches in all parent template source
+     *
+     *
+     * @throws \Smarty\Exception
+     */
+    private function matchParentTemplateSource(\Smarty\Compiler\Template $compiler): void {
 		// search parent compiler template source
 		$nextCompiler = $compiler;
 		while ($nextCompiler !== $nextCompiler->getParentCompiler()) {
@@ -190,7 +182,7 @@ abstract class ForeachSection extends Base {
 	 * @return string compiled code
 	 * @throws \Smarty\CompilerException
 	 */
-	public function compileSpecialVariable(\Smarty\Compiler\Template $compiler, $parameter) {
+	public function compileSpecialVariable(\Smarty\Compiler\Template $compiler, array $parameter) {
 		$tag = smarty_strtolower_ascii(trim($parameter[0], '"\''));
 		$name = isset($parameter[1]) ? $compiler->getId($parameter[1]) : false;
 		if (!$name) {

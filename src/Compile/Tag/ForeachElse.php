@@ -29,7 +29,6 @@ class ForeachElse extends Base {
 		if ($restore) {
 			$output .= "\$_smarty_tpl->setVariable('{$item}', {$localVariablePrefix}Backup);\n";
 		}
-		$output .= "}\nif ({$localVariablePrefix}DoElse) {\n?>";
-		return $output;
+		return $output . "}\nif ({$localVariablePrefix}DoElse) {\n?>";
 	}
 }

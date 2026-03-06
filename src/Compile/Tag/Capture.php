@@ -39,21 +39,20 @@ class Capture extends Base {
 	public static function compileSpecialVariable(
 		\Smarty\Compiler\Template $compiler,
 		                                     $parameter = null
-	) {
+	): string {
 		return '$_smarty_tpl->getSmarty()->getRuntime(\'Capture\')->getBuffer($_smarty_tpl' .
 			(isset($parameter[1]) ? ", {$parameter[ 1 ]})" : ')');
 	}
 
 	/**
-	 * Compiles code for the {capture} tag
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param \Smarty\Compiler\Template $compiler compiler object
-	 * @param null $parameter
-	 *
-	 * @return string compiled code
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+     * Compiles code for the {capture} tag
+     *
+     * @param array $args array with attributes from parser
+     * @param \Smarty\Compiler\Template $compiler compiler object
+     *
+     * @return string compiled code
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 		// check and get attributes
 		$_attr = $this->getAttributes($compiler, $args);

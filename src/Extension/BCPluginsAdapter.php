@@ -20,7 +20,7 @@ class BCPluginsAdapter extends Base {
 		$this->smarty = $smarty;
 	}
 
-	private function findPlugin($type, $name): ?array {
+	private function findPlugin(string $type, string $name): ?array {
 		if (null !== $plugin = $this->smarty->getRegisteredPlugin($type, $name)) {
 			return $plugin;
 		}
@@ -34,17 +34,18 @@ class BCPluginsAdapter extends Base {
 		if ($plugin === null) {
 			return null;
 		}
+        if (is_callable($plugin[0])) {
+            $callback = $plugin[0];
+            $cacheable = (bool) $plugin[1] ?? true;
+            return new TagPluginWrapper($callback, $cacheable);
+        }
 
-		if (is_callable($plugin[0])) {
-			$callback = $plugin[0];
-			$cacheable = (bool) $plugin[1] ?? true;
-			return new TagPluginWrapper($callback, $cacheable);
-		} elseif (class_exists($plugin[0])) {
-			$compiler = new $plugin[0];
-			if ($compiler instanceof CompilerInterface) {
+		if (class_exists($plugin[0])) {
+            $compiler = new $plugin[0];
+            if ($compiler instanceof CompilerInterface) {
 				return $compiler;
 			}
-		}
+        }
 
 		return null;
 	}
@@ -100,11 +101,11 @@ class BCPluginsAdapter extends Base {
 		return $this->preFilters;
 	}
 
-	public function addPreFilter(\Smarty\Filter\FilterInterface $filter) {
+	public function addPreFilter(\Smarty\Filter\FilterInterface $filter): void {
 		$this->preFilters[] = $filter;
 	}
 
-	public function addCallableAsPreFilter(callable $callable, ?string $name = null) {
+	public function addCallableAsPreFilter(callable $callable, ?string $name = null): void {
 		if ($name === null) {
 			$this->preFilters[] = new FilterPluginWrapper($callable);
 		} else {
@@ -112,7 +113,7 @@ class BCPluginsAdapter extends Base {
 		}
 	}
 
-	public function removePrefilter(string $name) {
+	public function removePrefilter(string $name): void {
 		unset($this->preFilters[$name]);
 	}
 
@@ -125,11 +126,11 @@ class BCPluginsAdapter extends Base {
 		return $this->postFilters;
 	}
 
-	public function addPostFilter(\Smarty\Filter\FilterInterface $filter) {
+	public function addPostFilter(\Smarty\Filter\FilterInterface $filter): void {
 		$this->postFilters[] = $filter;
 	}
 
-	public function addCallableAsPostFilter(callable $callable, ?string $name = null) {
+	public function addCallableAsPostFilter(callable $callable, ?string $name = null): void {
 		if ($name === null) {
 			$this->postFilters[] = new FilterPluginWrapper($callable);
 		} else {
@@ -137,7 +138,7 @@ class BCPluginsAdapter extends Base {
 		}
 	}
 
-	public function removePostFilter(string $name) {
+	public function removePostFilter(string $name): void {
 		unset($this->postFilters[$name]);
 	}
 
@@ -151,11 +152,11 @@ class BCPluginsAdapter extends Base {
 		return $this->outputFilters;
 	}
 
-	public function addOutputFilter(\Smarty\Filter\FilterInterface $filter) {
+	public function addOutputFilter(\Smarty\Filter\FilterInterface $filter): void {
 		$this->outputFilters[] = $filter;
 	}
 
-	public function addCallableAsOutputFilter(callable $callable, ?string $name = null) {
+	public function addCallableAsOutputFilter(callable $callable, ?string $name = null): void {
 		if ($name === null) {
 			$this->outputFilters[] = new FilterPluginWrapper($callable);
 		} else {
@@ -163,11 +164,11 @@ class BCPluginsAdapter extends Base {
 		}
 	}
 
-	public function removeOutputFilter(string $name) {
+	public function removeOutputFilter(string $name): void {
 		unset($this->outputFilters[$name]);
 	}
 
-	public function loadPluginsFromDir(string $path) {
+	public function loadPluginsFromDir(string $path): void {
 		foreach([
 			'function',
 			'modifier',
@@ -184,7 +185,7 @@ class BCPluginsAdapter extends Base {
 					require_once $filename;
 					$functionOrClassName = 'smarty_' . $type . '_' . $pluginName;
 					if (function_exists($functionOrClassName) || class_exists($functionOrClassName)) {
-						$this->smarty->registerPlugin($type, $pluginName, $functionOrClassName, true, []);
+						$this->smarty->registerPlugin($type, $pluginName, $functionOrClassName, true);
 					}
 				}
 			}
@@ -215,11 +216,9 @@ class BCPluginsAdapter extends Base {
 	}
 
 	/**
-	 * @param $filename
-	 *
-	 * @return string|null
-	 */
-	private function getPluginNameFromFilename($filename) {
+     * @param $filename
+     */
+    private function getPluginNameFromFilename(string $filename): ?string {
 		if (!preg_match('/.*\.([a-z_A-Z0-9]+)\.php$/',$filename,$matches)) {
 			return null;
 		}

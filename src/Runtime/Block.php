@@ -51,14 +51,14 @@ class Block
      *
      * @var Block|null
      */
-    public $child = null;
+    public $child;
 
     /**
      * Inheritance calling parent block
      *
      * @var Block|null
      */
-    public $parent = null;
+    public $parent;
 
     /**
      * Inheritance Template index
@@ -83,8 +83,6 @@ class Block
 
     /**
      * Compiled block code overloaded by {block} class
-     *
-     * @param \Smarty\Template $tpl
      */
     public function callBlock(\Smarty\Template $tpl)
     {

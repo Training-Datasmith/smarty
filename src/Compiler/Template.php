@@ -49,14 +49,14 @@ class Template extends BaseCompiler {
 	 *
 	 * @var \Smarty\Parser\TemplateParser
 	 */
-	private $parser = null;
+	private $parser;
 
 	/**
 	 * hash for nocache sections
 	 *
 	 * @var mixed
 	 */
-	public $nocache_hash = null;
+	public $nocache_hash;
 
 	/**
 	 * suppress generation of nocache code
@@ -91,7 +91,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @var \Smarty\Template
 	 */
-	private $template = null;
+	private $template;
 
 	/**
 	 * merged included sub template data
@@ -154,7 +154,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @var \Smarty\Compiler\Template
 	 */
-	private $parent_compiler = null;
+	private $parent_compiler;
 
 	/**
 	 * Flag true when compiling nocache section
@@ -217,7 +217,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @var array
 	 */
-	public $_cache = array();
+	public $_cache = [];
 
 	/**
 	 * Lexer preg pattern for left delimiter
@@ -365,23 +365,22 @@ class Template extends BaseCompiler {
 	}
 
 	/**
-	 * Compile template source and run optional post filter
-	 *
-	 * @param \Smarty\Template $template
-	 * @param Template|null $parent_compiler
-	 *
-	 * @return string
-	 * @throws CompilerException
-	 * @throws Exception
-	 */
-	public function compileTemplateSource(\Smarty\Template $template, ?\Smarty\Compiler\Template $parent_compiler = null) {
+     * Compile template source and run optional post filter
+     *
+     * @param \Smarty\Template $template
+     *
+     * @return string
+     * @throws CompilerException
+     * @throws Exception
+     */
+    public function compileTemplateSource(\Smarty\Template $template, ?\Smarty\Compiler\Template $parent_compiler = null) {
 		try {
 			// save template object in compiler class
 			$this->template = $template;
 			if ($this->smarty->debugging) {
 				$this->smarty->getDebug()->start_compile($this->template);
 			}
-			$this->parent_compiler = $parent_compiler ? $parent_compiler : $this;
+			$this->parent_compiler = $parent_compiler ?: $this;
 
 			if (empty($template->getCompiled()->nocache_hash)) {
 				$template->getCompiled()->nocache_hash = $this->nocache_hash;
@@ -494,18 +493,16 @@ class Template extends BaseCompiler {
 	 * @throws CompilerException
 	 * @throws Exception
 	 */
-	public function compileModifier($modifierlist, $value) {
+	public function compileModifier($modifierlist, $value): string {
 		return $this->modifierCompiler->compile([], $this, ['modifierlist' => $modifierlist, 'value' => $value]);
 	}
 
 	/**
-	 * compile variable
-	 *
-	 * @param string $variable
-	 *
-	 * @return string
-	 */
-	public function triggerTagNoCache($variable): void {
+     * compile variable
+     *
+     * @param string $variable
+     */
+    public function triggerTagNoCache($variable): void {
 		if (!strpos($variable, '(')) {
 			// not a variable variable
 			$var = trim($variable, '\'');
@@ -519,13 +516,11 @@ class Template extends BaseCompiler {
 	}
 
 	/**
-	 * compile config variable
-	 *
-	 * @param string $variable
-	 *
-	 * @return string
-	 */
-	public function compileConfigVariable($variable) {
+     * compile config variable
+     *
+     *
+     */
+    public function compileConfigVariable(string $variable): string {
 		// return '$_smarty_tpl->config_vars[' . $variable . ']';
 		return '$_smarty_tpl->getConfigVariable(' . $variable . ')';
 	}
@@ -686,22 +681,18 @@ class Template extends BaseCompiler {
 			}
 			if (is_callable($callback)) {
 				return $callback;
-			} else {
-				$this->trigger_template_error("Default plugin handler: Returned callback for '{$tag}' not callable");
 			}
+            $this->trigger_template_error("Default plugin handler: Returned callback for '{$tag}' not callable");
 		}
 		return null;
 	}
 
 	/**
-	 * Append code segments and remove unneeded ?> <?php transitions
-	 *
-	 * @param string $left
-	 * @param string $right
-	 *
-	 * @return string
-	 */
-	public function appendCode(string $left, string $right): string
+     * Append code segments and remove unneeded ?> <?php transitions
+     *
+     *
+     */
+    public function appendCode(string $left, string $right): string
 	{
 		if (preg_match('/\s*\?>\s?$/D', $left) && preg_match('/^<\?php\s+/', $right)) {
 			$left = preg_replace('/\s*\?>\s?$/D', "\n", $left);
@@ -774,7 +765,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @param string $varName
 	 */
-	public function setNocacheInVariable($varName) {
+	public function setNocacheInVariable($varName): void {
 		// create nocache var to make it know for further compiling
 		if ($_var = $this->getId($varName)) {
 			if ($this->template->hasVariable($_var)) {
@@ -797,7 +788,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @throws \Smarty\CompilerException when an unexpected token is found
 	 */
-	public function trigger_template_error($args = null, $line = null, $tagline = null) {
+	public function trigger_template_error($args = null, $line = null, $tagline = null): void {
 		$lex = $this->parser->lex;
 		if ($tagline === true) {
 			// get line number of Tag
@@ -879,7 +870,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @return string
 	 */
-	public function getVarExport($value) {
+	public function getVarExport($value): ?string {
 		return preg_replace('/\s/', '', var_export($value, true));
 	}
 
@@ -887,16 +878,14 @@ class Template extends BaseCompiler {
 	 *  enter double quoted string
 	 *  - save tag stack count
 	 */
-	public function enterDoubleQuote() {
+	public function enterDoubleQuote(): void {
 		array_push($this->_tag_stack_count, $this->getTagStackCount());
 	}
 
 	/**
-	 * Return tag stack count
-	 *
-	 * @return int
-	 */
-	public function getTagStackCount() {
+     * Return tag stack count
+     */
+    public function getTagStackCount(): int {
 		return count($this->_tag_stack);
 	}
 
@@ -920,7 +909,7 @@ class Template extends BaseCompiler {
 	/**
 	 * Build lexer regular expressions for left and right delimiter and user defined literals
 	 */
-	public function initDelimiterPreg() {
+	public function initDelimiterPreg(): void {
 		$ldel = $this->smarty->getLeftDelimiter();
 		$this->ldelLength = strlen($ldel);
 		$this->ldelPreg = '';
@@ -954,7 +943,7 @@ class Template extends BaseCompiler {
 	 *
 	 * @throws \Smarty\CompilerException
 	 */
-	public function leaveDoubleQuote() {
+	public function leaveDoubleQuote(): void {
 		if (array_pop($this->_tag_stack_count) !== $this->getTagStackCount()) {
 			$tag = $this->getOpenBlockTag();
 			$this->trigger_template_error(
@@ -1010,9 +999,8 @@ class Template extends BaseCompiler {
 		$tagCount = $this->getTagStackCount();
 		if ($tagCount) {
 			return $this->_tag_stack[$tagCount - 1][0];
-		} else {
-			return false;
 		}
+        return false;
 	}
 
 	/**
@@ -1051,11 +1039,9 @@ class Template extends BaseCompiler {
 	}
 
 	/**
-	 * Get current prefix variable name
-	 *
-	 * @return string
-	 */
-	public function getPrefixVariable() {
+     * Get current prefix variable name
+     */
+    public function getPrefixVariable(): string {
 		return '$_prefixVariable' . self::$prefixVariableNumber;
 	}
 
@@ -1064,16 +1050,14 @@ class Template extends BaseCompiler {
 	 *
 	 * @param string $code
 	 */
-	public function appendPrefixCode($code) {
+	public function appendPrefixCode($code): void {
 		$this->prefix_code[] = $code;
 	}
 
 	/**
-	 * get prefix code string
-	 *
-	 * @return string
-	 */
-	public function getPrefixCode() {
+     * get prefix code string
+     */
+    public function getPrefixCode(): string {
 		$code = '';
 		$prefixArray = array_merge($this->prefix_code, array_pop($this->prefixCodeStack));
 		$this->prefixCodeStack[] = [];
@@ -1084,7 +1068,7 @@ class Template extends BaseCompiler {
 		return $code;
 	}
 
-	public function cStyleComment($string) {
+	public function cStyleComment($string): string {
 		return '/*' . str_replace('*/', '* /', $string) . '*/';
 	}
 
@@ -1107,7 +1091,7 @@ class Template extends BaseCompiler {
 	 * @throws Exception
 	 * @throws CompilerException
 	 */
-	private function compileTag2($tag, $args, $parameter) {
+	private function compileTag2(string $tag, array $args, array $parameter) {
 		// $args contains the attributes parsed and compiled by the lexer/parser
 
 		$this->handleNocacheFlag($args);
@@ -1184,13 +1168,11 @@ class Template extends BaseCompiler {
 	}
 
 	/**
-	 * Sets $this->tag_nocache if attributes contain the 'nocache' flag.
-	 *
-	 * @param array $attributes
-	 *
-	 * @return void
-	 */
-	private function handleNocacheFlag(array $attributes) {
+     * Sets $this->tag_nocache if attributes contain the 'nocache' flag.
+     *
+     *
+     */
+    private function handleNocacheFlag(array $attributes): void {
 		foreach ($attributes as $value) {
 			if (is_string($value) && trim($value, '\'" ') == 'nocache') {
 				$this->tag_nocache = true;
@@ -1198,25 +1180,23 @@ class Template extends BaseCompiler {
 		}
 	}
 
-	private function getBaseTag($tag) {
+	private function getBaseTag(string $tag) {
 		if (strlen($tag) < 6 || substr($tag, -5) !== 'close') {
 			return $tag;
-		} else {
-			return substr($tag, 0, -5);
 		}
+        return substr($tag, 0, -5);
 	}
 
 	/**
-	 * Compiles the output of a variable or expression.
-	 *
-	 * @param $value
-	 * @param $attributes
-	 * @param $modifiers
-	 *
-	 * @return string
-	 * @throws Exception
-	 */
-	public function compilePrintExpression($value, $attributes = [], $modifiers = null) {
+     * Compiles the output of a variable or expression.
+     *
+     * @param $value
+     * @param $attributes
+     * @param $modifiers
+     *
+     * @throws Exception
+     */
+    public function compilePrintExpression($value, $attributes = [], $modifiers = null): string {
 		$this->handleNocacheFlag($attributes);
 		return $this->printExpressionCompiler->compile($attributes, $this, [
 			'value'=> $value,
@@ -1233,7 +1213,7 @@ class Template extends BaseCompiler {
 	 * @return bool true if compiling succeeded, false if it failed
 	 * @throws \Smarty\CompilerException
 	 */
-	protected function doCompile($_content, $isTemplateSource = false) {
+	protected function doCompile($_content, $isTemplateSource = false): string {
 		/* here is where the compiling takes place. Smarty
 		  tags in the templates are replaces with PHP code,
 		  then written to compiled files. */
@@ -1298,7 +1278,7 @@ class Template extends BaseCompiler {
 	 * @param string $key optional key for callback
 	 * @param bool $replace if true replace existing keyed callback
 	 */
-	public function registerPostCompileCallback($callback, $parameter = [], $key = null, $replace = false) {
+	public function registerPostCompileCallback($callback, $parameter = [], $key = null, $replace = false): void {
 		array_unshift($parameter, $callback);
 		if (isset($key)) {
 			if ($replace || !isset($this->postCompileCallbacks[$key])) {
@@ -1314,17 +1294,14 @@ class Template extends BaseCompiler {
 	 *
 	 * @param string $key callback key
 	 */
-	public function unregisterPostCompileCallback($key) {
+	public function unregisterPostCompileCallback($key): void {
 		unset($this->postCompileCallbacks[$key]);
 	}
 
 	/**
-	 * @param string $tag
-	 *
-	 * @return bool
-	 * @throws Exception
-	 */
-	private function canCompileTemplateFunctionCall(string $tag): bool {
+     * @throws Exception
+     */
+    private function canCompileTemplateFunctionCall(string $tag): bool {
 		return
 			isset($this->parent_compiler->tpl_function[$tag])
 			|| (
@@ -1346,12 +1323,13 @@ class Template extends BaseCompiler {
 
 			$allowedAsNormalFunction = empty($this->smarty->registered_objects[$base_tag][1])
 				|| in_array($method, $this->smarty->registered_objects[$base_tag][1]);
+            if ($allowedAsBlockFunction) {
+                return $this->objectMethodBlockCompiler->compile($args, $this, $parameter, $tag, $method);
+            }
 
-			if ($allowedAsBlockFunction) {
-				return $this->objectMethodBlockCompiler->compile($args, $this, $parameter, $tag, $method);
-			} elseif ($allowedAsNormalFunction) {
-				return $this->objectMethodCallCompiler->compile($args, $this, $parameter, $tag, $method);
-			}
+			if ($allowedAsNormalFunction) {
+                return $this->objectMethodCallCompiler->compile($args, $this, $parameter, $tag, $method);
+            }
 
 			$this->trigger_template_error(
 				'not allowed method "' . $method . '" in registered object "' .
@@ -1374,7 +1352,7 @@ class Template extends BaseCompiler {
 		);
 	}
 
-	public function compileFunctionCall(string $base_tag, array $args, array $parameter = []) {
+	public function compileFunctionCall(string $base_tag, array $args, array $parameter = []): string {
 		return $this->functionCallCompiler->compile($args, $this, $parameter, $base_tag, $base_tag);
 	}
 
@@ -1383,16 +1361,10 @@ class Template extends BaseCompiler {
 		return $this->compileModifier([array_merge([$function], $_attr)], $value);
 	}
 
-	/**
-	 * @return TemplateParser|null
-	 */
 	public function getParser(): ?TemplateParser {
 		return $this->parser;
 	}
 
-	/**
-	 * @param TemplateParser|null $parser
-	 */
 	public function setParser(?TemplateParser $parser): void {
 		$this->parser = $parser;
 	}
@@ -1411,16 +1383,10 @@ class Template extends BaseCompiler {
 		$this->template = $template;
 	}
 
-	/**
-	 * @return Template|null
-	 */
 	public function getParentCompiler(): ?Template {
 		return $this->parent_compiler;
 	}
 
-	/**
-	 * @param Template|null $parent_compiler
-	 */
 	public function setParentCompiler(?Template $parent_compiler): void {
 		$this->parent_compiler = $parent_compiler;
 	}
@@ -1433,7 +1399,7 @@ class Template extends BaseCompiler {
 	 * @param string $openTag the opening tag's name
 	 * @param mixed $data optional data saved
 	 */
-	public function openTag($openTag, $data = null) {
+	public function openTag($openTag, $data = null): void {
 		$this->_tag_stack[] = [$openTag, $data];
 		if ($openTag == 'nocache') {
 			$this->noCacheStackDepth++;
@@ -1463,10 +1429,9 @@ class Template extends BaseCompiler {
 				if (is_null($_data)) {
 					// return opening tag
 					return $_openTag;
-				} else {
-					// return restored data
-					return $_data;
 				}
+                // return restored data
+                return $_data;
 			}
 			// wrong nesting of tags
 			$this->trigger_template_error("unclosed '" . $this->getTemplate()->getLeftDelimiter() . "{$_openTag}" .
@@ -1478,35 +1443,30 @@ class Template extends BaseCompiler {
 	}
 
 	/**
-	 * Returns true if we are in a {nocache}...{/nocache} block, but false if inside {block} tag inside a {nocache} block...
-	 * @return bool
-	 */
-	public function isNocacheActive(): bool {
+     * Returns true if we are in a {nocache}...{/nocache} block, but false if inside {block} tag inside a {nocache} block...
+     */
+    public function isNocacheActive(): bool {
 		return !$this->suppressNocacheProcessing && ($this->noCacheStackDepth > 0 || $this->tag_nocache);
 	}
 
 	/**
-	 * Returns the full tag stack, used in the compiler for {break}
-	 * @return array
-	 */
-	public function getTagStack(): array {
+     * Returns the full tag stack, used in the compiler for {break}
+     */
+    public function getTagStack(): array {
 		return $this->_tag_stack;
 	}
 
 	/**
-	 * Should the next variable output be raw (true) or auto-escaped (false)
-	 * @return bool
-	 */
-	public function isRawOutput(): bool {
+     * Should the next variable output be raw (true) or auto-escaped (false)
+     */
+    public function isRawOutput(): bool {
 		return $this->raw_output;
 	}
 
 	/**
-	 * Should the next variable output be raw (true) or auto-escaped (false)
-	 * @param bool $raw_output
-	 * @return void
-	 */
-	public function setRawOutput(bool $raw_output): void {
+     * Should the next variable output be raw (true) or auto-escaped (false)
+     */
+    public function setRawOutput(bool $raw_output): void {
 		$this->raw_output = $raw_output;
 	}
 }

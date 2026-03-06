@@ -28,7 +28,7 @@ abstract class Base implements ModifierCompilerInterface {
 	 * @throws Exception if parameter is not a literal (but an expression, variable, …)
 	 * @author Rodney Rehm
 	 */
-	protected function literal_compiler_param($params, $index, $default = null)
+	protected function literal_compiler_param(array $params, $index, $default = null)
 	{
 		// not set, go default
 		if (!isset($params[ $index ])) {

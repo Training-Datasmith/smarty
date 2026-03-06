@@ -5,33 +5,31 @@ namespace Smarty\FunctionHandler;
 class HtmlBase extends Base {
 
 	/**
-	 * @param $inputType
-	 * @param      $name
-	 * @param      $value
-	 * @param      $output
-	 * @param $ismultiselect
-	 * @param      $selected
-	 * @param      $extra
-	 * @param      $separator
-	 * @param      $labels
-	 * @param      $label_ids
-	 * @param bool $escape
-	 *
-	 * @return string
-	 */
-	protected function getHtmlForInput(
-		$inputType,
+     * @param $inputType
+     * @param      $name
+     * @param      $value
+     * @param      $output
+     * @param $ismultiselect
+     * @param      $selected
+     * @param      $extra
+     * @param      $separator
+     * @param      $labels
+     * @param      $label_ids
+     * @param bool $escape
+     */
+    protected function getHtmlForInput(
+		string $inputType,
 		$name,
 		$value,
 		$output,
 		$ismultiselect,
 		$selected,
-		$extra,
-		$separator,
+		string $extra,
+		string $separator,
 		$labels,
 		$label_ids,
 		$escape = true
-	) {
+	): string {
 
 		$_output = '';
 		if (is_object($value)) {
@@ -100,8 +98,7 @@ class HtmlBase extends Base {
 		if ($labels) {
 			$_output .= '</label>';
 		}
-		$_output .= $separator;
-		return $_output;
+		return $_output . $separator;
 	}
 
 }

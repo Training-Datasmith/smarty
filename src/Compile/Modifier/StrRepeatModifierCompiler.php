@@ -10,7 +10,7 @@ namespace Smarty\Compile\Modifier;
 
 class StrRepeatModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		return 'str_repeat((string) ' . $params[0] . ', (int) ' . $params[1] . ')';
 	}
 

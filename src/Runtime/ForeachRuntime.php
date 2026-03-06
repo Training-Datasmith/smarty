@@ -20,29 +20,27 @@ class ForeachRuntime {
 	private $stack = [];
 
 	/**
-	 * Init foreach loop
-	 *  - save item and key variables, named foreach property data if defined
-	 *  - init item and key variables, named foreach property data if required
-	 *  - count total if required
-	 *
-	 * @param \Smarty\Template $tpl
-	 * @param mixed $from values to loop over
-	 * @param string $item variable name
-	 * @param bool $needTotal flag if we need to count values
-	 * @param null|string $key variable name
-	 * @param null|string $name of named foreach
-	 * @param array $properties of named foreach
-	 *
-	 * @return mixed $from
-	 */
-	public function init(
+     * Init foreach loop
+     *  - save item and key variables, named foreach property data if defined
+     *  - init item and key variables, named foreach property data if required
+     *  - count total if required
+     *
+     * @param mixed $from values to loop over
+     * @param string $item variable name
+     * @param bool $needTotal flag if we need to count values
+     * @param null|string $key variable name
+     * @param null|string $name of named foreach
+     * @param array $properties of named foreach
+     * @return mixed $from
+     */
+    public function init(
 		Template $tpl,
 		         $from,
 		         $item,
 		         $needTotal = false,
 		         $key = null,
 		         $name = null,
-		         $properties = []
+		         array $properties = []
 	) {
 		$needTotal = $needTotal || isset($properties['total']);
 		$saveVars = [];
@@ -65,7 +63,7 @@ class ForeachRuntime {
 				$tpl->getVariable($item)->getValue(),
 			];
 		}
-		$tpl->assign($item,null);
+		$tpl->assign($item);
 		if ($total === 0) {
 			$from = null;
 		} else {
@@ -76,7 +74,7 @@ class ForeachRuntime {
 						clone $tpl->getVariable($key),
 					];
 				}
-				$tpl->assign($key, null);
+				$tpl->assign($key);
 			}
 		}
 		if ($needTotal) {
@@ -121,26 +119,27 @@ class ForeachRuntime {
 	public function count($value): int
 	{
 		if ($value instanceof \IteratorAggregate) {
-			// Note: getIterator() returns a Traversable, not an Iterator
-			// thus rewind() and valid() methods may not be present
-			return iterator_count($value->getIterator());
-		} elseif ($value instanceof \Iterator) {
-			return $value instanceof \Generator ? 1 : iterator_count($value);
-		} elseif ($value instanceof \Countable) {
-			return count($value);
-		}
+            // Note: getIterator() returns a Traversable, not an Iterator
+            // thus rewind() and valid() methods may not be present
+            return iterator_count($value->getIterator());
+        }
+        if ($value instanceof \Iterator) {
+            return $value instanceof \Generator ? 1 : iterator_count($value);
+        }
+        if ($value instanceof \Countable) {
+            return count($value);
+        }
 		return count((array) $value);
 	}
 
 	/**
-	 * Restore saved variables
-	 *
-	 * will be called by {break n} or {continue n} for the required number of levels
-	 *
-	 * @param \Smarty\Template $tpl
-	 * @param int $levels number of levels
-	 */
-	public function restore(Template $tpl, $levels = 1) {
+     * Restore saved variables
+     *
+     * will be called by {break n} or {continue n} for the required number of levels
+     *
+     * @param int $levels number of levels
+     */
+    public function restore(Template $tpl, $levels = 1): void {
 		while ($levels) {
 			$saveVars = array_pop($this->stack);
 			if (!empty($saveVars)) {

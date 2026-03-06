@@ -79,17 +79,21 @@ class ModifierCompiler extends Base {
 	}
 
 	/**
-	 * Wether this class will be able to compile the given modifier.
-	 * @param string $modifier
-	 * @param Template $compiler
-	 *
-	 * @return bool
-	 * @throws CompilerException
-	 */
-	public function canCompileForModifier(string $modifier, \Smarty\Compiler\Template $compiler): bool {
-		return $compiler->getModifierCompiler($modifier)
-			|| $compiler->getSmarty()->getModifierCallback($modifier)
-			|| $compiler->getPluginFromDefaultHandler($modifier, \Smarty\Smarty::PLUGIN_MODIFIERCOMPILER)
-			|| $compiler->getPluginFromDefaultHandler($modifier, \Smarty\Smarty::PLUGIN_MODIFIER);
-	}
+     * Wether this class will be able to compile the given modifier.
+     *
+     * @throws CompilerException
+     */
+    public function canCompileForModifier(string $modifier, \Smarty\Compiler\Template $compiler): bool
+    {
+        if ($compiler->getModifierCompiler($modifier)) {
+            return true;
+        }
+        if ($compiler->getSmarty()->getModifierCallback($modifier)) {
+            return true;
+        }
+        if ($compiler->getPluginFromDefaultHandler($modifier, \Smarty\Smarty::PLUGIN_MODIFIERCOMPILER)) {
+            return true;
+        }
+        return (bool) $compiler->getPluginFromDefaultHandler($modifier, \Smarty\Smarty::PLUGIN_MODIFIER);
+    }
 }

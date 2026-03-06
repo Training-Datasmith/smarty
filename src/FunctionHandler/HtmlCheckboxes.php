@@ -55,19 +55,19 @@ class HtmlCheckboxes extends HtmlBase {
 			switch ($_key) {
 				case 'name':
 				case 'separator':
-					$$_key = (string)$_val;
+					${$_key} = (string)$_val;
 					break;
 				case 'escape':
 				case 'labels':
 				case 'label_ids':
-					$$_key = (bool)$_val;
+					${$_key} = (bool)$_val;
 					break;
 				case 'options':
-					$$_key = (array)$_val;
+					${$_key} = (array)$_val;
 					break;
 				case 'values':
 				case 'output':
-					$$_key = array_values((array)$_val);
+					${$_key} = array_values((array)$_val);
 					break;
 				case 'checked':
 				case 'selected':
@@ -162,7 +162,7 @@ class HtmlCheckboxes extends HtmlBase {
 			}
 		} else {
 			foreach ($values as $_i => $_key) {
-				$_val = isset($output[$_i]) ? $output[$_i] : '';
+				$_val = $output[$_i] ?? '';
 				$_html_result[] =
 					$this->getHtmlForInput(
 						'checkbox',

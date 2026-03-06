@@ -28,10 +28,8 @@ class StringEval extends RecompiledPlugin
      *
      * @param \Smarty\Template\Source   $source    source object
      * @param \Smarty\Template $_template template object
-     *
-     * @return void
      */
-    public function populate(\Smarty\Template\Source $source, ?\Smarty\Template $_template = null)
+    public function populate(\Smarty\Template\Source $source, ?\Smarty\Template $_template = null): void
     {
         $source->uid = sha1($source->name);
         $source->timestamp = $source->exists = true;
@@ -61,12 +59,14 @@ class StringEval extends RecompiledPlugin
     protected function decode($string)
     {
         // decode if specified
-        if (($pos = strpos($string, ':')) !== false) {
-            if (!strncmp($string, 'base64', 6)) {
-                return base64_decode(substr($string, 7));
-            } elseif (!strncmp($string, 'urlencode', 9)) {
-                return urldecode(substr($string, 10));
-            }
+        if ($pos = strpos($string, ':') === false) {
+            return $string;
+        }
+        if (!strncmp($string, 'base64', 6)) {
+            return base64_decode(substr($string, 7));
+        }
+        if (!strncmp($string, 'urlencode', 9)) {
+            return urldecode(substr($string, 10));
         }
         return $string;
     }
@@ -78,7 +78,7 @@ class StringEval extends RecompiledPlugin
      *
      * @return string                 resource's basename
      */
-    public function getBasename(\Smarty\Template\Source $source)
+    public function getBasename(\Smarty\Template\Source $source): string
     {
         return '';
     }

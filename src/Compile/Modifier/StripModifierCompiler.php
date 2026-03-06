@@ -14,7 +14,7 @@ namespace Smarty\Compile\Modifier;
 
 class StripModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		if (!isset($params[ 1 ])) {
 			$params[ 1 ] = "' '";
 		}

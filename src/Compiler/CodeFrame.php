@@ -27,25 +27,24 @@ class CodeFrame
 	}
 
 	/**
-	 * Create code frame for compiled and cached templates
-	 *
-	 * @param string $content optional template content
-	 * @param string $functions compiled template function and block code
-	 * @param bool $cache flag for cache file
-	 * @param Template|null $compiler
-	 *
-	 * @return string
-	 * @throws Exception
-*/
+    	 * Create code frame for compiled and cached templates
+    	 *
+    	 * @param string $content optional template content
+    	 * @param string $functions compiled template function and block code
+    	 * @param bool $cache flag for cache file
+    	 *
+    	 * @return string
+    	 * @throws Exception
+    */
     public function create(
-        $content = '',
-        $functions = '',
+        string $content = '',
+        string $functions = '',
         $cache = false,
         ?\Smarty\Compiler\Template $compiler = null
     ) {
         // build property code
         $properties[ 'version' ] = \Smarty\Smarty::SMARTY_VERSION;
-        $properties[ 'unifunc' ] = 'content_' . str_replace(array('.', ','), '_', uniqid('', true));
+        $properties[ 'unifunc' ] = 'content_' . str_replace(['.', ','], '_', uniqid('', true));
         if (!$cache) {
             $properties[ 'has_nocache_code' ] = $this->_template->getCompiled()->getNocacheCode();
             $properties[ 'file_dependency' ] = $this->_template->getCompiled()->file_dependency;
@@ -110,16 +109,13 @@ class CodeFrame
                 $output
             );
             $output = '';
-            foreach ($curr_split as $idx => $curr_output) {
+            foreach ($curr_split as $curr_output) {
                 $output .= $curr_output;
             }
         }
         return $output;
     }
 
-	/**
-	 * @return string
-	 */
 	public function insertLocalVariables(): string {
 		return '$_smarty_current_dir = ' . var_export(dirname($this->_template->getSource()->getFilepath() ?? '.'), true) . ";\n";
 	}

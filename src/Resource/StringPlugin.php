@@ -24,14 +24,12 @@ use Smarty\Template\Source;
 class StringPlugin extends BasePlugin {
 
 	/**
-	 * populate Source Object with metadata from Resource
-	 *
-	 * @param Source $source source object
-	 * @param Template $_template template object
-	 *
-	 * @return void
-	 */
-	public function populate(Source $source, ?Template $_template = null) {
+     * populate Source Object with metadata from Resource
+     *
+     * @param Source $source source object
+     * @param Template $_template template object
+     */
+    public function populate(Source $source, ?Template $_template = null): void {
 		$source->uid = sha1($source->name);
 		$source->timestamp = $source->exists = true;
 	}
@@ -58,13 +56,15 @@ class StringPlugin extends BasePlugin {
 	 */
 	protected function decode($string) {
 		// decode if specified
-		if (($pos = strpos($string, ':')) !== false) {
-			if (!strncmp($string, 'base64', 6)) {
-				return base64_decode(substr($string, 7));
-			} elseif (!strncmp($string, 'urlencode', 9)) {
-				return urldecode(substr($string, 10));
-			}
+		if ($pos = strpos($string, ':') === false) {
+			return $string;
 		}
+        if (!strncmp($string, 'base64', 6)) {
+            return base64_decode(substr($string, 7));
+        }
+        if (!strncmp($string, 'urlencode', 9)) {
+            return urldecode(substr($string, 10));
+        }
 		return $string;
 	}
 
@@ -76,19 +76,16 @@ class StringPlugin extends BasePlugin {
 	 *
 	 * @return string                 resource's basename
 	 */
-	public function getBasename(Source $source) {
+	public function getBasename(Source $source): string {
 		return '';
 	}
 
 	/*
-		* Disable timestamp checks for string resource.
-		*
-		* @return bool
-		*/
-	/**
-	 * @return bool
-	 */
-	public function checkTimestamps() {
+     * Disable timestamp checks for string resource.
+     *
+     * @return bool
+     */
+    public function checkTimestamps(): bool {
 		return false;
 	}
 }

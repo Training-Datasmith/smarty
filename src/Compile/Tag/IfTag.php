@@ -61,10 +61,8 @@ class IfTag extends Base {
 				$assignAttr[]['var'] = $parameter['if condition']['var'];
 				$_output .= $assignCompiler->compile($assignAttr, $compiler, []);
 			}
-			$_output .= "<?php if ({$prefixVar}) {?>";
-			return $_output;
-		} else {
-			return "<?php if ({$parameter['if condition']}) {?>";
+			return $_output . "<?php if ({$prefixVar}) {?>";
 		}
+        return "<?php if ({$parameter['if condition']}) {?>";
 	}
 }

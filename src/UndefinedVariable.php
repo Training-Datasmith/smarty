@@ -9,11 +9,9 @@ namespace Smarty;
 class UndefinedVariable extends Variable {
 
 	/**
-	 * Always returns an empty string.
-	 *
-	 * @return string
-	 */
-	public function __toString() {
+     * Always returns an empty string.
+     */
+    public function __toString(): string {
 		return '';
 	}
 }

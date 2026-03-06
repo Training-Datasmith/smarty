@@ -84,10 +84,8 @@ abstract class Custom extends Base
      *
      * @param \Smarty\Template\Cached   $cached    cached object
      * @param Template $_template template object
-     *
-     * @return void
      */
-    public function populate(\Smarty\Template\Cached $cached, Template $_template)
+    public function populate(\Smarty\Template\Cached $cached, Template $_template): void
     {
         $_cache_id = isset($cached->cache_id) ? preg_replace('![^\w\|]+!', '_', $cached->cache_id) : null;
         $_compile_id = isset($cached->compile_id) ? preg_replace('![^\w]+!', '_', $cached->compile_id) : null;
@@ -103,10 +101,8 @@ abstract class Custom extends Base
      * populate Cached Object with timestamp and exists from Resource
      *
      * @param \Smarty\Template\Cached $cached
-     *
-     * @return void
      */
-    public function populateTimestamp(\Smarty\Template\Cached $cached)
+    public function populateTimestamp(\Smarty\Template\Cached $cached): void
     {
         $mtime =
             $this->fetchTimestamp($cached->filepath, $cached->getSource()->name, $cached->cache_id, $cached->compile_id);
@@ -124,7 +120,7 @@ abstract class Custom extends Base
             $cached->content,
             $timestamp
         );
-        $cached->timestamp = isset($timestamp) ? $timestamp : false;
+        $cached->timestamp = $timestamp ?? false;
         $cached->exists = !!$cached->timestamp;
     }
 
@@ -145,8 +141,8 @@ abstract class Custom extends Base
         if (!$cached) {
             $cached = $_smarty_tpl->getCached();
         }
-        $content = $cached->content ? $cached->content : null;
-        $timestamp = $cached->timestamp ? $cached->timestamp : null;
+        $content = $cached->content ?: null;
+        $timestamp = $cached->timestamp ?: null;
         if ($content === null || !$timestamp) {
             $this->fetch(
                 $_smarty_tpl->getCached()->filepath,
@@ -206,10 +202,7 @@ abstract class Custom extends Base
                 $timestamp
             );
         }
-        if (isset($content)) {
-            return $content;
-        }
-        return false;
+        return $content ?? false;
     }
 
 	/**
@@ -275,10 +268,8 @@ abstract class Custom extends Base
      *
      * @param \Smarty\Smarty                 $smarty Smarty object
      * @param \Smarty\Template\Cached $cached cached object
-     *
-     * @return bool|void
      */
-    public function acquireLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
+    public function acquireLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
     {
         $cached->is_locked = true;
         $id = $cached->lock_id;
@@ -291,10 +282,8 @@ abstract class Custom extends Base
      *
      * @param \Smarty\Smarty                 $smarty Smarty object
      * @param \Smarty\Template\Cached $cached cached object
-     *
-     * @return bool|void
      */
-    public function releaseLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
+    public function releaseLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
     {
         $cached->is_locked = false;
         $name = $cached->getSource()->name . '.lock';

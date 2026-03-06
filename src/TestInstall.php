@@ -23,9 +23,7 @@ class TestInstall
      * diagnose Smarty setup
      * If $errors is secified, the diagnostic report will be appended to the array, rather than being output.
      *
-     * @param \Smarty $smarty
      * @param array   $errors array to push results into rather than outputting them
-     *
      * @return bool status, true if everything is fine, false else
      */
     public static function testInstall(Smarty $smarty, &$errors = null)
@@ -36,7 +34,6 @@ class TestInstall
             echo "Smarty Installation test...\n";
             echo "Testing template directory...\n";
         }
-        $_stream_resolve_include_path = function_exists('stream_resolve_include_path');
         // test if all registered template_dir are accessible
         foreach ($smarty->getTemplateDir() as $template_dir) {
             $_template_dir = $template_dir;
@@ -119,8 +116,6 @@ class TestInstall
         }
         if ($errors === null) {
             echo "Testing plugins directory...\n";
-        }
-        if ($errors === null) {
             echo "Testing cache directory...\n";
         }
         // test if all registered cache_dir is accessible

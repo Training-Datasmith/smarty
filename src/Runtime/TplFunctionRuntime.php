@@ -24,7 +24,7 @@ class TplFunctionRuntime {
 	 *
 	 * @throws \Smarty\Exception
 	 */
-	public function callTemplateFunction(Template $tpl, $name, $params, $nocache) {
+	public function callTemplateFunction(Template $tpl, $name, $params, $nocache): void {
 		$funcParam = $tpl->tplFunctions[$name] ?? ($tpl->getSmarty()->tplFunctions[$name] ?? null);
 		if (!isset($funcParam)) {
 			throw new \Smarty\Exception("Unable to find template function '{$name}'");
@@ -58,7 +58,7 @@ class TplFunctionRuntime {
 	 * @param bool $override if true replace existing
 	 *                                                                                      functions with same name
 	 */
-	public function registerTplFunctions(TemplateBase $obj, $tplFunctions, $override = true) {
+	public function registerTplFunctions(TemplateBase $obj, $tplFunctions, $override = true): void {
 		$obj->tplFunctions =
 			$override ? array_merge($obj->tplFunctions, $tplFunctions) : array_merge($tplFunctions, $obj->tplFunctions);
 		// make sure that the template functions are known in parent templates
@@ -81,22 +81,18 @@ class TplFunctionRuntime {
 	public function getTplFunction(Template $tpl, $name = null) {
 		if (isset($name)) {
 			return $tpl->tplFunctions[$name] ?? ($tpl->getSmarty()->tplFunctions[$name] ?? false);
-		} else {
-			return empty($tpl->tplFunctions) ? $tpl->getSmarty()->tplFunctions : $tpl->tplFunctions;
 		}
+        return empty($tpl->tplFunctions) ? $tpl->getSmarty()->tplFunctions : $tpl->tplFunctions;
 	}
 
 	/**
-	 * Add template function to cache file for nocache calls
-	 *
-	 * @param Template $tpl
-	 * @param string $_name template function name
-	 * @param string $_function PHP function name
-	 *
-	 * @return bool
-	 * @throws Exception
-	 */
-	private function addTplFuncToCache(Template $tpl, $_name, $_function) {
+     * Add template function to cache file for nocache calls
+     *
+     * @param string $_name template function name
+     * @param string $_function PHP function name
+     * @throws Exception
+     */
+    private function addTplFuncToCache(Template $tpl, $_name, $_function): bool {
 		$funcParam = $tpl->tplFunctions[$_name];
 		if (is_file($funcParam['compiled_filepath'])) {
 			// read compiled file

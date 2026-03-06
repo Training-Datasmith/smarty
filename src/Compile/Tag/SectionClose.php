@@ -42,7 +42,6 @@ class SectionClose extends Base {
 		} else {
 			$output .= "}\n}\n";
 		}
-		$output .= '?>';
-		return $output;
+		return $output . '?>';
 	}
 }

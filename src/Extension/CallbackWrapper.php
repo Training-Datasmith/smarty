@@ -16,10 +16,9 @@ class CallbackWrapper {
 	private $modifierName;
 
 	/**
-	 * @param string $modifierName
-	 * @param callback $callback
-	 */
-	public function __construct(string $modifierName, $callback) {
+     * @param callback $callback
+     */
+    public function __construct(string $modifierName, $callback) {
 		$this->callback = $callback;
 		$this->modifierName = $modifierName;
 	}

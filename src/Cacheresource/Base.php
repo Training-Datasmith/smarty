@@ -27,7 +27,6 @@ abstract class Base
     /**
      * populate Cached Object with timestamp and exists from Resource
      *
-     * @param Cached $cached
      *
      * @return void
      */
@@ -91,8 +90,6 @@ abstract class Base
     abstract public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time);
 
     /**
-     * @param Smarty                 $smarty
-     * @param Cached $cached
      *
      * @return bool|null
      */
@@ -115,8 +112,6 @@ abstract class Base
     /**
      * Check is cache is locked for this template
      *
-     * @param Smarty                 $smarty
-     * @param Cached $cached
      *
      * @return bool
      */
@@ -129,8 +124,6 @@ abstract class Base
     /**
      * Lock cache for this template
      *
-     * @param Smarty                 $smarty
-     * @param Cached $cached
      *
      * @return bool
      */
@@ -143,8 +136,6 @@ abstract class Base
     /**
      * Unlock cache for this template
      *
-     * @param Smarty                 $smarty
-     * @param Cached $cached
      *
      * @return bool
      */

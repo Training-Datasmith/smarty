@@ -23,10 +23,10 @@ class ExtendsPlugin extends BasePlugin
      *
      * @throws Exception
      */
-    public function populate(Source $source, ?Template $_template = null)
+    public function populate(Source $source, ?Template $_template = null): void
     {
         $uid = '';
-        $sources = array();
+        $sources = [];
         $components = explode('|', $source->name);
         $smarty = $source->getSmarty();
         $exists = true;
@@ -51,7 +51,7 @@ class ExtendsPlugin extends BasePlugin
      *
      * @param Source $source source object
      */
-    public function populateTimestamp(Source $source)
+    public function populateTimestamp(Source $source): void
     {
         $source->exists = true;
         /* @var Source $_s */
@@ -69,7 +69,7 @@ class ExtendsPlugin extends BasePlugin
      * @return string template source
      * @throws \Smarty\Exception if source cannot be loaded
      */
-    public function getContent(Source $source)
+    public function getContent(Source $source): string
     {
         if (!$source->exists) {
             throw new \Smarty\Exception("Unable to load  '{$source->type}:{$source->name}'");
@@ -91,25 +91,22 @@ class ExtendsPlugin extends BasePlugin
      *
      * @return string resource's basename
      */
-    public function getBasename(Source $source)
+    public function getBasename(Source $source): string
     {
-        $search = array(':');
+        $search = [':'];
         if (\Smarty\Smarty::$_IS_WINDOWS) {
-            $search = array(':', '|');
+            $search = [':', '|'];
         }
         return str_replace($search, '.', basename($source->getResourceName()));
     }
 
     /*
-      * Disable timestamp checks for extends resource.
-      * The individual source components will be checked.
-      *
-      * @return bool
-      */
-    /**
+     * Disable timestamp checks for extends resource.
+     * The individual source components will be checked.
+     *
      * @return bool
      */
-    public function checkTimestamps()
+    public function checkTimestamps(): bool
     {
         return false;
     }

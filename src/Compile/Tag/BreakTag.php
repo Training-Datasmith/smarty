@@ -52,7 +52,7 @@ class BreakTag extends Base {
 	 * @return string compiled code
 	 * @throws \Smarty\CompilerException
 	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = array(), $tag = null, $function = null): string
+	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 		[$levels, $foreachLevels] = $this->checkLevels($args, $compiler);
 		$output = "<?php ";
@@ -64,20 +64,18 @@ class BreakTag extends Base {
 			$foreachCompiler = $compiler->getTagCompiler('foreach');
 			$output .= $foreachCompiler->compileRestore($foreachLevels);
 		}
-		$output .= "{$this->tag} {$levels};?>";
-		return $output;
+		return $output . "{$this->tag} {$levels};?>";
 	}
 
 	/**
-	 * check attributes and return array of break and foreach levels
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param \Smarty\Compiler\Template $compiler compiler object
-	 *
-	 * @return array
-	 * @throws \Smarty\CompilerException
-	 */
-	public function checkLevels($args, \Smarty\Compiler\Template $compiler) {
+     * check attributes and return array of break and foreach levels
+     *
+     * @param array $args array with attributes from parser
+     * @param \Smarty\Compiler\Template $compiler compiler object
+     *
+     * @throws \Smarty\CompilerException
+     */
+    public function checkLevels($args, \Smarty\Compiler\Template $compiler): array {
 		static $_is_loopy = ['for' => true, 'foreach' => true, 'while' => true, 'section' => true];
 		// check and get attributes
 		$_attr = $this->getAttributes($compiler, $args);

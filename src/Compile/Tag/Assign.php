@@ -43,7 +43,7 @@ class Assign extends Base
      * @var array
      * @see BasePlugin
      */
-    protected $option_flags = array('nocache', 'noscope');
+    protected $option_flags = ['nocache', 'noscope'];
 
     /**
      * Compiles code for the {assign} tag
@@ -55,7 +55,7 @@ class Assign extends Base
      * @return string compiled code
      * @throws \Smarty\CompilerException
      */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = array(), $tag = null, $function = null): string
+	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 
         $_nocache = false;

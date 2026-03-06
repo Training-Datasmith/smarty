@@ -32,7 +32,7 @@ use Smarty\Template;
  */
 class HtmlOptions extends Base {
 
-	public function handle($params, Template $template) {
+	public function handle($params, Template $template): string {
 		$name = null;
 		$values = null;
 		$options = null;
@@ -46,14 +46,14 @@ class HtmlOptions extends Base {
 				case 'name':
 				case 'class':
 				case 'id':
-					$$_key = (string)$_val;
+					${$_key} = (string)$_val;
 					break;
 				case 'options':
 					$options = (array)$_val;
 					break;
 				case 'values':
 				case 'output':
-					$$_key = array_values((array)$_val);
+					${$_key} = array_values((array)$_val);
 					break;
 				case 'selected':
 					if (is_array($_val)) {
@@ -153,7 +153,7 @@ class HtmlOptions extends Base {
 	 *
 	 * @return string
 	 */
-	private function output($key, $value, $selected, $id, $class, &$idx)
+	private function output($key, $value, $selected, ?string $id, ?string $class, string &$idx)
 	{
 		if (!is_array($value)) {
 			$_key = smarty_function_escape_special_chars($key);
@@ -200,23 +200,20 @@ class HtmlOptions extends Base {
 	}
 
 	/**
-	 * @param $key
-	 * @param $values
-	 * @param $selected
-	 * @param $id
-	 * @param $class
-	 * @param $idx
-	 *
-	 * @return string
-	 */
-	private function getHtmlForOptGroup($key, $values, $selected, $id, $class, &$idx)
+     * @param $key
+     * @param $values
+     * @param $selected
+     * @param $id
+     * @param $class
+     * @param $idx
+     */
+    private function getHtmlForOptGroup($key, array $values, $selected, $id, $class, int &$idx): string
 	{
 		$optgroup_html = '<optgroup label="' . smarty_function_escape_special_chars($key) . '">' . "\n";
 		foreach ($values as $key => $value) {
 			$optgroup_html .= $this->output($key, $value, $selected, $id, $class, $idx);
 		}
-		$optgroup_html .= "</optgroup>\n";
-		return $optgroup_html;
+		return $optgroup_html . "</optgroup>\n";
 	}
 
 }

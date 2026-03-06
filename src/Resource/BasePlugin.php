@@ -36,8 +36,6 @@ abstract class BasePlugin
 
     /**
      * Flag if resource does allow compilation
-     *
-     * @return bool
      */
     public function supportsCompiledTemplates(): bool {
 		return true;
@@ -119,7 +117,7 @@ abstract class BasePlugin
      *
      * @param Source $source source object
      */
-    public function populateTimestamp(Source $source)
+    public function populateTimestamp(Source $source): void
     {
         // intentionally left blank
     }

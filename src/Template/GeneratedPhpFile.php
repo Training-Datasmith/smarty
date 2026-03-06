@@ -18,7 +18,7 @@ abstract class GeneratedPhpFile {
 	 *
 	 * @var string
 	 */
-	public $filepath = null;
+	public $filepath;
 
 	/**
 	 * Compiled Timestamp
@@ -39,7 +39,7 @@ abstract class GeneratedPhpFile {
 	 *
 	 * @var string
 	 */
-	public $compile_id = null;
+	public $compile_id;
 
 	/**
 	 * Compiled Content Loaded
@@ -81,16 +81,10 @@ abstract class GeneratedPhpFile {
 		return $this->timestamp;
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function getNocacheCode(): bool {
 		return $this->has_nocache_code;
 	}
 
-	/**
-	 * @param bool $has_nocache_code
-	 */
 	public function setNocacheCode(bool $has_nocache_code): void {
 		$this->has_nocache_code = $has_nocache_code;
 	}
@@ -119,13 +113,11 @@ abstract class GeneratedPhpFile {
 	}
 
 	/**
-	 * @param $file_dependency
-	 * @param Template $_template
-	 *
-	 * @return bool
-	 * @throws Exception
-	 */
-	protected function checkFileDependencies($file_dependency, Template $_template): bool {
+     * @param $file_dependency
+     *
+     * @throws Exception
+     */
+    protected function checkFileDependencies($file_dependency, Template $_template): bool {
 			// check file dependencies at compiled code
 		foreach ($file_dependency as $_file_to_check) {
 

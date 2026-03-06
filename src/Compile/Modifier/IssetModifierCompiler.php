@@ -7,9 +7,9 @@ use Smarty\CompilerException;
  */
 class IssetModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 
-		$params = array_filter($params, function($v) { return !empty($v); });
+		$params = array_filter($params, function($v): bool { return !empty($v); });
 
 		if (count($params) < 1) {
 			throw new CompilerException("Invalid number of arguments for isset. isset expects at least one parameter.");

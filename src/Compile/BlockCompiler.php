@@ -54,11 +54,9 @@ class BlockCompiler extends Base {
 	{
 
 		if (!isset($tag[5]) || substr($tag, -5) !== 'close') {
-			$output = $this->compileOpeningTag($compiler, $args, $tag, $function);
-		} else {
-			$output = $this->compileClosingTag($compiler, $tag, $parameter, $function);
+			return $this->compileOpeningTag($compiler, $args, $tag, $function);
 		}
-		return $output;
+		return $this->compileClosingTag($compiler, $tag, $parameter, $function);
 	}
 
 	/**
@@ -69,7 +67,7 @@ class BlockCompiler extends Base {
 	 * @return string compiled code
 	 * @throws CompilerException
 	 */
-	public function compileChild(\Smarty\Compiler\Template $compiler) {
+	public function compileChild(\Smarty\Compiler\Template $compiler): string {
 
 		if (!isset($compiler->_cache['blockNesting'])) {
 			$compiler->trigger_template_error(
@@ -82,8 +80,7 @@ class BlockCompiler extends Base {
 
 		$output = "<?php \n";
 		$output .= '$_smarty_tpl->getInheritance()->callChild($_smarty_tpl, $this' . ");\n";
-		$output .= "?>\n";
-		return $output;
+		return $output . "?>\n";
 	}
 
 	/**
@@ -94,7 +91,7 @@ class BlockCompiler extends Base {
 	 * @return string compiled code
 	 * @throws CompilerException
 	 */
-	public function compileParent(\Smarty\Compiler\Template $compiler) {
+	public function compileParent(\Smarty\Compiler\Template $compiler): string {
 
 		if (!isset($compiler->_cache['blockNesting'])) {
 			$compiler->trigger_template_error(
@@ -106,54 +103,39 @@ class BlockCompiler extends Base {
 
 		$output = "<?php \n";
 		$output .= '$_smarty_tpl->getInheritance()->callParent($_smarty_tpl, $this' . ");\n";
-		$output .= "?>\n";
-		return $output;
+		return $output . "?>\n";
 	}
 
 	/**
-	 * Returns true if this block is cacheable.
-	 *
-	 * @param Smarty $smarty
-	 * @param $function
-	 *
-	 * @return bool
-	 */
-	protected function blockIsCacheable(\Smarty\Smarty $smarty, $function): bool {
+     * Returns true if this block is cacheable.
+     *
+     * @param $function
+     *
+     */
+    protected function blockIsCacheable(\Smarty\Smarty $smarty, string $function): bool {
 		return $smarty->getBlockHandler($function)->isCacheable();
 	}
 
 	/**
-	 * Returns the code used for the isset check
-	 *
-	 * @param string $tag tag name
-	 * @param string $function base tag or method name
-	 *
-	 * @return string
-	 */
-	protected function getIsCallableCode($tag, $function): string {
+     * Returns the code used for the isset check
+     *
+     * @param string $tag tag name
+     * @param string $function base tag or method name
+     */
+    protected function getIsCallableCode($tag, $function): string {
 		return "\$_smarty_tpl->getSmarty()->getBlockHandler(" . var_export($function, true) . ")";
 	}
 
 	/**
-	 * Returns the full code used to call the callback
-	 *
-	 * @param string $tag tag name
-	 * @param string $function base tag or method name
-	 *
-	 * @return string
-	 */
-	protected function getFullCallbackCode($tag, $function): string {
+     * Returns the full code used to call the callback
+     *
+     * @param string $tag tag name
+     * @param string $function base tag or method name
+     */
+    protected function getFullCallbackCode($tag, $function): string {
 		return "\$_smarty_tpl->getSmarty()->getBlockHandler(" . var_export($function, true) . ")->handle";
 	}
 
-	/**
-	 * @param Template $compiler
-	 * @param array $args
-	 * @param string|null $tag
-	 * @param string|null $function
-	 *
-	 * @return string
-	 */
 	private function compileOpeningTag(Template $compiler, array $args, ?string $tag, ?string $function): string {
 
 		// check and get attributes
@@ -185,16 +167,11 @@ while (\$_block_repeat) {
 	}
 
 	/**
-	 * @param Template $compiler
-	 * @param string $tag
-	 * @param array $parameter
-	 * @param string|null $function
-	 *
-	 * @return string
-	 * @throws CompilerException
-	 * @throws Exception
-	 */
-	private function compileClosingTag(Template $compiler, string $tag, array $parameter, ?string $function): string {
+     *
+     * @throws CompilerException
+     * @throws Exception
+     */
+    private function compileClosingTag(Template $compiler, string $tag, array $parameter, ?string $function): string {
 
 		// closing tag of block plugin, restore nocache
 		$base_tag = substr($tag, 0, -5);

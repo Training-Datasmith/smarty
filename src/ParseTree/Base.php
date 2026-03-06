@@ -31,12 +31,11 @@ abstract class Base
      *
      * @var array
      */
-    public $subtrees = array();
+    public $subtrees = [];
 
     /**
      * Return buffer
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      *
      * @return string buffer content
      */

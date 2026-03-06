@@ -57,9 +57,8 @@ class Mailto extends Base {
 		if (empty($params['address'])) {
 			trigger_error("mailto: missing 'address' parameter", E_USER_WARNING);
 			return;
-		} else {
-			$address = $params['address'];
 		}
+        $address = $params['address'];
 
 		$text = $address;
 
@@ -81,7 +80,7 @@ class Mailto extends Base {
 					break;
 				case 'extra':
 				case 'text':
-					$$var = $value;
+					${$var} = $value;
 				// no break
 				default:
 			}
@@ -101,41 +100,42 @@ class Mailto extends Base {
 
 		$string = '<a href="mailto:' . htmlspecialchars($address, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) .
 			'" ' . $extra . '>' . htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) . '</a>';
-
-		if ($encode === 'javascript') {
-			$js_encode = '';
-			for ($x = 0, $_length = strlen($string); $x < $_length; $x++) {
+        if ($encode === 'javascript') {
+            $js_encode = '';
+            for ($x = 0, $_length = strlen($string); $x < $_length; $x++) {
 				$js_encode .= '%' . bin2hex($string[$x]);
 			}
-			return '<script>document.write(unescape(\'' . $js_encode . '\'))</script>';
-		} elseif ($encode === 'javascript_charcode') {
-			for ($x = 0, $_length = strlen($string); $x < $_length; $x++) {
+            return '<script>document.write(unescape(\'' . $js_encode . '\'))</script>';
+        }
+        if ($encode === 'javascript_charcode') {
+            for ($x = 0, $_length = strlen($string); $x < $_length; $x++) {
 				$ord[] = ord($string[$x]);
 			}
-			return '<script>document.write(String.fromCharCode(' . implode(',', $ord) . '))</script>';
-		} elseif ($encode === 'hex') {
-			preg_match('!^(.*)(\?.*)$!', $address, $match);
-			if (!empty($match[2])) {
+            return '<script>document.write(String.fromCharCode(' . implode(',', $ord) . '))</script>';
+        }
+
+		if ($encode === 'hex') {
+            preg_match('!^(.*)(\?.*)$!', $address, $match);
+            if (!empty($match[2])) {
 				trigger_error("mailto: hex encoding does not work with extra attributes. Try javascript.", E_USER_WARNING);
 				return;
 			}
-			$address_encode = '';
-			for ($x = 0, $_length = strlen($address); $x < $_length; $x++) {
+            $address_encode = '';
+            for ($x = 0, $_length = strlen($address); $x < $_length; $x++) {
 				if (preg_match('!\w!' . \Smarty\Smarty::$_UTF8_MODIFIER, $address[$x])) {
 					$address_encode .= '%' . bin2hex($address[$x]);
 				} else {
 					$address_encode .= $address[$x];
 				}
 			}
-			$text_encode = '';
-			for ($x = 0, $_length = strlen($text); $x < $_length; $x++) {
+            $text_encode = '';
+            for ($x = 0, $_length = strlen($text); $x < $_length; $x++) {
 				$text_encode .= '&#x' . bin2hex($text[$x]) . ';';
 			}
-			$mailto = "&#109;&#97;&#105;&#108;&#116;&#111;&#58;";
-			return '<a href="' . $mailto . $address_encode . '" ' . $extra . '>' . $text_encode . '</a>';
-		} else {
-			// no encoding
-			return $string;
-		}
+            $mailto = "&#109;&#97;&#105;&#108;&#116;&#111;&#58;";
+            return '<a href="' . $mailto . $address_encode . '" ' . $extra . '>' . $text_encode . '</a>';
+        }
+        // no encoding
+        return $string;
 	}
 }

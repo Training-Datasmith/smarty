@@ -43,7 +43,6 @@ class Tag extends Base
     /**
      * Return buffer content
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      *
      * @return string content
      */
@@ -55,7 +54,6 @@ class Tag extends Base
     /**
      * Return complied code that loads the evaluated output of buffer content into a temporary variable
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      *
      * @return string template code
      */

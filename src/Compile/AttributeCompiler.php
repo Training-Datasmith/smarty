@@ -60,7 +60,7 @@ class AttributeCompiler
 	 *
 	 * @return array  of mapped attributes for further processing
 	 */
-	public function getAttributes($compiler, $attributes)
+	public function getAttributes($compiler, $attributes): array
 	{
 		$_indexed_attr = [];
 		$options = array_fill_keys($this->option_flags, true);

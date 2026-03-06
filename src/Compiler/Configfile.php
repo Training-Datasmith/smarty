@@ -71,14 +71,13 @@ class Configfile extends BaseCompiler {
 	}
 
 	/**
-	 * Method to compile Smarty config source.
-	 *
-	 * @param Template $template
-	 *
-	 * @return bool true if compiling succeeded, false if it failed
-	 * @throws \Smarty\Exception
-	 */
-	public function compileTemplate(Template $template) {
+     * Method to compile Smarty config source.
+     *
+     *
+     * @return bool true if compiling succeeded, false if it failed
+     * @throws \Smarty\Exception
+     */
+    public function compileTemplate(Template $template): string {
 		$this->template = $template;
 		$this->template->getCompiled()->file_dependency[$this->template->getSource()->uid] =
 			[
@@ -141,7 +140,7 @@ class Configfile extends BaseCompiler {
 	 *
 	 * @throws CompilerException
 	 */
-	public function trigger_config_file_error($args = null) {
+	public function trigger_config_file_error($args = null): void {
 		// get config source line which has error
 		$line = $this->lex->line;
 		if (isset($args)) {

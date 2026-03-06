@@ -21,7 +21,7 @@ class Counter extends Base {
 	private $counters = [];
 
 	public function handle($params, Template $template) {
-		$name = (isset($params['name'])) ? $params['name'] : 'default';
+		$name = $params['name'] ?? 'default';
 		if (!isset($this->counters[$name])) {
 			$this->counters[$name] = ['start' => 1, 'skip' => 1, 'direction' => 'up', 'count' => 1];
 		}

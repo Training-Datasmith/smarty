@@ -49,15 +49,15 @@ class TextFormat implements BlockHandlerInterface {
 				case 'indent_char':
 				case 'wrap_char':
 				case 'assign':
-					$$_key = (string)$_val;
+					${$_key} = (string)$_val;
 					break;
 				case 'indent':
 				case 'indent_first':
 				case 'wrap':
-					$$_key = (int)$_val;
+					${$_key} = (int)$_val;
 					break;
 				case 'wrap_cut':
-					$$_key = (bool)$_val;
+					${$_key} = (bool)$_val;
 					break;
 				default:
 					trigger_error("textformat: unknown attribute '{$_key}'");
@@ -75,14 +75,14 @@ class TextFormat implements BlockHandlerInterface {
 			// convert mult. spaces & special chars to single space
 			$_paragraph =
 				preg_replace(
-					array(
+					[
 						'!\s+!' . Smarty::$_UTF8_MODIFIER,
 						'!(^\s+)|(\s+$)!' . Smarty::$_UTF8_MODIFIER
-					),
-					array(
+					],
+					[
 						' ',
 						''
-					),
+					],
 					$_paragraph
 				);
 			// indent first line

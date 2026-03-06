@@ -7,7 +7,7 @@ use Smarty\CompilerException;
  */
 class IsArrayModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 
 		if (count($params) !== 1) {
 			throw new CompilerException("Invalid number of arguments for is_array. is_array expects exactly 1 parameter.");

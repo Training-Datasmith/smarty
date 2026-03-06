@@ -32,7 +32,7 @@ class FilePlugin extends BasePlugin {
 	 *
 	 * @throws Exception
 	 */
-	public function populate(Source $source, ?Template $_template = null) {
+	public function populate(Source $source, ?Template $_template = null): void {
 
 		$source->uid = sha1(
 			$source->name . ($source->isConfig ? $source->getSmarty()->_joined_config_dir :
@@ -55,7 +55,7 @@ class FilePlugin extends BasePlugin {
 	 *
 	 * @param Source $source source object
 	 */
-	public function populateTimestamp(Source $source) {
+	public function populateTimestamp(Source $source): void {
 		$path = $this->getFilePath($source->name, $source->getSmarty(), $source->isConfig);
 		if (!$source->exists) {
 			$source->exists = ($path !== false && is_file($path));
@@ -92,20 +92,18 @@ class FilePlugin extends BasePlugin {
 	 *
 	 * @return string                 resource's basename
 	 */
-	public function getBasename(Source $source) {
+	public function getBasename(Source $source): string {
 		return basename($source->getResourceName());
 	}
 
 	/**
-	 * build template filepath by traversing the template_dir array
-	 *
-	 * @param $file
-	 * @param Smarty $smarty
-	 * @param bool $isConfig
-	 *
-	 * @return string fully qualified filepath
-	 */
-	public function getFilePath($file, \Smarty\Smarty $smarty, bool $isConfig = false) {
+     * build template filepath by traversing the template_dir array
+     *
+     * @param $file
+     *
+     * @return string fully qualified filepath
+     */
+    public function getFilePath($file, \Smarty\Smarty $smarty, bool $isConfig = false) {
 		// absolute file ?
 		if ($file[0] === '/' || $file[1] === ':') {
 			$file = $smarty->_realpath($file, true);
@@ -144,9 +142,8 @@ class FilePlugin extends BasePlugin {
 			if (empty($_index_dirs)) {
 				// index not found
 				return false;
-			} else {
-				$_directories = $_index_dirs;
 			}
+            $_directories = $_index_dirs;
 		}
 		// relative file name?
 		foreach ($_directories as $_directory) {
@@ -166,15 +163,12 @@ class FilePlugin extends BasePlugin {
 	}
 
 	/**
-	 * Returns the timestamp of the resource indicated by $resourceName, or false if it doesn't exist.
-	 *
-	 * @param string $resourceName
-	 * @param Smarty $smarty
-	 * @param bool $isConfig
-	 *
-	 * @return false|int
-	 */
-	public function getResourceNameTimestamp(string $resourceName, \Smarty\Smarty $smarty, bool $isConfig = false) {
+     * Returns the timestamp of the resource indicated by $resourceName, or false if it doesn't exist.
+     *
+     *
+     * @return false|int
+     */
+    public function getResourceNameTimestamp(string $resourceName, \Smarty\Smarty $smarty, bool $isConfig = false) {
 		if ($path = $this->getFilePath($resourceName, $smarty, $isConfig)) {
 			return filemtime($path);
 		}

@@ -69,15 +69,14 @@ class ExtendsTag extends Inheritance {
 	}
 
 	/**
-	 * Add code for inheritance endChild() method to end of template
-	 *
-	 * @param \Smarty\Compiler\Template $compiler
-	 * @param null|string $template optional inheritance parent template
-	 *
-	 * @throws \Smarty\CompilerException
-	 * @throws \Smarty\Exception
-	 */
-	private function compileEndChild(\Smarty\Compiler\Template $compiler, $template = null) {
+     * Add code for inheritance endChild() method to end of template
+     *
+     * @param null|string $template optional inheritance parent template
+     *
+     * @throws \Smarty\CompilerException
+     * @throws \Smarty\Exception
+     */
+    private function compileEndChild(\Smarty\Compiler\Template $compiler, $template = null): void {
 		$compiler->getParser()->template_postfix[] = new \Smarty\ParseTree\Tag(
 			$compiler->getParser(),
 			'<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl' .

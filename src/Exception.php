@@ -7,10 +7,7 @@ namespace Smarty;
  */
 class Exception extends \Exception {
 
-	/**
-	 * @return string
-	 */
-	public function __toString() {
+	public function __toString(): string {
 		return ' --> Smarty: ' . $this->message . ' <-- ';
 	}
 }

@@ -39,7 +39,6 @@ class Debug extends Base {
 		// display debug template
 		$_output =
 			"<?php \$_smarty_debug = new \\Smarty\\Debug;\n \$_smarty_debug->display_debug(\$_smarty_tpl);\n";
-		$_output .= "unset(\$_smarty_debug);\n?>";
-		return $_output;
+		return $_output . "unset(\$_smarty_debug);\n?>";
 	}
 }

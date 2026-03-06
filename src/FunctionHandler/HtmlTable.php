@@ -63,7 +63,7 @@ class HtmlTable extends Base {
 		foreach ($params as $_key => $_value) {
 			switch ($_key) {
 				case 'loop':
-					$$_key = (array)$_value;
+					${$_key} = (array)$_value;
 					break;
 				case 'cols':
 					if (is_array($_value) && !empty($_value)) {
@@ -79,7 +79,7 @@ class HtmlTable extends Base {
 					}
 					break;
 				case 'rows':
-					$$_key = (int)$_value;
+					${$_key} = (int)$_value;
 					break;
 				case 'table_attr':
 				case 'trailpad':
@@ -87,12 +87,12 @@ class HtmlTable extends Base {
 				case 'vdir':
 				case 'inner':
 				case 'caption':
-					$$_key = (string)$_value;
+					${$_key} = (string)$_value;
 					break;
 				case 'tr_attr':
 				case 'td_attr':
 				case 'th_attr':
-					$$_key = $_value;
+					${$_key} = $_value;
 					break;
 			}
 		}
@@ -114,7 +114,7 @@ class HtmlTable extends Base {
 			$cols = ($hdir === 'right') ? $cols : array_reverse($cols);
 			$output .= "<thead><tr>\n";
 			for ($r = 0; $r < $cols_count; $r++) {
-				$output .= '<th' . $this->cycle('th', $th_attr, $r) . '>';
+				$output .= '<th' . $this->cycle($th_attr, $r) . '>';
 				$output .= $cols[$r];
 				$output .= "</th>\n";
 			}
@@ -122,7 +122,7 @@ class HtmlTable extends Base {
 		}
 		$output .= "<tbody>\n";
 		for ($r = 0; $r < $rows; $r++) {
-			$output .= "<tr" . $this->cycle('tr', $tr_attr, $r) . ">\n";
+			$output .= "<tr" . $this->cycle($tr_attr, $r) . ">\n";
 			$rx = ($vdir === 'down') ? $r * $cols_count : ($rows - 1 - $r) * $cols_count;
 			for ($c = 0; $c < $cols_count; $c++) {
 				$x = ($hdir === 'right') ? $rx + $c : $rx + $cols_count - 1 - $c;
@@ -131,26 +131,23 @@ class HtmlTable extends Base {
 					$x = floor($x / $cols_count) + ($x % $cols_count) * $rows;
 				}
 				if ($x < $loop_count) {
-					$output .= "<td" . $this->cycle('td', $td_attr, $c) . ">" . $loop[$x] . "</td>\n";
+					$output .= "<td" . $this->cycle($td_attr, $c) . ">" . $loop[$x] . "</td>\n";
 				} else {
-					$output .= "<td" . $this->cycle('td', $td_attr, $c) . ">$trailpad</td>\n";
+					$output .= "<td" . $this->cycle($td_attr, $c) . ">$trailpad</td>\n";
 				}
 			}
 			$output .= "</tr>\n";
 		}
 		$output .= "</tbody>\n";
-		$output .= "</table>\n";
-		return $output;
+		return $output . "</table>\n";
 	}
 
 	/**
-	 * @param $name
-	 * @param $var
-	 * @param $no
-	 *
-	 * @return string
-	 */
-	private function cycle($name, $var, $no) {
+     * @param $name
+     * @param $var
+     * @param $no
+     */
+    private function cycle(string $var, int $no): string {
 		if (!is_array($var)) {
 			$ret = $var;
 		} else {

@@ -26,18 +26,16 @@ use Smarty\CompilerException;
 class SpecialVariableCompiler extends Base {
 
 	/**
-	 * Compiles code for the special $smarty variables
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param Template $compiler compiler object
-	 * @param array $parameter
-	 * @param null $tag
-	 * @param null $function
-	 *
-	 * @return string compiled code
-	 * @throws CompilerException
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+     * Compiles code for the special $smarty variables
+     *
+     * @param array $args array with attributes from parser
+     * @param Template $compiler compiler object
+     * @param array $parameter
+     *
+     * @return string compiled code
+     * @throws CompilerException
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 
 		$_index = preg_split("/\]\[/", substr($parameter, 1, strlen($parameter) - 2));
@@ -101,16 +99,14 @@ class SpecialVariableCompiler extends Base {
 					}
 					if (strpos($_index[1], '$') === false && strpos($_index[1], '\'') === false) {
 						return "(defined('{$_index[1]}') ? constant('{$_index[1]}') : null)";
-					} else {
-						return "(defined({$_index[1]}) ? constant({$_index[1]}) : null)";
 					}
+                    return "(defined({$_index[1]}) ? constant({$_index[1]}) : null)";
 				// no break
 				case 'config':
-					if (isset($_index[2])) {
+                    if (isset($_index[2])) {
 						return "(is_array(\$tmp = \$_smarty_tpl->getConfigVariable($_index[1])) ? \$tmp[$_index[2]] : null)";
-					} else {
-						return "\$_smarty_tpl->getConfigVariable($_index[1])";
 					}
+                    return "\$_smarty_tpl->getConfigVariable($_index[1])";
 				// no break
 				case 'ldelim':
 					return "\$_smarty_tpl->getLeftDelimiter()";

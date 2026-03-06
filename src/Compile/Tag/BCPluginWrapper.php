@@ -12,7 +12,7 @@ class BCPluginWrapper extends Base {
 	 * @var array
 	 * @see Smarty_Internal_CompileBase
 	 */
-	public $optional_attributes = array('_any');
+	public $optional_attributes = ['_any'];
 
 	private $callback;
 

@@ -33,7 +33,7 @@ class ConfigfileLexer
       *
       * @var int
       */
-     public $dataLength = null;
+     public $dataLength;
    /**
      * byte counter
      *
@@ -69,13 +69,13 @@ class ConfigfileLexer
      *
      * @var Smarty
      */
-    public $smarty = null;
+    public $smarty;
     /**
      * compiler object
      *
      * @var \Smarty\Compiler\Configfile
      */
-    private $compiler = null;
+    private $compiler;
     /**
      * copy of config_booleanize
      *
@@ -99,35 +99,34 @@ class ConfigfileLexer
      *
      * @var array
      */
-    public $state_name = array(1 => 'START', 2 => 'VALUE', 3 => 'NAKED_STRING_VALUE', 4 => 'COMMENT', 5 => 'SECTION', 6 => 'TRIPPLE');
+    public $state_name = [1 => 'START', 2 => 'VALUE', 3 => 'NAKED_STRING_VALUE', 4 => 'COMMENT', 5 => 'SECTION', 6 => 'TRIPPLE'];
 
     /**
      * storage for assembled token patterns
      *
      * @var string
      */
-    private $yy_global_pattern1 = null;
-    private $yy_global_pattern2 = null;
-    private $yy_global_pattern3 = null;
-    private $yy_global_pattern4 = null;
-    private $yy_global_pattern5 = null;
-    private $yy_global_pattern6 = null;
+    private $yy_global_pattern1;
+    private $yy_global_pattern2;
+    private $yy_global_pattern3;
+    private $yy_global_pattern4;
+    private $yy_global_pattern5;
+    private $yy_global_pattern6;
 
     /**
      * token names
      *
      * @var array
      */
-    public $smarty_token_names = array(        // Text for parser error messages
-    );
+    public $smarty_token_names = [        // Text for parser error messages
+    ];
 
     /**
      * constructor
      *
      * @param   string                             $data template source
-     * @param \Smarty\Compiler\Configfile $compiler
      */
-    public function __construct($data, \Smarty\Compiler\Configfile $compiler)
+    public function __construct(string $data, \Smarty\Compiler\Configfile $compiler)
     {
         $this->data = $data . "\n"; //now all lines are \n-terminated
         $this->dataLength = strlen($data);
@@ -145,7 +144,7 @@ class ConfigfileLexer
         return $input;
    }
 
-    public function PrintTrace()
+    public function PrintTrace(): void
     {
         $this->yyTraceFILE = fopen('php://output', 'w');
         $this->yyTracePrompt = '<br>';
@@ -154,42 +153,42 @@ class ConfigfileLexer
 
 
     private $_yy_state = 1;
-    private $_yy_stack = array();
+    private $_yy_stack = [];
 
     public function yylex()
     {
         return $this->{'yylex' . $this->_yy_state}();
     }
 
-    public function yypushstate($state)
+    public function yypushstate($state): void
     {
         if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
+             fprintf($this->yyTraceFILE, "%sState push %s\n", $this->yyTracePrompt, $this->state_name[$this->_yy_state] ?? $this->_yy_state);
         }
         array_push($this->_yy_stack, $this->_yy_state);
         $this->_yy_state = $state;
         if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
+             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, $this->state_name[$this->_yy_state] ?? $this->_yy_state);
         }
     }
 
-    public function yypopstate()
+    public function yypopstate(): void
     {
        if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
+             fprintf($this->yyTraceFILE, "%sState pop %s\n", $this->yyTracePrompt,  $this->state_name[$this->_yy_state] ?? $this->_yy_state);
         }
        $this->_yy_state = array_pop($this->_yy_stack);
         if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
+             fprintf($this->yyTraceFILE, "%snew State %s\n", $this->yyTracePrompt, $this->state_name[$this->_yy_state] ?? $this->_yy_state);
         }
 
     }
 
-    public function yybegin($state)
+    public function yybegin($state): void
     {
        $this->_yy_state = $state;
         if ($this->yyTraceFILE) {
-             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, isset($this->state_name[$this->_yy_state]) ? $this->state_name[$this->_yy_state] : $this->_yy_state);
+             fprintf($this->yyTraceFILE, "%sState set %s\n", $this->yyTracePrompt, $this->state_name[$this->_yy_state] ?? $this->_yy_state);
         }
     }
 
@@ -229,11 +228,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -252,45 +253,45 @@ class ConfigfileLexer
 
 
     const START = 1;
-    public function yy_r1_1()
+    public function yy_r1_1(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_COMMENTSTART;
     $this->yypushstate(self::COMMENT);
     }
-    public function yy_r1_2()
+    public function yy_r1_2(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_OPENB;
     $this->yypushstate(self::SECTION);
     }
-    public function yy_r1_3()
+    public function yy_r1_3(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_CLOSEB;
     }
-    public function yy_r1_4()
+    public function yy_r1_4(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_EQUAL;
     $this->yypushstate(self::VALUE);
     }
-    public function yy_r1_5()
+    public function yy_r1_5(): bool
     {
 
     return false;
     }
-    public function yy_r1_6()
+    public function yy_r1_6(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NEWLINE;
     }
-    public function yy_r1_7()
+    public function yy_r1_7(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_ID;
     }
-    public function yy_r1_8()
+    public function yy_r1_8(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_OTHER;
@@ -331,11 +332,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -354,36 +357,36 @@ class ConfigfileLexer
 
 
     const VALUE = 2;
-    public function yy_r2_1()
+    public function yy_r2_1(): bool
     {
 
     return false;
     }
-    public function yy_r2_2()
+    public function yy_r2_2(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_FLOAT;
     $this->yypopstate();
     }
-    public function yy_r2_3()
+    public function yy_r2_3(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_INT;
     $this->yypopstate();
     }
-    public function yy_r2_4()
+    public function yy_r2_4(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_TRIPPLE_QUOTES;
     $this->yypushstate(self::TRIPPLE);
     }
-    public function yy_r2_5()
+    public function yy_r2_5(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_SINGLE_QUOTED_STRING;
     $this->yypopstate();
     }
-    public function yy_r2_6()
+    public function yy_r2_6(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_DOUBLE_QUOTED_STRING;
@@ -392,7 +395,7 @@ class ConfigfileLexer
     public function yy_r2_7()
     {
 
-    if (!$this->configBooleanize || !in_array(strtolower($this->value), array('true', 'false', 'on', 'off', 'yes', 'no')) ) {
+    if (!$this->configBooleanize || !in_array(strtolower($this->value), ['true', 'false', 'on', 'off', 'yes', 'no']) ) {
         $this->yypopstate();
         $this->yypushstate(self::NAKED_STRING_VALUE);
         return true; //reprocess in new state
@@ -401,13 +404,13 @@ class ConfigfileLexer
         $this->yypopstate();
     }
     }
-    public function yy_r2_8()
+    public function yy_r2_8(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
     $this->yypopstate();
     }
-    public function yy_r2_9()
+    public function yy_r2_9(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
@@ -450,11 +453,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -473,7 +478,7 @@ class ConfigfileLexer
 
 
     const NAKED_STRING_VALUE = 3;
-    public function yy_r3_1()
+    public function yy_r3_1(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
@@ -515,11 +520,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -538,17 +545,17 @@ class ConfigfileLexer
 
 
     const COMMENT = 4;
-    public function yy_r4_1()
+    public function yy_r4_1(): bool
     {
 
     return false;
     }
-    public function yy_r4_2()
+    public function yy_r4_2(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
     }
-    public function yy_r4_3()
+    public function yy_r4_3(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_NEWLINE;
@@ -590,11 +597,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -613,12 +622,12 @@ class ConfigfileLexer
 
 
     const SECTION = 5;
-    public function yy_r5_1()
+    public function yy_r5_1(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_DOT;
     }
-    public function yy_r5_2()
+    public function yy_r5_2(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_SECTION;
@@ -659,11 +668,13 @@ class ConfigfileLexer
                     $this->line += substr_count($this->value, "\n");
                     // accept this token
                     return true;
-                } elseif ($r === true) {
+                }
+                if ($r === true) {
                     // we have changed state
                     // process this token in the new state
                     return $this->yylex();
-                } elseif ($r === false) {
+                }
+                if ($r === false) {
                     $this->counter += strlen($this->value);
                     $this->line += substr_count($this->value, "\n");
                     if ($this->counter >=  $this->dataLength) {
@@ -682,14 +693,14 @@ class ConfigfileLexer
 
 
     const TRIPPLE = 6;
-    public function yy_r6_1()
+    public function yy_r6_1(): void
     {
 
     $this->token = \Smarty\Parser\ConfigfileParser::TPC_TRIPPLE_QUOTES_END;
     $this->yypopstate();
     $this->yypushstate(self::START);
     }
-    public function yy_r6_2()
+    public function yy_r6_2(): void
     {
 
   $to = strlen($this->data);

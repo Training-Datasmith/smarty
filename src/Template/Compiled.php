@@ -16,7 +16,7 @@ class Compiled extends GeneratedPhpFile {
 	 *
 	 * @var string|null
 	 */
-	public $nocache_hash = null;
+	public $nocache_hash;
 
 	/**
 	 * Included sub templates
@@ -38,7 +38,7 @@ class Compiled extends GeneratedPhpFile {
 	 *
 	 * @return Compiled compiled object
 	 */
-	public static function load($_template) {
+	public static function load($_template): \Smarty\Template\Compiled {
 		$compiled = new Compiled();
 		if ($_template->getSource()->handler->supportsCompiledTemplates()) {
 			$compiled->populateCompiledFilepath($_template);
@@ -51,7 +51,7 @@ class Compiled extends GeneratedPhpFile {
 	 *
 	 * @param Template $_template template object
 	 **/
-	private function populateCompiledFilepath(Template $_template) {
+	private function populateCompiledFilepath(Template $_template): void {
 		$source = $_template->getSource();
 		$smarty = $_template->getSmarty();
 		$this->filepath = $smarty->getCompileDir();
@@ -85,14 +85,12 @@ class Compiled extends GeneratedPhpFile {
 	}
 
 	/**
-	 * render compiled template code
-	 *
-	 * @param Template $_template
-	 *
-	 * @return string
-	 * @throws \Smarty\Exception
-	 */
-	public function render(Template $_template) {
+     * render compiled template code
+     *
+     *
+     * @throws \Smarty\Exception
+     */
+    public function render(Template $_template): void {
 
 		if ($_template->getSmarty()->debugging) {
 			$_template->getSmarty()->getDebug()->start_render($_template);
@@ -126,7 +124,7 @@ class Compiled extends GeneratedPhpFile {
 	 *
 	 * @throws Exception
 	 */
-	private function compileAndLoad(Template $_smarty_tpl) {
+	private function compileAndLoad(Template $_smarty_tpl): void {
 
 		if ($_smarty_tpl->getSource()->handler->recompiled) {
 			$this->recompile($_smarty_tpl);
@@ -136,12 +134,12 @@ class Compiled extends GeneratedPhpFile {
 		if ($this->exists && !$_smarty_tpl->getSmarty()->force_compile
 			&& !($_smarty_tpl->compile_check && $_smarty_tpl->getSource()->getTimeStamp() > $this->getTimeStamp())
 		) {
-			$this->loadCompiledTemplate($_smarty_tpl, false);
+			$this->loadCompiledTemplate(false);
 		}
 
 		if (!$this->isValid) {
 			$this->compileAndWrite($_smarty_tpl);
-			$this->loadCompiledTemplate($_smarty_tpl);
+			$this->loadCompiledTemplate();
 		}
 
 		$this->processed = true;
@@ -154,7 +152,7 @@ class Compiled extends GeneratedPhpFile {
 	 *
 	 * @throws Exception
 	 */
-	private function recompile(Template $_smarty_tpl) {
+	private function recompile(Template $_smarty_tpl): void {
 		$level = ob_get_level();
 		ob_start();
 		// call compiler
@@ -172,13 +170,12 @@ class Compiled extends GeneratedPhpFile {
 	}
 
 	/**
-	 * compile template from source
-	 *
-	 * @param Template $_template
-	 *
-	 * @throws Exception
-	 */
-	public function compileAndWrite(Template $_template) {
+     * compile template from source
+     *
+     *
+     * @throws Exception
+     */
+    public function compileAndWrite(Template $_template): void {
 		// compile locking
 		if ($saved_timestamp = (!$_template->getSource()->handler->recompiled && is_file($this->filepath))) {
 			$saved_timestamp = $this->getTimeStamp();
@@ -198,14 +195,12 @@ class Compiled extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Do the actual compiling.
-	 *
-	 * @param Template $_smarty_tpl
-	 *
-	 * @return string
-	 * @throws Exception
-	 */
-	private function doCompile(Template $_smarty_tpl): string {
+     * Do the actual compiling.
+     *
+     *
+     * @throws Exception
+     */
+    private function doCompile(Template $_smarty_tpl): string {
 		$this->file_dependency = [];
 		$this->includes = [];
 		$this->nocache_hash = null;
@@ -222,7 +217,7 @@ class Compiled extends GeneratedPhpFile {
 	 * @return bool success
 	 * @throws \Smarty\Exception
 	 */
-	private function write(Template $_template, $code) {
+	private function write(Template $_template, string $code): bool {
 		if (!$_template->getSource()->handler->recompiled) {
 			if ($_template->getSmarty()->writeFile($this->filepath, $code) === true) {
 				$this->timestamp = $this->exists = is_file($this->filepath);
@@ -237,14 +232,13 @@ class Compiled extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Load fresh compiled template by including the PHP file
-	 * HHVM requires a workaround because of a PHP incompatibility
-	 *
-	 * @param Template $_smarty_tpl do not change/remove variable name, is used by compiled template
-	 * @param bool $invalidateCachedFiles forces a revalidation of the file in opcache or apc cache (if available)
-	 *
-	 */
-	private function loadCompiledTemplate(Template $_smarty_tpl, bool $invalidateCachedFiles = true) {
+     * Load fresh compiled template by including the PHP file
+     * HHVM requires a workaround because of a PHP incompatibility
+     *
+     * @param bool $invalidateCachedFiles forces a revalidation of the file in opcache or apc cache (if available)
+     *
+     */
+    private function loadCompiledTemplate(bool $invalidateCachedFiles = true): void {
         
 		if ($invalidateCachedFiles) {
 			if (function_exists('opcache_invalidate')
@@ -262,17 +256,16 @@ class Compiled extends GeneratedPhpFile {
 	}
 
 	/**
-	 * This function is executed automatically when a compiled or cached template file is included
-	 * - Decode saved properties from compiled template and cache files
-	 * - Check if compiled or cache file is valid
-	 *
-	 * @param Template $_template
-	 * @param array $properties special template properties
-	 *
-	 * @return bool flag if compiled or cache file is valid
-	 * @throws Exception
-	 */
-	public function isFresh(Template $_template, array $properties): bool {
+     * This function is executed automatically when a compiled or cached template file is included
+     * - Decode saved properties from compiled template and cache files
+     * - Check if compiled or cache file is valid
+     *
+     * @param array $properties special template properties
+     *
+     * @return bool flag if compiled or cache file is valid
+     * @throws Exception
+     */
+    public function isFresh(Template $_template, array $properties): bool {
 
 		// on cache resources other than file check version stored in cache code
 		if (\Smarty\Smarty::SMARTY_VERSION !== $properties['version']) {

@@ -11,7 +11,7 @@ namespace Smarty\Compile\Modifier;
 
 class CountParagraphsModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		// count \r or \n characters
 		return '(preg_match_all(\'#[\r\n]+#\', ' . $params[ 0 ] . ', $tmp)+1)';
 	}

@@ -18,35 +18,35 @@ class Source {
 	 *
 	 * @var string|null
 	 */
-	public $uid = null;
+	public $uid;
 
 	/**
 	 * Template Resource (\Smarty\Template::$template_resource)
 	 *
 	 * @var string
 	 */
-	public $resource = null;
+	public $resource;
 
 	/**
 	 * Resource Type
 	 *
 	 * @var string
 	 */
-	public $type = null;
+	public $type;
 
 	/**
 	 * Resource Name
 	 *
 	 * @var string
 	 */
-	public $name = null;
+	public $name;
 
 	/**
 	 * Source Timestamp
 	 *
 	 * @var int
 	 */
-	public $timestamp = null;
+	public $timestamp;
 
 	/**
 	 * Source Existence
@@ -60,28 +60,28 @@ class Source {
 	 *
 	 * @var string
 	 */
-	public $basename = null;
+	public $basename;
 
 	/**
 	 * The Components an extended template is made of
 	 *
 	 * @var \Smarty\Template\Source[]
 	 */
-	public $components = null;
+	public $components;
 
 	/**
 	 * Resource Handler
 	 *
 	 * @var \Smarty\Resource\BasePlugin
 	 */
-	public $handler = null;
+	public $handler;
 
 	/**
 	 * Smarty instance
 	 *
 	 * @var Smarty
 	 */
-	protected $smarty = null;
+	protected $smarty;
 
 	/**
 	 * Resource is source
@@ -95,7 +95,7 @@ class Source {
 	 *
 	 * @var string
 	 */
-	public $content = null;
+	public $content;
 
 	/**
 	 * @var array
@@ -113,7 +113,7 @@ class Source {
 	 * @throws   \Smarty\Exception
 	 * @internal param \Smarty\Resource\Base $handler Resource Handler this source object communicates with
 	 */
-	public function __construct(Smarty $smarty, $type, $name) {
+	public function __construct(Smarty $smarty, string $type, string $name) {
 		$this->handler = \Smarty\Resource\BasePlugin::load($smarty, $type);
 
 		$this->smarty = $smarty;
@@ -137,7 +137,7 @@ class Source {
 		?Template $_template = null,
 		?Smarty   $smarty = null,
 		          $template_resource = null
-	) {
+	): self {
 		if ($_template) {
 			$smarty = $_template->getSmarty();
 			$template_resource = $_template->template_resource;
@@ -201,7 +201,7 @@ class Source {
 	 *
 	 * @throws \Smarty\Exception
 	 */
-	public function _getDefaultTemplate($default_handler) {
+	public function _getDefaultTemplate($default_handler): void {
 		$_content = $_timestamp = null;
 		$_return = \call_user_func_array(
 			$default_handler,
@@ -252,22 +252,18 @@ class Source {
 	}
 
 	/**
-	 * Return source name
-	 * e.g.: 'sub/index.tpl'
-	 *
-	 * @return string
-	 */
-	public function getResourceName(): string {
+     * Return source name
+     * e.g.: 'sub/index.tpl'
+     */
+    public function getResourceName(): string {
 		return (string) $this->name;
 	}
 
 	/**
-	 * Return source name, including the type prefix.
-	 * e.g.: 'file:sub/index.tpl'
-	 *
-	 * @return string
-	 */
-	public function getFullResourceName(): string {
+     * Return source name, including the type prefix.
+     * e.g.: 'file:sub/index.tpl'
+     */
+    public function getFullResourceName(): string {
 		return $this->type . ':' . $this->name;
 	}
 

@@ -134,7 +134,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @var string
 	 */
-	public $_joined_template_dir = null;
+	public $_joined_template_dir;
 
 	/**
 	 * flag if config_dir is normalized
@@ -148,28 +148,28 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @var string
 	 */
-	public $_joined_config_dir = null;
+	public $_joined_config_dir;
 
 	/**
 	 * default template handler
 	 *
 	 * @var callable
 	 */
-	public $default_template_handler_func = null;
+	public $default_template_handler_func;
 
 	/**
 	 * default config handler
 	 *
 	 * @var callable
 	 */
-	public $default_config_handler_func = null;
+	public $default_config_handler_func;
 
 	/**
 	 * default plugin handler
 	 *
 	 * @var callable
 	 */
-	private $default_plugin_handler_func = null;
+	private $default_plugin_handler_func;
 
 	/**
 	 * flag if template_dir is normalized
@@ -248,7 +248,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @var \Smarty\Security
 	 */
-	public $security_policy = null;
+	public $security_policy;
 
 	/**
 	 * debug mode
@@ -284,14 +284,14 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @var string
 	 */
-	public $debug_tpl = null;
+	public $debug_tpl;
 
 	/**
 	 * When set, smarty uses this value as error_reporting-level.
 	 *
 	 * @var int
 	 */
-	public $error_reporting = null;
+	public $error_reporting;
 
 	/**
 	 * Controls whether variables with the same name overwrite each other.
@@ -434,7 +434,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @var \Smarty\Debug
 	 */
-	public $_debug = null;
+	public $_debug;
 
 	/**
 	 * template directory
@@ -533,11 +533,9 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Load an additional extension.
-	 *
-	 * @return void
-	 */
-	public function addExtension(ExtensionInterface $extension) {
+     * Load an additional extension.
+     */
+    public function addExtension(ExtensionInterface $extension): void {
 		$this->extensions[] = $extension;
 	}
 
@@ -551,13 +549,11 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Replace the entire list extensions, allowing you to determine the exact order of the extensions.
-	 *
-	 * @param ExtensionInterface[] $extensions
-	 *
-	 * @return void
-	 */
-	public function setExtensions(array $extensions): void {
+     * Replace the entire list extensions, allowing you to determine the exact order of the extensions.
+     *
+     * @param ExtensionInterface[] $extensions
+     */
+    public function setExtensions(array $extensions): void {
 		$this->extensions = $extensions;
 	}
 
@@ -583,7 +579,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @return static                 current Smarty instance for chaining
 	 * @throws \Smarty\Exception
 	 */
-	public function enableSecurity($security_class = null) {
+	public function enableSecurity($security_class = null): self {
 		\Smarty\Security::enableSecurity($this, $security_class);
 		return $this;
 	}
@@ -593,7 +589,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function disableSecurity() {
+	public function disableSecurity(): self {
 		$this->security_policy = null;
 		return $this;
 	}
@@ -607,7 +603,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function addTemplateDir($template_dir, $key = null, $isConfig = false) {
+	public function addTemplateDir($template_dir, $key = null, $isConfig = false): self {
 		if ($isConfig) {
 			$processed = &$this->_processedConfigDir;
 			$dir = &$this->config_dir;
@@ -659,7 +655,7 @@ class Smarty extends \Smarty\TemplateBase {
 			$this->_normalizeTemplateConfig($isConfig);
 		}
 		if ($index !== null) {
-			return isset($dir[$index]) ? $dir[$index] : null;
+			return $dir[$index] ?? null;
 		}
 		return $dir;
 	}
@@ -672,7 +668,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function setTemplateDir($template_dir, $isConfig = false) {
+	public function setTemplateDir($template_dir, $isConfig = false): self {
 		if ($isConfig) {
 			$this->config_dir = [];
 			$this->_processedConfigDir = [];
@@ -692,7 +688,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function prependTemplateDir($new_template_dir, $is_config = false) {
+	public function prependTemplateDir($new_template_dir, $is_config = false): self {
 		$current_template_dirs = $is_config ? $this->config_dir : $this->template_dir;
 		array_unshift($current_template_dirs, $new_template_dir);
 		$this->setTemplateDir($current_template_dirs, $is_config);
@@ -746,37 +742,33 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @api  Smarty::registerPlugin()
 	 */
-	public function registerPlugin($type, $name, $callback, $cacheable = true) {
+	public function registerPlugin($type, $name, $callback, $cacheable = true): self {
 		if (isset($this->registered_plugins[$type][$name])) {
-			throw new Exception("Plugin tag '{$name}' already registered");
-		} elseif (!is_callable($callback) && !class_exists($callback)) {
-			throw new Exception("Plugin '{$name}' not callable");
-		} else {
-			$this->registered_plugins[$type][$name] = [$callback, (bool)$cacheable];
-		}
+            throw new Exception("Plugin tag '{$name}' already registered");
+        }
+        if (!is_callable($callback) && !class_exists($callback)) {
+            throw new Exception("Plugin '{$name}' not callable");
+        }
+        $this->registered_plugins[$type][$name] = [$callback, (bool)$cacheable];
 		return $this;
 	}
 
 	/**
-	 * Returns plugin previously registered using ::registerPlugin as a numerical array as follows or null if not found:
-	 * [
-	 *  0 => the callback
-	 *  1 => (bool) $cacheable
-	 *  2 => (array) $cache_attr
-	 * ]
-	 *
-	 * @param string $type plugin type
-	 * @param string $name name of template tag
-	 *
-	 * @return array|null
-	 *
-	 * @api  Smarty::unregisterPlugin()
-	 */
-	public function getRegisteredPlugin($type, $name): ?array {
-		if (isset($this->registered_plugins[$type][$name])) {
-			return $this->registered_plugins[$type][$name];
-		}
-		return null;
+     * Returns plugin previously registered using ::registerPlugin as a numerical array as follows or null if not found:
+     * [
+     *  0 => the callback
+     *  1 => (bool) $cacheable
+     *  2 => (array) $cache_attr
+     * ]
+     *
+     * @param string $type plugin type
+     * @param string $name name of template tag
+     *
+     *
+     * @api  Smarty::unregisterPlugin()
+     */
+    public function getRegisteredPlugin($type, $name): ?array {
+		return $this->registered_plugins[$type][$name] ?? null;
 	}
 
 	/**
@@ -789,7 +781,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @api  Smarty::unregisterPlugin()
 	 */
-	public function unregisterPlugin($type, $name) {
+	public function unregisterPlugin($type, $name): self {
 		if (isset($this->registered_plugins[$type][$name])) {
 			unset($this->registered_plugins[$type][$name]);
 		}
@@ -804,7 +796,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @return static current Smarty instance for chaining
 	 * @deprecated since 5.0
 	 */
-	public function addPluginsDir($plugins_dir) {
+	public function addPluginsDir($plugins_dir): self {
 		trigger_error('Using Smarty::addPluginsDir() to load plugins is deprecated and will be ' .
 			'removed in a future release. Use Smarty::addExtension() to add an extension or Smarty::registerPlugin to ' .
 			'quickly register a plugin using a callback function.', E_USER_DEPRECATED);
@@ -823,7 +815,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @return array list of plugin directories
 	 * @deprecated since 5.0
 	 */
-	public function getPluginsDir() {
+	public function getPluginsDir(): array {
 		trigger_error('Using Smarty::getPluginsDir() is deprecated and will be ' .
 			'removed in a future release. It will always return an empty array.', E_USER_DEPRECATED);
 		return [];
@@ -844,7 +836,7 @@ class Smarty extends \Smarty\TemplateBase {
 
 		$this->extensions = array_filter(
 			$this->extensions,
-			function ($extension) {
+			function (\Smarty\Extension\ExtensionInterface $extension): bool {
 				return !($extension instanceof DefaultExtension);
 			}
 		);
@@ -864,7 +856,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @deprecated since 5.0
 	 */
-	public function registerDefaultPluginHandler($callback) {
+	public function registerDefaultPluginHandler($callback): self {
 
 		trigger_error('Using Smarty::registerDefaultPluginHandler() is deprecated and will be ' .
 			'removed in a future release. Please rewrite your plugin handler as an extension.',
@@ -897,7 +889,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function setCompileDir($compile_dir) {
+	public function setCompileDir($compile_dir): self {
 		$this->_normalizeDir('compile_dir', $compile_dir);
 		$this->_compileDirNormalized = true;
 		return $this;
@@ -923,7 +915,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static current Smarty instance for chaining
 	 */
-	public function setCacheDir($cache_dir) {
+	public function setCacheDir($cache_dir): self {
 		$this->_normalizeDir('cache_dir', $cache_dir);
 		$this->_cacheDirNormalized = true;
 		return $this;
@@ -962,16 +954,14 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Get unique template id
-	 *
-	 * @param string $resource_name
-	 * @param null|mixed $cache_id
-	 * @param null|mixed $compile_id
-	 * @param null $caching
-	 *
-	 * @return string
-	 */
-	private function generateUniqueTemplateId(
+     * Get unique template id
+     *
+     * @param string $resource_name
+     * @param null|mixed $cache_id
+     * @param null|mixed $compile_id
+     *
+     */
+    private function generateUniqueTemplateId(
 		$resource_name,
 		$cache_id = null,
 		$compile_id = null,
@@ -992,7 +982,7 @@ class Smarty extends \Smarty\TemplateBase {
 		// hash very long IDs to prevent problems with filename length
 		// do not hash shorter IDs, so they remain recognizable
 		if (strlen($_templateId) > 150) {
-			$_templateId = sha1($_templateId);
+			return sha1($_templateId);
 		}
 
 		return $_templateId;
@@ -1044,21 +1034,21 @@ class Smarty extends \Smarty\TemplateBase {
 	/**
 	 * @param boolean $use_sub_dirs
 	 */
-	public function setUseSubDirs($use_sub_dirs) {
+	public function setUseSubDirs($use_sub_dirs): void {
 		$this->use_sub_dirs = $use_sub_dirs;
 	}
 
 	/**
 	 * @param int $error_reporting
 	 */
-	public function setErrorReporting($error_reporting) {
+	public function setErrorReporting($error_reporting): void {
 		$this->error_reporting = $error_reporting;
 	}
 
 	/**
 	 * @param boolean $escape_html
 	 */
-	public function setEscapeHtml($escape_html) {
+	public function setEscapeHtml($escape_html): void {
 		$this->escape_html = $escape_html;
 	}
 
@@ -1076,21 +1066,21 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @param boolean $auto_literal
 	 */
-	public function setAutoLiteral($auto_literal = true) {
+	public function setAutoLiteral($auto_literal = true): void {
 		$this->auto_literal = $auto_literal;
 	}
 
 	/**
 	 * @param boolean $force_compile
 	 */
-	public function setForceCompile($force_compile) {
+	public function setForceCompile($force_compile): void {
 		$this->force_compile = $force_compile;
 	}
 
 	/**
 	 * @param boolean $merge_compiled_includes
 	 */
-	public function setMergeCompiledIncludes($merge_compiled_includes) {
+	public function setMergeCompiledIncludes($merge_compiled_includes): void {
 		$this->merge_compiled_includes = $merge_compiled_includes;
 	}
 
@@ -1108,7 +1098,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @param string $left_delimiter
 	 */
-	public function setLeftDelimiter($left_delimiter) {
+	public function setLeftDelimiter($left_delimiter): void {
 		$this->left_delimiter = $left_delimiter;
 	}
 
@@ -1126,58 +1116,56 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @param string
 	 */
-	public function setRightDelimiter($right_delimiter) {
+	public function setRightDelimiter($right_delimiter): void {
 		$this->right_delimiter = $right_delimiter;
 	}
 
 	/**
 	 * @param boolean $debugging
 	 */
-	public function setDebugging($debugging) {
+	public function setDebugging($debugging): void {
 		$this->debugging = $debugging;
 	}
 
 	/**
 	 * @param boolean $config_overwrite
 	 */
-	public function setConfigOverwrite($config_overwrite) {
+	public function setConfigOverwrite($config_overwrite): void {
 		$this->config_overwrite = $config_overwrite;
 	}
 
 	/**
 	 * @param boolean $config_booleanize
 	 */
-	public function setConfigBooleanize($config_booleanize) {
+	public function setConfigBooleanize($config_booleanize): void {
 		$this->config_booleanize = $config_booleanize;
 	}
 
 	/**
 	 * @param boolean $config_read_hidden
 	 */
-	public function setConfigReadHidden($config_read_hidden) {
+	public function setConfigReadHidden($config_read_hidden): void {
 		$this->config_read_hidden = $config_read_hidden;
 	}
 
 	/**
 	 * @param boolean $compile_locking
 	 */
-	public function setCompileLocking($compile_locking) {
+	public function setCompileLocking($compile_locking): void {
 		$this->compile_locking = $compile_locking;
 	}
 
 	/**
 	 * @param string $default_resource_type
 	 */
-	public function setDefaultResourceType($default_resource_type) {
+	public function setDefaultResourceType($default_resource_type): void {
 		$this->default_resource_type = $default_resource_type;
 	}
 
 	/**
-	 * Test install
-	 *
-	 * @param null $errors
-	 */
-	public function testInstall(&$errors = null) {
+     * Test install
+     */
+    public function testInstall(&$errors = null): void {
 		\Smarty\TestInstall::testInstall($this, $errors);
 	}
 
@@ -1186,7 +1174,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return static
 	 */
-	public function getSmarty() {
+	public function getSmarty(): self {
 		return $this;
 	}
 
@@ -1196,7 +1184,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @param string $dirName cache_dir or compile_dir
 	 * @param string $dir filepath of folder
 	 */
-	private function _normalizeDir($dirName, $dir) {
+	private function _normalizeDir(string $dirName, $dir): void {
 		$this->{$dirName} = $this->_realpath(rtrim($dir ?? '', "/\\") . DIRECTORY_SEPARATOR, true);
 	}
 
@@ -1205,7 +1193,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @param bool $isConfig true for config_dir
 	 */
-	private function _normalizeTemplateConfig($isConfig) {
+	private function _normalizeTemplateConfig(bool $isConfig): void {
 		if ($isConfig) {
 			$processed = &$this->_processedConfigDir;
 			$dir = &$this->config_dir;
@@ -1243,11 +1231,9 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Indicates if Smarty will mute errors for "undefined index", "undefined array key" and "trying to read property of null".
-	 *
-	 * @return bool
-	 */
-	public function isMutingUndefinedOrNullWarnings(): bool {
+     * Indicates if Smarty will mute errors for "undefined index", "undefined array key" and "trying to read property of null".
+     */
+    public function isMutingUndefinedOrNullWarnings(): bool {
 		return $this->isMutingUndefinedOrNullWarnings;
 	}
 
@@ -1300,7 +1286,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @api  Smarty::clearCompiledTemplate()
 	 */
-	public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null) {
+	public function clearCompiledTemplate($resource_name = null, $compile_id = null, $exp_time = null): int {
 		$_compile_dir = $this->getCompileDir();
 		if ($_compile_dir === '/') { //We should never want to delete this!
 			return 0;
@@ -1449,7 +1435,7 @@ class Smarty extends \Smarty\TemplateBase {
 		$time_limit,
 		$max_errors,
 		$isConfig = false
-	) {
+	): int {
 		// switch off time limit
 		if (function_exists('set_time_limit')) {
 			@set_time_limit($time_limit);
@@ -1467,9 +1453,12 @@ class Smarty extends \Smarty\TemplateBase {
 			$_dir_2 = new RecursiveIteratorIterator($_dir_1);
 			foreach ($_dir_2 as $_fileinfo) {
 				$_file = $_fileinfo->getFilename();
-				if (substr(basename($_fileinfo->getPathname()), 0, 1) === '.' || strpos($_file, '.svn') !== false) {
-					continue;
-				}
+                if (substr(basename($_fileinfo->getPathname()), 0, 1) === '.') {
+                    continue;
+                }
+                if (strpos($_file, '.svn') !== false) {
+                    continue;
+                }
 				if (substr_compare($_file, $extension, -strlen($extension)) !== 0) {
 					continue;
 				}
@@ -1514,16 +1503,13 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * check client side cache
-	 *
-	 * @param \Smarty\Template\Cached $cached
-	 * @param Template $_template
-	 * @param string $content
-	 *
-	 * @throws \Exception
-	 * @throws \Smarty\Exception
-	 */
-	public function cacheModifiedCheck(Template\Cached $cached, Template $_template, $content) {
+     * check client side cache
+     *
+     * @param string $content
+     * @throws \Exception
+     * @throws \Smarty\Exception
+     */
+    public function cacheModifiedCheck(Template\Cached $cached, Template $_template, $content): void {
 		$_isCached = $_template->isCached() && !$_template->getCompiled()->getNocacheCode();
 		$_last_modified_date =
 			@substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
@@ -1569,7 +1555,7 @@ class Smarty extends \Smarty\TemplateBase {
 		}
 	}
 
-	public function getModifierCallback(string $modifierName) {
+	public function getModifierCallback(string $modifierName): ?array {
 		foreach ($this->getExtensions() as $extension) {
 			if ($callback = $extension->getModifierCallback($modifierName)) {
 				return [new CallbackWrapper($modifierName, $callback), 'handle'];
@@ -1677,7 +1663,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @return boolean true
 	 * @throws Exception
 	 */
-	public function writeFile($_filepath, $_contents) {
+	public function writeFile($_filepath, $_contents): bool {
 		$_error_reporting = error_reporting();
 		error_reporting($_error_reporting & ~E_NOTICE & ~E_WARNING);
 		$_dirpath = dirname($_filepath);
@@ -1743,13 +1729,12 @@ class Smarty extends \Smarty\TemplateBase {
 	private $runtimes = [];
 
 	/**
-	 * Loads and returns a runtime extension or null if not found
-	 *
-	 * @param string $type
-	 *
-	 * @return object|null
-	 */
-	public function getRuntime(string $type) {
+     * Loads and returns a runtime extension or null if not found
+     *
+     *
+     * @return object|null
+     */
+    public function getRuntime(string $type) {
 
 		if (isset($this->runtimes[$type])) {
 			return $this->runtimes[$type];
@@ -1775,13 +1760,11 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Indicates if a runtime is available.
-	 *
-	 * @param string $type
-	 *
-	 * @return bool
-	 */
-	public function hasRuntime(string $type): bool {
+     * Indicates if a runtime is available.
+     *
+     *
+     */
+    public function hasRuntime(string $type): bool {
 		try {
 			$this->getRuntime($type);
 			return true;
@@ -1790,26 +1773,21 @@ class Smarty extends \Smarty\TemplateBase {
 		}
 	}
 
-	/**
-	 * @return callable|null
-	 */
 	public function getDefaultPluginHandlerFunc(): ?callable {
 		return $this->default_plugin_handler_func;
 	}
 
 	/**
-	 * load a filter of specified type and name
-	 *
-	 * @param string $type filter type
-	 * @param string $name filter name
-	 *
-	 * @return bool
-	 * @throws \Smarty\Exception
-	 * @api  Smarty::loadFilter()
-	 *
-	 * @deprecated since 5.0
-	 */
-	public function loadFilter($type, $name) {
+     * load a filter of specified type and name
+     *
+     * @param string $type filter type
+     * @param string $name filter name
+     *
+     * @throws \Smarty\Exception
+     * @api  Smarty::loadFilter()
+     * @deprecated since 5.0
+     */
+    public function loadFilter($type, $name): bool {
 
 		if ($type == \Smarty\Smarty::FILTER_VARIABLE) {
 			foreach ($this->getExtensions() as $extension) {
@@ -1871,12 +1849,11 @@ class Smarty extends \Smarty\TemplateBase {
 	private $_caching_type = 'file';
 
 	/**
-	 * @param $type
-	 *
-	 * @return void
-	 * @deprecated since 5.0
-	 */
-	public function setCachingType($type) {
+     * @param $type
+     *
+     * @deprecated since 5.0
+     */
+    public function setCachingType($type): void {
 		trigger_error('Using Smarty::setCachingType() is deprecated and will be ' .
 			'removed in a future release. Use Smarty::setCacheResource() instead.', E_USER_DEPRECATED);
 		$this->_caching_type = $type;
@@ -1884,10 +1861,9 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * @return string
-	 * @deprecated since 5.0
-	 */
-	public function getCachingType(): string {
+     * @deprecated since 5.0
+     */
+    public function getCachingType(): string {
 		trigger_error('Using Smarty::getCachingType() is deprecated and will be ' .
 			'removed in a future release.', E_USER_DEPRECATED);
 		return $this->_caching_type;
@@ -1905,7 +1881,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @deprecated since 5.0
 	 */
-	public function registerCacheResource($name, \Smarty\Cacheresource\Base $resource_handler) {
+	public function registerCacheResource($name, \Smarty\Cacheresource\Base $resource_handler): self {
 
 		trigger_error('Using Smarty::registerCacheResource() is deprecated and will be ' .
 			'removed in a future release. Use Smarty::setCacheResource() instead.', E_USER_DEPRECATED);
@@ -1926,7 +1902,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @deprecated since 5.0
 	 *
 	 */
-	public function unregisterCacheResource($name) {
+	public function unregisterCacheResource($name): self {
 
 		trigger_error('Using Smarty::unregisterCacheResource() is deprecated and will be ' .
 			'removed in a future release.', E_USER_DEPRECATED);
@@ -1937,7 +1913,7 @@ class Smarty extends \Smarty\TemplateBase {
 		return $this;
 	}
 
-	private function activateBCCacheResource() {
+	private function activateBCCacheResource(): void {
 		if ($this->_caching_type == 'file') {
 			$this->setCacheResource(new File());
 		}
@@ -1958,7 +1934,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @api  Smarty::registerFilter()
 	 */
-	public function registerFilter($type, $callback, $name = null) {
+	public function registerFilter($type, $callback, $name = null): self {
 		$name = $name ?? $this->_getFilterName($callback);
 		if (!is_callable($callback)) {
 			throw new Exception("{$type}filter '{$name}' not callable");
@@ -1995,13 +1971,14 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @return string|null   internal filter name or null if callable cannot be serialized
 	 */
-	private function _getFilterName($callable) {
+	private function _getFilterName($callable): ?string {
 		if (is_array($callable)) {
-			$_class_name = is_object($callable[0]) ? get_class($callable[0]) : $callable[0];
-			return $_class_name . '_' . $callable[1];
-		} elseif (is_string($callable)) {
-			return $callable;
-		}
+            $_class_name = is_object($callable[0]) ? get_class($callable[0]) : $callable[0];
+            return $_class_name . '_' . $callable[1];
+        }
+        if (is_string($callable)) {
+            return $callable;
+        }
 		return null;
 	}
 
@@ -2018,7 +1995,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 *
 	 */
-	public function unregisterFilter($type, $name) {
+	public function unregisterFilter($type, $name): self {
 
 		if (!is_string($name)) {
 			$name = $this->_getFilterName($name);
@@ -2053,7 +2030,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @api Smarty::addDefaultModifiers()
 	 *
 	 */
-	public function addDefaultModifiers($modifiers) {
+	public function addDefaultModifiers($modifiers): self {
 		if (is_array($modifiers)) {
 			$this->default_modifiers = array_merge($this->default_modifiers, $modifiers);
 		} else {
@@ -2083,21 +2060,15 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @api Smarty::setDefaultModifiers()
 	 *
 	 */
-	public function setDefaultModifiers($modifiers) {
+	public function setDefaultModifiers($modifiers): self {
 		$this->default_modifiers = (array)$modifiers;
 		return $this;
 	}
 
-	/**
-	 * @return Cacheresource\Base
-	 */
 	public function getCacheResource(): Cacheresource\Base {
 		return $this->cacheResource;
 	}
 
-	/**
-	 * @param Cacheresource\Base $cacheResource
-	 */
 	public function setCacheResource(Cacheresource\Base $cacheResource): void {
 		$this->cacheResource = $cacheResource;
 	}
@@ -2127,24 +2098,21 @@ class Smarty extends \Smarty\TemplateBase {
 	 * @throws \Exception
 	 * @throws \Smarty\Exception
 	 */
-	public function display($template = null, $cache_id = null, $compile_id = null) {
+	public function display($template = null, $cache_id = null, $compile_id = null): void {
 		$this->returnOrCreateTemplate($template, $cache_id, $compile_id)->display();
 	}
 
 	/**
-	 * @param $resource_name
-	 * @param $cache_id
-	 * @param $compile_id
-	 * @param $parent
-	 * @param $caching
-	 * @param $cache_lifetime
-	 * @param bool $isConfig
-	 * @param array $data
-	 *
-	 * @return Template
-	 * @throws Exception
-	 */
-	public function doCreateTemplate(
+     * @param $resource_name
+     * @param $cache_id
+     * @param $compile_id
+     * @param $parent
+     * @param $caching
+     * @param $cache_lifetime
+     *
+     * @throws Exception
+     */
+    public function doCreateTemplate(
 		$resource_name,
 		$cache_id = null,
 		$compile_id = null,
@@ -2201,7 +2169,7 @@ class Smarty extends \Smarty\TemplateBase {
 	 *
 	 * @api  Smarty::isCached()
 	 */
-	public function isCached($template = null, $cache_id = null, $compile_id = null) {
+	public function isCached($template = null, $cache_id = null, $compile_id = null): bool {
 		return $this->returnOrCreateTemplate($template, $cache_id, $compile_id)->isCached();
 	}
 
@@ -2223,11 +2191,10 @@ class Smarty extends \Smarty\TemplateBase {
 	}
 
 	/**
-	 * Sets if Smarty should check If-Modified-Since headers to determine cache validity.
-	 * @param bool $cache_modified_check
-	 * @return void
-	 */
-	public function setCacheModifiedCheck($cache_modified_check): void {
+     * Sets if Smarty should check If-Modified-Since headers to determine cache validity.
+     * @param bool $cache_modified_check
+     */
+    public function setCacheModifiedCheck($cache_modified_check): void {
 		$this->cache_modified_check = (bool) $cache_modified_check;
 	}
 

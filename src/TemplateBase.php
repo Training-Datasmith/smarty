@@ -21,7 +21,7 @@ abstract class TemplateBase extends Data {
 	 *
 	 * @var string
 	 */
-	public $cache_id = null;
+	public $cache_id;
 
 	/**
 	 * Set this if you want different sets of compiled files for the same
@@ -29,7 +29,7 @@ abstract class TemplateBase extends Data {
 	 *
 	 * @var string
 	 */
-	public $compile_id = null;
+	public $compile_id;
 
 	/**
 	 * caching enabled
@@ -125,9 +125,6 @@ abstract class TemplateBase extends Data {
 		return $this;
 	}
 
-	/**
-	 * @return int
-	 */
 	public function getCompileCheck(): int {
 		return $this->compile_check;
 	}
@@ -135,35 +132,35 @@ abstract class TemplateBase extends Data {
 	/**
 	 * @param int $compile_check
 	 */
-	public function setCompileCheck($compile_check) {
+	public function setCompileCheck($compile_check): void {
 		$this->compile_check = (int)$compile_check;
 	}
 
 	/**
 	 * @param int $caching
 	 */
-	public function setCaching($caching) {
+	public function setCaching($caching): void {
 		$this->caching = (int)$caching;
 	}
 
 	/**
 	 * @param int $cache_lifetime
 	 */
-	public function setCacheLifetime($cache_lifetime) {
+	public function setCacheLifetime($cache_lifetime): void {
 		$this->cache_lifetime = $cache_lifetime;
 	}
 
 	/**
 	 * @param string $compile_id
 	 */
-	public function setCompileId($compile_id) {
+	public function setCompileId($compile_id): void {
 		$this->compile_id = $compile_id;
 	}
 
 	/**
 	 * @param string $cache_id
 	 */
-	public function setCacheId($cache_id) {
+	public function setCacheId($cache_id): void {
 		$this->cache_id = $cache_id;
 	}
 
@@ -201,9 +198,6 @@ abstract class TemplateBase extends Data {
 		return $smarty->debug_tpl;
 	}
 
-	/**
-	 * @return Debug
-	 */
 	public function getDebug(): Debug {
 		if (!isset($this->debug)) {
 			$this->debug = new \Smarty\Debug();
@@ -284,15 +278,13 @@ abstract class TemplateBase extends Data {
 	}
 
 	/**
-	 * common setter for literals for easier handling of duplicates the
-	 * Smarty::$literals array gets filled with identical key values
-	 *
-	 * @param Smarty $smarty
-	 * @param array $literals
-	 *
-	 * @throws \Smarty\Exception
-	 */
-	private function _setLiterals(Smarty $smarty, $literals) {
+     * common setter for literals for easier handling of duplicates the
+     * Smarty::$literals array gets filled with identical key values
+     *
+     *
+     * @throws \Smarty\Exception
+     */
+    private function _setLiterals(Smarty $smarty, array $literals): void {
 		$literals = array_combine($literals, $literals);
 		$error = isset($literals[$smarty->getLeftDelimiter()]) ? [$smarty->getLeftDelimiter()] : [];
 		$error = isset($literals[$smarty->getRightDelimiter()]) ? $error[] = $smarty->getRightDelimiter() : $error;
@@ -302,7 +294,7 @@ abstract class TemplateBase extends Data {
 				'" may not be identical with left or right delimiter'
 			);
 		}
-		$smarty->literals = array_merge((array)$smarty->literals, (array)$literals);
+		$smarty->literals = array_merge((array)$smarty->literals, $literals);
 	}
 
 	/**

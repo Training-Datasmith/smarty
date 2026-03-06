@@ -57,19 +57,17 @@ class IncludeTag extends Base {
 	protected $optional_attributes = ['_any'];
 
 	/**
-	 * Compiles code for the {include} tag
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param Template $compiler compiler object
-	 *
-	 * @return string
-	 * @throws \Exception
-	 * @throws \Smarty\CompilerException
-	 * @throws \Smarty\Exception
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+     * Compiles code for the {include} tag
+     *
+     * @param array $args array with attributes from parser
+     * @param Template $compiler compiler object
+     *
+     * @throws \Exception
+     * @throws \Smarty\CompilerException
+     * @throws \Smarty\Exception
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
-		$uid = $t_hash = null;
 		// check and get attributes
 		$_attr = $this->getAttributes($compiler, $args);
 		$fullResourceName = $source_resource = $_attr['file'];
@@ -155,7 +153,6 @@ class IncludeTag extends Base {
 				$_assign = $_attr['assign'];
 			}
 		}
-		$has_compiled_template = false;
 
 		// delete {include} standard attributes
 		unset($_attr['file'], $_attr['assign'], $_attr['cache_id'], $_attr['cache_lifetime'], $_attr['nocache'], $_attr['caching'], $_attr['scope'], $_attr['inline']);
@@ -182,8 +179,7 @@ class IncludeTag extends Base {
 		if (isset($_assign)) {
 			$_output .= "\$_smarty_tpl->assign({$_assign}, ob_get_clean(), false, {$_scope});\n";
 		}
-		$_output .= "?>";
-		return $_output;
+		return $_output . "?>";
 	}
 
 }

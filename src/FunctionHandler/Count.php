@@ -15,7 +15,7 @@ use Smarty\Template;
  */
 class Count extends Base {
 
-	public function handle($params, Template $template) {
+	public function handle($params, Template $template): int {
 
 		$params = array_values($params ?? []);
 

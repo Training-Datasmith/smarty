@@ -28,11 +28,9 @@ abstract class RecompiledPlugin extends BasePlugin {
 	public $recompiled = true;
 
 	/**
-	 * Flag if resource does allow compilation
-	 *
-	 * @return bool
-	 */
-	public function supportsCompiledTemplates(): bool {
+     * Flag if resource does allow compilation
+     */
+    public function supportsCompiledTemplates(): bool {
 		return false;
 	}
 

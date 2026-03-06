@@ -35,7 +35,7 @@ class Append extends Assign
      * @return string compiled code
      * @throws \Smarty\CompilerException
      */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = array(), $tag = null, $function = null): string
+	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 
         // check and get attributes
@@ -48,9 +48,9 @@ class Append extends Assign
         } else {
             $_params[ 'smarty_internal_index' ] = '[]';
         }
-        $_new_attr = array();
+        $_new_attr = [];
         foreach ($_attr as $key => $value) {
-            $_new_attr[] = array($key => $value);
+            $_new_attr[] = [$key => $value];
         }
         // call compile assign
         return parent::compile($_new_attr, $compiler, $_params);

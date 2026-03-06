@@ -255,8 +255,7 @@ class ForeachTag extends ForeachSection {
 		if (!empty($itemAttr)) {
 			$output .= "{$localVariablePrefix}Backup = clone \$_smarty_tpl->getVariable('{$item}');\n";
 		}
-		$output .= '?>';
-		return $output;
+		return $output . '?>';
 	}
 
 	/**
@@ -280,7 +279,7 @@ class ForeachTag extends ForeachSection {
 	 *
 	 * @return string compiled code
 	 */
-	public function compileRestore($levels) {
+	public function compileRestore($levels): string {
 		return "\$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore(\$_smarty_tpl, {$levels});";
 	}
 }

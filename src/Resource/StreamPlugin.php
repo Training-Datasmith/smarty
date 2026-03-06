@@ -26,14 +26,12 @@ use Smarty\Template\Source;
 class StreamPlugin extends RecompiledPlugin {
 
 	/**
-	 * populate Source Object with meta data from Resource
-	 *
-	 * @param Source $source source object
-	 * @param Template $_template template object
-	 *
-	 * @return void
-	 */
-	public function populate(Source $source, ?Template $_template = null) {
+     * populate Source Object with meta data from Resource
+     *
+     * @param Source $source source object
+     * @param Template $_template template object
+     */
+    public function populate(Source $source, ?Template $_template = null): void {
 		$source->uid = false;
 		$source->content = $this->getContent($source);
 		$source->timestamp = $source->exists = !!$source->content;
@@ -63,9 +61,8 @@ class StreamPlugin extends RecompiledPlugin {
 			}
 			fclose($fp);
 			return $t;
-		} else {
-			return false;
 		}
+        return false;
 	}
 
 }

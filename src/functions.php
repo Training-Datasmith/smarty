@@ -14,8 +14,6 @@ use Smarty\Exception;
  * May not be required when running PHP8.2+: https://wiki.php.net/rfc/strtolower-ascii
  *
  * @param $string
- *
- * @return string
  */
 function smarty_ucfirst_ascii($string): string {
     return smarty_strtoupper_ascii(substr($string, 0, 1)) . substr($string, 1);
@@ -27,8 +25,6 @@ function smarty_ucfirst_ascii($string): string {
  * May not be required when running PHP8.2+: https://wiki.php.net/rfc/strtolower-ascii
  *
  * @param $string
- *
- * @return string
  */
 function smarty_strtolower_ascii($string): string {
     return strtr($string, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz');
@@ -40,8 +36,6 @@ function smarty_strtolower_ascii($string): string {
  * May not be required when running PHP8.2+: https://wiki.php.net/rfc/strtolower-ascii
  *
  * @param $string
- *
- * @return string
  */
 function smarty_strtoupper_ascii($string): string {
     return strtr($string, 'abcdefghijklmnopqrstuvwxyz', 'ABCDEFGHIJKLMNOPQRSTUVWXYZ');
@@ -60,13 +54,15 @@ function smarty_strtoupper_ascii($string): string {
 function smarty_make_timestamp($string)
 {
 	if (empty($string)) {
-		// use "now":
-		return time();
-	} elseif ($string instanceof DateTime
-		|| (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)
-	) {
-		return (int)$string->format('U'); // PHP 5.2 BC
-	} elseif (strlen($string) === 14 && ctype_digit((string)$string)) {
+        // use "now":
+        return time();
+    }
+    if ($string instanceof DateTime
+		|| (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)) {
+        return (int)$string->format('U');
+        // PHP 5.2 BC
+    }
+    elseif (strlen($string) === 14 && ctype_digit((string)$string)) {
 		// it is mysql timestamp format of YYYYMMDDHHMMSS?
 		return mktime(
 			substr($string, 8, 2),
@@ -76,10 +72,12 @@ function smarty_make_timestamp($string)
 			substr($string, 6, 2),
 			substr($string, 0, 4)
 		);
-	} elseif (is_numeric($string)) {
+	}
+    elseif (is_numeric($string)) {
 		// it is a numeric string, we handle it as timestamp
 		return (int)$string;
-	} else {
+	}
+    else {
 		// strtotime should handle it
 		$time = strtotime($string);
 		if ($time === -1 || $time === false) {
@@ -146,7 +144,7 @@ function smarty_mb_str_replace($search, $replace, $subject, &$count = 0)
 			$replace = mb_convert_encoding($replace, $current_charset, \Smarty\Smarty::$_CHARSET);
 		}
 
-		$parts = mb_split(preg_quote($search), $subject ?? "") ?: array();
+		$parts = mb_split(preg_quote($search), $subject ?? "") ?: [];
 		// If original regex encoding was not unicode...
 		if(!$reg_is_unicode) {
 			// ...restore original regex encoding to avoid breaking the system.
@@ -177,13 +175,11 @@ function smarty_mb_str_replace($search, $replace, $subject, &$count = 0)
  * @author Monte Ohrt <monte at ohrt dot com>
  *
  * @param string $string text that should by escaped
- *
- * @return string
  */
-function smarty_function_escape_special_chars($string)
+function smarty_function_escape_special_chars($string): string
 {
 	if (!is_array($string)) {
-		$string = htmlspecialchars((string) $string, ENT_COMPAT, \Smarty\Smarty::$_CHARSET, false);
+		return htmlspecialchars((string) $string, ENT_COMPAT, \Smarty\Smarty::$_CHARSET, false);
 	}
 	return $string;
 }
@@ -203,7 +199,7 @@ function smarty_function_escape_special_chars($string)
  * @return string  wrapped string
  * @author Rodney Rehm
  */
-function smarty_mb_wordwrap($str, $width = 75, $break = "\n", $cut = false)
+function smarty_mb_wordwrap($str, $width = 75, string $break = "\n", $cut = false)
 {
 	// break words into tokens using white space as a delimiter
 	$tokens = preg_split('!(\s)!S' . \Smarty\Smarty::$_UTF8_MODIFIER, $str, -1, PREG_SPLIT_NO_EMPTY + PREG_SPLIT_DELIM_CAPTURE);
@@ -213,7 +209,7 @@ function smarty_mb_wordwrap($str, $width = 75, $break = "\n", $cut = false)
 	$_space = false;
 	foreach ($tokens as $_token) {
 		$token_length = mb_strlen($_token, \Smarty\Smarty::$_CHARSET);
-		$_tokens = array($_token);
+		$_tokens = [$_token];
 		if ($token_length > $width) {
 			if ($cut) {
 				$_tokens = preg_split(

@@ -49,7 +49,6 @@ class ForeachClose extends Base {
 		/* @var \Smarty\Compile\Tag\ForeachTag $foreachCompiler */
 		$foreachCompiler = $compiler->getTagCompiler('foreach');
 		$output .= $foreachCompiler->compileRestore(1);
-		$output .= "?>";
-		return $output;
+		return $output . "?>";
 	}
 }

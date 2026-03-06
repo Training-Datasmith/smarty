@@ -55,13 +55,11 @@ abstract class Base implements CompilerInterface {
 	}
 
 	/**
-	 * Converts attributes into parameter array strings
-	 *
-	 * @param array $_attr
-	 *
-	 * @return array
-	 */
-	protected function formatParamsArray(array $_attr): array {
+     * Converts attributes into parameter array strings
+     *
+     *
+     */
+    protected function formatParamsArray(array $_attr): array {
 		$_paramsArray = [];
 		foreach ($_attr as $_key => $_value) {
 			$_paramsArray[] = var_export($_key, true) . "=>" . $_value;
@@ -116,13 +114,12 @@ abstract class Base implements CompilerInterface {
 	}
 
 	/**
-	 * @param mixed $scope
-	 * @param array $invalidScopes
-	 *
-	 * @return int
-	 * @throws Exception
-	 */
-	protected function convertScope($scope): int {
+     * @param mixed $scope
+     * @param array $invalidScopes
+     *
+     * @throws Exception
+     */
+    protected function convertScope($scope): int {
 
 		static $scopes = [
 			'local'    => Data::SCOPE_LOCAL,    // current scope
@@ -157,5 +154,5 @@ abstract class Base implements CompilerInterface {
 	 * @return string compiled code as a string
 	 * @throws \Smarty\CompilerException
 	 */
-	abstract public function compile($args, Template $compiler, $parameter = array(), $tag = null, $function = null): string;
+	abstract public function compile($args, Template $compiler, $parameter = [], $tag = null, $function = null): string;
 }

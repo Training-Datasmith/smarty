@@ -38,12 +38,6 @@ class ConfigfileParser
      */
     public $yymajor;
     /**
-     * lexer object
-     *
-     * @var Lexer
-     */
-    private $lex;
-    /**
      * internal error flag
      *
      * @var bool
@@ -54,13 +48,13 @@ class ConfigfileParser
      *
      * @var Configfile
      */
-    public $compiler = null;
+    public $compiler;
     /**
      * smarty object
      *
      * @var Smarty
      */
-    public $smarty = null;
+    public $smarty;
     /**
      * copy of config_overwrite property
      *
@@ -78,18 +72,14 @@ class ConfigfileParser
      *
      * @var array
      */
-    private static $escapes_single = array('\\' => '\\',
-                                           '\'' => '\'');
+    private static $escapes_single = ['\\' => '\\',
+                                           '\'' => '\''];
 
     /**
      * constructor
-     *
-     * @param Lexer      $lex
-     * @param Configfile $compiler
      */
     public function __construct(Lexer $lex, Configfile $compiler)
     {
-        $this->lex = $lex;
         $this->smarty = $compiler->getSmarty();
         $this->compiler = $compiler;
         $this->configOverwrite = $this->smarty->config_overwrite;
@@ -100,18 +90,14 @@ class ConfigfileParser
      * parse optional boolean keywords
      *
      * @param string $str
-     *
-     * @return bool
      */
-    private function parse_bool($str)
+    private function parse_bool($str): bool
     {
         $str = strtolower($str);
-        if (in_array($str, array('on', 'yes', 'true'))) {
-            $res = true;
-        } else {
-            $res = false;
+        if (in_array($str, ['on', 'yes', 'true'])) {
+            return true;
         }
-        return $res;
+        return false;
     }
 
     /**
@@ -120,10 +106,8 @@ class ConfigfileParser
      *  unescape inner quotes
      *
      * @param string $qstr
-     *
-     * @return string
      */
-    private static function parse_single_quoted_string($qstr)
+    private static function parse_single_quoted_string($qstr): string
     {
         $escaped_string = substr($qstr, 1, strlen($qstr) - 2); //remove outer quotes
 
@@ -145,10 +129,8 @@ class ConfigfileParser
      * parse double quoted string
      *
      * @param string $qstr
-     *
-     * @return string
      */
-    private static function parse_double_quoted_string($qstr)
+    private static function parse_double_quoted_string($qstr): string
     {
         $inner_str = substr($qstr, 1, strlen($qstr) - 2);
         return stripcslashes($inner_str);
@@ -158,21 +140,16 @@ class ConfigfileParser
      * parse triple quoted string
      *
      * @param string $qstr
-     *
-     * @return string
      */
-    private static function parse_tripple_double_quoted_string($qstr)
+    private static function parse_tripple_double_quoted_string($qstr): string
     {
         return stripcslashes($qstr);
     }
 
     /**
      * set a config variable in target array
-     *
-     * @param array $var
-     * @param array $target_array
      */
-    private function set_var(array $var, array &$target_array)
+    private function set_var(array $var, array &$target_array): void
     {
         $key = $var['key'];
         $value = $var['value'];
@@ -187,13 +164,11 @@ class ConfigfileParser
 
     /**
      * add config variable to global vars
-     *
-     * @param array $vars
      */
-    private function add_global_vars(array $vars)
+    private function add_global_vars(array $vars): void
     {
         if (!isset($this->compiler->config_data['vars'])) {
-            $this->compiler->config_data['vars'] = array();
+            $this->compiler->config_data['vars'] = [];
         }
         foreach ($vars as $var) {
             $this->set_var($var, $this->compiler->config_data);
@@ -204,12 +179,11 @@ class ConfigfileParser
      * add config variable to section
      *
      * @param string $section_name
-     * @param array  $vars
      */
-    private function add_section_vars($section_name, array $vars)
+    private function add_section_vars($section_name, array $vars): void
     {
         if (!isset($this->compiler->config_data['sections'][$section_name]['vars'])) {
-            $this->compiler->config_data['sections'][$section_name]['vars'] = array();
+            $this->compiler->config_data['sections'][$section_name]['vars'] = [];
         }
         foreach ($vars as $var) {
             $this->set_var($var, $this->compiler->config_data['sections'][$section_name]);
@@ -239,74 +213,74 @@ class ConfigfileParser
     const YY_ERROR_ACTION = 58;
 
     const YY_SZ_ACTTAB = 39;
-public static $yy_action = array(
+public static $yy_action = [
      24,   25,   26,   27,   28,   12,   15,   23,   31,   32,
      59,    8,    9,    3,   21,   22,   33,   13,   33,   13,
      14,   10,   18,   16,   30,   11,   17,   20,   34,    7,
       5,    1,    2,   29,    4,   19,   52,   35,    6,
-    );
-    public static $yy_lookahead = array(
+    ];
+    public static $yy_lookahead = [
       7,    8,    9,   10,   11,   12,    5,   27,   15,   16,
      20,   21,   25,   23,   25,   26,   17,   18,   17,   18,
       2,   25,    4,   13,   14,    1,   15,   24,   17,   22,
       3,   23,   23,   14,    6,    2,   28,   17,    3,
-);
+];
     const YY_SHIFT_USE_DFLT = -8;
     const YY_SHIFT_MAX = 19;
-    public static $yy_shift_ofst = array(
+    public static $yy_shift_ofst = [
      -8,    1,    1,    1,   -7,   -1,   -1,   24,   -8,   -8,
      -8,   18,   10,   11,   27,   28,   19,   20,   33,   35,
-);
+];
     const YY_REDUCE_USE_DFLT = -21;
     const YY_REDUCE_MAX = 10;
-    public static $yy_reduce_ofst = array(
+    public static $yy_reduce_ofst = [
     -10,  -11,  -11,  -11,  -20,  -13,   -4,    3,    7,    8,
       9,
-);
-    public static $yyExpectedTokens = array(
-         array(),
-         array(5, 17, 18, ),
-         array(5, 17, 18, ),
-         array(5, 17, 18, ),
-         array(7, 8, 9, 10, 11, 12, 15, 16, ),
-         array(17, 18, ),
-         array(17, 18, ),
-         array(1, ),
-         array(),
-         array(),
-         array(),
-         array(2, 4, ),
-         array(13, 14, ),
-         array(15, 17, ),
-         array(3, ),
-         array(6, ),
-         array(14, ),
-         array(17, ),
-         array(2, ),
-         array(3, ),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-         array(),
-);
-    public static $yy_default = array(
+];
+    public static $yyExpectedTokens = [
+         [],
+         [5, 17, 18, ],
+         [5, 17, 18, ],
+         [5, 17, 18, ],
+         [7, 8, 9, 10, 11, 12, 15, 16, ],
+         [17, 18, ],
+         [17, 18, ],
+         [1, ],
+         [],
+         [],
+         [],
+         [2, 4, ],
+         [13, 14, ],
+         [15, 17, ],
+         [3, ],
+         [6, ],
+         [14, ],
+         [17, ],
+         [2, ],
+         [3, ],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+         [],
+];
+    public static $yy_default = [
      44,   40,   41,   37,   58,   58,   58,   36,   39,   44,
      44,   58,   58,   58,   58,   58,   58,   58,   58,   58,
      38,   42,   43,   45,   46,   47,   48,   49,   50,   51,
      52,   53,   54,   55,   56,   57,
-);
+];
     const YYNOCODE = 29;
     const YYSTACKDEPTH = 100;
     const YYNSTATE = 36;
@@ -314,9 +288,9 @@ public static $yy_action = array(
     const YYERRORSYMBOL = 19;
     const YYERRSYMDT = 'yy0';
     const YYFALLBACK = 0;
-    public static $yyFallback = array(
-    );
-    public function Trace($TraceFILE, $zTracePrompt)
+    public static $yyFallback = [
+    ];
+    public function Trace($TraceFILE, $zTracePrompt): void
     {
         if (!$TraceFILE) {
             $zTracePrompt = 0;
@@ -327,7 +301,7 @@ public static $yy_action = array(
         $this->yyTracePrompt = $zTracePrompt;
     }
 
-    public function PrintTrace()
+    public function PrintTrace(): void
     {
         $this->yyTraceFILE = fopen('php://output', 'w');
         $this->yyTracePrompt = '<br>';
@@ -337,9 +311,9 @@ public static $yy_action = array(
     public $yyTracePrompt;
     public $yyidx;                    /* Index of top element in stack */
     public $yyerrcnt;                 /* Shifts left before out of the error */
-    public $yystack = array();  /* The parser's stack */
+    public $yystack = [];  /* The parser's stack */
 
-    public $yyTokenName = array(
+    public $yyTokenName = [
   '$',             'OPENB',         'SECTION',       'CLOSEB',      
   'DOT',           'ID',            'EQUAL',         'FLOAT',       
   'INT',           'BOOL',          'SINGLE_QUOTED_STRING',  'DOUBLE_QUOTED_STRING',
@@ -347,9 +321,9 @@ public static $yy_action = array(
   'OTHER',         'NEWLINE',       'COMMENTSTART',  'error',       
   'start',         'global_vars',   'sections',      'var_list',    
   'section',       'newline',       'var',           'value',       
-    );
+    ];
 
-    public static $yyRuleName = array(
+    public static $yyRuleName = [
   'start ::= global_vars sections',
   'global_vars ::= var_list',
   'sections ::= sections section',
@@ -372,7 +346,7 @@ public static $yy_action = array(
   'newline ::= NEWLINE',
   'newline ::= COMMENTSTART NEWLINE',
   'newline ::= COMMENTSTART NAKED_STRING NEWLINE',
-    );
+    ];
 
     public function tokenName($tokenType)
     {
@@ -381,12 +355,11 @@ public static $yy_action = array(
         }
         if ($tokenType > 0 && $tokenType < count($this->yyTokenName)) {
             return $this->yyTokenName[$tokenType];
-        } else {
-            return 'Unknown';
         }
+        return 'Unknown';
     }
 
-    public static function yy_destructor($yymajor, $yypminor)
+    public static function yy_destructor($yymajor, $yypminor): void
     {
         switch ($yymajor) {
             default:  break;   /* If no destructor action specified: do nothing */
@@ -413,7 +386,7 @@ public static $yy_action = array(
 
     public function __destruct()
     {
-        while ($this->yystack !== Array()) {
+        while ($this->yystack !== []) {
             $this->yy_pop_parser_stack();
         }
         if (is_resource($this->yyTraceFILE)) {
@@ -423,8 +396,8 @@ public static $yy_action = array(
 
     public function yy_get_expected_tokens($token)
     {
-        static $res3 = array();
-        static $res4 = array();
+        static $res3 = [];
+        static $res4 = [];
         $state = $this->yystack[$this->yyidx]->stateno;
         $expected = self::$yyExpectedTokens[$state];
         if (isset($res3[$state][$token])) {
@@ -480,21 +453,22 @@ public static $yy_action = array(
                         $x->major = self::$yyRuleInfo[$yyruleno][0];
                         $this->yystack[$this->yyidx] = $x;
                         continue 2;
-                    } elseif ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
+                    }
+                    if ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
                         // the last token was just ignored, we can't accept
                         // by ignoring input, this is in essence ignoring a
                         // syntax error!
                         return array_unique($expected);
-                    } elseif ($nextstate === self::YY_NO_ACTION) {
+                    }
+                    if ($nextstate === self::YY_NO_ACTION) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
                         // input accepted, but not shifted (I guess)
                         return $expected;
-                    } else {
-                        $yyact = $nextstate;
                     }
+                    $yyact = $nextstate;
                 } while (true);
             }
             break;
@@ -505,10 +479,10 @@ public static $yy_action = array(
         return array_unique($expected);
     }
 
-    public function yy_is_expected_token($token)
+    public function yy_is_expected_token($token): bool
     {
-        static $res = array();
-        static $res2 = array();
+        static $res = [];
+        static $res2 = [];
         if ($token === 0) {
             return true; // 0 is not part of this
         }
@@ -563,7 +537,8 @@ public static $yy_action = array(
                         $x->major = self::$yyRuleInfo[$yyruleno][0];
                         $this->yystack[$this->yyidx] = $x;
                         continue 2;
-                    } elseif ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
+                    }
+                    if ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
                         if (!$token) {
@@ -574,14 +549,14 @@ public static $yy_action = array(
                         // by ignoring input, this is in essence ignoring a
                         // syntax error!
                         return false;
-                    } elseif ($nextstate === self::YY_NO_ACTION) {
+                    }
+                    if ($nextstate === self::YY_NO_ACTION) {
                         $this->yyidx = $yyidx;
                         $this->yystack = $stack;
                         // input accepted, but not shifted (I guess)
                         return true;
-                    } else {
-                        $yyact = $nextstate;
                     }
+                    $yyact = $nextstate;
                 } while (true);
             }
             break;
@@ -623,9 +598,8 @@ public static $yy_action = array(
             }
 
             return self::$yy_default[$stateno];
-        } else {
-            return self::$yy_action[$i];
         }
+        return self::$yy_action[$i];
     }
 
     public function yy_find_reduce_action($stateno, $iLookAhead)
@@ -646,12 +620,11 @@ public static $yy_action = array(
         if ($i < 0 || $i >= self::YY_SZ_ACTTAB ||
               self::$yy_lookahead[$i] != $iLookAhead) {
             return self::$yy_default[$stateno];
-        } else {
-            return self::$yy_action[$i];
         }
+        return self::$yy_action[$i];
     }
 
-    public function yy_shift($yyNewState, $yyMajor, $yypMinor)
+    public function yy_shift($yyNewState, $yyMajor, $yypMinor): void
     {
         $this->yyidx++;
         if ($this->yyidx >= self::YYSTACKDEPTH) {
@@ -686,32 +659,32 @@ public static $yy_action = array(
         }
     }
 
-    public static $yyRuleInfo = array(
-  array( 0 => 20, 1 => 2 ),
-  array( 0 => 21, 1 => 1 ),
-  array( 0 => 22, 1 => 2 ),
-  array( 0 => 22, 1 => 0 ),
-  array( 0 => 24, 1 => 5 ),
-  array( 0 => 24, 1 => 6 ),
-  array( 0 => 23, 1 => 2 ),
-  array( 0 => 23, 1 => 2 ),
-  array( 0 => 23, 1 => 0 ),
-  array( 0 => 26, 1 => 3 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 3 ),
-  array( 0 => 27, 1 => 2 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 27, 1 => 1 ),
-  array( 0 => 25, 1 => 1 ),
-  array( 0 => 25, 1 => 2 ),
-  array( 0 => 25, 1 => 3 ),
-    );
+    public static $yyRuleInfo = [
+  [ 0 => 20, 1 => 2 ],
+  [ 0 => 21, 1 => 1 ],
+  [ 0 => 22, 1 => 2 ],
+  [ 0 => 22, 1 => 0 ],
+  [ 0 => 24, 1 => 5 ],
+  [ 0 => 24, 1 => 6 ],
+  [ 0 => 23, 1 => 2 ],
+  [ 0 => 23, 1 => 2 ],
+  [ 0 => 23, 1 => 0 ],
+  [ 0 => 26, 1 => 3 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 3 ],
+  [ 0 => 27, 1 => 2 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 27, 1 => 1 ],
+  [ 0 => 25, 1 => 1 ],
+  [ 0 => 25, 1 => 2 ],
+  [ 0 => 25, 1 => 3 ],
+    ];
 
-    public static $yyReduceMap = array(
+    public static $yyReduceMap = [
         0 => 0,
         2 => 0,
         3 => 0,
@@ -734,80 +707,80 @@ public static $yy_action = array(
         16 => 16,
         17 => 17,
         18 => 17,
-    );
+    ];
 // line 251 "src/Parser/ConfigfileParser.y"
-    public function yy_r0(){
+    public function yy_r0(): void{
     $this->_retvalue = null;
     }
 // line 256 "src/Parser/ConfigfileParser.y"
-    public function yy_r1(){
+    public function yy_r1(): void{
     $this->add_global_vars($this->yystack[$this->yyidx + 0]->minor);
     $this->_retvalue = null;
     }
 // line 270 "src/Parser/ConfigfileParser.y"
-    public function yy_r4(){
+    public function yy_r4(): void{
     $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
     $this->_retvalue = null;
     }
 // line 275 "src/Parser/ConfigfileParser.y"
-    public function yy_r5(){
+    public function yy_r5(): void{
     if ($this->configReadHidden) {
         $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
     $this->_retvalue = null;
     }
 // line 283 "src/Parser/ConfigfileParser.y"
-    public function yy_r6(){
+    public function yy_r6(): void{
     $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
 // line 287 "src/Parser/ConfigfileParser.y"
-    public function yy_r7(){
-    $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor, array($this->yystack[$this->yyidx + 0]->minor));
+    public function yy_r7(): void{
+    $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor, [$this->yystack[$this->yyidx + 0]->minor]);
     }
 // line 291 "src/Parser/ConfigfileParser.y"
-    public function yy_r8(){
-    $this->_retvalue = array();
+    public function yy_r8(): void{
+    $this->_retvalue = [];
     }
 // line 297 "src/Parser/ConfigfileParser.y"
-    public function yy_r9(){
-    $this->_retvalue = array('key' => $this->yystack[$this->yyidx + -2]->minor, 'value' => $this->yystack[$this->yyidx + 0]->minor);
+    public function yy_r9(): void{
+    $this->_retvalue = ['key' => $this->yystack[$this->yyidx + -2]->minor, 'value' => $this->yystack[$this->yyidx + 0]->minor];
     }
 // line 302 "src/Parser/ConfigfileParser.y"
-    public function yy_r10(){
+    public function yy_r10(): void{
     $this->_retvalue = (float) $this->yystack[$this->yyidx + 0]->minor;
     }
 // line 306 "src/Parser/ConfigfileParser.y"
-    public function yy_r11(){
+    public function yy_r11(): void{
     $this->_retvalue = (int) $this->yystack[$this->yyidx + 0]->minor;
     }
 // line 310 "src/Parser/ConfigfileParser.y"
-    public function yy_r12(){
+    public function yy_r12(): void{
     $this->_retvalue = $this->parse_bool($this->yystack[$this->yyidx + 0]->minor);
     }
 // line 314 "src/Parser/ConfigfileParser.y"
-    public function yy_r13(){
+    public function yy_r13(): void{
     $this->_retvalue = self::parse_single_quoted_string($this->yystack[$this->yyidx + 0]->minor);
     }
 // line 318 "src/Parser/ConfigfileParser.y"
-    public function yy_r14(){
+    public function yy_r14(): void{
     $this->_retvalue = self::parse_double_quoted_string($this->yystack[$this->yyidx + 0]->minor);
     }
 // line 322 "src/Parser/ConfigfileParser.y"
-    public function yy_r15(){
+    public function yy_r15(): void{
     $this->_retvalue = self::parse_tripple_double_quoted_string($this->yystack[$this->yyidx + -1]->minor);
     }
 // line 326 "src/Parser/ConfigfileParser.y"
-    public function yy_r16(){
+    public function yy_r16(): void{
     $this->_retvalue = '';
     }
 // line 330 "src/Parser/ConfigfileParser.y"
-    public function yy_r17(){
+    public function yy_r17(): void{
     $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
 
     private $_retvalue;
 
-    public function yy_reduce($yyruleno)
+    public function yy_reduce($yyruleno): void
     {
         if ($this->yyTraceFILE && $yyruleno >= 0
               && $yyruleno < count(self::$yyRuleName)) {
@@ -847,7 +820,7 @@ public static $yy_action = array(
         }
     }
 
-    public function yy_parse_failed()
+    public function yy_parse_failed(): void
     {
         if ($this->yyTraceFILE) {
             fprintf($this->yyTraceFILE, "%sFail!\n", $this->yyTracePrompt);
@@ -856,7 +829,7 @@ public static $yy_action = array(
         }
     }
 
-    public function yy_syntax_error($yymajor, $TOKEN)
+    public function yy_syntax_error($yymajor, $TOKEN): void
     {
 // line 238 "src/Parser/ConfigfileParser.y"
 
@@ -865,7 +838,7 @@ public static $yy_action = array(
     $this->compiler->trigger_config_file_error();
     }
 
-    public function yy_accept()
+    public function yy_accept(): void
     {
         if ($this->yyTraceFILE) {
             fprintf($this->yyTraceFILE, "%sAccept!\n", $this->yyTracePrompt);
@@ -879,7 +852,7 @@ public static $yy_action = array(
     $this->retvalue = $this->_retvalue;
     }
 
-    public function doParse($yymajor, $yytokenvalue)
+    public function doParse($yymajor, $yytokenvalue): void
     {
         $yyerrorhit = 0;   /* True if yymajor has invoked an error */
 
@@ -889,7 +862,7 @@ public static $yy_action = array(
             $x = (object) ['stateno' => null, 'major' => null, 'minor' => null];
             $x->stateno = 0;
             $x->major = 0;
-            $this->yystack = array();
+            $this->yystack = [];
             $this->yystack[] = $x;
         }
         $yyendofinput = ($yymajor==0);
@@ -931,7 +904,7 @@ public static $yy_action = array(
                             fprintf($this->yyTraceFILE, "%sDiscard input token %s\n",
                                 $this->yyTracePrompt, $this->yyTokenName[$yymajor]);
                         }
-                        $this->yy_destructor($yymajor, $yytokenvalue);
+                        static::yy_destructor($yymajor, $yytokenvalue);
                         $yymajor = self::YYNOCODE;
                     } else {
                         while ($this->yyidx >= 0 &&
@@ -941,7 +914,7 @@ public static $yy_action = array(
                             $this->yy_pop_parser_stack();
                         }
                         if ($this->yyidx < 0 || $yymajor==0) {
-                            $this->yy_destructor($yymajor, $yytokenvalue);
+                            static::yy_destructor($yymajor, $yytokenvalue);
                             $this->yy_parse_failed();
                             $yymajor = self::YYNOCODE;
                         } elseif ($yymx !== self::YYERRORSYMBOL) {
@@ -956,7 +929,7 @@ public static $yy_action = array(
                         $this->yy_syntax_error($yymajor, $yytokenvalue);
                     }
                     $this->yyerrcnt = 3;
-                    $this->yy_destructor($yymajor, $yytokenvalue);
+                    static::yy_destructor($yymajor, $yytokenvalue);
                     if ($yyendofinput) {
                         $this->yy_parse_failed();
                     }

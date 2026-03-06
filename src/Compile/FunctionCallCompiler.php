@@ -75,7 +75,7 @@ class FunctionCallCompiler extends Base {
 		}
 
 		if (!empty($parameter['modifierlist'])) {
-			$output = $compiler->compileModifier($parameter['modifierlist'], $output);
+			return $compiler->compileModifier($parameter['modifierlist'], $output);
 		}
 
 		return $output;

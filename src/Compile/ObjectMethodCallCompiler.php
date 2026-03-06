@@ -69,8 +69,7 @@ class ObjectMethodCallCompiler extends Base {
 		}
 		if (empty($_assign)) {
 			return "<?php echo {$output};?>\n";
-		} else {
-			return "<?php \$_smarty_tpl->assign({$_assign},{$output});?>\n";
 		}
+        return "<?php \$_smarty_tpl->assign({$_assign},{$output});?>\n";
 	}
 }

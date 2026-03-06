@@ -31,38 +31,38 @@ class Template extends TemplateBase {
 	/**
 	 * @var Compiled
 	 */
-	private $compiled = null;
+	private $compiled;
 
 	/**
 	 * @var Cached
 	 */
-	private $cached = null;
+	private $cached;
 
 	/**
 	 * @var \Smarty\Compiler\Template
 	 */
-	private $compiler = null;
+	private $compiler;
 
 	/**
 	 * Source instance
 	 *
 	 * @var Source|Config
 	 */
-	private $source = null;
+	private $source;
 
 	/**
 	 * Template resource
 	 *
 	 * @var string
 	 */
-	public $template_resource = null;
+	public $template_resource;
 
 	/**
 	 * Template ID
 	 *
 	 * @var null|string
 	 */
-	public $templateId = null;
+	public $templateId;
 
 	/**
 	 * Callbacks called before rendering template
@@ -83,14 +83,14 @@ class Template extends TemplateBase {
 	 *
 	 * @var string
 	 */
-	private $left_delimiter = null;
+	private $left_delimiter;
 
 	/**
 	 * Template right-delimiter. If null, defaults to $this->getSmarty()-getRightDelimiter().
 	 *
 	 * @var string
 	 */
-	private $right_delimiter = null;
+	private $right_delimiter;
 
 	/**
 	 * @var InheritanceRuntime|null
@@ -123,9 +123,9 @@ class Template extends TemplateBase {
 	) {
 		$this->smarty = $smarty;
 		// Smarty parameter
-		$this->cache_id = $_cache_id === null ? $this->smarty->cache_id : $_cache_id;
-		$this->compile_id = $_compile_id === null ? $this->smarty->compile_id : $_compile_id;
-		$this->caching = (int)($_caching === null ? $this->smarty->caching : $_caching);
+		$this->cache_id = $_cache_id ?? $this->smarty->cache_id;
+		$this->compile_id = $_compile_id ?? $this->smarty->compile_id;
+		$this->caching = (int)($_caching ?? $this->smarty->caching);
 		$this->cache_lifetime = $this->smarty->cache_lifetime;
 		$this->compile_check = (int)$smarty->compile_check;
 		$this->parent = $_parent;
@@ -150,7 +150,7 @@ class Template extends TemplateBase {
 	 * @throws \Exception
 	 * @throws \Smarty\Exception
 	 */
-	private function render($no_output_filter = true, $display = null) {
+	private function render(bool $no_output_filter = true, $display = null) {
 		if ($this->smarty->debugging) {
 			$this->smarty->getDebug()->start_template($this, $display);
 		}
@@ -192,7 +192,7 @@ class Template extends TemplateBase {
 				$this->smarty->cacheModifiedCheck(
 					$this->getCached(),
 					$this,
-					isset($content) ? $content : ob_get_clean()
+					$content ?? ob_get_clean()
 				);
 			} else {
 				if ((!$this->caching || $this->getCached()->getNocacheCode() || $this->getSource()->handler->recompiled)
@@ -209,39 +209,37 @@ class Template extends TemplateBase {
 				$this->smarty->getDebug()->display_debug($this, true);
 			}
 			return '';
-		} else {
-			if ($this->smarty->debugging) {
+		}
+        if ($this->smarty->debugging) {
 				$this->smarty->getDebug()->end_template($this);
 				if ($this->smarty->debugging === 2 && $display === false) {
 					$this->smarty->getDebug()->display_debug($this, true);
 				}
 			}
-			if (
+        if (
 				!$no_output_filter
 				&& (!$this->caching || $this->getCached()->getNocacheCode() || $this->getSource()->handler->recompiled)
 			) {
 
 				return $this->smarty->runOutputFilters(ob_get_clean(), $this);
 			}
-			// return cache content
-			return null;
-		}
+        // return cache content
+        return null;
 	}
 
 	/**
-	 * Runtime function to render sub-template
-	 *
-	 * @param string $template_name template name
-	 * @param mixed $cache_id cache id
-	 * @param mixed $compile_id compile id
-	 * @param integer $caching cache mode
-	 * @param integer $cache_lifetime lifetime of cache data
-	 * @param array $extra_vars passed parameter template variables
-	 * @param int|null $scope
-	 *
-	 * @throws Exception
-	 */
-	public function renderSubTemplate(
+     * Runtime function to render sub-template
+     *
+     * @param string $template_name template name
+     * @param mixed $cache_id cache id
+     * @param mixed $compile_id compile id
+     * @param integer $caching cache mode
+     * @param integer $cache_lifetime lifetime of cache data
+     * @param array $extra_vars passed parameter template variables
+     *
+     * @throws Exception
+     */
+    public function renderSubTemplate(
 		$template_name,
 		$cache_id,
 		$compile_id,
@@ -250,7 +248,7 @@ class Template extends TemplateBase {
 		array $extra_vars = [],
 		?int $scope = null,
 		?string $currentDir = null
-	) {
+	): void {
 
 		$name = $this->parseResourceName($template_name);
 		if ($currentDir && preg_match('/^\.{1,2}\//', $name)) {
@@ -288,16 +286,14 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Remove type indicator from resource name if present.
-	 * E.g. $this->parseResourceName('file:template.tpl') returns 'template.tpl'
-	 *
-	 * @note "C:/foo.tpl" was forced to file resource up till Smarty 3.1.3 (including).
-	 *
-	 * @param string $resource_name    template_resource or config_resource to parse
-	 *
-	 * @return string
-	 */
-	private function parseResourceName($resource_name): string {
+     * Remove type indicator from resource name if present.
+     * E.g. $this->parseResourceName('file:template.tpl') returns 'template.tpl'
+     *
+     * @note "C:/foo.tpl" was forced to file resource up till Smarty 3.1.3 (including).
+     *
+     * @param string $resource_name    template_resource or config_resource to parse
+     */
+    private function parseResourceName($resource_name): string {
 		if (preg_match('/^([A-Za-z0-9_\-]{2,}):/', $resource_name, $match)) {
 			return substr($resource_name, strlen($match[0]));
 		}
@@ -309,7 +305,7 @@ class Template extends TemplateBase {
 	 *
 	 * @return bool true is sub template
 	 */
-	public function _isSubTpl() {
+	public function _isSubTpl(): bool {
 		return isset($this->parent) && $this->parent instanceof Template;
 	}
 
@@ -418,12 +414,11 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Helper function for InheritanceRuntime object
-	 *
-	 * @return InheritanceRuntime
-	 * @throws Exception
-	 */
-	public function getInheritance(): InheritanceRuntime {
+     * Helper function for InheritanceRuntime object
+     *
+     * @throws Exception
+     */
+    public function getInheritance(): InheritanceRuntime {
 		if (is_null($this->inheritance)) {
 			$this->inheritance = clone $this->getSmarty()->getRuntime('Inheritance');
 		}
@@ -431,13 +426,11 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Sets a new InheritanceRuntime object.
-	 *
-	 * @param InheritanceRuntime $inheritanceRuntime
-	 *
-	 * @return void
-	 */
-	public function setInheritance(InheritanceRuntime $inheritanceRuntime) {
+     * Sets a new InheritanceRuntime object.
+     *
+     *
+     */
+    public function setInheritance(InheritanceRuntime $inheritanceRuntime): void {
 		$this->inheritance = $inheritanceRuntime;
 	}
 
@@ -452,17 +445,16 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Create code frame for compiled and cached templates
-	 *
-	 * @param string $content optional template content
-	 * @param string $functions compiled template function and block code
-	 * @param bool $cache flag for cache file
-	 * @param Compiler\Template|null $compiler
-	 *
-	 * @return string
-	 * @throws Exception
-	 */
-	public function createCodeFrame($content = '', $functions = '', $cache = false, ?\Smarty\Compiler\Template $compiler = null) {
+     * Create code frame for compiled and cached templates
+     *
+     * @param string $content optional template content
+     * @param string $functions compiled template function and block code
+     * @param bool $cache flag for cache file
+     *
+     * @return string
+     * @throws Exception
+     */
+    public function createCodeFrame(string $content = '', string $functions = '', $cache = false, ?\Smarty\Compiler\Template $compiler = null) {
 		return $this->getCodeFrameCompiler()->create($content, $functions, $cache, $compiler);
 	}
 
@@ -476,14 +468,13 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Returns if the current template must be compiled by the Smarty compiler
-	 * It does compare the timestamps of template source and the compiled templates and checks the force compile
-	 * configuration
-	 *
-	 * @return bool
-	 * @throws \Smarty\Exception
-	 */
-	public function mustCompile(): bool {
+     * Returns if the current template must be compiled by the Smarty compiler
+     * It does compare the timestamps of template source and the compiled templates and checks the force compile
+     * configuration
+     *
+     * @throws \Smarty\Exception
+     */
+    public function mustCompile(): bool {
 		if (!$this->getSource()->exists) {
 			if ($this->_isSubTpl()) {
 				$parent_resource = " in '{$this->parent->template_resource}'";
@@ -519,7 +510,7 @@ class Template extends TemplateBase {
 	 *
 	 * @param string $left_delimiter
 	 */
-	public function setLeftDelimiter($left_delimiter)
+	public function setLeftDelimiter($left_delimiter): void
 	{
 		$this->left_delimiter = $left_delimiter;
 	}
@@ -539,21 +530,20 @@ class Template extends TemplateBase {
 	 *
 	 * @param string
 	 */
-	public function setRightDelimiter($right_delimiter)
+	public function setRightDelimiter($right_delimiter): void
 	{
 		$this->right_delimiter = $right_delimiter;
 	}
 
 	/**
-	 * gets  a stream variable
-	 *
-	 * @param string                                                  $variable the stream of the variable
-	 *
-	 * @return mixed
-	 * @throws \Smarty\Exception
-	 *
-	 */
-	public function getStreamVariable($variable)
+     * gets  a stream variable
+     *
+     * @param string                                                  $variable the stream of the variable
+     *
+     * @throws \Smarty\Exception
+     *
+     */
+    public function getStreamVariable(string $variable): ?string
 	{
 
 		trigger_error("Using stream variables (\`\{\$foo:bar\}\`)is deprecated.", E_USER_DEPRECATED);
@@ -580,17 +570,17 @@ class Template extends TemplateBase {
 		$confObj = parent::configLoad($config_file, $sections);
 
 		$this->getCompiled()->file_dependency[ $confObj->getSource()->uid ] =
-			array($confObj->getSource()->getResourceName(), $confObj->getSource()->getTimeStamp(), $confObj->getSource()->type);
+			[$confObj->getSource()->getResourceName(), $confObj->getSource()->getTimeStamp(), $confObj->getSource()->type];
 
 		return $confObj;
 	}
 
 	public function fetch() {
 		$result = $this->_execute(0);
-		return $result === null ? ob_get_clean() : $result;
+		return $result ?? ob_get_clean();
 	}
 
-	public function display() {
+	public function display(): void {
 		$this->_execute(1);
 	}
 
@@ -620,7 +610,7 @@ class Template extends TemplateBase {
 	 * @throws Exception
 	 * @throws \Throwable
 	 */
-	private function _execute($function) {
+	private function _execute(int $function) {
 
 		$smarty = $this->getSmarty();
 
@@ -696,13 +686,11 @@ class Template extends TemplateBase {
 	}
 
 	/**
-	 * Sets the Cached object, so subtemplates can share one Cached object to gather meta-data.
-	 *
-	 * @param Cached $cached
-	 *
-	 * @return void
-	 */
-	private function setCached(Cached $cached) {
+     * Sets the Cached object, so subtemplates can share one Cached object to gather meta-data.
+     *
+     *
+     */
+    private function setCached(Cached $cached): void {
 		$this->cached = $cached;
 	}
 
@@ -711,7 +699,7 @@ class Template extends TemplateBase {
 	 *
 	 * @throws Exception
 	 */
-	public function setCompileId($compile_id) {
+	public function setCompileId($compile_id): void {
 		parent::setCompileId($compile_id);
 		$this->getCompiled(true);
 		if ($this->caching) {
@@ -724,7 +712,7 @@ class Template extends TemplateBase {
 	 *
 	 * @throws Exception
 	 */
-	public function setCacheId($cache_id) {
+	public function setCacheId($cache_id): void {
 		parent::setCacheId($cache_id);
 		$this->getCached(true);
 	}

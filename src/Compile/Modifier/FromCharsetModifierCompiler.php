@@ -11,7 +11,7 @@ namespace Smarty\Compile\Modifier;
 
 class FromCharsetModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		if (!isset($params[ 1 ])) {
 			$params[ 1 ] = '"ISO-8859-1"';
 		}

@@ -50,7 +50,7 @@ abstract class CustomPlugin extends BasePlugin {
 	 * @param Source $source source object
 	 * @param Template|null $_template template object
 	 */
-	public function populate(Source $source, ?Template $_template = null) {
+	public function populate(Source $source, ?Template $_template = null): void {
 		$source->uid = sha1($source->type . ':' . $source->name);
 		$mtime = $this->fetchTimestamp($source->name);
 		if ($mtime !== null) {
@@ -58,9 +58,7 @@ abstract class CustomPlugin extends BasePlugin {
 		} else {
 			$this->fetch($source->name, $content, $timestamp);
 			$source->timestamp = $timestamp ?? false;
-			if (isset($content)) {
-				$source->content = $content;
-			}
+			$source->content = $content;
 		}
 		$source->exists = !!$source->timestamp;
 	}
@@ -75,10 +73,7 @@ abstract class CustomPlugin extends BasePlugin {
 	 */
 	public function getContent(Source $source) {
 		$this->fetch($source->name, $content, $timestamp);
-		if (isset($content)) {
-			return $content;
-		}
-		throw new Exception("Unable to read template {$source->type} '{$source->name}'");
+        return $content;
 	}
 
 	/**
@@ -93,13 +88,11 @@ abstract class CustomPlugin extends BasePlugin {
 	}
 
 	/**
-	 * Removes special characters from $name and limits its length to 127 characters.
-	 *
-	 * @param $name
-	 *
-	 * @return string
-	 */
-	private function generateSafeName($name): string {
+     * Removes special characters from $name and limits its length to 127 characters.
+     *
+     * @param $name
+     */
+    private function generateSafeName($name): string {
 		return substr(preg_replace('/[^A-Za-z0-9._]/', '', (string)$name), 0, 127);
 	}
 }

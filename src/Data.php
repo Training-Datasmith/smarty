@@ -24,28 +24,28 @@ class Data
 	 *
 	 * @var Smarty
 	 */
-	protected $smarty = null;
+	protected $smarty;
 
     /**
      * template variables
      *
      * @var Variable[]
      */
-    public $tpl_vars = array();
+    public $tpl_vars = [];
 
     /**
      * parent data container (if any)
      *
      * @var Data
      */
-    public $parent = null;
+    public $parent;
 
     /**
      * configuration settings
      *
      * @var string[]
      */
-    public $config_vars = array();
+    public $config_vars = [];
 
 	/**
 	 * This variable will hold a stack of template variables.
@@ -68,15 +68,14 @@ class Data
 	protected $defaultScope = self::SCOPE_LOCAL;
 
 	/**
-	 * create Smarty data object
-	 *
-	 * @param Smarty|array $_parent parent template
-	 * @param Smarty|Template $smarty global smarty instance
-	 * @param string $name optional data block name
-	 *
-	 * @throws Exception
-	 */
-	public function __construct($_parent = null, $smarty = null, $name = null) {
+     * create Smarty data object
+     *
+     * @param Smarty|array $_parent parent template
+     * @param Smarty|Template $smarty global smarty instance
+     *
+     * @throws Exception
+     */
+    public function __construct($_parent = null, $smarty = null) {
 
 		$this->smarty = $smarty;
 		if (is_object($_parent)) {
@@ -103,7 +102,7 @@ class Data
 	 * @return Data current Data (or Smarty or \Smarty\Template) instance for
 	 *                              chaining
 	 */
-    public function assign($tpl_var, $value = null, $nocache = false, $scope = null)
+    public function assign($tpl_var, $value = null, $nocache = false, $scope = null): self
     {
         if (is_array($tpl_var)) {
             foreach ($tpl_var as $_key => $_val) {
@@ -162,10 +161,9 @@ class Data
      * @param bool         $nocache if true any output of this variable will
      *                              be not cached
      *
-     * @return Data
      * @api  Smarty::append()
      */
-	public function append($tpl_var, $value = null, $merge = false, $nocache = false)
+    public function append($tpl_var, $value = null, $merge = false, $nocache = false): self
 	{
 		if (is_array($tpl_var)) {
 			foreach ($tpl_var as $_key => $_val) {
@@ -267,29 +265,25 @@ class Data
 
 		if ($errorEnable && $this->getSmarty()->error_unassigned) {
 			// force a notice
-			$x = $$varName;
+			$x = ${$varName};
 		}
 		return new UndefinedVariable();
 	}
 
 	/**
-	 * Directly sets a complete Variable object in the variable with the given name.
-	 * @param $varName
-	 * @param Variable $variableObject
-	 *
-	 * @return void
-	 */
-	public function setVariable($varName, Variable $variableObject) {
+     * Directly sets a complete Variable object in the variable with the given name.
+     * @param $varName
+     *
+     */
+    public function setVariable($varName, Variable $variableObject): void {
 		$this->tpl_vars[$varName] = $variableObject;
 	}
 
 	/**
-	 * Indicates if given variable has been set.
-	 * @param $varName
-	 *
-	 * @return bool
-	 */
-	public function hasVariable($varName): bool {
+     * Indicates if given variable has been set.
+     * @param $varName
+     */
+    public function hasVariable($varName): bool {
 		return !($this->getVariable($varName, true, false) instanceof UndefinedVariable);
 	}
 
@@ -307,11 +301,9 @@ class Data
 	}
 
 	/**
-	 * load config variables into template object
-	 *
-	 * @param array $new_config_vars
-	 */
-	public function assignConfigVars($new_config_vars, array $sections = []) {
+     * load config variables into template object
+     */
+    public function assignConfigVars(array $new_config_vars, array $sections = []): void {
 
 		// copy global config vars
 		foreach ($new_config_vars['vars'] as $variable => $value) {
@@ -346,15 +338,14 @@ class Data
     }
 
 	/**
-	 * clear the given assigned template variable(s).
-	 *
-	 * @param string|array $tpl_var the template variable(s) to clear
-	 *
-	 * @return Data
-	 *
-	 * @api  Smarty::clearAssign()
-	 */
-	public function clearAssign($tpl_var)
+     * clear the given assigned template variable(s).
+     *
+     * @param string|array $tpl_var the template variable(s) to clear
+     *
+     *
+     * @api  Smarty::clearAssign()
+     */
+    public function clearAssign($tpl_var): self
 	{
 		if (is_array($tpl_var)) {
 			foreach ($tpl_var as $curr_var) {
@@ -367,33 +358,31 @@ class Data
 	}
 
 	/**
-	 * clear all the assigned template variables.
-	 *
-	 * @return Data
-	 *
-	 * @api  Smarty::clearAllAssign()
-	 */
-	public function clearAllAssign()
+     * clear all the assigned template variables.
+     *
+     *
+     * @api  Smarty::clearAllAssign()
+     */
+    public function clearAllAssign(): self
 	{
-		$this->tpl_vars = array();
+		$this->tpl_vars = [];
 		return $this;
 	}
 
 	/**
-	 * clear a single or all config variables
-	 *
-	 * @param string|null $name variable name or null
-	 *
-	 * @return Data
-	 *
-	 * @api  Smarty::clearConfig()
-	 */
-	public function clearConfig($name = null)
+     * clear a single or all config variables
+     *
+     * @param string|null $name variable name or null
+     *
+     *
+     * @api  Smarty::clearConfig()
+     */
+    public function clearConfig($name = null): self
 	{
 		if (isset($name)) {
 			unset($this->config_vars[ $name ]);
 		} else {
-			$this->config_vars = array();
+			$this->config_vars = [];
 		}
 		return $this;
 	}
@@ -461,7 +450,7 @@ class Data
 	 *
 	 * @api  Smarty::configLoad()
 	 */
-	public function configLoad($config_file, $sections = null)
+	public function configLoad($config_file, $sections = null): self
 	{
 		$template = $this->getSmarty()->doCreateTemplate($config_file, null, null, $this, null, null, true);
 		$template->caching = Smarty::CACHING_OFF;
@@ -472,20 +461,18 @@ class Data
 	}
 
 	/**
-	 * Sets the default scope for new variables assigned in this template.
-	 * @param int $scope
-	 *
-	 * @return void
-	 */
-	protected function setDefaultScope(int $scope) {
+     * Sets the default scope for new variables assigned in this template.
+     *
+     * @return void
+     */
+    protected function setDefaultScope(int $scope) {
 		$this->defaultScope = $scope;
 	}
 
 	/**
-	 * Returns the default scope for new variables assigned in this template.
-	 * @return int
-	 */
-	public function getDefaultScope(): int {
+     * Returns the default scope for new variables assigned in this template.
+     */
+    public function getDefaultScope(): int {
 		return $this->defaultScope;
 	}
 

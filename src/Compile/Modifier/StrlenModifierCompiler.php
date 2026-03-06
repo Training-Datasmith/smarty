@@ -11,7 +11,7 @@ namespace Smarty\Compile\Modifier;
 
 class StrlenModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		return 'strlen((string) ' . $params[0] . ')';
 	}
 

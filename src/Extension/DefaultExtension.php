@@ -52,7 +52,7 @@ class DefaultExtension extends Base {
 		return $this->modifiers[$modifier] ?? null;
 	}
 
-	public function getModifierCallback(string $modifierName) {
+	public function getModifierCallback(string $modifierName): ?array {
 		switch ($modifierName) {
 			case 'capitalize': return [$this, 'smarty_modifier_capitalize'];
 			case 'count': return [$this, 'smarty_modifier_count'];
@@ -109,19 +109,17 @@ class DefaultExtension extends Base {
 	}
 
 	/**
-	 * Smarty spacify modifier plugin
-	 * Type:     modifier
-	 * Name:     spacify
-	 * Purpose:  add spaces between characters in a string
-	 *
-	 * @author Monte Ohrt <monte at ohrt dot com>
-	 *
-	 * @param string $string       input string
-	 * @param string $spacify_char string to insert between characters.
-	 *
-	 * @return string
-	 */
-	public function smarty_modifier_spacify($string, $spacify_char = ' ')
+     * Smarty spacify modifier plugin
+     * Type:     modifier
+     * Name:     spacify
+     * Purpose:  add spaces between characters in a string
+     *
+     * @author Monte Ohrt <monte at ohrt dot com>
+     *
+     * @param string $string       input string
+     * @param string $spacify_char string to insert between characters.
+     */
+    public function smarty_modifier_spacify($string, $spacify_char = ' '): string
 	{
 		// well… what about charsets besides latin and UTF-8?
 		return implode($spacify_char, preg_split('//' . \Smarty\Smarty::$_UTF8_MODIFIER, $string, -1, PREG_SPLIT_NO_EMPTY));
@@ -142,7 +140,7 @@ class DefaultExtension extends Base {
 	 * @author Monte Ohrt <monte at ohrt dot com>
 	 * @author Rodney Rehm
 	 */
-	public function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false)
+	public function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false): ?string
 	{
 		$string = (string) $string;
 
@@ -153,7 +151,7 @@ class DefaultExtension extends Base {
 			// uppercase word breaks
 			$upper_string = preg_replace_callback(
 				"!(^|[^\p{L}'])([\p{Ll}])!S" . \Smarty\Smarty::$_UTF8_MODIFIER,
-				function ($matches)	{
+				function ($matches): string	{
 					return stripslashes($matches[1]) .
 						mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, \Smarty\Smarty::$_CHARSET);
 				},
@@ -180,10 +178,9 @@ class DefaultExtension extends Base {
 				}
 			}
 		}
-		$upper_string =
-			preg_replace_callback(
+		return preg_replace_callback(
 				"!((^|\s)['\"])(\w)!" . \Smarty\Smarty::$_UTF8_MODIFIER,
-				function ($matches) {
+				function ($matches): string {
 					return stripslashes(
 						$matches[ 1 ]) . mb_convert_case(stripslashes($matches[ 3 ]),
 						MB_CASE_UPPER,
@@ -192,35 +189,38 @@ class DefaultExtension extends Base {
 				},
 				$upper_string
 			);
-		return $upper_string;
 	}
 
 	/**
-	 * Smarty count modifier plugin
-	 * Type:     modifier
-	 * Name:     count
-	 * Purpose:  counts all elements in an array or in a Countable object
-	 * Input:
-	 *          - Countable|array: array or object to count
-	 *          - mode: int defaults to 0 for normal count mode, if set to 1 counts recursive
-	 *
-	 * @param mixed $arrayOrObject  input array/object
-	 * @param int $mode       count mode
-	 *
-	 * @return int
-	 */
-	public function smarty_modifier_count($arrayOrObject, $mode = 0) {
+     * Smarty count modifier plugin
+     * Type:     modifier
+     * Name:     count
+     * Purpose:  counts all elements in an array or in a Countable object
+     * Input:
+     *          - Countable|array: array or object to count
+     *          - mode: int defaults to 0 for normal count mode, if set to 1 counts recursive
+     *
+     * @param mixed $arrayOrObject  input array/object
+     * @param int $mode       count mode
+     */
+    public function smarty_modifier_count($arrayOrObject, $mode = 0): int {
 		/*
+         * @see https://www.php.net/count
+         * > Prior to PHP 8.0.0, if the parameter was neither an array nor an object that implements the Countable interface,
+         * > 1 would be returned, unless value was null, in which case 0 would be returned.
+         */
+        if ($arrayOrObject instanceof \Countable || is_array($arrayOrObject)) {
+            return count($arrayOrObject, (int) $mode);
+        }
+        /*
 		 * @see https://www.php.net/count
 		 * > Prior to PHP 8.0.0, if the parameter was neither an array nor an object that implements the Countable interface,
 		 * > 1 would be returned, unless value was null, in which case 0 would be returned.
 		 */
 
-		if ($arrayOrObject instanceof \Countable || is_array($arrayOrObject)) {
-			return count($arrayOrObject, (int) $mode);
-		} elseif ($arrayOrObject === null) {
-			return 0;
-		}
+		if ($arrayOrObject === null) {
+            return 0;
+        }
 		return 1;
 	}
 
@@ -259,7 +259,7 @@ class DefaultExtension extends Base {
 		}
 		if ($formatter === 'strftime' || ($formatter === 'auto' && strpos($format, '%') !== false)) {
 			if (\Smarty\Smarty::$_IS_WINDOWS) {
-				$_win_from = array(
+				$_win_from = [
 					'%D',
 					'%h',
 					'%n',
@@ -267,8 +267,8 @@ class DefaultExtension extends Base {
 					'%R',
 					'%t',
 					'%T'
-				);
-				$_win_to = array(
+				];
+				$_win_to = [
 					'%m/%d/%y',
 					'%b',
 					"\n",
@@ -276,7 +276,7 @@ class DefaultExtension extends Base {
 					'%H:%M',
 					"\t",
 					'%H:%M:%S'
-				);
+				];
 				if (strpos($format, '%e') !== false) {
 					$_win_from[] = '%e';
 					$_win_to[] = sprintf('%\' 2d', date('j', $timestamp));
@@ -289,30 +289,27 @@ class DefaultExtension extends Base {
 			}
 			// @ to suppress deprecation errors when running in PHP8.1 or higher.
 			return @strftime($format, $timestamp);
-		} else {
-			return date($format, $timestamp);
 		}
+        return date($format, $timestamp);
 	}
 
 	/**
-	 * Smarty debug_print_var modifier plugin
-	 * Type:     modifier
-	 * Name:     debug_print_var
-	 * Purpose:  formats variable contents for display in the console
-	 *
-	 * @author Monte Ohrt <monte at ohrt dot com>
-	 *
-	 * @param array|object $var     variable to be formatted
-	 * @param int          $max     maximum recursion depth if $var is an array or object
-	 * @param int          $length  maximum string length if $var is a string
-	 * @param int          $depth   actual recursion depth
-	 * @param array        $objects processed objects in actual depth to prevent recursive object processing
-	 *
-	 * @return string
-	 */
-	public function smarty_modifier_debug_print_var($var, $max = 10, $length = 40, $depth = 0, $objects = array())
+     * Smarty debug_print_var modifier plugin
+     * Type:     modifier
+     * Name:     debug_print_var
+     * Purpose:  formats variable contents for display in the console
+     *
+     * @author Monte Ohrt <monte at ohrt dot com>
+     *
+     * @param array|object $var     variable to be formatted
+     * @param int          $max     maximum recursion depth if $var is an array or object
+     * @param int          $length  maximum string length if $var is a string
+     * @param int          $depth   actual recursion depth
+     * @param array        $objects processed objects in actual depth to prevent recursive object processing
+     */
+    public function smarty_modifier_debug_print_var($var, $max = 10, $length = 40, $depth = 0, $objects = []): string
 	{
-		$_replace = array("\n" => '\n', "\r" => '\r', "\t" => '\t');
+		$_replace = ["\n" => '\n', "\r" => '\r', "\t" => '\t'];
 		switch (gettype($var)) {
 			case 'array':
 				$results = '<b>Array (' . count($var) . ')</b>';
@@ -442,7 +439,7 @@ class DefaultExtension extends Base {
 				// escape quotes and backslashes, newlines, etc.
 				return strtr(
 					$string,
-					array(
+					[
 						'\\' => '\\\\',
 						"'"  => "\\'",
 						'"'  => '\\"',
@@ -455,18 +452,18 @@ class DefaultExtension extends Base {
 						'<S'   => '<\S',
 						"`" => "\\\\`",
 						"\${" => "\\\\\\$\\{"
-					)
+					]
 				);
 			case 'mail':
 				return smarty_mb_str_replace(
-					array(
+					[
 						'@',
 						'.'
-					),
-					array(
+					],
+					[
 						' [AT] ',
 						' [DOT] '
-					),
+					],
 					$string
 				);
 			case 'nonstd':
@@ -498,7 +495,7 @@ class DefaultExtension extends Base {
 	 * @return array sequence of unicodes
 	 * @author Rodney Rehm
 	 */
-	private function mb_to_unicode($string, $encoding = null) {
+	private function mb_to_unicode(string $string, $encoding = null) {
 		if ($encoding) {
 			$expanded = mb_convert_encoding($string, 'UTF-32BE', $encoding);
 		} else {
@@ -508,18 +505,16 @@ class DefaultExtension extends Base {
 	}
 
 	/**
-	 * Smarty explode modifier plugin
-	 * Type:     modifier
-	 * Name:     explode
-	 * Purpose:  split a string by a string
-	 *
-	 * @param string   $separator
-	 * @param string   $string
-	 * @param int|null $limit
-	 *
-	 * @return array
-	 */
-	public function smarty_modifier_explode($separator, $string, ?int $limit = null)
+     * Smarty explode modifier plugin
+     * Type:     modifier
+     * Name:     explode
+     * Purpose:  split a string by a string
+     *
+     * @param string   $separator
+     * @param string   $string
+     *
+     */
+    public function smarty_modifier_explode($separator, $string, ?int $limit = null): array
 	{
 		trigger_error("Using explode is deprecated. " .
 			"Use split, using the array first, separator second.", E_USER_DEPRECATED);
@@ -528,80 +523,72 @@ class DefaultExtension extends Base {
 	}
 
 	/**
-	 * Smarty split modifier plugin
-	 * Type:     modifier
-	 * Name:     split
-	 * Purpose:  split a string by a string
-	 *
-	 * @param string $string
-	 * @param string   $separator
-	 * @param int|null $limit
-	 *
-	 * @return array
-	 */
-	public function smarty_modifier_split($string, $separator, ?int $limit = null)
+     * Smarty split modifier plugin
+     * Type:     modifier
+     * Name:     split
+     * Purpose:  split a string by a string
+     *
+     * @param string $string
+     * @param string   $separator
+     *
+     */
+    public function smarty_modifier_split($string, $separator, ?int $limit = null): array
 	{
 		// provide $string default to prevent deprecation errors in PHP >=8.1
 		return explode($separator, $string ?? '', $limit ?? PHP_INT_MAX);
 	}
 
 	/**
-	 * Smarty implode modifier plugin
-	 * Type:     modifier
-	 * Name:     implode
-	 * Purpose:  join an array of values into a single string
-	 *
-	 * @param array   $values
-	 * @param string   $separator
-	 *
-	 * @return string
-	 */
-	public function smarty_modifier_implode($values, $separator = '')
+     * Smarty implode modifier plugin
+     * Type:     modifier
+     * Name:     implode
+     * Purpose:  join an array of values into a single string
+     *
+     * @param array   $values
+     * @param string   $separator
+     */
+    public function smarty_modifier_implode($values, $separator = ''): string
 	{
 
 		trigger_error("Using implode is deprecated. " .
 			"Use join using the array first, separator second.", E_USER_DEPRECATED);
 
 		if (is_array($separator)) {
-			return implode((string) ($values ?? ''), (array) $separator);
+			return implode((string) ($values ?? ''), $separator);
 		}
 		return implode((string) ($separator ?? ''), (array) $values);
 	}
 
 	/**
-	 * Smarty in_array modifier plugin
-	 * Type:     modifier
-	 * Name:     in_array
-	 * Purpose:  test if value is contained in an array
-	 *
-	 * @param mixed   $needle
-	 * @param array   $array
-	 * @param bool   $strict
-	 *
-	 * @return bool
-	 */
-	public function smarty_modifier_in_array($needle, $array, $strict = false)
+     * Smarty in_array modifier plugin
+     * Type:     modifier
+     * Name:     in_array
+     * Purpose:  test if value is contained in an array
+     *
+     * @param mixed   $needle
+     * @param array   $array
+     * @param bool   $strict
+     */
+    public function smarty_modifier_in_array($needle, $array, $strict = false): bool
 	{
 		return in_array($needle, (array) $array, (bool) $strict);
 	}
 
 	/**
-	 * Smarty join modifier plugin
-	 * Type:     modifier
-	 * Name:     join
-	 * Purpose:  join an array of values into a single string
-	 *
-	 * @param array   $values
-	 * @param string   $separator
-	 *
-	 * @return string
-	 */
-	public function smarty_modifier_join($values, $separator = '')
+     * Smarty join modifier plugin
+     * Type:     modifier
+     * Name:     join
+     * Purpose:  join an array of values into a single string
+     *
+     * @param array   $values
+     * @param string   $separator
+     */
+    public function smarty_modifier_join($values, $separator = ''): string
 	{
 		if (is_array($separator)) {
 			trigger_error("Using join with the separator first is deprecated. " .
 				"Call join using the array first, separator second.", E_USER_DEPRECATED);
-			return implode((string) ($values ?? ''), (array) $separator);
+			return implode((string) ($values ?? ''), $separator);
 		}
 		return implode((string) ($separator ?? ''), (array) $values);
 	}
@@ -628,19 +615,14 @@ class DefaultExtension extends Base {
 	}
 
 	/**
-	 * Smarty number_format modifier plugin
-	 * Type:     modifier
-	 * Name:     number_format
-	 * Purpose:  Format a number with grouped thousands
-	 *
-	 * @param float|null  $num
-	 * @param int         $decimals
-	 * @param string|null $decimal_separator
-	 * @param string|null $thousands_separator
-	 *
-	 * @return string
-	 */
-	public function smarty_modifier_number_format(?float $num, int $decimals = 0, ?string $decimal_separator = ".", ?string $thousands_separator = ",")
+     * Smarty number_format modifier plugin
+     * Type:     modifier
+     * Name:     number_format
+     * Purpose:  Format a number with grouped thousands
+     *
+     *
+     */
+    public function smarty_modifier_number_format(?float $num, int $decimals = 0, ?string $decimal_separator = ".", ?string $thousands_separator = ","): string
 	{
 		// provide $num default to prevent deprecation errors in PHP >=8.1
 		return number_format($num ?? 0.0, $decimals, $decimal_separator, $thousands_separator);
@@ -661,7 +643,7 @@ class DefaultExtension extends Base {
 	 *
 	 * @return string
 	 */
-	public function smarty_modifier_regex_replace($string, $search, $replace, $limit = -1)
+	public function smarty_modifier_regex_replace($string, $search, $replace, $limit = -1): ?string
 	{
 		if (is_array($search)) {
 			foreach ($search as $idx => $s) {
@@ -688,7 +670,7 @@ class DefaultExtension extends Base {
 		}
 		// remove eval-modifier from $search
 		if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && (strpos($match[ 1 ], 'e') !== false)) {
-			$search = substr($search, 0, -strlen($match[ 1 ])) . preg_replace('![e\s]+!', '', $match[ 1 ]);
+			return substr($search, 0, -strlen($match[ 1 ])) . preg_replace('![e\s]+!', '', $match[ 1 ]);
 		}
 		return $search;
 	}
@@ -731,7 +713,7 @@ class DefaultExtension extends Base {
 	 *
 	 * @return string truncated string
 	 */
-	public function smarty_modifier_truncate($string, $length = 80, $etc = '...', $break_words = false, $middle = false)
+	public function smarty_modifier_truncate($string, $length = 80, string $etc = '...', $break_words = false, $middle = false)
 	{
 		if ($length === 0 || $string === null) {
 			return '';

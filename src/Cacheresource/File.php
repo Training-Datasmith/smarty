@@ -28,10 +28,8 @@ class File extends Base
      *
      * @param Cached   $cached    cached object
      * @param Template $_template template object
-     *
-     * @return void
      */
-    public function populate(Cached $cached, Template $_template)
+    public function populate(Cached $cached, Template $_template): void
     {
         $source = $_template->getSource();
         $smarty = $_template->getSmarty();
@@ -40,14 +38,14 @@ class File extends Base
         $cached->filepath = $smarty->getCacheDir();
         if (isset($_template->cache_id)) {
             $cached->filepath .= preg_replace(
-                                     array(
+                                     [
                                          '![^\w|]+!',
                                          '![|]+!'
-                                     ),
-                                     array(
+                                     ],
+                                     [
                                          '_',
                                          $_compile_dir_sep
-                                     ),
+                                     ],
                                      $_template->cache_id
                                  ) . $_compile_dir_sep;
         }
@@ -77,10 +75,8 @@ class File extends Base
      * populate Cached Object with timestamp and exists from Resource
      *
      * @param Cached $cached cached object
-     *
-     * @return void
      */
-    public function populateTimestamp(Cached $cached)
+    public function populateTimestamp(Cached $cached): void
     {
         $cached->timestamp = $cached->exists = is_file($cached->filepath);
         if ($cached->exists) {
@@ -106,9 +102,8 @@ class File extends Base
         if ($update && defined('HHVM_VERSION')) {
             eval('?>' . file_get_contents($_smarty_tpl->getCached()->filepath));
             return true;
-        } else {
-            return @include $_smarty_tpl->getCached()->filepath;
         }
+        return @include $_smarty_tpl->getCached()->filepath;
     }
 
     /**
@@ -120,7 +115,7 @@ class File extends Base
      * @return bool success
      * @throws \Smarty\Exception
      */
-    public function storeCachedContent(Template $_template, $content)
+    public function storeCachedContent(Template $_template, $content): bool
     {
         if ($_template->getSmarty()->writeFile($_template->getCached()->filepath, $content) === true) {
             if (function_exists('opcache_invalidate')
@@ -156,9 +151,7 @@ class File extends Base
     /**
      * Empty cache
      *
-     * @param Smarty  $smarty
      * @param integer $exp_time expiration time (number of seconds, not timestamp)
-     *
      * @return integer number of cache files deleted
      */
     public function clearAll(Smarty $smarty, $exp_time = null)
@@ -169,15 +162,13 @@ class File extends Base
     /**
      * Empty cache for a specific template
      *
-     * @param Smarty  $smarty
      * @param string  $resource_name template name
      * @param string  $cache_id      cache id
      * @param string  $compile_id    compile id
      * @param integer $exp_time      expiration time (number of seconds, not timestamp)
-     *
      * @return integer number of cache files deleted
      */
-    public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time)
+    public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time): int
     {
 	    $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
 	    $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', $compile_id) : null;
@@ -297,9 +288,8 @@ class File extends Base
         if (null !== $cached->lock_id && is_file($cached->lock_id)) {
             $t = filemtime($cached->lock_id);
             return $t && (time() - $t < $smarty->locking_timeout);
-        } else {
-            return false;
         }
+        return false;
     }
 
     /**
@@ -307,10 +297,8 @@ class File extends Base
      *
      * @param Smarty                 $smarty Smarty object
      * @param Cached $cached cached object
-     *
-     * @return void
      */
-    public function acquireLock(Smarty $smarty, Cached $cached)
+    public function acquireLock(Smarty $smarty, Cached $cached): void
     {
         $cached->is_locked = true;
         touch($cached->lock_id);
@@ -321,10 +309,8 @@ class File extends Base
      *
      * @param Smarty                 $smarty Smarty object
      * @param Cached $cached cached object
-     *
-     * @return void
      */
-    public function releaseLock(Smarty $smarty, Cached $cached)
+    public function releaseLock(Smarty $smarty, Cached $cached): void
     {
         $cached->is_locked = false;
         @unlink($cached->lock_id);

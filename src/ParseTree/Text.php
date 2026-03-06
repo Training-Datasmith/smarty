@@ -48,7 +48,6 @@ class Text extends Base
     /**
      * Return buffer content
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      *
      * @return string text
      */

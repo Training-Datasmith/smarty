@@ -65,8 +65,7 @@ class WhileTag extends Base {
 				$_output .= $assignCompiler->compile($assignAttr, $compiler, []);
 			}
 			return $_output;
-		} else {
-			return "<?php\n while ({$parameter['if condition']}) {?>";
 		}
+        return "<?php\n while ({$parameter['if condition']}) {?>";
 	}
 }

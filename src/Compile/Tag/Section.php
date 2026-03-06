@@ -63,7 +63,7 @@ class Section extends ForeachSection {
 	 *
 	 * @var array
 	 */
-	protected $itemProperties = null;
+	protected $itemProperties;
 
 	/**
 	 * {section} tag has always name attribute
@@ -393,7 +393,6 @@ class Section extends ForeachSection {
 		if (isset($namedAttr['last'])) {
 			$output .= "{$sectionVar}->value['last'] = ({$propValue['iteration']} === {$propValue['total']});\n";
 		}
-		$output .= '?>';
-		return $output;
+		return $output . '?>';
 	}
 }

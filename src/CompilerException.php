@@ -36,17 +36,14 @@ class CompilerException extends Exception {
 		}
 	}
 
-	/**
-	 * @return string
-	 */
-	public function __toString() {
+	public function __toString(): string {
 		return ' --> Smarty Compiler: ' . $this->message . ' <-- ';
 	}
 
 	/**
 	 * @param int $line
 	 */
-	public function setLine($line) {
+	public function setLine($line): void {
 		$this->line = $line;
 	}
 
@@ -55,19 +52,19 @@ class CompilerException extends Exception {
 	 *
 	 * @type string|null
 	 */
-	public $source = null;
+	public $source;
 
 	/**
 	 * The raw text of the error message
 	 *
 	 * @type string|null
 	 */
-	public $desc = null;
+	public $desc;
 
 	/**
 	 * The resource identifier or template name
 	 *
 	 * @type string|null
 	 */
-	public $template = null;
+	public $template;
 }

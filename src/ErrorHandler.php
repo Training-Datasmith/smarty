@@ -26,12 +26,12 @@ class ErrorHandler
      */
     public $allowDereferencingNonObjects = true;
 
-    private $previousErrorHandler = null;
+    private $previousErrorHandler;
 
     /**
      * Enable error handler to intercept errors
      */
-    public function activate() {
+    public function activate(): void {
         /*
             Error muting is done because some people implemented custom error_handlers using
             https://php.net/set_error_handler and for some reason did not understand the following paragraph:
@@ -49,7 +49,7 @@ class ErrorHandler
     /**
      * Disable error handler
      */
-    public function deactivate() {
+    public function deactivate(): void {
         restore_error_handler();
         $this->previousErrorHandler = null;
     }

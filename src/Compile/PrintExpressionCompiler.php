@@ -38,16 +38,15 @@ class PrintExpressionCompiler extends Base {
 	protected $option_flags = ['nocache', 'nofilter'];
 
 	/**
-	 * Compiles code for generating output from any expression
-	 *
-	 * @param array $args array with attributes from parser
-	 * @param \Smarty\Compiler\Template $compiler compiler object
-	 * @param array $parameter array with compilation parameter
-	 *
-	 * @return string
-	 * @throws \Smarty\Exception
-	 */
-	public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
+     * Compiles code for generating output from any expression
+     *
+     * @param array $args array with attributes from parser
+     * @param \Smarty\Compiler\Template $compiler compiler object
+     * @param array $parameter array with compilation parameter
+     *
+     * @throws \Smarty\Exception
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
 	{
 
 		// check and get attributes
@@ -60,9 +59,9 @@ class PrintExpressionCompiler extends Base {
 		if (isset($_attr['assign'])) {
 			// assign output to variable
 			return "<?php \$_smarty_tpl->assign({$_attr['assign']},{$output});?>";
-		} else {
-			// display value
-			if (!$_attr['nofilter']) {
+		}
+        // display value
+        if (!$_attr['nofilter']) {
 				// default modifier
 				if ($compiler->getSmarty()->getDefaultModifiers()) {
 					$modifierlist = [];
@@ -87,9 +86,8 @@ class PrintExpressionCompiler extends Base {
 				}
 
 			}
-			$output = "<?php echo {$output};?>\n";
-			$compiler->setRawOutput(false);
-		}
+        $output = "<?php echo {$output};?>\n";
+        $compiler->setRawOutput(false);
 		return $output;
 	}
 

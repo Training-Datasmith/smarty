@@ -126,9 +126,8 @@ class Math extends Base {
 		if (empty($params['format'])) {
 			if (empty($params['assign'])) {
 				return $smarty_math_result;
-			} else {
-				$template->assign($params['assign'], $smarty_math_result);
 			}
+            $template->assign($params['assign'], $smarty_math_result);
 		} else {
 			if (empty($params['assign'])) {
 				printf($params['format'], $smarty_math_result);

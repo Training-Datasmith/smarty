@@ -18,11 +18,8 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @var boolean
 	 */
-	private $valid = null;
+	private $valid;
 
-	/**
-	 * @param bool|null $valid
-	 */
 	public function setValid(?bool $valid): void {
 		$this->valid = $valid;
 	}
@@ -32,14 +29,14 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @var \Smarty\Cacheresource\Base
 	 */
-	public $handler = null;
+	public $handler;
 
 	/**
 	 * Template Cache Id (\Smarty\Template::$cache_id)
 	 *
 	 * @var string
 	 */
-	public $cache_id = null;
+	public $cache_id;
 
 	/**
 	 * saved cache lifetime in seconds
@@ -53,7 +50,7 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @var string
 	 */
-	public $lock_id = null;
+	public $lock_id;
 
 	/**
 	 * flag that cache is locked by this instance
@@ -67,7 +64,7 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @var Source
 	 */
-	public $source = null;
+	public $source;
 
 	/**
 	 * Nocache hash codes of processed compiled templates
@@ -81,17 +78,15 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @var string
 	 */
-	public $content = null;
+	public $content;
 
 	/**
-	 * create Cached Object container
-	 *
-	 * @param Source $source
-	 * @param \Smarty\Cacheresource\Base $handler
-	 * @param $compile_id
-	 * @param $cache_id
-	 */
-	public function __construct(Source $source, \Smarty\Cacheresource\Base $handler, $compile_id, $cache_id) {
+     * create Cached Object container
+     *
+     * @param $compile_id
+     * @param $cache_id
+     */
+    public function __construct(Source $source, \Smarty\Cacheresource\Base $handler, $compile_id, $cache_id) {
 		$this->compile_id = $compile_id;
 		$this->cache_id = $cache_id;
 		$this->source = $source;
@@ -99,14 +94,12 @@ class Cached extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Render cache template
-	 *
-	 * @param \Smarty\Template $_template
-	 * @param bool $no_output_filter
-	 *
-	 * @throws \Exception
-	 */
-	public function render(Template $_template, $no_output_filter = true) {
+     * Render cache template
+     *
+     * @param bool $no_output_filter
+     * @throws \Exception
+     */
+    public function render(Template $_template, $no_output_filter = true): void {
 
 		if (!$this->isCached($_template)) {
 			$this->updateCache($_template, $no_output_filter);
@@ -129,14 +122,13 @@ class Cached extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Check if cache is valid, lock cache if required
-	 *
-	 * @param Template $_template
-	 *
-	 * @return bool flag true if cache is valid
-	 * @throws Exception
-	 */
-	public function isCached(Template $_template) {
+     * Check if cache is valid, lock cache if required
+     *
+     *
+     * @return bool flag true if cache is valid
+     * @throws Exception
+     */
+    public function isCached(Template $_template) {
 		if ($this->valid !== null) {
 			return $this->valid;
 		}
@@ -211,7 +203,7 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @param Template $_template template object
 	 */
-	private function process(Template $_template) {
+	private function process(Template $_template): void {
 		if ($this->handler->process($_template, $this) === false) {
 			$this->valid = false;
 		}
@@ -239,7 +231,7 @@ class Cached extends GeneratedPhpFile {
 	 *
 	 * @return bool success
 	 */
-	public function writeCache(Template $_template, $content) {
+	public function writeCache(Template $_template, $content): bool {
 		if (!$_template->getSource()->handler->recompiled) {
 			if ($this->handler->storeCachedContent($_template, $content)) {
 				$this->content = null;
@@ -263,14 +255,12 @@ class Cached extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Cache was invalid , so render from compiled and write to cache
-	 *
-	 * @param Template $_template
-	 * @param bool $no_output_filter
-	 *
-	 * @throws \Smarty\Exception
-	 */
-	private function updateCache(Template $_template, $no_output_filter) {
+     * Cache was invalid , so render from compiled and write to cache
+     *
+     * @param bool $no_output_filter
+     * @throws \Smarty\Exception
+     */
+    private function updateCache(Template $_template, $no_output_filter): void {
 
 		ob_start();
 
@@ -289,14 +279,12 @@ class Cached extends GeneratedPhpFile {
 	}
 
 	/**
-	 * Sanitize content and write it to cache resource
-	 *
-	 * @param Template $_template
-	 * @param bool $no_output_filter
-	 *
-	 * @throws \Smarty\Exception
-	 */
-	private function removeNoCacheHash(Template $_template, $no_output_filter) {
+     * Sanitize content and write it to cache resource
+     *
+     * @param bool $no_output_filter
+     * @throws \Smarty\Exception
+     */
+    private function removeNoCacheHash(Template $_template, $no_output_filter): void {
 		$php_pattern = '/(<%|%>|<\?php|<\?|\?>|<script\s+language\s*=\s*[\"\']?\s*php\s*[\"\']?\s*>)/';
 		$content = ob_get_clean();
 		$hash_array = $this->hashes;
@@ -355,46 +343,38 @@ class Cached extends GeneratedPhpFile {
 		$this->writeCache($_template, $codeframe);
 	}
 
-	/**
-	 * @return Source|null
-	 */
 	public function getSource(): ?Source {
 		return $this->source;
 	}
 
-	/**
-	 * @param Source|null $source
-	 */
 	public function setSource(?Source $source): void {
 		$this->source = $source;
 	}
 
 	/**
-	 * Returns the generated content
-	 *
-	 * @param Template $template
-	 *
-	 * @return string|null
-	 * @throws \Exception
-	 */
-	public function getContent(Template $template) {
+     * Returns the generated content
+     *
+     *
+     * @return string|null
+     * @throws \Exception
+     */
+    public function getContent(Template $template) {
 		ob_start();
 		$this->render($template);
 		return ob_get_clean();
 	}
 
 	/**
-	 * This function is executed automatically when a generated file is included
-	 * - Decode saved properties
-	 * - Check if file is valid
-	 *
-	 * @param Template $_template
-	 * @param array $properties special template properties
-	 *
-	 * @return bool flag if compiled or cache file is valid
-	 * @throws Exception
-	 */
-	public function isFresh(Template $_template, array $properties): bool {
+     * This function is executed automatically when a generated file is included
+     * - Decode saved properties
+     * - Check if file is valid
+     *
+     * @param array $properties special template properties
+     *
+     * @return bool flag if compiled or cache file is valid
+     * @throws Exception
+     */
+    public function isFresh(Template $_template, array $properties): bool {
 
 		// on cache resources other than file check version stored in cache code
 		if (\Smarty\Smarty::SMARTY_VERSION !== $properties['version']) {

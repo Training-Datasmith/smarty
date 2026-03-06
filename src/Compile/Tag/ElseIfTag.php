@@ -68,19 +68,16 @@ class ElseIfTag extends Base {
 				$this->openTag($compiler, 'elseif', [$nesting + 1, $compiler->tag_nocache]);
 				$_output = $compiler->appendCode("<?php } else {\n?>", $assignCode);
 				return $compiler->appendCode($_output, "<?php if ({$prefixVar}) {?>");
-			} else {
-				$this->openTag($compiler, 'elseif', [$nesting, $nocache_pushed]);
-				return "<?php } elseif ({$parameter['if condition']}) {?>";
 			}
-		} else {
-			$_output = $compiler->appendCode("<?php } else {\n?>", $prefixCode);
-			$this->openTag($compiler, 'elseif', [$nesting + 1, $nocache_pushed]);
-			if ($condition_by_assign) {
+            $this->openTag($compiler, 'elseif', [$nesting, $nocache_pushed]);
+            return "<?php } elseif ({$parameter['if condition']}) {?>";
+		}
+        $_output = $compiler->appendCode("<?php } else {\n?>", $prefixCode);
+        $this->openTag($compiler, 'elseif', [$nesting + 1, $nocache_pushed]);
+        if ($condition_by_assign) {
 				$_output = $compiler->appendCode($_output, $assignCode);
 				return $compiler->appendCode($_output, "<?php if ({$prefixVar}) {?>");
-			} else {
-				return $compiler->appendCode($_output, "<?php if ({$parameter['if condition']}) {?>");
 			}
-		}
+        return $compiler->appendCode($_output, "<?php if ({$parameter['if condition']}) {?>");
 	}
 }

@@ -70,12 +70,8 @@ class Call extends Base {
 		//$compiler->suppressNocacheProcessing = true;
 		// was there an assign attribute
 		if (isset($_assign)) {
-			$_output =
-				"<?php ob_start();\n\$_smarty_tpl->getSmarty()->getRuntime('TplFunction')->callTemplateFunction(\$_smarty_tpl, {$_name}, {$_params}, {$_nocache});\n\$_smarty_tpl->assign({$_assign}, ob_get_clean());?>\n";
-		} else {
-			$_output =
-				"<?php \$_smarty_tpl->getSmarty()->getRuntime('TplFunction')->callTemplateFunction(\$_smarty_tpl, {$_name}, {$_params}, {$_nocache});?>\n";
+			return "<?php ob_start();\n\$_smarty_tpl->getSmarty()->getRuntime('TplFunction')->callTemplateFunction(\$_smarty_tpl, {$_name}, {$_params}, {$_nocache});\n\$_smarty_tpl->assign({$_assign}, ob_get_clean());?>\n";
 		}
-		return $_output;
+		return "<?php \$_smarty_tpl->getSmarty()->getRuntime('TplFunction')->callTemplateFunction(\$_smarty_tpl, {$_name}, {$_params}, {$_nocache});?>\n";
 	}
 }

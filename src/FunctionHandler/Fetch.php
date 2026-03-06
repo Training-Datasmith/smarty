@@ -97,9 +97,8 @@ class Fetch extends Base {
 								if (!preg_match('![\w\d-]+: .+!', $param_value)) {
 									trigger_error("[plugin] invalid header format '{$param_value}'", E_USER_NOTICE);
 									return;
-								} else {
-									$extra_headers[] = $param_value;
 								}
+                                $extra_headers[] = $param_value;
 							}
 							break;
 						case 'proxy_host':
@@ -147,43 +146,42 @@ class Fetch extends Base {
 				if (!$fp) {
 					trigger_error("[plugin] unable to fetch: $errstr ($errno)", E_USER_NOTICE);
 					return;
-				} else {
-					if ($_is_proxy) {
+				}
+                if ($_is_proxy) {
 						fputs($fp, 'GET ' . $params['file'] . " HTTP/1.0\r\n");
 					} else {
 						fputs($fp, "GET $uri HTTP/1.0\r\n");
 					}
-					if (!empty($host)) {
+                if (!empty($host)) {
 						fputs($fp, "Host: $host\r\n");
 					}
-					if (!empty($accept)) {
+                if (!empty($accept)) {
 						fputs($fp, "Accept: $accept\r\n");
 					}
-					if (!empty($agent)) {
+                if (!empty($agent)) {
 						fputs($fp, "User-Agent: $agent\r\n");
 					}
-					if (!empty($referer)) {
+                if (!empty($referer)) {
 						fputs($fp, "Referer: $referer\r\n");
 					}
-					if (isset($extra_headers) && is_array($extra_headers)) {
+                if (isset($extra_headers) && is_array($extra_headers)) {
 						foreach ($extra_headers as $curr_header) {
 							fputs($fp, $curr_header . "\r\n");
 						}
 					}
-					if (!empty($user) && !empty($pass)) {
+                if (!empty($user) && !empty($pass)) {
 						fputs($fp, 'Authorization: BASIC ' . base64_encode("$user:$pass") . "\r\n");
 					}
-					fputs($fp, "\r\n");
-					while (!feof($fp)) {
+                fputs($fp, "\r\n");
+                while (!feof($fp)) {
 						$content .= fgets($fp, 4096);
 					}
-					fclose($fp);
-					$csplit = preg_split("!\r\n\r\n!", $content, 2);
-					$content = $csplit[1];
-					if (!empty($params['assign_headers'])) {
+                fclose($fp);
+                $csplit = preg_split("!\r\n\r\n!", $content, 2);
+                $content = $csplit[1];
+                if (!empty($params['assign_headers'])) {
 						$template->assign($params['assign_headers'], preg_split("!\r\n!", $csplit[0]));
 					}
-				}
 			} else {
 				trigger_error("[plugin fetch] unable to parse URL, check syntax", E_USER_NOTICE);
 				return;

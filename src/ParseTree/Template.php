@@ -26,22 +26,12 @@ class Template extends Base
      *
      * @var array
      */
-    public $subtrees = array();
-
-    /**
-     * Create root of parse tree for template elements
-     */
-    public function __construct()
-    {
-    }
+    public $subtrees = [];
 
     /**
      * Append buffer to subtree
-     *
-     * @param \Smarty\Parser\TemplateParser $parser
-     * @param Base $subtree
      */
-    public function append_subtree(\Smarty\Parser\TemplateParser $parser, Base $subtree)
+    public function append_subtree(\Smarty\Parser\TemplateParser $parser, Base $subtree): void
     {
         if (!empty($subtree->subtrees)) {
             $this->subtrees = array_merge($this->subtrees, $subtree->subtrees);
@@ -55,10 +45,9 @@ class Template extends Base
     /**
      * Append array to subtree
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      * @param Base[] $array
      */
-    public function append_array(\Smarty\Parser\TemplateParser $parser, $array = array())
+    public function append_array(\Smarty\Parser\TemplateParser $parser, $array = []): void
     {
         if (!empty($array)) {
             $this->subtrees = array_merge($this->subtrees, (array)$array);
@@ -68,10 +57,9 @@ class Template extends Base
     /**
      * Prepend array to subtree
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      * @param Base[] $array
      */
-    public function prepend_array(\Smarty\Parser\TemplateParser $parser, $array = array())
+    public function prepend_array(\Smarty\Parser\TemplateParser $parser, $array = []): void
     {
         if (!empty($array)) {
             $this->subtrees = array_merge((array)$array, $this->subtrees);
@@ -81,7 +69,6 @@ class Template extends Base
     /**
      * Sanitize and merge subtree buffers together
      *
-     * @param \Smarty\Parser\TemplateParser $parser
      *
      * @return string template code content
      */
@@ -129,13 +116,16 @@ class Template extends Base
         return $code;
     }
 
-    private function getChunkedSubtrees() {
-        $chunks = array();
+    /**
+     * @return array{mode: ('other' | 'tag' | 'text' | 'textstripped' | null), subtrees: list}[]
+     */
+    private function getChunkedSubtrees(): array {
+        $chunks = [];
         $currentMode = null;
-        $currentChunk = array();
+        $currentChunk = [];
         for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
 
-            if ($this->subtrees[ $key ]->data === '' && in_array($currentMode, array('textstripped', 'text', 'tag'))) {
+            if ($this->subtrees[ $key ]->data === '' && in_array($currentMode, ['textstripped', 'text', 'tag'])) {
                 continue;
             }
 
@@ -153,19 +143,19 @@ class Template extends Base
             if ($newMode == $currentMode) {
                 $currentChunk[] = $this->subtrees[ $key ];
             } else {
-                $chunks[] = array(
+                $chunks[] = [
                     'mode' => $currentMode,
                     'subtrees' => $currentChunk
-                );
+                ];
                 $currentMode = $newMode;
-                $currentChunk = array($this->subtrees[ $key ]);
+                $currentChunk = [$this->subtrees[ $key ]];
             }
         }
         if ($currentMode && $currentChunk) {
-            $chunks[] = array(
+            $chunks[] = [
                 'mode' => $currentMode,
                 'subtrees' => $currentChunk
-            );
+            ];
         }
         return $chunks;
     }

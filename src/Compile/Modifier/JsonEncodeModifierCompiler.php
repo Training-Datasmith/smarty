@@ -7,7 +7,7 @@ namespace Smarty\Compile\Modifier;
  */
 class JsonEncodeModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		return 'json_encode(' . $params[0] . (isset($params[1]) ? ', (int) ' . $params[1] : '') . ')';
 	}
 

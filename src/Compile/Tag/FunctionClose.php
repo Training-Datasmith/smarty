@@ -25,7 +25,7 @@ class FunctionClose extends Base {
 	 *
 	 * @var object
 	 */
-	private $compiler = null;
+	private $compiler;
 
 	/**
 	 * Compiles code for the {/function} tag

@@ -11,7 +11,7 @@ namespace Smarty\Compile\Modifier;
 
 class CountCharactersModifierCompiler extends Base {
 
-	public function compile($params, \Smarty\Compiler\Template $compiler) {
+	public function compile($params, \Smarty\Compiler\Template $compiler): string {
 		if (!isset($params[ 1 ]) || $params[ 1 ] !== 'true') {
 			return 'preg_match_all(\'/[^\s]/' . \Smarty\Smarty::$_UTF8_MODIFIER . '\',' . $params[ 0 ] . ', $tmp)';
 		}

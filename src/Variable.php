@@ -17,12 +17,12 @@ class Variable
      *
      * @var mixed
      */
-    public $value = null;
+    public $value;
 
 	/**
 	 * Other r/w properties for foreach, for, while, etc.
 	 */
-	public $step, $total, $first, $last, $key, $show, $iteration, $index = null;
+	public $step, $total, $first, $last, $key, $show, $iteration, $index;
 
 	/**
 	 * @param mixed|null $value
@@ -38,9 +38,6 @@ class Variable
      */
     private $nocache = false;
 
-	/**
-	 * @param bool $nocache
-	 */
 	public function setNocache(bool $nocache): void {
 		$this->nocache = $nocache;
 	}
@@ -63,10 +60,8 @@ class Variable
 
     /**
      * <<magic>> String conversion
-     *
-     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return (string)$this->value;
     }
@@ -81,13 +76,12 @@ class Variable
 	 */
 	public function preIncDec($operator = '++') {
 		if ($operator == '--') {
-			return --$this->value;
-		} elseif ($operator == '++') {
-			return ++$this->value;
-		} else {
-			throw new Exception("Invalid incdec operator. Use '--' or '++'.");
-		}
-		return $this->value;
+            return --$this->value;
+        }
+        if ($operator == '++') {
+            return ++$this->value;
+        }
+		throw new Exception("Invalid incdec operator. Use '--' or '++'.");
 	}
 
 	/**
@@ -100,17 +94,14 @@ class Variable
 	 */
 	public function postIncDec($operator = '++') {
 		if ($operator == '--') {
-			return $this->value--;
-		} elseif ($operator == '++') {
-			return $this->value++;
-		} else {
-			throw new Exception("Invalid incdec operator. Use '--' or '++'.");
-		}
+            return $this->value--;
+        }
+        if ($operator == '++') {
+            return $this->value++;
+        }
+        throw new Exception("Invalid incdec operator. Use '--' or '++'.");
 	}
 
-	/**
-	 * @return bool
-	 */
 	public function isNocache(): bool {
 		return $this->nocache;
 	}
