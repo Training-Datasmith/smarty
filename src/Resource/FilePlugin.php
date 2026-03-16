@@ -112,7 +112,7 @@ class FilePlugin extends BasePlugin
     public function getFilePath($file, \Smarty\Smarty $smarty, bool $isConfig = false)
     {
         // absolute file ?
-        if ($file[0] === '/' || $file[1] === ':') {
+        if ($file[0] === '/' || (isset($file[1]) && $file[1] === ':')) {
             $file = $smarty->_realpath($file, true);
             return is_file($file) ? $file : false;
         }

@@ -499,6 +499,7 @@ class DefaultExtension extends Base
                         '<S'   => '<\S',
                         '`' => '\\\\`',
                         '${' => '\\\\\$\\{',
+                        "\x00" => '\\x00',
                     ]
                 );
             case 'mail':
@@ -715,9 +716,10 @@ class DefaultExtension extends Base
         if (($pos = strpos($search, "\0")) !== false) {
             $search = substr($search, 0, $pos);
         }
-        // remove eval-modifier from $search
+        // reject patterns containing eval-modifier
         if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && (strpos($match[ 1 ], 'e') !== false)) {
-            return substr($search, 0, -strlen($match[ 1 ])) . preg_replace('![e\s]+!', '', $match[ 1 ]);
+            trigger_error('regex_replace: the /e modifier is not allowed', E_USER_WARNING);
+            return false;
         }
         return $search;
     }

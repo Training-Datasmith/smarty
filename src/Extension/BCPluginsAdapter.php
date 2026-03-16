@@ -41,7 +41,7 @@ class BCPluginsAdapter extends Base
         }
         if (is_callable($plugin[0])) {
             $callback = $plugin[0];
-            $cacheable = (bool) $plugin[1] ?? true;
+            $cacheable = (bool)($plugin[1] ?? true);
             return new TagPluginWrapper($callback, $cacheable);
         }
 
@@ -62,7 +62,7 @@ class BCPluginsAdapter extends Base
             return null;
         }
         $callback = $plugin[0];
-        $cacheable = (bool) $plugin[1] ?? true;
+        $cacheable = (bool)($plugin[1] ?? true);
 
         return new FunctionPluginWrapper($callback, $cacheable);
 
@@ -75,7 +75,7 @@ class BCPluginsAdapter extends Base
             return null;
         }
         $callback = $plugin[0];
-        $cacheable = (bool) $plugin[1] ?? true;
+        $cacheable = (bool)($plugin[1] ?? true);
 
         return new BlockPluginWrapper($callback, $cacheable);
     }

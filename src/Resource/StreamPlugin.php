@@ -58,7 +58,7 @@ class StreamPlugin extends RecompiledPlugin
 
         $t = '';
         // the availability of the stream has already been checked in Smarty\Resource\Base::fetch()
-        $fp = fopen($filepath, 'r+');
+        $fp = fopen($filepath, 'r');
         if ($fp) {
             while (!feof($fp) && ($current_line = fgets($fp)) !== false) {
                 $t .= $current_line;

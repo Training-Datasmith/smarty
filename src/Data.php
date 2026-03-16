@@ -465,7 +465,7 @@ class Data
     {
         $template = $this->getSmarty()->doCreateTemplate($config_file, null, null, $this, null, null, true);
         $template->caching = Smarty::CACHING_OFF;
-        $template->assign('sections', (array) $sections ?? []);
+        $template->assign('sections', (array) ($sections ?? []));
         // trigger a call to $this->assignConfigVars
         $template->fetch();
         return $this;

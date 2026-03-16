@@ -543,7 +543,6 @@ class Template extends TemplateBase
     public function getRightDelimiter()
     {
         return $this->right_delimiter ?? $this->getSmarty()->getRightDelimiter();
-        ;
     }
 
     /**
@@ -570,7 +569,7 @@ class Template extends TemplateBase
         trigger_error("Using stream variables (\`\{\$foo:bar\}\`)is deprecated.", E_USER_DEPRECATED);
 
         $_result = '';
-        $fp = fopen($variable, 'r+');
+        $fp = fopen($variable, 'r');
         if ($fp) {
             while (!feof($fp) && ($current_line = fgets($fp)) !== false) {
                 $_result .= $current_line;

@@ -337,7 +337,7 @@ class Template extends BaseCompiler
                 ',',
             ],
             '_',
-            uniqid(mt_rand(), true)
+            bin2hex(random_bytes(16))
         );
 
         $this->modifierCompiler = new ModifierCompiler();
@@ -515,7 +515,7 @@ class Template extends BaseCompiler
         if (!strpos($variable, '(')) {
             // not a variable variable
             $var = trim($variable, '\'');
-            $this->tag_nocache = $this->tag_nocache |
+            $this->tag_nocache = $this->tag_nocache ||
                 $this->template->getVariable(
                     $var,
                     true,

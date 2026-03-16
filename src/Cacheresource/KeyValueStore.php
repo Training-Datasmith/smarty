@@ -312,11 +312,10 @@ abstract class KeyValueStore extends Base
      */
     protected function getMetaTimestamp(&$content)
     {
-        extract(unpack('N1s/N1m/a*content', $content));
-        /**
-         * @var  int $s
-         * @var  int $m
-         */
+        $unpacked = unpack('N1s/N1m/a*content', $content);
+        $s = (int)$unpacked['s'];
+        $m = (int)$unpacked['m'];
+        $content = $unpacked['content'];
         return $s + ($m / 100000000);
     }
 

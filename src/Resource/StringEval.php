@@ -61,7 +61,7 @@ class StringEval extends RecompiledPlugin
     protected function decode($string)
     {
         // decode if specified
-        if ($pos = strpos($string, ':') === false) {
+        if (($pos = strpos($string, ':')) === false) {
             return $string;
         }
         if (!strncmp($string, 'base64', 6)) {

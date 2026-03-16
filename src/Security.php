@@ -190,6 +190,11 @@ class Security
      */
     protected $_secure_dir = [];
 
+    /**
+     * @var Smarty
+     */
+    protected Smarty $smarty;
+
     public function __construct(Smarty $smarty)
     {
         $this->smarty = $smarty;
@@ -455,7 +460,7 @@ class Security
         foreach ($oldDir as $directory) {
             //           $directory = $this->smarty->_realpath($directory, true);
             $length = strlen($directory);
-            foreach ($this->_resource_dir as $dir) {
+            foreach (array_keys($this->_resource_dir) as $dir) {
                 if (substr($dir, 0, $length) === $directory) {
                     unset($this->_resource_dir[$dir]);
                 }

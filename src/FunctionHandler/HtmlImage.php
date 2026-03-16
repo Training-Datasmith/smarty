@@ -31,12 +31,12 @@ use Smarty\Template;
  * @param Template $template template object
  *
  * @throws Exception
- * @return string
+ * @return string|null
  * @uses    smarty_function_escape_special_chars()
  */
 class HtmlImage extends Base
 {
-    public function handle($params, Template $template): void
+    public function handle($params, Template $template): ?string
     {
         $alt = '';
         $file = '';
@@ -69,7 +69,7 @@ class HtmlImage extends Base
                     break;
                 case 'link':
                 case 'href':
-                    $prefix = '<a href="' . $_val . '">';
+                    $prefix = '<a href="' . htmlspecialchars((string) $_val, ENT_QUOTES, 'UTF-8') . '">';
                     $suffix = '</a>';
                     break;
                 default:
@@ -84,6 +84,68 @@ class HtmlImage extends Base
                     break;
             }
         }
-        trigger_error('html_image: missing \'file\' parameter', E_USER_NOTICE);
+        if (empty($file)) {
+            trigger_error('html_image: missing \'file\' parameter', E_USER_NOTICE);
+            return null;
+        }
+        if ($file[0] === '/') {
+            $_image_path = $basedir . $file;
+        } else {
+            $_image_path = $file;
+        }
+        // strip file protocol
+        if (stripos($params['file'], 'file://') === 0) {
+            $params['file'] = substr($params['file'], 7);
+        }
+        $protocol = strpos($params['file'], '://');
+        if ($protocol !== false) {
+            $protocol = strtolower(substr($params['file'], 0, $protocol));
+        }
+        if (isset($template->getSmarty()->security_policy)) {
+            if ($protocol) {
+                // remote resource (or php stream, …)
+                if (!$template->getSmarty()->security_policy->isTrustedUri($params['file'])) {
+                    return null;
+                }
+            } else {
+                // local file
+                if (!$template->getSmarty()->security_policy->isTrustedResourceDir($_image_path)) {
+                    return null;
+                }
+            }
+        }
+        if (!isset($params['width']) || !isset($params['height'])) {
+            // FIXME: (rodneyrehm) getimagesize() loads the complete file off a remote resource, use custom [jpg,png,gif]header reader!
+            if (!$_image_data = @getimagesize($_image_path)) {
+                if (!file_exists($_image_path)) {
+                    trigger_error("html_image: unable to find '{$_image_path}'", E_USER_NOTICE);
+                    return null;
+                } elseif (!is_readable($_image_path)) {
+                    trigger_error("html_image: unable to read '{$_image_path}'", E_USER_NOTICE);
+                    return null;
+                } else {
+                    trigger_error("html_image: '{$_image_path}' is not a valid image file", E_USER_NOTICE);
+                    return null;
+                }
+            }
+            if (!isset($params['width'])) {
+                $width = $_image_data[0];
+            }
+            if (!isset($params['height'])) {
+                $height = $_image_data[1];
+            }
+        }
+        if (isset($params['dpi'])) {
+            if (strstr($_SERVER['HTTP_USER_AGENT'] ?? '', 'Mac')) {
+                $dpi_default = 72;
+            } else {
+                $dpi_default = 96;
+            }
+            $_resize = $dpi_default / $params['dpi'];
+            $width = round($width * $_resize);
+            $height = round($height * $_resize);
+        }
+        return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' .
+            $height . '"' . $extra . ' />' . $suffix;
     }
 }

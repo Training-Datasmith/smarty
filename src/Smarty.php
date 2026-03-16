@@ -999,7 +999,7 @@ class Smarty extends \Smarty\TemplateBase
         // defaults for optional params
         $cache_id = $cache_id ?? $this->cache_id;
         $compile_id = $compile_id ?? $this->compile_id;
-        $caching = (int)$caching ?? $this->caching;
+        $caching = (int)($caching ?? $this->caching);
 
         // Add default resource type to resource name if it is missing
         if (strpos($resource_name, ':') === false) {
@@ -1567,8 +1567,11 @@ class Smarty extends \Smarty\TemplateBase
     public function cacheModifiedCheck(Template\Cached $cached, Template $_template, $content): void
     {
         $_isCached = $_template->isCached() && !$_template->getCompiled()->getNocacheCode();
-        $_last_modified_date =
-            @substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
+        $_last_modified_date = '';
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $_last_modified_date =
+                @substr($_SERVER['HTTP_IF_MODIFIED_SINCE'], 0, strpos($_SERVER['HTTP_IF_MODIFIED_SINCE'], 'GMT') + 3);
+        }
         if ($_isCached && $cached->timestamp <= strtotime($_last_modified_date)) {
             switch (PHP_SAPI) {
                 case 'cgi': // php-cgi < 5.3

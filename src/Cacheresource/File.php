@@ -121,7 +121,7 @@ class File extends Base
     {
         if ($_template->getSmarty()->writeFile($_template->getCached()->filepath, $content) === true) {
             if (function_exists('opcache_invalidate')
-                && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api'))) < 1
+                && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)
             ) {
                 opcache_invalidate($_template->getCached()->filepath, true);
             }

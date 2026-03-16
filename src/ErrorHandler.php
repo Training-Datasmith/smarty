@@ -77,21 +77,21 @@ class ErrorHandler
             '/^(Undefined property)/',
             $errstr
         )) {
-            return; // suppresses this error
+            return true; // suppresses this error
         }
 
         if ($this->allowUndefinedArrayKeys && preg_match(
             '/^(Undefined index|Undefined array key|Trying to access array offset on)/',
             $errstr
         )) {
-            return; // suppresses this error
+            return true; // suppresses this error
         }
 
         if ($this->allowDereferencingNonObjects && preg_match(
             '/^Attempt to read property ".+?" on/',
             $errstr
         )) {
-            return; // suppresses this error
+            return true; // suppresses this error
         }
 
         // pass all other errors through to the previous error handler or to the default PHP error handler

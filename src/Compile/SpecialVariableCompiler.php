@@ -44,6 +44,7 @@ class SpecialVariableCompiler extends Base
         if ($variable === false) {
             $compiler->trigger_template_error('special $Smarty variable name index can not be variable', null, true);
         }
+        $compiled_ref = 'null';
         if (!isset($compiler->getSmarty()->security_policy)
             || $compiler->getSmarty()->security_policy->isTrustedSpecialSmartyVar($variable, $compiler)
         ) {

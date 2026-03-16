@@ -303,7 +303,9 @@ abstract class TemplateBase extends Data
     {
         $literals = array_combine($literals, $literals);
         $error = isset($literals[$smarty->getLeftDelimiter()]) ? [$smarty->getLeftDelimiter()] : [];
-        $error = isset($literals[$smarty->getRightDelimiter()]) ? $error[] = $smarty->getRightDelimiter() : $error;
+        if (isset($literals[$smarty->getRightDelimiter()])) {
+            $error[] = $smarty->getRightDelimiter();
+        }
         if (!empty($error)) {
             throw new Exception(
                 'User defined literal(s) "' . $error .
