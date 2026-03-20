@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -12,12 +11,11 @@ namespace Smarty\Compile\Modifier;
  *
  * @author Amaury Bouchard
  */
-
-class RawModifierCompiler extends Base
+class Raw_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler)
     {
-        $compiler->setRawOutput(true);
-        return ($params[0]);
+        $compiler->set_raw_output(true);
+        return $params[0];
     }
 }

@@ -1,26 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Nocache
  * Compiles the {nocache} {/nocache} tags.
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Nocacheclose Class
  *
-
-
  */
-class NocacheClose extends Base
+class Nocache_Close extends Base
 {
     /**
      * Compiles code for the {/nocache} tag
@@ -31,7 +25,7 @@ class NocacheClose extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        $this->closeTag($compiler, ['nocache']);
+        $this->close_tag($compiler, ['nocache']);
         return '';
     }
 }

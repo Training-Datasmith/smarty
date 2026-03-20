@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 use Smarty\Exception;
-
-abstract class Base implements ModifierCompilerInterface
+abstract class Base implements Modifier_Compiler_Interface
 {
     /**
      * Compiles code for the modifier
@@ -18,7 +16,6 @@ abstract class Base implements ModifierCompilerInterface
      * @throws \Smarty\CompilerException
      */
     abstract public function compile($params, \Smarty\Compiler\Template $compiler);
-
     /**
      * evaluate compiler parameter
      *
@@ -33,19 +30,15 @@ abstract class Base implements ModifierCompilerInterface
     protected function literal_compiler_param(array $params, $index, $default = null)
     {
         // not set, go default
-        if (!isset($params[ $index ])) {
+        if (!isset($params[$index])) {
             return $default;
         }
         // test if param is a literal
-        if (!preg_match('/^([\'"]?)[a-zA-Z0-9-]+(\\1)$/', $params[ $index ])) {
-            throw new Exception(
-                '$param[' . $index .
-                '] is not a literal and is thus not evaluatable at compile time'
-            );
+        if (!preg_match('/^([\'"]?)[a-zA-Z0-9-]+(\1)$/', $params[$index])) {
+            throw new Exception('$param[' . $index . '] is not a literal and is thus not evaluatable at compile time');
         }
         $t = null;
-        eval('$t = ' . $params[ $index ] . ';');
+        eval('$t = ' . $params[$index] . ';');
         return $t;
     }
-
 }

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Exception;
 use Smarty\Template;
-
 /**
  * Smarty {html_image} function plugin
  * Type:     function
@@ -34,7 +32,7 @@ use Smarty\Template;
  * @return string|null
  * @uses    smarty_function_escape_special_chars()
  */
-class HtmlImage extends Base
+class Html_Image extends Base
 {
     public function handle($params, Template $template): ?string
     {
@@ -61,10 +59,7 @@ class HtmlImage extends Base
                     if (!is_array($_val)) {
                         ${$_key} = smarty_function_escape_special_chars($_val);
                     } else {
-                        throw new Exception(
-                            "html_image: extra attribute '{$_key}' cannot be an array",
-                            E_USER_NOTICE
-                        );
+                        throw new Exception("html_image: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
                     }
                     break;
                 case 'link':
@@ -76,10 +71,7 @@ class HtmlImage extends Base
                     if (!is_array($_val)) {
                         $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
                     } else {
-                        throw new Exception(
-                            "html_image: extra attribute '{$_key}' cannot be an array",
-                            E_USER_NOTICE
-                        );
+                        throw new Exception("html_image: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
                     }
                     break;
             }
@@ -101,17 +93,14 @@ class HtmlImage extends Base
         if ($protocol !== false) {
             $protocol = strtolower(substr($params['file'], 0, $protocol));
         }
-        if (isset($template->getSmarty()->security_policy)) {
+        if (isset($template->get_smarty()->security_policy)) {
             if ($protocol) {
                 // remote resource (or php stream, …)
-                if (!$template->getSmarty()->security_policy->isTrustedUri($params['file'])) {
+                if (!$template->get_smarty()->security_policy->is_trusted_uri($params['file'])) {
                     return null;
                 }
-            } else {
-                // local file
-                if (!$template->getSmarty()->security_policy->isTrustedResourceDir($_image_path)) {
-                    return null;
-                }
+            } else if (!$template->get_smarty()->security_policy->is_trusted_resource_dir($_image_path)) {
+                return null;
             }
         }
         if (!isset($params['width']) || !isset($params['height'])) {
@@ -145,7 +134,6 @@ class HtmlImage extends Base
             $width = round($width * $_resize);
             $height = round($height * $_resize);
         }
-        return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' .
-            $height . '"' . $extra . ' />' . $suffix;
+        return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"' . $extra . ' />' . $suffix;
     }
 }

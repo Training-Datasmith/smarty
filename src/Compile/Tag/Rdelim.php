@@ -1,22 +1,17 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Rdelim
  * Compiles the {rdelim} tag
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 /**
  * Smarty Internal Plugin Compile Rdelim Class
  *
-
-
  */
 class Rdelim extends Ldelim
 {
@@ -33,6 +28,6 @@ class Rdelim extends Ldelim
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
         parent::compile($args, $compiler);
-        return $compiler->getTemplate()->getRightDelimiter();
+        return $compiler->get_template()->get_right_delimiter();
     }
 }

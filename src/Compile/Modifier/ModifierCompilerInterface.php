@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
-interface ModifierCompilerInterface
+interface Modifier_Compiler_Interface
 {
     /**
      * Compiles code for the modifier

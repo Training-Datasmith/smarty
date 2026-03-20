@@ -1,25 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Cacheresource;
 
 /**
  * Smarty Internal Plugin
  *
-
-
  */
-
 use Smarty\Smarty;
 use Smarty\Template;
 use Smarty\Template\Cached;
-
 /**
  * Cache Handler API
  *
-
-
  * @author     Rodney Rehm
  */
 abstract class Custom extends Base
@@ -37,7 +30,6 @@ abstract class Custom extends Base
      * @return void
      */
     abstract protected function fetch($id, $name, $cache_id, $compile_id, &$content, &$mtime);
-
     /**
      * Fetch cached content's modification timestamp from data source
      * {@internal implementing this method is optional.
@@ -50,11 +42,10 @@ abstract class Custom extends Base
      *
      * @return integer|boolean timestamp (epoch) the template was modified, or false if not found
      */
-    protected function fetchTimestamp($id, $name, $cache_id, $compile_id)
+    protected function fetch_timestamp($id, $name, $cache_id, $compile_id)
     {
         return false;
     }
-
     /**
      * Save content to cache
      *
@@ -68,7 +59,6 @@ abstract class Custom extends Base
      * @return boolean      success
      */
     abstract protected function save($id, $name, $cache_id, $compile_id, $exp_time, $content);
-
     /**
      * Delete content from cache
      *
@@ -80,7 +70,6 @@ abstract class Custom extends Base
      * @return integer      number of deleted caches
      */
     abstract protected function delete($name, $cache_id, $compile_id, $exp_time);
-
     /**
      * populate Cached Object with metadata from Resource
      *
@@ -91,41 +80,31 @@ abstract class Custom extends Base
     {
         $_cache_id = isset($cached->cache_id) ? preg_replace('![^\w\|]+!', '_', $cached->cache_id) : null;
         $_compile_id = isset($cached->compile_id) ? preg_replace('![^\w]+!', '_', $cached->compile_id) : null;
-        $path = $cached->getSource()->uid . $_cache_id . $_compile_id;
+        $path = $cached->get_source()->uid . $_cache_id . $_compile_id;
         $cached->filepath = sha1($path);
-        if ($_template->getSmarty()->cache_locking) {
+        if ($_template->get_smarty()->cache_locking) {
             $cached->lock_id = sha1('lock.' . $path);
         }
-        $this->populateTimestamp($cached);
+        $this->populate_timestamp($cached);
     }
-
     /**
      * populate Cached Object with timestamp and exists from Resource
      *
      * @param \Smarty\Template\Cached $cached
      */
-    public function populateTimestamp(\Smarty\Template\Cached $cached): void
+    public function populate_timestamp(\Smarty\Template\Cached $cached): void
     {
-        $mtime =
-            $this->fetchTimestamp($cached->filepath, $cached->getSource()->name, $cached->cache_id, $cached->compile_id);
+        $mtime = $this->fetch_timestamp($cached->filepath, $cached->get_source()->name, $cached->cache_id, $cached->compile_id);
         if ($mtime !== null) {
             $cached->timestamp = $mtime;
             $cached->exists = !!$cached->timestamp;
             return;
         }
         $timestamp = null;
-        $this->fetch(
-            $cached->filepath,
-            $cached->getSource()->name,
-            $cached->cache_id,
-            $cached->compile_id,
-            $cached->content,
-            $timestamp
-        );
+        $this->fetch($cached->filepath, $cached->get_source()->name, $cached->cache_id, $cached->compile_id, $cached->content, $timestamp);
         $cached->timestamp = $timestamp ?? false;
         $cached->exists = !!$cached->timestamp;
     }
-
     /**
      * Read the cached template and process the header
      *
@@ -135,25 +114,15 @@ abstract class Custom extends Base
      *
      * @return boolean                 true or false if the cached content does not exist
      */
-    public function process(
-        Template               $_smarty_tpl,
-        ?\Smarty\Template\Cached $cached = null,
-        $update = false
-    ) {
+    public function process(Template $_smarty_tpl, ?\Smarty\Template\Cached $cached = null, $update = false)
+    {
         if (!$cached) {
-            $cached = $_smarty_tpl->getCached();
+            $cached = $_smarty_tpl->get_cached();
         }
         $content = $cached->content ?: null;
         $timestamp = $cached->timestamp ?: null;
         if ($content === null || !$timestamp) {
-            $this->fetch(
-                $_smarty_tpl->getCached()->filepath,
-                $_smarty_tpl->getSource()->name,
-                $_smarty_tpl->cache_id,
-                $_smarty_tpl->compile_id,
-                $content,
-                $timestamp
-            );
+            $this->fetch($_smarty_tpl->get_cached()->filepath, $_smarty_tpl->get_source()->name, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, $content, $timestamp);
         }
         if (isset($content)) {
             eval('?>' . $content);
@@ -162,7 +131,6 @@ abstract class Custom extends Base
         }
         return false;
     }
-
     /**
      * Write the rendered template output to cache
      *
@@ -171,18 +139,10 @@ abstract class Custom extends Base
      *
      * @return boolean                  success
      */
-    public function storeCachedContent(Template $_template, $content)
+    public function store_cached_content(Template $_template, $content)
     {
-        return $this->save(
-            $_template->getCached()->filepath,
-            $_template->getSource()->name,
-            $_template->cache_id,
-            $_template->compile_id,
-            $_template->cache_lifetime,
-            $content
-        );
+        return $this->save($_template->get_cached()->filepath, $_template->get_source()->name, $_template->cache_id, $_template->compile_id, $_template->cache_lifetime, $content);
     }
-
     /**
      * Read cached template from cache
      *
@@ -190,23 +150,15 @@ abstract class Custom extends Base
      *
      * @return string|boolean  content
      */
-    public function retrieveCachedContent(Template $_template)
+    public function retrieve_cached_content(Template $_template)
     {
-        $content = $_template->getCached()->content ?: null;
+        $content = $_template->get_cached()->content ?: null;
         if ($content === null) {
             $timestamp = null;
-            $this->fetch(
-                $_template->getCached()->filepath,
-                $_template->getSource()->name,
-                $_template->cache_id,
-                $_template->compile_id,
-                $content,
-                $timestamp
-            );
+            $this->fetch($_template->get_cached()->filepath, $_template->get_source()->name, $_template->cache_id, $_template->compile_id, $content, $timestamp);
         }
         return $content ?? false;
     }
-
     /**
      * Empty cache
      *
@@ -215,11 +167,10 @@ abstract class Custom extends Base
      *
      * @return integer number of cache files deleted
      */
-    public function clearAll(\Smarty\Smarty $smarty, $exp_time = null)
+    public function clear_all(\Smarty\Smarty $smarty, $exp_time = null)
     {
         return $this->delete(null, null, null, $exp_time);
     }
-
     /**
      * Empty cache for a specific template
      *
@@ -245,7 +196,6 @@ abstract class Custom extends Base
         }
         return $this->delete($cache_name, $cache_id, $compile_id, $exp_time);
     }
-
     /**
      * Check is cache is locked for this template
      *
@@ -254,41 +204,39 @@ abstract class Custom extends Base
      *
      * @return boolean               true or false if cache is locked
      */
-    public function hasLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
+    public function has_lock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
     {
         $id = $cached->lock_id;
-        $name = $cached->getSource()->name . '.lock';
-        $mtime = $this->fetchTimestamp($id, $name, $cached->cache_id, $cached->compile_id);
+        $name = $cached->get_source()->name . '.lock';
+        $mtime = $this->fetch_timestamp($id, $name, $cached->cache_id, $cached->compile_id);
         if ($mtime === null) {
             $this->fetch($id, $name, $cached->cache_id, $cached->compile_id, $content, $mtime);
         }
         return $mtime && ($t = time()) - $mtime < $smarty->locking_timeout;
     }
-
     /**
      * Lock cache for this template
      *
      * @param \Smarty\Smarty                 $smarty Smarty object
      * @param \Smarty\Template\Cached $cached cached object
      */
-    public function acquireLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
+    public function acquire_lock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
     {
         $cached->is_locked = true;
         $id = $cached->lock_id;
-        $name = $cached->getSource()->name . '.lock';
+        $name = $cached->get_source()->name . '.lock';
         $this->save($id, $name, $cached->cache_id, $cached->compile_id, $smarty->locking_timeout, '');
     }
-
     /**
      * Unlock cache for this template
      *
      * @param \Smarty\Smarty                 $smarty Smarty object
      * @param \Smarty\Template\Cached $cached cached object
      */
-    public function releaseLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
+    public function release_lock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached): void
     {
         $cached->is_locked = false;
-        $name = $cached->getSource()->name . '.lock';
+        $name = $cached->get_source()->name . '.lock';
         $this->delete($name, $cached->cache_id, $cached->compile_id, null);
     }
 }

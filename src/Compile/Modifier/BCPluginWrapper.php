@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
-class BCPluginWrapper extends Base
+class Bc_Plugin_Wrapper extends Base
 {
     private $callback;
-
     public function __construct($callback)
     {
         $this->callback = $callback;
     }
-
     /**
      * @inheritDoc
      */

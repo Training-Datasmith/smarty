@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Template;
-
 /**
  * Smarty {cycle} function plugin
  * Type:     function
@@ -45,10 +43,10 @@ class Cycle extends Base
     public function handle($params, Template $template)
     {
         static $cycle_vars;
-        $name = (empty($params['name'])) ? 'default' : $params['name'];
-        $print = !(isset($params['print'])) || (bool)$params['print'];
-        $advance = !(isset($params['advance'])) || (bool)$params['advance'];
-        $reset = isset($params['reset']) && (bool)$params['reset'];
+        $name = empty($params['name']) ? 'default' : $params['name'];
+        $print = !isset($params['print']) || (bool) $params['print'];
+        $advance = !isset($params['advance']) || (bool) $params['advance'];
+        $reset = isset($params['reset']) && (bool) $params['reset'];
         if (!isset($params['values'])) {
             if (!isset($cycle_vars[$name]['values'])) {
                 trigger_error('cycle: missing \'values\' parameter');

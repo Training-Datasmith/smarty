@@ -1,35 +1,30 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty;
 
 /**
  * Smarty error handler to fix new error levels in PHP8 for backwards compatibility
  * @author     Simon Wisselink
  */
-class ErrorHandler
+class Error_Handler
 {
     /**
      * Allows {$foo->propName} where propName is undefined.
      * @var bool
      */
-    public $allowUndefinedProperties = true;
-
+    public $allow_undefined_properties = true;
     /**
      * Allows {$foo.bar} where bar is unset and {$foo.bar1.bar2} where either bar1 or bar2 is unset.
      * @var bool
      */
-    public $allowUndefinedArrayKeys = true;
-
+    public $allow_undefined_array_keys = true;
     /**
      * Allows {$foo->bar} where bar is not an object (e.g. null or false).
      * @var bool
      */
-    public $allowDereferencingNonObjects = true;
-
-    private $previousErrorHandler;
-
+    public $allow_dereferencing_non_objects = true;
+    private $previous_error_handler;
     /**
      * Enable error handler to intercept errors
      */
@@ -38,7 +33,7 @@ class ErrorHandler
         /*
             Error muting is done because some people implemented custom error_handlers using
             https://php.net/set_error_handler and for some reason did not understand the following paragraph:
-
+        
             It is important to remember that the standard PHP error handler is completely bypassed for the
             error types specified by error_types unless the callback function returns FALSE.
             error_reporting() settings will have no effect and your error handler will be called regardless -
@@ -46,18 +41,16 @@ class ErrorHandler
             Of particular note is that this value will be 0 if the statement that caused the error was
             prepended by the @ error-control operator.
         */
-        $this->previousErrorHandler = set_error_handler([$this, 'handleError']);
+        $this->previous_error_handler = set_error_handler([$this, 'handleError']);
     }
-
     /**
      * Disable error handler
      */
     public function deactivate(): void
     {
         restore_error_handler();
-        $this->previousErrorHandler = null;
+        $this->previous_error_handler = null;
     }
-
     /**
      * Error Handler to mute expected messages
      *
@@ -71,31 +64,21 @@ class ErrorHandler
      *
      * @return bool
      */
-    public function handleError($errno, $errstr, $errfile, $errline, $errcontext = [])
+    public function handle_error($errno, $errstr, $errfile, $errline, $errcontext = [])
     {
-        if ($this->allowUndefinedProperties && preg_match(
-            '/^(Undefined property)/',
-            $errstr
-        )) {
-            return true; // suppresses this error
+        if ($this->allow_undefined_properties && preg_match('/^(Undefined property)/', $errstr)) {
+            return true;
+            // suppresses this error
         }
-
-        if ($this->allowUndefinedArrayKeys && preg_match(
-            '/^(Undefined index|Undefined array key|Trying to access array offset on)/',
-            $errstr
-        )) {
-            return true; // suppresses this error
+        if ($this->allow_undefined_array_keys && preg_match('/^(Undefined index|Undefined array key|Trying to access array offset on)/', $errstr)) {
+            return true;
+            // suppresses this error
         }
-
-        if ($this->allowDereferencingNonObjects && preg_match(
-            '/^Attempt to read property ".+?" on/',
-            $errstr
-        )) {
-            return true; // suppresses this error
+        if ($this->allow_dereferencing_non_objects && preg_match('/^Attempt to read property ".+?" on/', $errstr)) {
+            return true;
+            // suppresses this error
         }
-
         // pass all other errors through to the previous error handler or to the default PHP error handler
-        return $this->previousErrorHandler ?
-            call_user_func($this->previousErrorHandler, $errno, $errstr, $errfile, $errline, $errcontext) : false;
+        return $this->previous_error_handler ? call_user_func($this->previous_error_handler, $errno, $errstr, $errfile, $errline, $errcontext) : false;
     }
 }

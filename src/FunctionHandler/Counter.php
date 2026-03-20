@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Template;
-
 /**
  * Smarty {counter} function plugin
  * Type:     function
@@ -22,16 +20,15 @@ use Smarty\Template;
 class Counter extends Base
 {
     private $counters = [];
-
     public function handle($params, Template $template)
     {
         $name = $params['name'] ?? 'default';
         if (!isset($this->counters[$name])) {
             $this->counters[$name] = ['start' => 1, 'skip' => 1, 'direction' => 'up', 'count' => 1];
         }
-        $counter = & $this->counters[$name];
+        $counter =& $this->counters[$name];
         if (isset($params['start'])) {
-            $counter['start'] = $counter['count'] = (int)$params['start'];
+            $counter['start'] = $counter['count'] = (int) $params['start'];
         }
         if (!empty($params['assign'])) {
             $counter['assign'] = $params['assign'];
@@ -40,7 +37,7 @@ class Counter extends Base
             $template->assign($counter['assign'], $counter['count']);
         }
         if (isset($params['print'])) {
-            $print = (bool)$params['print'];
+            $print = (bool) $params['print'];
         } else {
             $print = empty($counter['assign']);
         }

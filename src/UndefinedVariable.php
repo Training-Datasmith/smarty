@@ -1,14 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty;
 
 /**
  * class for undefined variable object
  * This class defines an object for undefined variable handling
  */
-class UndefinedVariable extends Variable
+class Undefined_Variable extends Variable
 {
     /**
      * Always returns an empty string.

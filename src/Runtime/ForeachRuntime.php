@@ -1,19 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Runtime;
 
 use Smarty\Template;
-
 /**
  * Foreach Runtime Methods count(), init(), restore()
  *
-
-
  * @author     Uwe Tews
  */
-class ForeachRuntime
+class Foreach_Runtime
 {
     /**
      * Stack of saved variables
@@ -21,7 +17,6 @@ class ForeachRuntime
      * @var array
      */
     private $stack = [];
-
     /**
      * Init foreach loop
      *  - save item and key variables, named foreach property data if defined
@@ -36,21 +31,14 @@ class ForeachRuntime
      * @param array $properties of named foreach
      * @return mixed $from
      */
-    public function init(
-        Template $tpl,
-        $from,
-        $item,
-        $needTotal = false,
-        $key = null,
-        $name = null,
-        array $properties = []
-    ) {
-        $needTotal = $needTotal || isset($properties['total']);
-        $saveVars = [];
+    public function init(Template $tpl, $from, $item, $need_total = false, $key = null, $name = null, array $properties = [])
+    {
+        $need_total = $need_total || isset($properties['total']);
+        $save_vars = [];
         $total = null;
         if (!is_array($from)) {
             if (is_object($from)) {
-                if ($needTotal) {
+                if ($need_total) {
                     $total = $this->count($from);
                 }
             } else {
@@ -58,58 +46,46 @@ class ForeachRuntime
             }
         }
         if (!isset($total)) {
-            $total = empty($from) ? 0 : ($needTotal ? count($from) : 1);
+            $total = empty($from) ? 0 : ($need_total ? count($from) : 1);
         }
-        if ($tpl->hasVariable($item)) {
-            $saveVars['item'] = [
-                $item,
-                $tpl->getVariable($item)->getValue(),
-            ];
+        if ($tpl->has_variable($item)) {
+            $save_vars['item'] = [$item, $tpl->get_variable($item)->get_value()];
         }
         $tpl->assign($item);
         if ($total === 0) {
             $from = null;
-        } else {
-            if ($key) {
-                if ($tpl->hasVariable($key)) {
-                    $saveVars['key'] = [
-                        $key,
-                        clone $tpl->getVariable($key),
-                    ];
-                }
-                $tpl->assign($key);
+        } else if ($key) {
+            if ($tpl->has_variable($key)) {
+                $save_vars['key'] = [$key, clone $tpl->get_variable($key)];
             }
+            $tpl->assign($key);
         }
-        if ($needTotal) {
-            $tpl->getVariable($item)->total = $total;
+        if ($need_total) {
+            $tpl->get_variable($item)->total = $total;
         }
         if ($name) {
-            $namedVar = "__smarty_foreach_{$name}";
-            if ($tpl->hasVariable($namedVar)) {
-                $saveVars['named'] = [
-                    $namedVar,
-                    clone $tpl->getVariable($namedVar),
-                ];
+            $named_var = "__smarty_foreach_{$name}";
+            if ($tpl->has_variable($named_var)) {
+                $save_vars['named'] = [$named_var, clone $tpl->get_variable($named_var)];
             }
-            $namedProp = [];
+            $named_prop = [];
             if (isset($properties['total'])) {
-                $namedProp['total'] = $total;
+                $named_prop['total'] = $total;
             }
             if (isset($properties['iteration'])) {
-                $namedProp['iteration'] = 0;
+                $named_prop['iteration'] = 0;
             }
             if (isset($properties['index'])) {
-                $namedProp['index'] = -1;
+                $named_prop['index'] = -1;
             }
             if (isset($properties['show'])) {
-                $namedProp['show'] = ($total > 0);
+                $named_prop['show'] = $total > 0;
             }
-            $tpl->assign($namedVar, $namedProp);
+            $tpl->assign($named_var, $named_prop);
         }
-        $this->stack[] = $saveVars;
+        $this->stack[] = $save_vars;
         return $from;
     }
-
     /**
      * [util function] counts an array, arrayAccess/traversable or PDOStatement object
      *
@@ -134,7 +110,6 @@ class ForeachRuntime
         }
         return count((array) $value);
     }
-
     /**
      * Restore saved variables
      *
@@ -145,16 +120,16 @@ class ForeachRuntime
     public function restore(Template $tpl, $levels = 1): void
     {
         while ($levels) {
-            $saveVars = array_pop($this->stack);
-            if (!empty($saveVars)) {
-                if (isset($saveVars['item'])) {
-                    $tpl->getVariable($saveVars['item'][0])->setValue($saveVars['item'][1]);
+            $save_vars = array_pop($this->stack);
+            if (!empty($save_vars)) {
+                if (isset($save_vars['item'])) {
+                    $tpl->get_variable($save_vars['item'][0])->set_value($save_vars['item'][1]);
                 }
-                if (isset($saveVars['key'])) {
-                    $tpl->setVariable($saveVars['key'][0], $saveVars['key'][1]);
+                if (isset($save_vars['key'])) {
+                    $tpl->set_variable($save_vars['key'][0], $save_vars['key'][1]);
                 }
-                if (isset($saveVars['named'])) {
-                    $tpl->setVariable($saveVars['named'][0], $saveVars['named'][1]);
+                if (isset($save_vars['named'])) {
+                    $tpl->set_variable($save_vars['named'][0], $save_vars['named'][1]);
                 }
             }
             $levels--;

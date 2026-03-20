@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -11,12 +10,10 @@ namespace Smarty\Compile\Modifier;
  * Purpose:  return the length of the given string
  *
  */
-
-class StrlenModifierCompiler extends Base
+class Strlen_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
         return 'strlen((string) ' . $params[0] . ')';
     }
-
 }

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -12,13 +11,11 @@ namespace Smarty\Compile\Modifier;
  *
  * @author Uwe Tews
  */
-
-class CountParagraphsModifierCompiler extends Base
+class Count_Paragraphs_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
         // count \r or \n characters
-        return '(preg_match_all(\'#[\r\n]+#\', ' . $params[ 0 ] . ', $tmp)+1)';
+        return '(preg_match_all(\'#[\r\n]+#\', ' . $params[0] . ', $tmp)+1)';
     }
-
 }

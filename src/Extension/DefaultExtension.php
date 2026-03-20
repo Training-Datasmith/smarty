@@ -1,159 +1,201 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Extension;
 
-class DefaultExtension extends Base
+class Default_Extension extends Base
 {
     private $modifiers = [];
-
-    private $functionHandlers = [];
-
-    private $blockHandlers = [];
-
-    public function getModifierCompiler(string $modifier): ?\Smarty\Compile\Modifier\ModifierCompilerInterface
+    private $function_handlers = [];
+    private $block_handlers = [];
+    public function get_modifier_compiler(string $modifier): ?\Smarty\Compile\Modifier\Modifier_Compiler_Interface
     {
-
         if (isset($this->modifiers[$modifier])) {
             return $this->modifiers[$modifier];
         }
-
         switch ($modifier) {
-            case 'cat': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\CatModifierCompiler();
+            case 'cat':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Cat_Modifier_Compiler();
                 break;
-            case 'count_characters': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\CountCharactersModifierCompiler();
+            case 'count_characters':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Count_Characters_Modifier_Compiler();
                 break;
-            case 'count_paragraphs': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\CountParagraphsModifierCompiler();
+            case 'count_paragraphs':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Count_Paragraphs_Modifier_Compiler();
                 break;
-            case 'count_sentences': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\CountSentencesModifierCompiler();
+            case 'count_sentences':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Count_Sentences_Modifier_Compiler();
                 break;
-            case 'count_words': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\CountWordsModifierCompiler();
+            case 'count_words':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Count_Words_Modifier_Compiler();
                 break;
-            case 'default': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\DefaultModifierCompiler();
+            case 'default':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Default_Modifier_Compiler();
                 break;
-            case 'empty': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\EmptyModifierCompiler();
+            case 'empty':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Empty_Modifier_Compiler();
                 break;
-            case 'escape': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\EscapeModifierCompiler();
+            case 'escape':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Escape_Modifier_Compiler();
                 break;
-            case 'from_charset': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\FromCharsetModifierCompiler();
+            case 'from_charset':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\From_Charset_Modifier_Compiler();
                 break;
-            case 'indent': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\IndentModifierCompiler();
+            case 'indent':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Indent_Modifier_Compiler();
                 break;
-            case 'is_array': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\IsArrayModifierCompiler();
+            case 'is_array':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Is_Array_Modifier_Compiler();
                 break;
-            case 'isset': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\IssetModifierCompiler();
+            case 'isset':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Isset_Modifier_Compiler();
                 break;
-            case 'json_encode': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\JsonEncodeModifierCompiler();
+            case 'json_encode':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Json_Encode_Modifier_Compiler();
                 break;
-            case 'lower': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\LowerModifierCompiler();
+            case 'lower':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Lower_Modifier_Compiler();
                 break;
-            case 'nl2br': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Nl2brModifierCompiler();
+            case 'nl2br':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Nl2br_Modifier_Compiler();
                 break;
-            case 'noprint': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\NoPrintModifierCompiler();
+            case 'noprint':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\No_Print_Modifier_Compiler();
                 break;
-            case 'raw': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\RawModifierCompiler();
+            case 'raw':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Raw_Modifier_Compiler();
                 break;
-            case 'round': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\RoundModifierCompiler();
+            case 'round':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Round_Modifier_Compiler();
                 break;
-            case 'str_repeat': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\StrRepeatModifierCompiler();
+            case 'str_repeat':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Str_Repeat_Modifier_Compiler();
                 break;
-            case 'string_format': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\StringFormatModifierCompiler();
+            case 'string_format':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\String_Format_Modifier_Compiler();
                 break;
-            case 'strip': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\StripModifierCompiler();
+            case 'strip':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Strip_Modifier_Compiler();
                 break;
-            case 'strip_tags': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\StripTagsModifierCompiler();
+            case 'strip_tags':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Strip_Tags_Modifier_Compiler();
                 break;
-            case 'strlen': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\StrlenModifierCompiler();
+            case 'strlen':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Strlen_Modifier_Compiler();
                 break;
-            case 'substr': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\SubstrModifierCompiler();
+            case 'substr':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Substr_Modifier_Compiler();
                 break;
-            case 'to_charset': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\ToCharsetModifierCompiler();
+            case 'to_charset':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\To_Charset_Modifier_Compiler();
                 break;
-            case 'unescape': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\UnescapeModifierCompiler();
+            case 'unescape':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Unescape_Modifier_Compiler();
                 break;
-            case 'upper': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\UpperModifierCompiler();
+            case 'upper':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Upper_Modifier_Compiler();
                 break;
-            case 'wordwrap': $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\WordWrapModifierCompiler();
+            case 'wordwrap':
+                $this->modifiers[$modifier] = new \Smarty\Compile\Modifier\Word_Wrap_Modifier_Compiler();
                 break;
         }
-
         return $this->modifiers[$modifier] ?? null;
     }
-
-    public function getModifierCallback(string $modifierName): ?array
+    public function get_modifier_callback(string $modifier_name): ?array
     {
-        switch ($modifierName) {
-            case 'capitalize': return [$this, 'smarty_modifier_capitalize'];
-            case 'count': return [$this, 'smarty_modifier_count'];
-            case 'date_format': return [$this, 'smarty_modifier_date_format'];
-            case 'debug_print_var': return [$this, 'smarty_modifier_debug_print_var'];
-            case 'escape': return [$this, 'smarty_modifier_escape'];
-            case 'explode': return [$this, 'smarty_modifier_explode'];
-            case 'implode': return [$this, 'smarty_modifier_implode'];
-            case 'in_array': return [$this, 'smarty_modifier_in_array'];
-            case 'join': return [$this, 'smarty_modifier_join'];
-            case 'mb_wordwrap': return [$this, 'smarty_modifier_mb_wordwrap'];
-            case 'number_format': return [$this, 'smarty_modifier_number_format'];
-            case 'regex_replace': return [$this, 'smarty_modifier_regex_replace'];
-            case 'replace': return [$this, 'smarty_modifier_replace'];
-            case 'spacify': return [$this, 'smarty_modifier_spacify'];
-            case 'split': return [$this, 'smarty_modifier_split'];
-            case 'truncate': return [$this, 'smarty_modifier_truncate'];
+        switch ($modifier_name) {
+            case 'capitalize':
+                return [$this, 'smarty_modifier_capitalize'];
+            case 'count':
+                return [$this, 'smarty_modifier_count'];
+            case 'date_format':
+                return [$this, 'smarty_modifier_date_format'];
+            case 'debug_print_var':
+                return [$this, 'smarty_modifier_debug_print_var'];
+            case 'escape':
+                return [$this, 'smarty_modifier_escape'];
+            case 'explode':
+                return [$this, 'smarty_modifier_explode'];
+            case 'implode':
+                return [$this, 'smarty_modifier_implode'];
+            case 'in_array':
+                return [$this, 'smarty_modifier_in_array'];
+            case 'join':
+                return [$this, 'smarty_modifier_join'];
+            case 'mb_wordwrap':
+                return [$this, 'smarty_modifier_mb_wordwrap'];
+            case 'number_format':
+                return [$this, 'smarty_modifier_number_format'];
+            case 'regex_replace':
+                return [$this, 'smarty_modifier_regex_replace'];
+            case 'replace':
+                return [$this, 'smarty_modifier_replace'];
+            case 'spacify':
+                return [$this, 'smarty_modifier_spacify'];
+            case 'split':
+                return [$this, 'smarty_modifier_split'];
+            case 'truncate':
+                return [$this, 'smarty_modifier_truncate'];
         }
         return null;
     }
-
-    public function getFunctionHandler(string $functionName): ?\Smarty\FunctionHandler\FunctionHandlerInterface
+    public function get_function_handler(string $function_name): ?\Smarty\Function_Handler\Function_Handler_Interface
     {
-
-        if (isset($this->functionHandlers[$functionName])) {
-            return $this->functionHandlers[$functionName];
+        if (isset($this->function_handlers[$function_name])) {
+            return $this->function_handlers[$function_name];
         }
-
-        switch ($functionName) {
-            case 'count': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Count();
+        switch ($function_name) {
+            case 'count':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Count();
                 break;
-            case 'counter': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Counter();
+            case 'counter':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Counter();
                 break;
-            case 'cycle': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Cycle();
+            case 'cycle':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Cycle();
                 break;
-            case 'fetch': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Fetch();
+            case 'fetch':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Fetch();
                 break;
-            case 'html_checkboxes': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlCheckboxes();
+            case 'html_checkboxes':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Checkboxes();
                 break;
-            case 'html_image': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlImage();
+            case 'html_image':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Image();
                 break;
-            case 'html_options': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlOptions();
+            case 'html_options':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Options();
                 break;
-            case 'html_radios': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlRadios();
+            case 'html_radios':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Radios();
                 break;
-            case 'html_select_date': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlSelectDate();
+            case 'html_select_date':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Select_Date();
                 break;
-            case 'html_select_time': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlSelectTime();
+            case 'html_select_time':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Select_Time();
                 break;
-            case 'html_table': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\HtmlTable();
+            case 'html_table':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Html_Table();
                 break;
-            case 'mailto': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Mailto();
+            case 'mailto':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Mailto();
                 break;
-            case 'math': $this->functionHandlers[$functionName] = new \Smarty\FunctionHandler\Math();
+            case 'math':
+                $this->function_handlers[$function_name] = new \Smarty\Function_Handler\Math();
                 break;
         }
-
-        return $this->functionHandlers[$functionName] ?? null;
+        return $this->function_handlers[$function_name] ?? null;
     }
-
-    public function getBlockHandler(string $blockTagName): ?\Smarty\BlockHandler\BlockHandlerInterface
+    public function get_block_handler(string $block_tag_name): ?\Smarty\Block_Handler\Block_Handler_Interface
     {
-
-        switch ($blockTagName) {
-            case 'textformat': $this->blockHandlers[$blockTagName] = new \Smarty\BlockHandler\TextFormat();
+        switch ($block_tag_name) {
+            case 'textformat':
+                $this->block_handlers[$block_tag_name] = new \Smarty\Block_Handler\Text_Format();
                 break;
         }
-
-        return $this->blockHandlers[$blockTagName] ?? null;
+        return $this->block_handlers[$block_tag_name] ?? null;
     }
-
     /**
      * Smarty spacify modifier plugin
      * Type:     modifier
@@ -170,7 +212,6 @@ class DefaultExtension extends Base
         // well… what about charsets besides latin and UTF-8?
         return implode($spacify_char, preg_split('//' . \Smarty\Smarty::$_UTF8_MODIFIER, $string, -1, PREG_SPLIT_NO_EMPTY));
     }
-
     /**
      * Smarty capitalize modifier plugin
      * Type:     modifier
@@ -189,56 +230,27 @@ class DefaultExtension extends Base
     public function smarty_modifier_capitalize($string, $uc_digits = false, $lc_rest = false): ?string
     {
         $string = (string) $string;
-
         if ($lc_rest) {
             // uppercase (including hyphenated words)
             $upper_string = mb_convert_case($string, MB_CASE_TITLE, \Smarty\Smarty::$_CHARSET);
         } else {
             // uppercase word breaks
-            $upper_string = preg_replace_callback(
-                "!(^|[^\p{L}'])([\p{Ll}])!S" . \Smarty\Smarty::$_UTF8_MODIFIER,
-                function ($matches): string {
-                    return stripslashes($matches[1]) .
-                        mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, \Smarty\Smarty::$_CHARSET);
-                },
-                $string
-            );
+            $upper_string = preg_replace_callback("!(^|[^\\p{L}'])([\\p{Ll}])!S" . \Smarty\Smarty::$_UTF8_MODIFIER, function ($matches): string {
+                return stripslashes($matches[1]) . mb_convert_case(stripslashes($matches[2]), MB_CASE_UPPER, \Smarty\Smarty::$_CHARSET);
+            }, $string);
         }
         // check uc_digits case
         if (!$uc_digits) {
-            if (preg_match_all(
-                "!\b([\p{L}]*[\p{N}]+[\p{L}]*)\b!" . \Smarty\Smarty::$_UTF8_MODIFIER,
-                $string,
-                $matches,
-                PREG_OFFSET_CAPTURE
-            )
-            ) {
-                foreach ($matches[ 1 ] as $match) {
-                    $upper_string =
-                        substr_replace(
-                            $upper_string,
-                            mb_strtolower($match[ 0 ], \Smarty\Smarty::$_CHARSET),
-                            $match[ 1 ],
-                            strlen($match[ 0 ])
-                        );
+            if (preg_match_all("!\\b([\\p{L}]*[\\p{N}]+[\\p{L}]*)\\b!" . \Smarty\Smarty::$_UTF8_MODIFIER, $string, $matches, PREG_OFFSET_CAPTURE)) {
+                foreach ($matches[1] as $match) {
+                    $upper_string = substr_replace($upper_string, mb_strtolower($match[0], \Smarty\Smarty::$_CHARSET), $match[1], strlen($match[0]));
                 }
             }
         }
-        return preg_replace_callback(
-            "!((^|\s)['\"])(\w)!" . \Smarty\Smarty::$_UTF8_MODIFIER,
-            function ($matches): string {
-                return stripslashes(
-                    $matches[ 1 ]
-                ) . mb_convert_case(
-                    stripslashes($matches[ 3 ]),
-                    MB_CASE_UPPER,
-                    \Smarty\Smarty::$_CHARSET
-                );
-            },
-            $upper_string
-        );
+        return preg_replace_callback("!((^|\\s)['\"])(\\w)!" . \Smarty\Smarty::$_UTF8_MODIFIER, function ($matches): string {
+            return stripslashes($matches[1]) . mb_convert_case(stripslashes($matches[3]), MB_CASE_UPPER, \Smarty\Smarty::$_CHARSET);
+        }, $upper_string);
     }
-
     /**
      * Smarty count modifier plugin
      * Type:     modifier
@@ -251,28 +263,26 @@ class DefaultExtension extends Base
      * @param mixed $arrayOrObject  input array/object
      * @param int $mode       count mode
      */
-    public function smarty_modifier_count($arrayOrObject, $mode = 0): int
+    public function smarty_modifier_count($array_or_object, $mode = 0): int
     {
         /*
          * @see https://www.php.net/count
          * > Prior to PHP 8.0.0, if the parameter was neither an array nor an object that implements the Countable interface,
          * > 1 would be returned, unless value was null, in which case 0 would be returned.
          */
-        if ($arrayOrObject instanceof \Countable || is_array($arrayOrObject)) {
-            return count($arrayOrObject, (int) $mode);
+        if ($array_or_object instanceof \Countable || is_array($array_or_object)) {
+            return count($array_or_object, (int) $mode);
         }
         /*
          * @see https://www.php.net/count
          * > Prior to PHP 8.0.0, if the parameter was neither an array nor an object that implements the Countable interface,
          * > 1 would be returned, unless value was null, in which case 0 would be returned.
          */
-
-        if ($arrayOrObject === null) {
+        if ($array_or_object === null) {
             return 0;
         }
         return 1;
     }
-
     /**
      * Smarty date_format modifier plugin
      * Type:     modifier
@@ -298,7 +308,6 @@ class DefaultExtension extends Base
         if ($format === null) {
             $format = \Smarty\Smarty::$_DATE_FORMAT;
         }
-
         if (!empty($string) && $string !== '0000-00-00' && $string !== '0000-00-00 00:00:00') {
             $timestamp = smarty_make_timestamp($string);
         } elseif (!empty($default_date)) {
@@ -306,26 +315,10 @@ class DefaultExtension extends Base
         } else {
             return;
         }
-        if ($formatter === 'strftime' || ($formatter === 'auto' && strpos($format, '%') !== false)) {
+        if ($formatter === 'strftime' || $formatter === 'auto' && strpos($format, '%') !== false) {
             if (\Smarty\Smarty::$_IS_WINDOWS) {
-                $_win_from = [
-                    '%D',
-                    '%h',
-                    '%n',
-                    '%r',
-                    '%R',
-                    '%t',
-                    '%T',
-                ];
-                $_win_to = [
-                    '%m/%d/%y',
-                    '%b',
-                    "\n",
-                    '%I:%M:%S %p',
-                    '%H:%M',
-                    "\t",
-                    '%H:%M:%S',
-                ];
+                $_win_from = ['%D', '%h', '%n', '%r', '%R', '%t', '%T'];
+                $_win_to = ['%m/%d/%y', '%b', "\n", '%I:%M:%S %p', '%H:%M', "\t", '%H:%M:%S'];
                 if (strpos($format, '%e') !== false) {
                     $_win_from[] = '%e';
                     $_win_to[] = sprintf('%\' 2d', date('j', $timestamp));
@@ -341,7 +334,6 @@ class DefaultExtension extends Base
         }
         return date($format, $timestamp);
     }
-
     /**
      * Smarty debug_print_var modifier plugin
      * Type:     modifier
@@ -366,9 +358,7 @@ class DefaultExtension extends Base
                     break;
                 }
                 foreach ($var as $curr_key => $curr_val) {
-                    $results .= '<br>' . str_repeat('&nbsp;', $depth * 2) . '<b>' . htmlspecialchars(strtr($curr_key, $_replace)) .
-                        '</b> =&gt; ' .
-                        $this->smarty_modifier_debug_print_var($curr_val, $max, $length, ++$depth, $objects);
+                    $results .= '<br>' . str_repeat('&nbsp;', $depth * 2) . '<b>' . htmlspecialchars(strtr($curr_key, $_replace)) . '</b> =&gt; ' . $this->smarty_modifier_debug_print_var($curr_val, $max, $length, ++$depth, $objects);
                     $depth--;
                 }
                 break;
@@ -384,8 +374,7 @@ class DefaultExtension extends Base
                 }
                 $objects[] = $var;
                 foreach ($object_vars as $curr_key => $curr_val) {
-                    $results .= '<br>' . str_repeat('&nbsp;', $depth * 2) . '<b> -&gt;' . htmlspecialchars(strtr($curr_key, $_replace)) .
-                        '</b> = ' . $this->smarty_modifier_debug_print_var($curr_val, $max, $length, ++$depth, $objects);
+                    $results .= '<br>' . str_repeat('&nbsp;', $depth * 2) . '<b> -&gt;' . htmlspecialchars(strtr($curr_key, $_replace)) . '</b> = ' . $this->smarty_modifier_debug_print_var($curr_val, $max, $length, ++$depth, $objects);
                     $depth--;
                 }
                 break;
@@ -399,13 +388,13 @@ class DefaultExtension extends Base
                 } elseif (null === $var) {
                     $results = 'null';
                 } else {
-                    $results = htmlspecialchars((string)$var);
+                    $results = htmlspecialchars((string) $var);
                 }
                 $results = '<i>' . $results . '</i>';
                 break;
             case 'integer':
             case 'float':
-                $results = htmlspecialchars((string)$var);
+                $results = htmlspecialchars((string) $var);
                 break;
             case 'string':
                 $results = strtr($var, $_replace);
@@ -416,7 +405,7 @@ class DefaultExtension extends Base
                 break;
             case 'unknown type':
             default:
-                $results = strtr((string)$var, $_replace);
+                $results = strtr((string) $var, $_replace);
                 if (mb_strlen($results, \Smarty\Smarty::$_CHARSET) > $length) {
                     $results = mb_substr($results, 0, $length - 3, \Smarty\Smarty::$_CHARSET) . '...';
                 }
@@ -424,7 +413,6 @@ class DefaultExtension extends Base
         }
         return $results;
     }
-
     /**
      * Smarty escape modifier plugin
      * Type:     modifier
@@ -445,9 +433,7 @@ class DefaultExtension extends Base
         if (!$char_set) {
             $char_set = \Smarty\Smarty::$_CHARSET;
         }
-
-        $string = (string)$string;
-
+        $string = (string) $string;
         switch ($esc_type) {
             case 'html':
                 return htmlspecialchars($string, ENT_QUOTES, $char_set, $double_encode);
@@ -467,7 +453,7 @@ class DefaultExtension extends Base
                 $return = '';
                 $_length = strlen($string);
                 for ($x = 0; $x < $_length; $x++) {
-                    $return .= '%' . bin2hex($string[ $x ]);
+                    $return .= '%' . bin2hex($string[$x]);
                 }
                 return $return;
             case 'hexentity':
@@ -484,36 +470,23 @@ class DefaultExtension extends Base
                 return $return;
             case 'javascript':
                 // escape quotes and backslashes, newlines, etc.
-                return strtr(
-                    $string,
-                    [
-                        '\\' => '\\\\',
-                        "'"  => "\\'",
-                        '"'  => '\\"',
-                        "\r" => '\\r',
-                        "\n" => '\\n',
-                        '</' => '<\/',
-                        // see https://html.spec.whatwg.org/multipage/scripting.html#restrictions-for-contents-of-script-elements
-                        '<!--' => '<\!--',
-                        '<s'   => '<\s',
-                        '<S'   => '<\S',
-                        '`' => '\\\\`',
-                        '${' => '\\\\\$\\{',
-                        "\x00" => '\\x00',
-                    ]
-                );
+                return strtr($string, [
+                    '\\' => '\\\\',
+                    "'" => "\\'",
+                    '"' => '\"',
+                    "\r" => '\r',
+                    "\n" => '\n',
+                    '</' => '<\/',
+                    // see https://html.spec.whatwg.org/multipage/scripting.html#restrictions-for-contents-of-script-elements
+                    '<!--' => '<\!--',
+                    '<s' => '<\s',
+                    '<S' => '<\S',
+                    '`' => '\\\\`',
+                    '${' => '\\\\\\$\{',
+                    "\x00" => '\x00',
+                ]);
             case 'mail':
-                return smarty_mb_str_replace(
-                    [
-                        '@',
-                        '.',
-                    ],
-                    [
-                        ' [AT] ',
-                        ' [DOT] ',
-                    ],
-                    $string
-                );
+                return smarty_mb_str_replace(['@', '.'], [' [AT] ', ' [DOT] '], $string);
             case 'nonstd':
                 // escape non-standard chars, such as ms document quotes
                 $return = '';
@@ -526,11 +499,10 @@ class DefaultExtension extends Base
                 }
                 return $return;
             default:
-                trigger_error("escape: unsupported type: $esc_type - returning unmodified string", E_USER_NOTICE);
+                trigger_error("escape: unsupported type: {$esc_type} - returning unmodified string", E_USER_NOTICE);
                 return $string;
         }
     }
-
     /**
      * convert characters to their decimal unicode equivalents
      *
@@ -551,7 +523,6 @@ class DefaultExtension extends Base
         }
         return unpack('N*', $expanded);
     }
-
     /**
      * Smarty explode modifier plugin
      * Type:     modifier
@@ -564,12 +535,10 @@ class DefaultExtension extends Base
      */
     public function smarty_modifier_explode($separator, $string, ?int $limit = null): array
     {
-        trigger_error('Using explode is deprecated. ' .
-            'Use split, using the array first, separator second.', E_USER_DEPRECATED);
+        trigger_error('Using explode is deprecated. ' . 'Use split, using the array first, separator second.', E_USER_DEPRECATED);
         // provide $string default to prevent deprecation errors in PHP >=8.1
         return explode($separator, $string ?? '', $limit ?? PHP_INT_MAX);
     }
-
     /**
      * Smarty split modifier plugin
      * Type:     modifier
@@ -585,7 +554,6 @@ class DefaultExtension extends Base
         // provide $string default to prevent deprecation errors in PHP >=8.1
         return explode($separator, $string ?? '', $limit ?? PHP_INT_MAX);
     }
-
     /**
      * Smarty implode modifier plugin
      * Type:     modifier
@@ -597,16 +565,12 @@ class DefaultExtension extends Base
      */
     public function smarty_modifier_implode($values, $separator = ''): string
     {
-
-        trigger_error('Using implode is deprecated. ' .
-            'Use join using the array first, separator second.', E_USER_DEPRECATED);
-
+        trigger_error('Using implode is deprecated. ' . 'Use join using the array first, separator second.', E_USER_DEPRECATED);
         if (is_array($separator)) {
             return implode((string) ($values ?? ''), $separator);
         }
         return implode((string) ($separator ?? ''), (array) $values);
     }
-
     /**
      * Smarty in_array modifier plugin
      * Type:     modifier
@@ -621,7 +585,6 @@ class DefaultExtension extends Base
     {
         return in_array($needle, (array) $array, (bool) $strict);
     }
-
     /**
      * Smarty join modifier plugin
      * Type:     modifier
@@ -634,13 +597,11 @@ class DefaultExtension extends Base
     public function smarty_modifier_join($values, $separator = ''): string
     {
         if (is_array($separator)) {
-            trigger_error('Using join with the separator first is deprecated. ' .
-                'Call join using the array first, separator second.', E_USER_DEPRECATED);
+            trigger_error('Using join with the separator first is deprecated. ' . 'Call join using the array first, separator second.', E_USER_DEPRECATED);
             return implode((string) ($values ?? ''), $separator);
         }
         return implode((string) ($separator ?? ''), (array) $values);
     }
-
     /**
      * Smarty wordwrap modifier plugin
      * Type:     modifier
@@ -661,7 +622,6 @@ class DefaultExtension extends Base
     {
         return smarty_mb_wordwrap($str, $width, $break, $cut);
     }
-
     /**
      * Smarty number_format modifier plugin
      * Type:     modifier
@@ -675,7 +635,6 @@ class DefaultExtension extends Base
         // provide $num default to prevent deprecation errors in PHP >=8.1
         return number_format($num ?? 0.0, $decimals, $decimal_separator, $thousands_separator);
     }
-
     /**
      * Smarty regex_replace modifier plugin
      * Type:     modifier
@@ -695,14 +654,13 @@ class DefaultExtension extends Base
     {
         if (is_array($search)) {
             foreach ($search as $idx => $s) {
-                $search[ $idx ] = $this->regex_replace_check($s);
+                $search[$idx] = $this->regex_replace_check($s);
             }
         } else {
             $search = $this->regex_replace_check($search);
         }
         return preg_replace($search, $replace, $string, $limit);
     }
-
     /**
      * @param  string $search string(s) that should be replaced
      *
@@ -713,17 +671,16 @@ class DefaultExtension extends Base
     {
         // null-byte injection detection
         // anything behind the first null-byte is ignored
-        if (($pos = strpos($search, "\0")) !== false) {
+        if (($pos = strpos($search, "\x00")) !== false) {
             $search = substr($search, 0, $pos);
         }
         // reject patterns containing eval-modifier
-        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && (strpos($match[ 1 ], 'e') !== false)) {
+        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && strpos($match[1], 'e') !== false) {
             trigger_error('regex_replace: the /e modifier is not allowed', E_USER_WARNING);
             return false;
         }
         return $search;
     }
-
     /**
      * Smarty replace modifier plugin
      * Type:     modifier
@@ -743,7 +700,6 @@ class DefaultExtension extends Base
     {
         return smarty_mb_str_replace($search, $replace, $string);
     }
-
     /**
      * Smarty truncate modifier plugin
      * Type:     modifier
@@ -770,19 +726,13 @@ class DefaultExtension extends Base
         if (mb_strlen($string, \Smarty\Smarty::$_CHARSET) > $length) {
             $length -= min($length, mb_strlen($etc, \Smarty\Smarty::$_CHARSET));
             if (!$break_words && !$middle) {
-                $string = preg_replace(
-                    '/\s+?(\S+)?$/' . \Smarty\Smarty::$_UTF8_MODIFIER,
-                    '',
-                    mb_substr($string, 0, $length + 1, \Smarty\Smarty::$_CHARSET)
-                );
+                $string = preg_replace('/\s+?(\S+)?$/' . \Smarty\Smarty::$_UTF8_MODIFIER, '', mb_substr($string, 0, $length + 1, \Smarty\Smarty::$_CHARSET));
             }
             if (!$middle) {
                 return mb_substr($string, 0, $length, \Smarty\Smarty::$_CHARSET) . $etc;
             }
-            return mb_substr($string, 0, intval($length / 2), \Smarty\Smarty::$_CHARSET) . $etc .
-                mb_substr($string, -intval($length / 2), $length, \Smarty\Smarty::$_CHARSET);
+            return mb_substr($string, 0, intval($length / 2), \Smarty\Smarty::$_CHARSET) . $etc . mb_substr($string, -intval($length / 2), $length, \Smarty\Smarty::$_CHARSET);
         }
         return $string;
     }
-
 }

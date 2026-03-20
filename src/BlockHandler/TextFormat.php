@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\BlockHandler;
+declare (strict_types=1);
+namespace Smarty\Block_Handler;
 
 use Smarty\Smarty;
 use Smarty\Template;
-
 /**
  * Smarty {textformat}{/textformat} block plugin
  * Type:     block function
@@ -31,7 +29,7 @@ use Smarty\Template;
  * @author Monte Ohrt <monte at ohrt dot com>
  * @throws \Smarty\Exception
  */
-class TextFormat implements BlockHandlerInterface
+class Text_Format implements Block_Handler_Interface
 {
     public function handle($params, $content, Template $template, &$repeat)
     {
@@ -52,15 +50,15 @@ class TextFormat implements BlockHandlerInterface
                 case 'indent_char':
                 case 'wrap_char':
                 case 'assign':
-                    ${$_key} = (string)$_val;
+                    ${$_key} = (string) $_val;
                     break;
                 case 'indent':
                 case 'indent_first':
                 case 'wrap':
-                    ${$_key} = (int)$_val;
+                    ${$_key} = (int) $_val;
                     break;
                 case 'wrap_cut':
-                    ${$_key} = (bool)$_val;
+                    ${$_key} = (bool) $_val;
                     break;
                 default:
                     trigger_error("textformat: unknown attribute '{$_key}'");
@@ -76,18 +74,7 @@ class TextFormat implements BlockHandlerInterface
                 continue;
             }
             // convert mult. spaces & special chars to single space
-            $_paragraph =
-                preg_replace(
-                    [
-                        '!\s+!' . Smarty::$_UTF8_MODIFIER,
-                        '!(^\s+)|(\s+$)!' . Smarty::$_UTF8_MODIFIER,
-                    ],
-                    [
-                        ' ',
-                        '',
-                    ],
-                    $_paragraph
-                );
+            $_paragraph = preg_replace(['!\s+!' . Smarty::$_UTF8_MODIFIER, '!(^\s+)|(\s+$)!' . Smarty::$_UTF8_MODIFIER], [' ', ''], $_paragraph);
             // indent first line
             if ($indent_first > 0) {
                 $_paragraph = str_repeat($indent_char, $indent_first) . $_paragraph;
@@ -106,8 +93,7 @@ class TextFormat implements BlockHandlerInterface
             return $_output;
         }
     }
-
-    public function isCacheable(): bool
+    public function is_cacheable(): bool
     {
         return true;
     }

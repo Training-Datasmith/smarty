@@ -1,24 +1,19 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Cacheresource;
 
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
+use Recursive_Directory_Iterator;
+use Recursive_Iterator_Iterator;
 use Smarty\Smarty;
 use Smarty\Template;
 use Smarty\Template\Cached;
-
 /**
  * Smarty Internal Plugin CacheResource File
  *
-
-
  * @author     Uwe Tews
  * @author     Rodney Rehm
  */
-
 /**
  * This class does contain all necessary methods for the HTML cache on file system
  * Implements the file system as resource for the HTML cache Version using nocache inserts.
@@ -33,36 +28,22 @@ class File extends Base
      */
     public function populate(Cached $cached, Template $_template): void
     {
-        $source = $_template->getSource();
-        $smarty = $_template->getSmarty();
+        $source = $_template->get_source();
+        $smarty = $_template->get_smarty();
         $_compile_dir_sep = $smarty->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
         $_filepath = $source->uid;
-        $cached->filepath = $smarty->getCacheDir();
+        $cached->filepath = $smarty->get_cache_dir();
         if (isset($_template->cache_id)) {
-            $cached->filepath .= preg_replace(
-                [
-                                         '![^\w|]+!',
-                                         '![|]+!',
-                                     ],
-                [
-                                         '_',
-                                         $_compile_dir_sep,
-                                     ],
-                $_template->cache_id
-            ) . $_compile_dir_sep;
+            $cached->filepath .= preg_replace(['![^\w|]+!', '![|]+!'], ['_', $_compile_dir_sep], $_template->cache_id) . $_compile_dir_sep;
         }
         if (isset($_template->compile_id)) {
             $cached->filepath .= preg_replace('![^\w]+!', '_', $_template->compile_id) . $_compile_dir_sep;
         }
         // if use_sub_dirs, break file into directories
         if ($smarty->use_sub_dirs) {
-            $cached->filepath .= $_filepath[ 0 ] . $_filepath[ 1 ] . DIRECTORY_SEPARATOR . $_filepath[ 2 ] .
-                                 $_filepath[ 3 ] .
-                                 DIRECTORY_SEPARATOR .
-                                 $_filepath[ 4 ] . $_filepath[ 5 ] . DIRECTORY_SEPARATOR;
+            $cached->filepath .= $_filepath[0] . $_filepath[1] . DIRECTORY_SEPARATOR . $_filepath[2] . $_filepath[3] . DIRECTORY_SEPARATOR . $_filepath[4] . $_filepath[5] . DIRECTORY_SEPARATOR;
         }
-        $cached->filepath .= $_filepath . '_' . $source->getBasename();
-
+        $cached->filepath .= $_filepath . '_' . $source->get_basename();
         if ($smarty->cache_locking) {
             $cached->lock_id = $cached->filepath . '.lock';
         }
@@ -72,20 +53,18 @@ class File extends Base
             $cached->timestamp = filemtime($cached->filepath);
         }
     }
-
     /**
      * populate Cached Object with timestamp and exists from Resource
      *
      * @param Cached $cached cached object
      */
-    public function populateTimestamp(Cached $cached): void
+    public function populate_timestamp(Cached $cached): void
     {
         $cached->timestamp = $cached->exists = is_file($cached->filepath);
         if ($cached->exists) {
             $cached->timestamp = filemtime($cached->filepath);
         }
     }
-
     /**
      * Read the cached template and process its header
      *
@@ -95,19 +74,15 @@ class File extends Base
      *
      * @return boolean true or false if the cached content does not exist
      */
-    public function process(
-        Template $_smarty_tpl,
-        ?Cached  $cached = null,
-        $update = false
-    ) {
-        $_smarty_tpl->getCached()->setValid(false);
+    public function process(Template $_smarty_tpl, ?Cached $cached = null, $update = false)
+    {
+        $_smarty_tpl->get_cached()->set_valid(false);
         if ($update && defined('HHVM_VERSION')) {
-            eval('?>' . file_get_contents($_smarty_tpl->getCached()->filepath));
+            eval('?>' . file_get_contents($_smarty_tpl->get_cached()->filepath));
             return true;
         }
-        return @include $_smarty_tpl->getCached()->filepath;
+        return @include $_smarty_tpl->get_cached()->filepath;
     }
-
     /**
      * Write the rendered template output to cache
      *
@@ -117,15 +92,13 @@ class File extends Base
      * @return bool success
      * @throws \Smarty\Exception
      */
-    public function storeCachedContent(Template $_template, $content): bool
+    public function store_cached_content(Template $_template, $content): bool
     {
-        if ($_template->getSmarty()->writeFile($_template->getCached()->filepath, $content) === true) {
-            if (function_exists('opcache_invalidate')
-                && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)
-            ) {
-                opcache_invalidate($_template->getCached()->filepath, true);
+        if ($_template->get_smarty()->write_file($_template->get_cached()->filepath, $content) === true) {
+            if (function_exists('opcache_invalidate') && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)) {
+                opcache_invalidate($_template->get_cached()->filepath, true);
             }
-            $cached = $_template->getCached();
+            $cached = $_template->get_cached();
             $cached->timestamp = $cached->exists = is_file($cached->filepath);
             if ($cached->exists) {
                 $cached->timestamp = filemtime($cached->filepath);
@@ -134,7 +107,6 @@ class File extends Base
         }
         return false;
     }
-
     /**
      * Read cached template from cache
      *
@@ -142,25 +114,23 @@ class File extends Base
      *
      * @return string  content
      */
-    public function retrieveCachedContent(Template $_template)
+    public function retrieve_cached_content(Template $_template)
     {
-        if (is_file($_template->getCached()->filepath)) {
-            return file_get_contents($_template->getCached()->filepath);
+        if (is_file($_template->get_cached()->filepath)) {
+            return file_get_contents($_template->get_cached()->filepath);
         }
         return false;
     }
-
     /**
      * Empty cache
      *
      * @param integer $exp_time expiration time (number of seconds, not timestamp)
      * @return integer number of cache files deleted
      */
-    public function clearAll(Smarty $smarty, $exp_time = null)
+    public function clear_all(Smarty $smarty, $exp_time = null)
     {
         return $this->clear($smarty, null, null, null, $exp_time);
     }
-
     /**
      * Empty cache for a specific template
      *
@@ -176,8 +146,9 @@ class File extends Base
         $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? '/' : '^';
         $_compile_id_offset = $smarty->use_sub_dirs ? 3 : 0;
-        $_dir = $smarty->getCacheDir();
-        if ($_dir === '/') { //We should never want to delete this!
+        $_dir = $smarty->get_cache_dir();
+        if ($_dir === '/') {
+            //We should never want to delete this!
             return 0;
         }
         $_dir_length = strlen($_dir);
@@ -193,11 +164,11 @@ class File extends Base
         if (isset($resource_name)) {
             $_save_stat = $smarty->caching;
             $smarty->caching = \Smarty\Smarty::CACHING_LIFETIME_CURRENT;
-            $tpl = $smarty->doCreateTemplate($resource_name);
+            $tpl = $smarty->do_create_template($resource_name);
             $smarty->caching = $_save_stat;
             // remove from template cache
-            if ($tpl->getSource()->exists) {
-                $_resourcename_parts = basename(str_replace('^', '/', $tpl->getCached()->filepath));
+            if ($tpl->get_source()->exists) {
+                $_resourcename_parts = basename(str_replace('^', '/', $tpl->get_cached()->filepath));
             } else {
                 return 0;
             }
@@ -205,17 +176,17 @@ class File extends Base
         $_count = 0;
         $_time = time();
         if (file_exists($_dir)) {
-            $_cacheDirs = new RecursiveDirectoryIterator($_dir);
-            $_cache = new RecursiveIteratorIterator($_cacheDirs, RecursiveIteratorIterator::CHILD_FIRST);
+            $_cache_dirs = new Recursive_Directory_Iterator($_dir);
+            $_cache = new Recursive_Iterator_Iterator($_cache_dirs, Recursive_Iterator_Iterator::CHILD_FIRST);
             foreach ($_cache as $_file) {
-                if (substr(basename($_file->getPathname()), 0, 1) === '.') {
+                if (substr(basename($_file->get_pathname()), 0, 1) === '.') {
                     continue;
                 }
-                $_filepath = (string)$_file;
+                $_filepath = (string) $_file;
                 // directory ?
-                if ($_file->isDir()) {
+                if ($_file->is_dir()) {
                     // delete folder if empty
-                    @rmdir($_file->getPathname());
+                    @rmdir($_file->get_pathname());
                 } else {
                     // delete only php files
                     if (substr($_filepath, -4) !== '.php') {
@@ -225,26 +196,23 @@ class File extends Base
                     $_parts_count = count($_parts);
                     // check name
                     if (isset($resource_name)) {
-                        if ($_parts[ $_parts_count - 1 ] !== $_resourcename_parts) {
+                        if ($_parts[$_parts_count - 1] !== $_resourcename_parts) {
                             continue;
                         }
                     }
                     // check compile id
-                    if (isset($_compile_id) && (!isset($_parts[ $_parts_count - 2 - $_compile_id_offset ])
-                            || $_parts[ $_parts_count - 2 - $_compile_id_offset ] !== $_compile_id)
-                    ) {
+                    if (isset($_compile_id) && (!isset($_parts[$_parts_count - 2 - $_compile_id_offset]) || $_parts[$_parts_count - 2 - $_compile_id_offset] !== $_compile_id)) {
                         continue;
                     }
                     // check cache id
                     if (isset($_cache_id)) {
                         // count of cache id parts
-                        $_parts_count = (isset($_compile_id)) ? $_parts_count - 2 - $_compile_id_offset :
-                            $_parts_count - 1 - $_compile_id_offset;
+                        $_parts_count = isset($_compile_id) ? $_parts_count - 2 - $_compile_id_offset : $_parts_count - 1 - $_compile_id_offset;
                         if ($_parts_count < $_cache_id_parts_count) {
                             continue;
                         }
                         for ($i = 0; $i < $_cache_id_parts_count; $i++) {
-                            if ($_parts[ $i ] !== $_cache_id_parts[ $i ]) {
+                            if ($_parts[$i] !== $_cache_id_parts[$i]) {
                                 continue 2;
                             }
                         }
@@ -254,19 +222,15 @@ class File extends Base
                         if (isset($exp_time)) {
                             if ($exp_time < 0) {
                                 preg_match('#\'cache_lifetime\' =>\s*(\d*)#', file_get_contents($_filepath), $match);
-                                if ($_time < (filemtime($_filepath) + $match[ 1 ])) {
+                                if ($_time < filemtime($_filepath) + $match[1]) {
                                     continue;
                                 }
-                            } else {
-                                if ($_time - filemtime($_filepath) < $exp_time) {
-                                    continue;
-                                }
+                            } else if ($_time - filemtime($_filepath) < $exp_time) {
+                                continue;
                             }
                         }
                         $_count += @unlink($_filepath) ? 1 : 0;
-                        if (function_exists('opcache_invalidate')
-                            && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)
-                        ) {
+                        if (function_exists('opcache_invalidate') && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)) {
                             opcache_invalidate($_filepath, true);
                         }
                     }
@@ -275,7 +239,6 @@ class File extends Base
         }
         return $_count;
     }
-
     /**
      * Check is cache is locked for this template
      *
@@ -284,35 +247,33 @@ class File extends Base
      *
      * @return boolean true or false if cache is locked
      */
-    public function hasLock(Smarty $smarty, Cached $cached)
+    public function has_lock(Smarty $smarty, Cached $cached)
     {
         clearstatcache(true, $cached->lock_id ?? '');
         if (null !== $cached->lock_id && is_file($cached->lock_id)) {
             $t = filemtime($cached->lock_id);
-            return $t && (time() - $t < $smarty->locking_timeout);
+            return $t && time() - $t < $smarty->locking_timeout;
         }
         return false;
     }
-
     /**
      * Lock cache for this template
      *
      * @param Smarty                 $smarty Smarty object
      * @param Cached $cached cached object
      */
-    public function acquireLock(Smarty $smarty, Cached $cached): void
+    public function acquire_lock(Smarty $smarty, Cached $cached): void
     {
         $cached->is_locked = true;
         touch($cached->lock_id);
     }
-
     /**
      * Unlock cache for this template
      *
      * @param Smarty                 $smarty Smarty object
      * @param Cached $cached cached object
      */
-    public function releaseLock(Smarty $smarty, Cached $cached): void
+    public function release_lock(Smarty $smarty, Cached $cached): void
     {
         $cached->is_locked = false;
         @unlink($cached->lock_id);

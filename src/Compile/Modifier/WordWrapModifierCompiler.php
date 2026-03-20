@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -12,21 +11,19 @@ namespace Smarty\Compile\Modifier;
  *
  * @author Uwe Tews
  */
-
-class WordWrapModifierCompiler extends Base
+class Word_Wrap_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
-        if (!isset($params[ 1 ])) {
-            $params[ 1 ] = 80;
+        if (!isset($params[1])) {
+            $params[1] = 80;
         }
-        if (!isset($params[ 2 ])) {
-            $params[ 2 ] = '"\n"';
+        if (!isset($params[2])) {
+            $params[2] = '"\n"';
         }
-        if (!isset($params[ 3 ])) {
-            $params[ 3 ] = 'false';
+        if (!isset($params[3])) {
+            $params[3] = 'false';
         }
-        return 'smarty_mb_wordwrap(' . $params[ 0 ] . ',' . $params[ 1 ] . ',' . $params[ 2 ] . ',' . $params[ 3 ] . ')';
+        return 'smarty_mb_wordwrap(' . $params[0] . ',' . $params[1] . ',' . $params[2] . ',' . $params[3] . ')';
     }
-
 }

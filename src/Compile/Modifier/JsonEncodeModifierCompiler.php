@@ -1,17 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
  * Smarty json_encode modifier plugin
  */
-class JsonEncodeModifierCompiler extends Base
+class Json_Encode_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
         return 'json_encode(' . $params[0] . (isset($params[1]) ? ', (int) ' . $params[1] : '') . ')';
     }
-
 }

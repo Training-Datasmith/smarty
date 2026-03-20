@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -11,8 +10,7 @@ namespace Smarty\Compile\Modifier;
  * Purpose:  insert HTML line breaks before all newlines in a string
  *
  */
-
-class Nl2brModifierCompiler extends Base
+class Nl2br_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {

@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -11,12 +10,10 @@ namespace Smarty\Compile\Modifier;
  * Purpose:  returns string repeated times times
  *
  */
-
-class StrRepeatModifierCompiler extends Base
+class Str_Repeat_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
         return 'str_repeat((string) ' . $params[0] . ', (int) ' . $params[1] . ')';
     }
-
 }

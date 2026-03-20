@@ -1,16 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Capture Class
  *
-
-
  */
 class Capture extends Base
 {
@@ -21,7 +17,6 @@ class Capture extends Base
      * @see BasePlugin
      */
     public $shorttag_order = ['name'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -29,7 +24,6 @@ class Capture extends Base
      * @see BasePlugin
      */
     public $optional_attributes = ['name', 'assign', 'append'];
-
     /**
      * Compiles code for the {$smarty.capture.xxx}
      *
@@ -38,14 +32,10 @@ class Capture extends Base
      *
      * @return string compiled code
      */
-    public static function compileSpecialVariable(
-        \Smarty\Compiler\Template $compiler,
-        $parameter = null
-    ): string {
-        return '$_smarty_tpl->getSmarty()->getRuntime(\'Capture\')->getBuffer($_smarty_tpl' .
-            (isset($parameter[1]) ? ", {$parameter[ 1 ]})" : ')');
+    public static function compile_special_variable(\Smarty\Compiler\Template $compiler, $parameter = null): string
+    {
+        return '$_smarty_tpl->getSmarty()->getRuntime(\'Capture\')->getBuffer($_smarty_tpl' . (isset($parameter[1]) ? ", {$parameter[1]})" : ')');
     }
-
     /**
      * Compiles code for the {capture} tag
      *
@@ -57,17 +47,15 @@ class Capture extends Base
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         $buffer = $_attr['name'] ?? "'default'";
         $assign = $_attr['assign'] ?? 'null';
         $append = $_attr['append'] ?? 'null';
-
         $compiler->_cache['capture_stack'][] = $compiler->tag_nocache;
         if ($compiler->tag_nocache) {
             // push a virtual {nocache} tag onto the stack.
-            $compiler->openTag('nocache');
+            $compiler->open_tag('nocache');
         }
-
-        return "<?php \$_smarty_tpl->getSmarty()->getRuntime('Capture')->open(\$_smarty_tpl, $buffer, $assign, $append);?>";
+        return "<?php \$_smarty_tpl->getSmarty()->getRuntime('Capture')->open(\$_smarty_tpl, {$buffer}, {$assign}, {$append});?>";
     }
 }

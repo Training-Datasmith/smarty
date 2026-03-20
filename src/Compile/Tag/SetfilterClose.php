@@ -1,26 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Setfilter
  * Compiles code for setfilter tag
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Setfilterclose Class
  *
-
-
  */
-class SetfilterClose extends Base
+class Setfilter_Close extends Base
 {
     /**
      * Compiles code for the {/setfilter} tag
@@ -33,13 +27,9 @@ class SetfilterClose extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        $this->getAttributes($compiler, $args);
-
+        $this->get_attributes($compiler, $args);
         // reset variable filter to previous state
-        $compiler->getSmarty()->setDefaultModifiers(
-            count($compiler->variable_filter_stack) ? array_pop($compiler->variable_filter_stack) : []
-        );
-
+        $compiler->get_smarty()->set_default_modifiers(count($compiler->variable_filter_stack) ? array_pop($compiler->variable_filter_stack) : []);
         return '';
     }
 }

@@ -1,27 +1,21 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Config Load
  * Compiles the {config load} tag
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
 use Smarty\Smarty;
-
 /**
  * Smarty Internal Plugin Compile Config Load Class
  *
-
-
  */
-class ConfigLoad extends Base
+class Config_Load extends Base
 {
     /**
      * Attribute definition: Overwrites base class.
@@ -30,7 +24,6 @@ class ConfigLoad extends Base
      * @see BasePlugin
      */
     protected $required_attributes = ['file'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -38,7 +31,6 @@ class ConfigLoad extends Base
      * @see BasePlugin
      */
     protected $shorttag_order = ['file', 'section'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -46,7 +38,6 @@ class ConfigLoad extends Base
      * @see BasePlugin
      */
     protected $optional_attributes = ['section'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -54,7 +45,6 @@ class ConfigLoad extends Base
      * @see BasePlugin
      */
     protected $option_flags = [];
-
     /**
      * Compiles code for the {config_load} tag
      *
@@ -67,12 +57,10 @@ class ConfigLoad extends Base
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
-
+        $_attr = $this->get_attributes($compiler, $args);
         // save possible attributes
         $conf_file = $_attr['file'];
         $section = $_attr['section'] ?? 'null';
-
         // create config object
         return "<?php\n\$_smarty_tpl->configLoad({$conf_file}, {$section});\n?>\n";
     }

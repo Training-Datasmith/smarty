@@ -1,48 +1,40 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Runtime;
 
 use Smarty\Template;
-
 /**
  * Runtime Extension Capture
  *
-
-
  * @author     Uwe Tews
  */
-class CaptureRuntime
+class Capture_Runtime
 {
     /**
      * Stack of capture parameter
      *
      * @var array
      */
-    private $captureStack = [];
-
+    private $capture_stack = [];
     /**
      * Current open capture sections
      *
      * @var int
      */
-    private $captureCount = 0;
-
+    private $capture_count = 0;
     /**
      * Count stack
      *
      * @var int[]
      */
-    private $countStack = [];
-
+    private $count_stack = [];
     /**
      * Named buffer
      *
      * @var string[]
      */
-    private $namedBuffer = [];
-
+    private $named_buffer = [];
     /**
      * Open capture section
      *
@@ -52,51 +44,34 @@ class CaptureRuntime
      */
     public function open(Template $_template, $buffer, $assign, $append): void
     {
-
-        $this->registerCallbacks($_template);
-
-        $this->captureStack[] = [
-            $buffer,
-            $assign,
-            $append,
-        ];
-        $this->captureCount++;
+        $this->register_callbacks($_template);
+        $this->capture_stack[] = [$buffer, $assign, $append];
+        $this->capture_count++;
         ob_start();
     }
-
     /**
      * Register callbacks in template class
      */
-    private function registerCallbacks(Template $_template): void
+    private function register_callbacks(Template $_template): void
     {
-
-        foreach ($_template->startRenderCallbacks as $callback) {
+        foreach ($_template->start_render_callbacks as $callback) {
             if (is_array($callback) && get_class($callback[0]) == self::class) {
                 // already registered
                 return;
             }
         }
-
-        $_template->startRenderCallbacks[] = [
-            $this,
-            'startRender',
-        ];
-        $_template->endRenderCallbacks[] = [
-            $this,
-            'endRender',
-        ];
-        $this->startRender($_template);
+        $_template->start_render_callbacks[] = [$this, 'startRender'];
+        $_template->end_render_callbacks[] = [$this, 'endRender'];
+        $this->start_render($_template);
     }
-
     /**
      * Start render callback
      */
-    public function startRender(Template $_template): void
+    public function start_render(Template $_template): void
     {
-        $this->countStack[] = $this->captureCount;
-        $this->captureCount = 0;
+        $this->count_stack[] = $this->capture_count;
+        $this->capture_count = 0;
     }
-
     /**
      * Close capture section
      *
@@ -105,21 +80,20 @@ class CaptureRuntime
      */
     public function close(Template $_template): void
     {
-        if ($this->captureCount) {
-            [$buffer, $assign, $append] = array_pop($this->captureStack);
-            $this->captureCount--;
+        if ($this->capture_count) {
+            [$buffer, $assign, $append] = array_pop($this->capture_stack);
+            $this->capture_count--;
             if (isset($assign)) {
                 $_template->assign($assign, ob_get_contents());
             }
             if (isset($append)) {
                 $_template->append($append, ob_get_contents());
             }
-            $this->namedBuffer[$buffer] = ob_get_clean();
+            $this->named_buffer[$buffer] = ob_get_clean();
         } else {
             $this->error($_template);
         }
     }
-
     /**
      * Error exception on not matching {capture}{/capture}
      *
@@ -130,33 +104,31 @@ class CaptureRuntime
     {
         throw new \Smarty\Exception("Not matching {capture}{/capture} in '{$_template->template_resource}'");
     }
-
     /**
      * Return content of named capture buffer by key or as array
      *
      * @param string|null $name
      * @return string|string[]|null
      */
-    public function getBuffer(Template $_template, $name = null)
+    public function get_buffer(Template $_template, $name = null)
     {
         if (isset($name)) {
-            return $this->namedBuffer[$name] ?? null;
+            return $this->named_buffer[$name] ?? null;
         }
-        return $this->namedBuffer;
+        return $this->named_buffer;
     }
-
     /**
      * End render callback
      *
      *
      * @throws \Smarty\Exception
      */
-    public function endRender(Template $_template): void
+    public function end_render(Template $_template): void
     {
-        if ($this->captureCount) {
+        if ($this->capture_count) {
             $this->error($_template);
         } else {
-            $this->captureCount = array_pop($this->countStack);
+            $this->capture_count = array_pop($this->count_stack);
         }
     }
 }

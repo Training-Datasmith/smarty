@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Cacheresource;
 
 use Smarty\Smarty;
 use Smarty\Template;
 use Smarty\Template\Cached;
-
 /**
  * Cache Handler API
  * @author     Rodney Rehm
@@ -23,15 +21,13 @@ abstract class Base
      * @return void
      */
     abstract public function populate(Cached $cached, Template $_template);
-
     /**
      * populate Cached Object with timestamp and exists from Resource
      *
      *
      * @return void
      */
-    abstract public function populateTimestamp(Cached $cached);
-
+    abstract public function populate_timestamp(Cached $cached);
     /**
      * Read the cached template and process header
      *
@@ -41,12 +37,7 @@ abstract class Base
      *
      * @return boolean true or false if the cached content does not exist
      */
-    abstract public function process(
-        Template $_template,
-        ?Cached  $cached = null,
-        $update = false
-    );
-
+    abstract public function process(Template $_template, ?Cached $cached = null, $update = false);
     /**
      * Write the rendered template output to cache
      *
@@ -55,8 +46,7 @@ abstract class Base
      *
      * @return boolean success
      */
-    abstract public function storeCachedContent(Template $_template, $content);
-
+    abstract public function store_cached_content(Template $_template, $content);
     /**
      * Read cached template from cache
      *
@@ -64,8 +54,7 @@ abstract class Base
      *
      * @return string  content
      */
-    abstract public function retrieveCachedContent(Template $_template);
-
+    abstract public function retrieve_cached_content(Template $_template);
     /**
      * Empty cache
      *
@@ -74,8 +63,7 @@ abstract class Base
      *
      * @return integer number of cache files deleted
      */
-    abstract public function clearAll(Smarty $smarty, $exp_time = null);
-
+    abstract public function clear_all(Smarty $smarty, $exp_time = null);
     /**
      * Empty cache for a specific template
      *
@@ -88,7 +76,6 @@ abstract class Base
      * @return integer number of cache files deleted
      */
     abstract public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time);
-
     /**
      *
      * @return bool|null
@@ -97,49 +84,46 @@ abstract class Base
     {
         // theoretically locking_timeout should be checked against time_limit (max_execution_time)
         $start = microtime(true);
-        $hadLock = null;
-        while ($this->hasLock($smarty, $cached)) {
-            $hadLock = true;
+        $had_lock = null;
+        while ($this->has_lock($smarty, $cached)) {
+            $had_lock = true;
             if (microtime(true) - $start > $smarty->locking_timeout) {
                 // abort waiting for lock release
                 return false;
             }
             sleep(1);
         }
-        return $hadLock;
+        return $had_lock;
     }
-
     /**
      * Check is cache is locked for this template
      *
      *
      * @return bool
      */
-    public function hasLock(Smarty $smarty, Cached $cached)
+    public function has_lock(Smarty $smarty, Cached $cached)
     {
         // check if lock exists
         return false;
     }
-
     /**
      * Lock cache for this template
      *
      *
      * @return bool
      */
-    public function acquireLock(Smarty $smarty, Cached $cached)
+    public function acquire_lock(Smarty $smarty, Cached $cached)
     {
         // create lock
         return true;
     }
-
     /**
      * Unlock cache for this template
      *
      *
      * @return bool
      */
-    public function releaseLock(Smarty $smarty, Cached $cached)
+    public function release_lock(Smarty $smarty, Cached $cached)
     {
         // release lock
         return true;

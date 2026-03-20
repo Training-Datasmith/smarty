@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compiler;
 
 use Smarty\Smarty;
-
-abstract class BaseCompiler
+abstract class Base_Compiler
 {
     /**
      * Smarty object
@@ -14,10 +12,8 @@ abstract class BaseCompiler
      * @var Smarty
      */
     protected $smarty;
-
-    public function getSmarty(): Smarty
+    public function get_smarty(): Smarty
     {
         return $this->smarty;
     }
-
 }

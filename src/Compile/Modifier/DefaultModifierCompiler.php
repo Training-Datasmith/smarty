@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -12,14 +11,13 @@ namespace Smarty\Compile\Modifier;
  *
  * @author Uwe Tews
  */
-
-class DefaultModifierCompiler extends Base
+class Default_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler)
     {
-        $output = $params[ 0 ];
-        if (!isset($params[ 1 ])) {
-            $params[ 1 ] = "''";
+        $output = $params[0];
+        if (!isset($params[1])) {
+            $params[1] = "''";
         }
         array_shift($params);
         foreach ($params as $param) {
@@ -27,5 +25,4 @@ class DefaultModifierCompiler extends Base
         }
         return $output;
     }
-
 }

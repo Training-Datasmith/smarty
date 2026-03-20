@@ -1,18 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Forelse Class
  *
-
-
  */
-class ForElse extends Base
+class For_Else extends Base
 {
     /**
      * Compiles code for the {forelse} tag
@@ -25,8 +21,8 @@ class ForElse extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        [$tagName, $nocache_pushed] = $this->closeTag($compiler, ['for']);
-        $this->openTag($compiler, 'forelse', ['forelse', $nocache_pushed]);
+        [$tag_name, $nocache_pushed] = $this->close_tag($compiler, ['for']);
+        $this->open_tag($compiler, 'forelse', ['forelse', $nocache_pushed]);
         return '<?php }} else { ?>';
     }
 }

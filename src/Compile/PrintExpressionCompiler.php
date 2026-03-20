@@ -1,26 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Print Expression
  * Compiles any tag which will output an expression or variable
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile;
 
-use Smarty\Compiler\BaseCompiler;
-
+use Smarty\Compiler\Base_Compiler;
 /**
  * Smarty Internal Plugin Compile Print Expression Class
  *
-
-
  */
-class PrintExpressionCompiler extends Base
+class Print_Expression_Compiler extends Base
 {
     /**
      * Attribute definition: Overwrites base class.
@@ -29,7 +23,6 @@ class PrintExpressionCompiler extends Base
      * @see BaseCompiler
      */
     public $optional_attributes = ['assign'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -37,7 +30,6 @@ class PrintExpressionCompiler extends Base
      * @see BaseCompiler
      */
     protected $option_flags = ['nocache', 'nofilter'];
-
     /**
      * Compiles code for generating output from any expression
      *
@@ -49,13 +41,12 @@ class PrintExpressionCompiler extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         $output = $parameter['value'];
         // tag modifier
         if (!empty($parameter['modifierlist'])) {
-            $output = $compiler->compileModifier($parameter['modifierlist'], $output);
+            $output = $compiler->compile_modifier($parameter['modifierlist'], $output);
         }
         if (isset($_attr['assign'])) {
             // assign output to variable
@@ -64,32 +55,24 @@ class PrintExpressionCompiler extends Base
         // display value
         if (!$_attr['nofilter']) {
             // default modifier
-            if ($compiler->getSmarty()->getDefaultModifiers()) {
+            if ($compiler->get_smarty()->get_default_modifiers()) {
                 $modifierlist = [];
-                foreach ($compiler->getSmarty()->getDefaultModifiers() as $key => $single_default_modifier) {
-                    preg_match_all(
-                        '/(\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"|:|[^:]+)/',
-                        $single_default_modifier,
-                        $mod_array
-                    );
+                foreach ($compiler->get_smarty()->get_default_modifiers() as $key => $single_default_modifier) {
+                    preg_match_all('/(\'[^\'\\\\]*(?:\\\\.[^\'\\\\]*)*\'|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"|:|[^:]+)/', $single_default_modifier, $mod_array);
                     for ($i = 0, $count = count($mod_array[0]); $i < $count; $i++) {
                         if ($mod_array[0][$i] !== ':') {
                             $modifierlist[$key][] = $mod_array[0][$i];
                         }
                     }
                 }
-
-                $output = $compiler->compileModifier($modifierlist, $output);
+                $output = $compiler->compile_modifier($modifierlist, $output);
             }
-
-            if ($compiler->getTemplate()->getSmarty()->escape_html && !$compiler->isRawOutput()) {
+            if ($compiler->get_template()->get_smarty()->escape_html && !$compiler->is_raw_output()) {
                 $output = "htmlspecialchars((string) ({$output}), ENT_QUOTES, '" . addslashes(\Smarty\Smarty::$_CHARSET) . "')";
             }
-
         }
         $output = "<?php echo {$output};?>\n";
-        $compiler->setRawOutput(false);
+        $compiler->set_raw_output(false);
         return $output;
     }
-
 }

@@ -1,13 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Filter;
 
-class FilterPluginWrapper implements FilterInterface
+class Filter_Plugin_Wrapper implements Filter_Interface
 {
     private $callback;
-
     public function __construct($callback)
     {
         $this->callback = $callback;

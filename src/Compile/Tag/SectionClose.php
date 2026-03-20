@@ -1,23 +1,19 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Section
  * Compiles the {section} {sectionelse} {/section} tags
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Sectionclose Class
  */
-class SectionClose extends Base
+class Section_Close extends Base
 {
     /**
      * Compiles code for the {/section} tag
@@ -29,17 +25,14 @@ class SectionClose extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        $compiler->loopNesting--;
-
-        [$openTag, $nocache_pushed] = $this->closeTag($compiler, ['section', 'sectionelse']);
-
+        $compiler->loop_nesting--;
+        [$open_tag, $nocache_pushed] = $this->close_tag($compiler, ['section', 'sectionelse']);
         if ($nocache_pushed) {
             // pop the pushed virtual nocache tag
-            $this->closeTag($compiler, 'nocache');
+            $this->close_tag($compiler, 'nocache');
         }
-
         $output = "<?php\n";
-        if ($openTag === 'sectionelse') {
+        if ($open_tag === 'sectionelse') {
             $output .= "}\n";
         } else {
             $output .= "}\n}\n";

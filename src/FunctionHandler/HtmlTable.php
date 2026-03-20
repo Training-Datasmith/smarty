@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Template;
-
 /**
  * Smarty {html_table} function plugin
  * Type:     function
@@ -44,7 +42,7 @@ use Smarty\Template;
  * @author  Monte Ohrt <monte at ohrt dot com>
  * @author  credit to Messju Mohr <messju at lammfellpuschen dot de>
  */
-class HtmlTable extends Base
+class Html_Table extends Base
 {
     public function handle($params, Template $template)
     {
@@ -67,7 +65,7 @@ class HtmlTable extends Base
         foreach ($params as $_key => $_value) {
             switch ($_key) {
                 case 'loop':
-                    ${$_key} = (array)$_value;
+                    ${$_key} = (array) $_value;
                     break;
                 case 'cols':
                     if (is_array($_value) && !empty($_value)) {
@@ -77,13 +75,13 @@ class HtmlTable extends Base
                         $cols = explode(',', $_value);
                         $cols_count = count($cols);
                     } elseif (!empty($_value)) {
-                        $cols_count = (int)$_value;
+                        $cols_count = (int) $_value;
                     } else {
                         $cols_count = $cols;
                     }
                     break;
                 case 'rows':
-                    ${$_key} = (int)$_value;
+                    ${$_key} = (int) $_value;
                     break;
                 case 'table_attr':
                 case 'trailpad':
@@ -91,7 +89,7 @@ class HtmlTable extends Base
                 case 'vdir':
                 case 'inner':
                 case 'caption':
-                    ${$_key} = (string)$_value;
+                    ${$_key} = (string) $_value;
                     break;
                 case 'tr_attr':
                 case 'td_attr':
@@ -110,12 +108,12 @@ class HtmlTable extends Base
                 $cols_count = ceil($loop_count / $rows);
             }
         }
-        $output = "<table $table_attr>\n";
+        $output = "<table {$table_attr}>\n";
         if (!empty($caption)) {
             $output .= '<caption>' . $caption . "</caption>\n";
         }
         if (is_array($cols)) {
-            $cols = ($hdir === 'right') ? $cols : array_reverse($cols);
+            $cols = $hdir === 'right' ? $cols : array_reverse($cols);
             $output .= "<thead><tr>\n";
             for ($r = 0; $r < $cols_count; $r++) {
                 $output .= '<th' . $this->cycle($th_attr, $r) . '>';
@@ -127,17 +125,17 @@ class HtmlTable extends Base
         $output .= "<tbody>\n";
         for ($r = 0; $r < $rows; $r++) {
             $output .= '<tr' . $this->cycle($tr_attr, $r) . ">\n";
-            $rx = ($vdir === 'down') ? $r * $cols_count : ($rows - 1 - $r) * $cols_count;
+            $rx = $vdir === 'down' ? $r * $cols_count : ($rows - 1 - $r) * $cols_count;
             for ($c = 0; $c < $cols_count; $c++) {
-                $x = ($hdir === 'right') ? $rx + $c : $rx + $cols_count - 1 - $c;
+                $x = $hdir === 'right' ? $rx + $c : $rx + $cols_count - 1 - $c;
                 if ($inner !== 'cols') {
                     /* shuffle x to loop over rows*/
-                    $x = floor($x / $cols_count) + ($x % $cols_count) * $rows;
+                    $x = floor($x / $cols_count) + $x % $cols_count * $rows;
                 }
                 if ($x < $loop_count) {
                     $output .= '<td' . $this->cycle($td_attr, $c) . '>' . $loop[$x] . "</td>\n";
                 } else {
-                    $output .= '<td' . $this->cycle($td_attr, $c) . ">$trailpad</td>\n";
+                    $output .= '<td' . $this->cycle($td_attr, $c) . ">{$trailpad}</td>\n";
                 }
             }
             $output .= "</tr>\n";
@@ -145,7 +143,6 @@ class HtmlTable extends Base
         $output .= "</tbody>\n";
         return $output . "</table>\n";
     }
-
     /**
      * @param $name
      * @param $var
@@ -158,6 +155,6 @@ class HtmlTable extends Base
         } else {
             $ret = $var[$no % count($var)];
         }
-        return ($ret) ? ' ' . $ret : '';
+        return $ret ? ' ' . $ret : '';
     }
 }

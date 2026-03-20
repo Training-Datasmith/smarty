@@ -1,26 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile If
  * Compiles the {if} {else} {elseif} {/if} tags
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Ifclose Class
  *
-
-
  */
-class IfClose extends Base
+class If_Close extends Base
 {
     /**
      * Compiles code for the {/if} tag
@@ -32,15 +26,12 @@ class IfClose extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-
-        [$nesting, $nocache_pushed] = $this->closeTag($compiler, ['if', 'else', 'elseif']);
-
+        [$nesting, $nocache_pushed] = $this->close_tag($compiler, ['if', 'else', 'elseif']);
         if ($nocache_pushed) {
             // pop the pushed virtual nocache tag
-            $this->closeTag($compiler, 'nocache');
+            $this->close_tag($compiler, 'nocache');
             $compiler->tag_nocache = true;
         }
-
         $tmp = '';
         for ($i = 0; $i < $nesting; $i++) {
             $tmp .= '}';

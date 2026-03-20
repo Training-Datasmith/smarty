@@ -1,14 +1,11 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty plugin
  *
-
-
  * @author     Uwe Tews
  */
-
 /**
  * FIXME: \Smarty\Security API
  *      - getter and setter instead of public properties would allow cultivating an internal cache properly
@@ -18,13 +15,12 @@ declare(strict_types=1);
  *        $template_dir or $config_dir should NOT share the same \Smarty\Security instance,
  *        as this would lead to (severe) performance penalty! how should this be handled?
  */
-
 namespace Smarty;
 
 /**
  * This class does contain the security settings
  */
-#[\AllowDynamicProperties]
+#[\Allow_Dynamic_Properties]
 class Security
 {
     /**
@@ -34,21 +30,18 @@ class Security
      * @var array
      */
     public $secure_dir = [];
-
     /**
      * List of regular expressions (PCRE) that include trusted URIs
      *
      * @var array
      */
     public $trusted_uri = [];
-
     /**
      * List of trusted constants names
      *
      * @var array
      */
     public $trusted_constants = [];
-
     /**
      * This is an array of trusted static classes.
      * If empty access to all static classes is allowed.
@@ -57,7 +50,6 @@ class Security
      * @var array
      */
     public $static_classes = [];
-
     /**
      * This is an nested array of trusted classes and static methods.
      * If empty access to all static classes and methods is allowed.
@@ -71,7 +63,6 @@ class Security
      * @var array
      */
     public $trusted_static_methods = [];
-
     /**
      * This is an array of trusted static properties.
      * If empty access to all static classes and properties is allowed.
@@ -85,7 +76,6 @@ class Security
      * @var array
      */
     public $trusted_static_properties = [];
-
     /**
      * This is an array of allowed tags.
      * If empty no restriction by allowed_tags.
@@ -93,7 +83,6 @@ class Security
      * @var array
      */
     public $allowed_tags = [];
-
     /**
      * This is an array of disabled tags.
      * If empty no restriction by disabled_tags.
@@ -101,7 +90,6 @@ class Security
      * @var array
      */
     public $disabled_tags = [];
-
     /**
      * This is an array of allowed modifier plugins.
      * If empty no restriction by allowed_modifiers.
@@ -109,7 +97,6 @@ class Security
      * @var array
      */
     public $allowed_modifiers = [];
-
     /**
      * This is an array of disabled modifier plugins.
      * If empty no restriction by disabled_modifiers.
@@ -117,14 +104,12 @@ class Security
      * @var array
      */
     public $disabled_modifiers = [];
-
     /**
      * This is an array of disabled special $smarty variables.
      *
      * @var array
      */
     public $disabled_special_smarty_vars = [];
-
     /**
      * This is an array of trusted streams.
      * If empty all streams are allowed.
@@ -133,73 +118,62 @@ class Security
      * @var array
      */
     public $streams = ['file'];
-
     /**
      * + flag if constants can be accessed from template
      *
      * @var boolean
      */
     public $allow_constants = true;
-
     /**
      * + flag if super globals can be accessed from template
      *
      * @var boolean
      */
     public $allow_super_globals = true;
-
     /**
      * max template nesting level
      *
      * @var int
      */
     public $max_template_nesting = 0;
-
     /**
      * current template nesting level
      *
      * @var int
      */
     private $_current_template_nesting = 0;
-
     /**
      * Cache for $resource_dir lookup
      *
      * @var array
      */
     protected $_resource_dir = [];
-
     /**
      * Cache for $template_dir lookup
      *
      * @var array
      */
     protected $_template_dir = [];
-
     /**
      * Cache for $config_dir lookup
      *
      * @var array
      */
     protected $_config_dir = [];
-
     /**
      * Cache for $secure_dir lookup
      *
      * @var array
      */
     protected $_secure_dir = [];
-
     /**
      * @var Smarty
      */
     protected Smarty $smarty;
-
     public function __construct(Smarty $smarty)
     {
         $this->smarty = $smarty;
     }
-
     /**
      * Check if static class is trusted.
      *
@@ -208,17 +182,15 @@ class Security
      *
      * @return boolean                 true if class is trusted
      */
-    public function isTrustedStaticClass($class_name, $compiler): bool
+    public function is_trusted_static_class($class_name, $compiler): bool
     {
-        if (isset($this->static_classes)
-            && (empty($this->static_classes) || in_array($class_name, $this->static_classes))
-        ) {
+        if (isset($this->static_classes) && (empty($this->static_classes) || in_array($class_name, $this->static_classes))) {
             return true;
         }
         $compiler->trigger_template_error("access to static class '{$class_name}' not allowed by security setting");
-        return false; // should not, but who knows what happens to the compiler in the future?
+        return false;
+        // should not, but who knows what happens to the compiler in the future?
     }
-
     /**
      * Check if static class method/property is trusted.
      *
@@ -228,11 +200,11 @@ class Security
      *
      * @return boolean                 true if class method is trusted
      */
-    public function isTrustedStaticClassAccess($class_name, $params, $compiler)
+    public function is_trusted_static_class_access($class_name, $params, $compiler)
     {
         if (!isset($params[2])) {
             // fall back
-            return $this->isTrustedStaticClass($class_name, $compiler);
+            return $this->is_trusted_static_class($class_name, $compiler);
         }
         if ($params[2] === 'method') {
             $allowed = $this->trusted_static_methods;
@@ -245,18 +217,16 @@ class Security
         if (isset($allowed)) {
             if (empty($allowed)) {
                 // fall back
-                return $this->isTrustedStaticClass($class_name, $compiler);
+                return $this->is_trusted_static_class($class_name, $compiler);
             }
-            if (isset($allowed[$class_name])
-                && (empty($allowed[$class_name]) || in_array($name, $allowed[$class_name]))
-            ) {
+            if (isset($allowed[$class_name]) && (empty($allowed[$class_name]) || in_array($name, $allowed[$class_name]))) {
                 return true;
             }
         }
         $compiler->trigger_template_error("access to static class '{$class_name}' {$params[2]} '{$name}' not allowed by security setting");
-        return false; // should not, but who knows what happens to the compiler in the future?
+        return false;
+        // should not, but who knows what happens to the compiler in the future?
     }
-
     /**
      * Check if tag is trusted.
      *
@@ -265,10 +235,9 @@ class Security
      *
      * @return boolean                 true if tag is trusted
      */
-    public function isTrustedTag($tag_name, $compiler): bool
+    public function is_trusted_tag($tag_name, $compiler): bool
     {
         $tag_name = strtolower($tag_name);
-
         // check for internal always required tags
         if (in_array($tag_name, ['assign', 'call'])) {
             return true;
@@ -284,9 +253,9 @@ class Security
         } else {
             $compiler->trigger_template_error("tag '{$tag_name}' not allowed by security setting", null, true);
         }
-        return false; // should not, but who knows what happens to the compiler in the future?
+        return false;
+        // should not, but who knows what happens to the compiler in the future?
     }
-
     /**
      * Check if special $smarty variable is trusted.
      *
@@ -295,19 +264,15 @@ class Security
      *
      * @return boolean                 true if tag is trusted
      */
-    public function isTrustedSpecialSmartyVar($var_name, $compiler): bool
+    public function is_trusted_special_smarty_var($var_name, $compiler): bool
     {
         if (!in_array($var_name, $this->disabled_special_smarty_vars)) {
             return true;
         }
-        $compiler->trigger_template_error(
-            "special variable '\$smarty.{$var_name}' not allowed by security setting",
-            null,
-            true
-        );
-        return false; // should not, but who knows what happens to the compiler in the future?
+        $compiler->trigger_template_error("special variable '\$smarty.{$var_name}' not allowed by security setting", null, true);
+        return false;
+        // should not, but who knows what happens to the compiler in the future?
     }
-
     /**
      * Check if modifier plugin is trusted.
      *
@@ -316,7 +281,7 @@ class Security
      *
      * @return boolean                 true if tag is trusted
      */
-    public function isTrustedModifier($modifier_name, $compiler): bool
+    public function is_trusted_modifier($modifier_name, $compiler): bool
     {
         // check for internal always allowed modifier
         if (in_array($modifier_name, ['default'])) {
@@ -327,32 +292,22 @@ class Security
             if (empty($this->disabled_modifiers) || !in_array($modifier_name, $this->disabled_modifiers)) {
                 return true;
             }
-            $compiler->trigger_template_error(
-                "modifier '{$modifier_name}' disabled by security setting",
-                null,
-                true
-            );
-        } elseif (in_array($modifier_name, $this->allowed_modifiers)
-            && !in_array($modifier_name, $this->disabled_modifiers)
-        ) {
+            $compiler->trigger_template_error("modifier '{$modifier_name}' disabled by security setting", null, true);
+        } elseif (in_array($modifier_name, $this->allowed_modifiers) && !in_array($modifier_name, $this->disabled_modifiers)) {
             return true;
         } else {
-            $compiler->trigger_template_error(
-                "modifier '{$modifier_name}' not allowed by security setting",
-                null,
-                true
-            );
+            $compiler->trigger_template_error("modifier '{$modifier_name}' not allowed by security setting", null, true);
         }
-        return false; // should not, but who knows what happens to the compiler in the future?
+        return false;
+        // should not, but who knows what happens to the compiler in the future?
     }
-
     /**
      * Check if constants are enabled or trusted
      *
      * @param string $const constant name
      * @param object $compiler compiler object
      */
-    public function isTrustedConstant($const, $compiler): bool
+    public function is_trusted_constant($const, $compiler): bool
     {
         if (in_array($const, ['true', 'false', 'null'])) {
             return true;
@@ -370,7 +325,6 @@ class Security
         $compiler->trigger_template_error('Security: access to constants not permitted');
         return false;
     }
-
     /**
      * Check if stream is trusted.
      *
@@ -379,14 +333,13 @@ class Security
      * @return boolean         true if stream is trusted
      * @throws Exception if stream is not trusted
      */
-    public function isTrustedStream($stream_name): bool
+    public function is_trusted_stream($stream_name): bool
     {
         if (isset($this->streams) && (empty($this->streams) || in_array($stream_name, $this->streams))) {
             return true;
         }
         throw new Exception("stream '{$stream_name}' not allowed by security setting");
     }
-
     /**
      * Check if directory of file resource is trusted.
      *
@@ -396,33 +349,32 @@ class Security
      * @return bool true if directory is trusted
      * @throws \Smarty\Exception if directory is not trusted
      */
-    public function isTrustedResourceDir($filepath, $isConfig = null): bool
+    public function is_trusted_resource_dir($filepath, $is_config = null): bool
     {
-        $_dir = $this->smarty->getTemplateDir();
+        $_dir = $this->smarty->get_template_dir();
         if ($this->_template_dir !== $_dir) {
-            $this->_updateResourceDir($this->_template_dir, $_dir);
+            $this->_update_resource_dir($this->_template_dir, $_dir);
             $this->_template_dir = $_dir;
         }
-        $_dir = $this->smarty->getConfigDir();
+        $_dir = $this->smarty->get_config_dir();
         if ($this->_config_dir !== $_dir) {
-            $this->_updateResourceDir($this->_config_dir, $_dir);
+            $this->_update_resource_dir($this->_config_dir, $_dir);
             $this->_config_dir = $_dir;
         }
         if ($this->_secure_dir !== $this->secure_dir) {
-            $this->secure_dir = (array)$this->secure_dir;
+            $this->secure_dir = (array) $this->secure_dir;
             foreach ($this->secure_dir as $k => $d) {
                 $this->secure_dir[$k] = $this->smarty->_realpath($d . DIRECTORY_SEPARATOR, true);
             }
-            $this->_updateResourceDir($this->_secure_dir, $this->secure_dir);
+            $this->_update_resource_dir($this->_secure_dir, $this->secure_dir);
             $this->_secure_dir = $this->secure_dir;
         }
-        $addPath = $this->_checkDir($filepath, $this->_resource_dir);
-        if ($addPath !== false) {
-            $this->_resource_dir = array_merge($this->_resource_dir, $addPath);
+        $add_path = $this->_check_dir($filepath, $this->_resource_dir);
+        if ($add_path !== false) {
+            $this->_resource_dir = array_merge($this->_resource_dir, $add_path);
         }
         return true;
     }
-
     /**
      * Check if URI (e.g. {fetch} or {html_image}) is trusted
      * To simplify things, isTrustedUri() resolves all input to "{$PROTOCOL}://{$HOSTNAME}".
@@ -435,7 +387,7 @@ class Security
      * @throws Exception if URI is not trusted
      * @uses   $trusted_uri for list of patterns to match against $uri
      */
-    public function isTrustedUri($uri): bool
+    public function is_trusted_uri($uri): bool
     {
         $_uri = parse_url($uri);
         if (!empty($_uri['scheme']) && !empty($_uri['host'])) {
@@ -448,16 +400,15 @@ class Security
         }
         throw new Exception("URI '{$uri}' not allowed by security setting");
     }
-
     /**
      * Remove old directories and its sub folders, add new directories
      *
      * @param array $oldDir
      * @param array $newDir
      */
-    private function _updateResourceDir($oldDir, $newDir): void
+    private function _update_resource_dir($old_dir, $new_dir): void
     {
-        foreach ($oldDir as $directory) {
+        foreach ($old_dir as $directory) {
             //           $directory = $this->smarty->_realpath($directory, true);
             $length = strlen($directory);
             foreach (array_keys($this->_resource_dir) as $dir) {
@@ -466,12 +417,11 @@ class Security
                 }
             }
         }
-        foreach ($newDir as $directory) {
+        foreach ($new_dir as $directory) {
             //           $directory = $this->smarty->_realpath($directory, true);
             $this->_resource_dir[$directory] = true;
         }
     }
-
     /**
      * Check if file is inside a valid directory
      *
@@ -480,7 +430,7 @@ class Security
      * @return array|bool
      * @throws \Smarty\Exception
      */
-    private function _checkDir(string $filepath, array $dirs): array
+    private function _check_dir(string $filepath, array $dirs): array
     {
         $directory = dirname($this->smarty->_realpath($filepath, true)) . DIRECTORY_SEPARATOR;
         $_directory = [];
@@ -504,7 +454,6 @@ class Security
         // give up
         throw new Exception(sprintf('Smarty Security: not trusted file path \'%s\' ', $filepath));
     }
-
     /**
      * Loads security class and enables security
      *
@@ -513,7 +462,7 @@ class Security
      * @return \Smarty current Smarty instance for chaining
      * @throws \Smarty\Exception when an invalid class name is provided
      */
-    public static function enableSecurity(Smarty $smarty, $security_class): Smarty
+    public static function enable_security(Smarty $smarty, $security_class): Smarty
     {
         if ($security_class instanceof Security) {
             $smarty->security_policy = $security_class;
@@ -526,15 +475,14 @@ class Security
             $security_class = $smarty->security_class;
         }
         if (!class_exists($security_class)) {
-            throw new Exception("Security class '$security_class' is not defined");
+            throw new Exception("Security class '{$security_class}' is not defined");
         }
         if ($security_class !== Security::class && !is_subclass_of($security_class, Security::class)) {
-            throw new Exception("Class '$security_class' must extend " . Security::class . '.');
+            throw new Exception("Class '{$security_class}' must extend " . Security::class . '.');
         }
         $smarty->security_policy = new $security_class($smarty);
         return $smarty;
     }
-
     /**
      * Start template processing
      *
@@ -542,29 +490,27 @@ class Security
      *
      * @throws Exception
      */
-    public function startTemplate($template): void
+    public function start_template($template): void
     {
         if ($this->max_template_nesting > 0 && $this->_current_template_nesting++ >= $this->max_template_nesting) {
             throw new Exception("maximum template nesting level of '{$this->max_template_nesting}' exceeded when calling '{$template->template_resource}'");
         }
     }
-
     /**
      * Exit template processing
      */
-    public function endTemplate(): void
+    public function end_template(): void
     {
         if ($this->max_template_nesting > 0) {
             $this->_current_template_nesting--;
         }
     }
-
     /**
      * Register callback functions call at start/end of template rendering
      */
-    public function registerCallBacks(Template $template): void
+    public function register_call_backs(Template $template): void
     {
-        $template->startRenderCallbacks[] = [$this, 'startTemplate'];
-        $template->endRenderCallbacks[] = [$this, 'endTemplate'];
+        $template->start_render_callbacks[] = [$this, 'startTemplate'];
+        $template->end_render_callbacks[] = [$this, 'endTemplate'];
     }
 }

@@ -1,18 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile ElseIf Class
  *
-
-
  */
-class ElseIfTag extends Base
+class Else_If_Tag extends Base
 {
     /**
      * Compiles code for the {elseif} tag
@@ -26,13 +22,11 @@ class ElseIfTag extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-
-        [$nesting, $nocache_pushed] = $this->closeTag($compiler, ['if', 'elseif']);
-
+        [$nesting, $nocache_pushed] = $this->close_tag($compiler, ['if', 'elseif']);
         if (!isset($parameter['if condition'])) {
             $compiler->trigger_template_error('missing elseif condition', null, true);
         }
-        $assignCode = '';
+        $assign_code = '';
         $var = '';
         if (is_array($parameter['if condition'])) {
             $condition_by_assign = true;
@@ -41,45 +35,41 @@ class ElseIfTag extends Base
             } else {
                 $var = $parameter['if condition']['var'];
             }
-            if ($compiler->isNocacheActive()) {
+            if ($compiler->is_nocache_active()) {
                 // create nocache var to make it know for further compiling
-                $compiler->setNocacheInVariable($var);
+                $compiler->set_nocache_in_variable($var);
             }
-            $prefixVar = $compiler->getNewPrefixVariable();
-            $assignCode = "<?php {$prefixVar} = {$parameter[ 'if condition' ][ 'value' ]};?>\n";
-            $assignCompiler = new Assign();
-            $assignAttr = [];
-            $assignAttr[]['value'] = $prefixVar;
+            $prefix_var = $compiler->get_new_prefix_variable();
+            $assign_code = "<?php {$prefix_var} = {$parameter['if condition']['value']};?>\n";
+            $assign_compiler = new Assign();
+            $assign_attr = [];
+            $assign_attr[]['value'] = $prefix_var;
             if (is_array($parameter['if condition']['var'])) {
-                $assignAttr[]['var'] = $parameter['if condition']['var']['var'];
-                $assignCode .= $assignCompiler->compile(
-                    $assignAttr,
-                    $compiler,
-                    ['smarty_internal_index' => $parameter['if condition']['var']['smarty_internal_index']]
-                );
+                $assign_attr[]['var'] = $parameter['if condition']['var']['var'];
+                $assign_code .= $assign_compiler->compile($assign_attr, $compiler, ['smarty_internal_index' => $parameter['if condition']['var']['smarty_internal_index']]);
             } else {
-                $assignAttr[]['var'] = $parameter['if condition']['var'];
-                $assignCode .= $assignCompiler->compile($assignAttr, $compiler, []);
+                $assign_attr[]['var'] = $parameter['if condition']['var'];
+                $assign_code .= $assign_compiler->compile($assign_attr, $compiler, []);
             }
         } else {
             $condition_by_assign = false;
         }
-        $prefixCode = $compiler->getPrefixCode();
-        if (empty($prefixCode)) {
+        $prefix_code = $compiler->get_prefix_code();
+        if (empty($prefix_code)) {
             if ($condition_by_assign) {
-                $this->openTag($compiler, 'elseif', [$nesting + 1, $compiler->tag_nocache]);
-                $_output = $compiler->appendCode("<?php } else {\n?>", $assignCode);
-                return $compiler->appendCode($_output, "<?php if ({$prefixVar}) {?>");
+                $this->open_tag($compiler, 'elseif', [$nesting + 1, $compiler->tag_nocache]);
+                $_output = $compiler->append_code("<?php } else {\n?>", $assign_code);
+                return $compiler->append_code($_output, "<?php if ({$prefix_var}) {?>");
             }
-            $this->openTag($compiler, 'elseif', [$nesting, $nocache_pushed]);
+            $this->open_tag($compiler, 'elseif', [$nesting, $nocache_pushed]);
             return "<?php } elseif ({$parameter['if condition']}) {?>";
         }
-        $_output = $compiler->appendCode("<?php } else {\n?>", $prefixCode);
-        $this->openTag($compiler, 'elseif', [$nesting + 1, $nocache_pushed]);
+        $_output = $compiler->append_code("<?php } else {\n?>", $prefix_code);
+        $this->open_tag($compiler, 'elseif', [$nesting + 1, $nocache_pushed]);
         if ($condition_by_assign) {
-            $_output = $compiler->appendCode($_output, $assignCode);
-            return $compiler->appendCode($_output, "<?php if ({$prefixVar}) {?>");
+            $_output = $compiler->append_code($_output, $assign_code);
+            return $compiler->append_code($_output, "<?php if ({$prefix_var}) {?>");
         }
-        return $compiler->appendCode($_output, "<?php if ({$parameter['if condition']}) {?>");
+        return $compiler->append_code($_output, "<?php if ({$parameter['if condition']}) {?>");
     }
 }

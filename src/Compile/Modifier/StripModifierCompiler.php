@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -15,15 +14,13 @@ namespace Smarty\Compile\Modifier;
  *
  * @author Uwe Tews
  */
-
-class StripModifierCompiler extends Base
+class Strip_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
-        if (!isset($params[ 1 ])) {
-            $params[ 1 ] = "' '";
+        if (!isset($params[1])) {
+            $params[1] = "' '";
         }
-        return "preg_replace('!\s+!" . \Smarty\Smarty::$_UTF8_MODIFIER . "', {$params[1]},{$params[0]})";
+        return "preg_replace('!\\s+!" . \Smarty\Smarty::$_UTF8_MODIFIER . "', {$params[1]},{$params[0]})";
     }
-
 }

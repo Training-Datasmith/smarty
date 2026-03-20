@@ -1,30 +1,24 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Resource String
  *
-
-
  * @author     Uwe Tews
  * @author     Rodney Rehm
  */
-
 namespace Smarty\Resource;
 
 use Smarty\Smarty;
 use Smarty\Template;
 use Smarty\Template\Source;
-
 /**
  * Smarty Internal Plugin Resource String
  * Implements the strings as resource for Smarty template
  * {@internal unlike eval-resources the compiled state of string-resources is saved for subsequent access}}
  *
-
-
  */
-class StringPlugin extends BasePlugin
+class String_Plugin extends Base_Plugin
 {
     /**
      * populate Source Object with metadata from Resource
@@ -37,7 +31,6 @@ class StringPlugin extends BasePlugin
         $source->uid = sha1($source->name);
         $source->timestamp = $source->exists = true;
     }
-
     /**
      * Load template's source from $resource_name into current template object
      *
@@ -47,11 +40,10 @@ class StringPlugin extends BasePlugin
      * @uses decode() to decode base64 and urlencoded template_resources
      *
      */
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
         return $this->decode($source->name);
     }
-
     /**
      * decode base64 and urlencode
      *
@@ -73,7 +65,6 @@ class StringPlugin extends BasePlugin
         }
         return $string;
     }
-
     /**
      * Determine basename for compiled filename
      * Always returns an empty string.
@@ -82,17 +73,16 @@ class StringPlugin extends BasePlugin
      *
      * @return string                 resource's basename
      */
-    public function getBasename(Source $source): string
+    public function get_basename(Source $source): string
     {
         return '';
     }
-
     /*
      * Disable timestamp checks for string resource.
      *
      * @return bool
      */
-    public function checkTimestamps(): bool
+    public function check_timestamps(): bool
     {
         return false;
     }

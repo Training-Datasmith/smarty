@@ -1,10 +1,9 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
-namespace Smarty\FunctionHandler;
-
-class HtmlBase extends Base
+class Html_Base extends Base
 {
     /**
      * @param $inputType
@@ -19,58 +18,32 @@ class HtmlBase extends Base
      * @param      $label_ids
      * @param bool $escape
      */
-    protected function getHtmlForInput(
-        string $inputType,
-        $name,
-        $value,
-        $output,
-        $ismultiselect,
-        $selected,
-        string $extra,
-        string $separator,
-        $labels,
-        $label_ids,
-        $escape = true
-    ): string {
-
+    protected function get_html_for_input(string $input_type, $name, $value, $output, $ismultiselect, $selected, string $extra, string $separator, $labels, $label_ids, $escape = true): string
+    {
         $_output = '';
         if (is_object($value)) {
             if (method_exists($value, '__toString')) {
-                $value = (string)$value->__toString();
+                $value = (string) $value->__toString();
             } else {
-                trigger_error(
-                    'value is an object of class \'' . get_class($value) .
-                    '\' without __toString() method',
-                    E_USER_NOTICE
-                );
+                trigger_error('value is an object of class \'' . get_class($value) . '\' without __toString() method', E_USER_NOTICE);
                 return '';
             }
         } else {
-            $value = (string)$value;
+            $value = (string) $value;
         }
         if (is_object($output)) {
             if (method_exists($output, '__toString')) {
-                $output = (string)$output->__toString();
+                $output = (string) $output->__toString();
             } else {
-                trigger_error(
-                    'output is an object of class \'' . get_class($output) .
-                    '\' without __toString() method',
-                    E_USER_NOTICE
-                );
+                trigger_error('output is an object of class \'' . get_class($output) . '\' without __toString() method', E_USER_NOTICE);
                 return '';
             }
         } else {
-            $output = (string)$output;
+            $output = (string) $output;
         }
         if ($labels) {
             if ($label_ids) {
-                $_id = smarty_function_escape_special_chars(
-                    preg_replace(
-                        '![^\w\-\.]!' . \Smarty\Smarty::$_UTF8_MODIFIER,
-                        '_',
-                        $name . '_' . $value
-                    )
-                );
+                $_id = smarty_function_escape_special_chars(preg_replace('![^\w\-\.]!' . \Smarty\Smarty::$_UTF8_MODIFIER, '_', $name . '_' . $value));
                 $_output .= '<label for="' . $_id . '">';
             } else {
                 $_output .= '<label>';
@@ -81,7 +54,7 @@ class HtmlBase extends Base
         if ($escape) {
             $output = smarty_function_escape_special_chars($output);
         }
-        $_output .= '<input type="' . $inputType . '" name="' . $name;
+        $_output .= '<input type="' . $input_type . '" name="' . $name;
         if ($ismultiselect) {
             $_output .= '[]';
         }
@@ -90,7 +63,7 @@ class HtmlBase extends Base
             $_output .= ' id="' . $_id . '"';
         }
         if ($ismultiselect && is_array($selected)) {
-            if (isset($selected[ $value ])) {
+            if (isset($selected[$value])) {
                 $_output .= ' checked="checked"';
             }
         } elseif ($value === $selected) {
@@ -102,5 +75,4 @@ class HtmlBase extends Base
         }
         return $_output . $separator;
     }
-
 }

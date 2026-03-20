@@ -1,24 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Compile Plugin Base
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile;
 
 use Smarty\Compiler\Template;
 use Smarty\Data;
 use Smarty\Exception;
-
 /**
  * This class does extend all internal compile plugins
  *
-
-
  */
-abstract class Base implements CompilerInterface
+abstract class Base implements Compiler_Interface
 {
     /**
      * Array of names of required attribute required by tag
@@ -26,7 +22,6 @@ abstract class Base implements CompilerInterface
      * @var array
      */
     protected $required_attributes = [];
-
     /**
      * Array of names of optional attribute required by tag
      * use array('_any') if there is no restriction of attributes names
@@ -34,14 +29,12 @@ abstract class Base implements CompilerInterface
      * @var array
      */
     protected $optional_attributes = [];
-
     /**
      * Shorttag attribute order defined by its names
      *
      * @var array
      */
     protected $shorttag_order = [];
-
     /**
      * Array of names of valid option flags
      *
@@ -52,26 +45,23 @@ abstract class Base implements CompilerInterface
      * @var bool
      */
     protected $cacheable = true;
-
-    public function isCacheable(): bool
+    public function is_cacheable(): bool
     {
         return $this->cacheable;
     }
-
     /**
      * Converts attributes into parameter array strings
      *
      *
      */
-    protected function formatParamsArray(array $_attr): array
+    protected function format_params_array(array $_attr): array
     {
-        $_paramsArray = [];
+        $_params_array = [];
         foreach ($_attr as $_key => $_value) {
-            $_paramsArray[] = var_export($_key, true) . '=>' . $_value;
+            $_params_array[] = var_export($_key, true) . '=>' . $_value;
         }
-        return $_paramsArray;
+        return $_params_array;
     }
-
     /**
      * This function checks if the attributes passed are valid
      * The attributes passed for the tag to compile are checked against the list of required and
@@ -84,16 +74,10 @@ abstract class Base implements CompilerInterface
      *
      * @return array  of mapped attributes for further processing
      */
-    protected function getAttributes($compiler, $attributes)
+    protected function get_attributes($compiler, $attributes)
     {
-        return (new AttributeCompiler(
-            $this->required_attributes,
-            $this->optional_attributes,
-            $this->shorttag_order,
-            $this->option_flags
-        ))->getAttributes($compiler, $attributes);
+        return (new Attribute_Compiler($this->required_attributes, $this->optional_attributes, $this->shorttag_order, $this->option_flags))->get_attributes($compiler, $attributes);
     }
-
     /**
      * Push opening tag name on stack
      * Optionally additional data can be saved on stack
@@ -102,11 +86,10 @@ abstract class Base implements CompilerInterface
      * @param string $openTag the opening tag's name
      * @param mixed $data optional data saved
      */
-    protected function openTag(Template $compiler, $openTag, $data = null)
+    protected function open_tag(Template $compiler, $open_tag, $data = null)
     {
-        $compiler->openTag($openTag, $data);
+        $compiler->open_tag($open_tag, $data);
     }
-
     /**
      * Pop closing tag
      * Raise an error if this stack-top doesn't match with expected opening tags
@@ -116,43 +99,41 @@ abstract class Base implements CompilerInterface
      *
      * @return mixed        any type the opening tag's name or saved data
      */
-    protected function closeTag(Template $compiler, $expectedTag)
+    protected function close_tag(Template $compiler, $expected_tag)
     {
-        return $compiler->closeTag($expectedTag);
+        return $compiler->close_tag($expected_tag);
     }
-
     /**
      * @param mixed $scope
      * @param array $invalidScopes
      *
      * @throws Exception
      */
-    protected function convertScope($scope): int
+    protected function convert_scope($scope): int
     {
-
         static $scopes = [
-            'local'    => Data::SCOPE_LOCAL,    // current scope
-            'parent' => Data::SCOPE_PARENT,     // parent scope (definition unclear)
-            'tpl_root' => Data::SCOPE_TPL_ROOT, // highest template (keep going up until parent is not a template)
-            'root'     => Data::SCOPE_ROOT,     // highest scope (definition unclear)
-            'global' => Data::SCOPE_GLOBAL,     // smarty object
-
-            'smarty' => Data::SCOPE_SMARTY,     // @deprecated alias of 'global'
+            'local' => Data::SCOPE_LOCAL,
+            // current scope
+            'parent' => Data::SCOPE_PARENT,
+            // parent scope (definition unclear)
+            'tpl_root' => Data::SCOPE_TPL_ROOT,
+            // highest template (keep going up until parent is not a template)
+            'root' => Data::SCOPE_ROOT,
+            // highest scope (definition unclear)
+            'global' => Data::SCOPE_GLOBAL,
+            // smarty object
+            'smarty' => Data::SCOPE_SMARTY,
         ];
-
-        $_scopeName = trim($scope, '\'"');
-        if (is_numeric($_scopeName) && in_array($_scopeName, $scopes)) {
-            return (int) $_scopeName;
+        $_scope_name = trim($scope, '\'"');
+        if (is_numeric($_scope_name) && in_array($_scope_name, $scopes)) {
+            return (int) $_scope_name;
         }
-
-        if (isset($scopes[$_scopeName])) {
-            return $scopes[$_scopeName];
+        if (isset($scopes[$_scope_name])) {
+            return $scopes[$_scope_name];
         }
-
-        $err = var_export($_scopeName, true);
+        $err = var_export($_scope_name, true);
         throw new Exception("illegal value '{$err}' for \"scope\" attribute");
     }
-
     /**
      * Compiles code for the tag
      *

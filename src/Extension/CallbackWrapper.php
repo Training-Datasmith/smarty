@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Extension;
 
 use Smarty\Exception;
-
-class CallbackWrapper
+class Callback_Wrapper
 {
     /**
      * @var callback
@@ -15,24 +13,21 @@ class CallbackWrapper
     /**
      * @var string
      */
-    private $modifierName;
-
+    private $modifier_name;
     /**
      * @param callback $callback
      */
-    public function __construct(string $modifierName, $callback)
+    public function __construct(string $modifier_name, $callback)
     {
         $this->callback = $callback;
-        $this->modifierName = $modifierName;
+        $this->modifier_name = $modifier_name;
     }
-
     public function handle(...$params)
     {
         try {
             return ($this->callback)(...$params);
-        } catch (\ArgumentCountError $e) {
-            throw new Exception('Invalid number of arguments to modifier ' . $this->modifierName);
+        } catch (\Argument_Count_Error $e) {
+            throw new Exception('Invalid number of arguments to modifier ' . $this->modifier_name);
         }
     }
-
 }

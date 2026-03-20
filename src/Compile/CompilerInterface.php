@@ -1,16 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile;
 
 /**
  * This class does extend all internal compile plugins
  *
-
-
  */
-interface CompilerInterface
+interface Compiler_Interface
 {
     /**
      * Compiles code for the tag
@@ -23,6 +20,5 @@ interface CompilerInterface
      * @throws \Smarty\CompilerException
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string;
-
-    public function isCacheable(): bool;
+    public function is_cacheable(): bool;
 }

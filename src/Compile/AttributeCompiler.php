@@ -1,13 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile;
 
 /**
  * This class handles compiling the attributes.
  */
-class AttributeCompiler
+class Attribute_Compiler
 {
     /**
      * Array of names of required attributes required by tag
@@ -15,7 +14,6 @@ class AttributeCompiler
      * @var array
      */
     protected $required_attributes = [];
-
     /**
      * Array of names of optional attribute required by tag
      * use array('_any') if there is no restriction of attributes names
@@ -23,33 +21,25 @@ class AttributeCompiler
      * @var array
      */
     protected $optional_attributes = [];
-
     /**
      * Shorttag attribute order defined by its names
      *
      * @var array
      */
     protected $shorttag_order = [];
-
     /**
      * Array of names of valid option flags
      *
      * @var array
      */
     protected $option_flags = [];
-
-    public function __construct(
-        array $required_attributes = [],
-        array $optional_attributes = [],
-        array $shorttag_order = [],
-        array $option_flags = []
-    ) {
+    public function __construct(array $required_attributes = [], array $optional_attributes = [], array $shorttag_order = [], array $option_flags = [])
+    {
         $this->required_attributes = $required_attributes;
         $this->optional_attributes = $optional_attributes;
         $this->shorttag_order = $shorttag_order;
         $this->option_flags = $option_flags;
     }
-
     /**
      * This function checks if the attributes passed are valid
      * The attributes passed for the tag to compile are checked against the list of required and
@@ -62,7 +52,7 @@ class AttributeCompiler
      *
      * @return array  of mapped attributes for further processing
      */
-    public function getAttributes($compiler, $attributes): array
+    public function get_attributes($compiler, $attributes): array
     {
         $_indexed_attr = [];
         $options = array_fill_keys($this->option_flags, true);
@@ -90,19 +80,12 @@ class AttributeCompiler
                             if (is_string($v)) {
                                 $v = trim($v, '\'" ');
                             }
-
                             // Mapping array for boolean option value
-                            static $optionMap = [1 => true, 0 => false, 'true' => true, 'false' => false];
-
-                            if (isset($optionMap[$v])) {
-                                $_indexed_attr[$k] = $optionMap[$v];
+                            static $option_map = [1 => true, 0 => false, 'true' => true, 'false' => false];
+                            if (isset($option_map[$v])) {
+                                $_indexed_attr[$k] = $option_map[$v];
                             } else {
-                                $compiler->trigger_template_error(
-                                    "illegal value '" . var_export($v, true) .
-                                    "' for options flag '{$k}'",
-                                    null,
-                                    true
-                                );
+                                $compiler->trigger_template_error("illegal value '" . var_export($v, true) . "' for options flag '{$k}'", null, true);
                             }
                         }
                         // must be named attribute
@@ -120,16 +103,9 @@ class AttributeCompiler
         }
         // check for not allowed attributes
         if ($this->optional_attributes !== ['_any']) {
-            $allowedAttributes = array_fill_keys(
-                array_merge(
-                    $this->required_attributes,
-                    $this->optional_attributes,
-                    $this->option_flags
-                ),
-                true
-            );
+            $allowed_attributes = array_fill_keys(array_merge($this->required_attributes, $this->optional_attributes, $this->option_flags), true);
             foreach ($_indexed_attr as $key => $dummy) {
-                if (!isset($allowedAttributes[$key]) && $key !== 0) {
+                if (!isset($allowed_attributes[$key]) && $key !== 0) {
                     $compiler->trigger_template_error("unexpected '{$key}' attribute", null, true);
                 }
             }
@@ -140,7 +116,6 @@ class AttributeCompiler
                 $_indexed_attr[$flag] = false;
             }
         }
-
         return $_indexed_attr;
     }
 }

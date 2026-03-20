@@ -1,31 +1,25 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Resource Stream
  * Implements the streams as resource for Smarty template
  *
-
-
  * @author     Uwe Tews
  * @author     Rodney Rehm
  */
-
 namespace Smarty\Resource;
 
 use Smarty\Smarty;
 use Smarty\Template;
 use Smarty\Template\Source;
-
 /**
  * Smarty Internal Plugin Resource Stream
  * Implements the streams as resource for Smarty template
  *
  * @link       https://php.net/streams
-
-
  */
-class StreamPlugin extends RecompiledPlugin
+class Stream_Plugin extends Recompiled_Plugin
 {
     /**
      * populate Source Object with meta data from Resource
@@ -36,10 +30,9 @@ class StreamPlugin extends RecompiledPlugin
     public function populate(Source $source, ?Template $_template = null): void
     {
         $source->uid = false;
-        $source->content = $this->getContent($source);
+        $source->content = $this->get_content($source);
         $source->timestamp = $source->exists = !!$source->content;
     }
-
     /**
      * Load template's source from stream into current template object
      *
@@ -47,15 +40,13 @@ class StreamPlugin extends RecompiledPlugin
      *
      * @return string template source
      */
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
-
-        if (strpos($source->getResourceName(), '://') !== false) {
-            $filepath = $source->getResourceName();
+        if (strpos($source->get_resource_name(), '://') !== false) {
+            $filepath = $source->get_resource_name();
         } else {
-            $filepath = str_replace(':', '://', $source->getFullResourceName());
+            $filepath = str_replace(':', '://', $source->get_full_resource_name());
         }
-
         $t = '';
         // the availability of the stream has already been checked in Smarty\Resource\Base::fetch()
         $fp = fopen($filepath, 'r');
@@ -68,5 +59,4 @@ class StreamPlugin extends RecompiledPlugin
         }
         return false;
     }
-
 }

@@ -1,25 +1,19 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Debug
  * Compiles the {debug} tag.
  * It opens a window the the Smarty Debugging Console.
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Debug Class
  *
-
-
  */
 class Debug extends Base
 {
@@ -34,13 +28,11 @@ class Debug extends Base
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
         // check and get attributes, may trigger errors
-        $this->getAttributes($compiler, $args);
-
+        $this->get_attributes($compiler, $args);
         // compile always as nocache
         $compiler->tag_nocache = true;
         // display debug template
-        $_output =
-            "<?php \$_smarty_debug = new \\Smarty\\Debug;\n \$_smarty_debug->display_debug(\$_smarty_tpl);\n";
+        $_output = "<?php \$_smarty_debug = new \\Smarty\\Debug;\n \$_smarty_debug->display_debug(\$_smarty_tpl);\n";
         return $_output . "unset(\$_smarty_debug);\n?>";
     }
 }

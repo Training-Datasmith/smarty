@@ -1,18 +1,15 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
  * Smarty substr modifier plugin
  */
-class SubstrModifierCompiler extends Base
+class Substr_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
-        return 'substr((string) ' . $params[0] . ', (int) ' . $params[1] .
-            (isset($params[2]) ? ', (int) ' . $params[2] : '') . ')';
+        return 'substr((string) ' . $params[0] . ', (int) ' . $params[1] . (isset($params[2]) ? ', (int) ' . $params[2] : '') . ')';
     }
-
 }

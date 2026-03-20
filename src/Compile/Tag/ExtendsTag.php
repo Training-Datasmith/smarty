@@ -1,24 +1,19 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile extend
  * Compiles the {extends} tag
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 /**
  * Smarty Internal Plugin Compile extend Class
  *
-
-
  */
-class ExtendsTag extends Inheritance
+class Extends_Tag extends Inheritance
 {
     /**
      * Attribute definition: Overwrites base class.
@@ -27,7 +22,6 @@ class ExtendsTag extends Inheritance
      * @see BasePlugin
      */
     protected $required_attributes = ['file'];
-
     /**
      * Array of names of optional attribute required by tag
      * use array('_any') if there is no restriction of attributes names
@@ -35,7 +29,6 @@ class ExtendsTag extends Inheritance
      * @var array
      */
     protected $optional_attributes = [];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -43,7 +36,6 @@ class ExtendsTag extends Inheritance
      * @see BasePlugin
      */
     protected $shorttag_order = ['file'];
-
     /**
      * Compiles code for the {extends} tag extends: resource
      *
@@ -57,19 +49,18 @@ class ExtendsTag extends Inheritance
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         if ($_attr['nocache'] === true) {
-            $compiler->trigger_template_error('nocache option not allowed', $compiler->getParser()->lex->line - 1);
+            $compiler->trigger_template_error('nocache option not allowed', $compiler->get_parser()->lex->line - 1);
         }
         if (strpos($_attr['file'], '$_tmp') !== false) {
-            $compiler->trigger_template_error('illegal value for file attribute', $compiler->getParser()->lex->line - 1);
+            $compiler->trigger_template_error('illegal value for file attribute', $compiler->get_parser()->lex->line - 1);
         }
         // add code to initialize inheritance
-        $this->registerInit($compiler, true);
-        $this->compileEndChild($compiler, $_attr['file']);
+        $this->register_init($compiler, true);
+        $this->compile_end_child($compiler, $_attr['file']);
         return '';
     }
-
     /**
      * Add code for inheritance endChild() method to end of template
      *
@@ -78,12 +69,8 @@ class ExtendsTag extends Inheritance
      * @throws \Smarty\CompilerException
      * @throws \Smarty\Exception
      */
-    private function compileEndChild(\Smarty\Compiler\Template $compiler, $template = null): void
+    private function compile_end_child(\Smarty\Compiler\Template $compiler, $template = null): void
     {
-        $compiler->getParser()->template_postfix[] = new \Smarty\ParseTree\Tag(
-            $compiler->getParser(),
-            '<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl' .
-            (isset($template) ? ", {$template}, \$_smarty_current_dir" : '') . ");\n?>"
-        );
+        $compiler->get_parser()->template_postfix[] = new \Smarty\Parse_Tree\Tag($compiler->get_parser(), '<?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl' . (isset($template) ? ", {$template}, \$_smarty_current_dir" : '') . ");\n?>");
     }
 }

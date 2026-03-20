@@ -1,29 +1,22 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Resource;
 
 use Smarty\Smarty;
-
 /**
  * Smarty Internal Plugin Resource Eval
  *
-
-
  * @author     Uwe Tews
  * @author     Rodney Rehm
  */
-
 /**
  * Smarty Internal Plugin Resource Eval
  * Implements the strings as resource for Smarty template
  * {@internal unlike string-resources the compiled state of eval-resources is NOT saved for subsequent access}}
  *
-
-
  */
-class StringEval extends RecompiledPlugin
+class String_Eval extends Recompiled_Plugin
 {
     /**
      * populate Source Object with meta data from Resource
@@ -36,7 +29,6 @@ class StringEval extends RecompiledPlugin
         $source->uid = sha1($source->name);
         $source->timestamp = $source->exists = true;
     }
-
     /**
      * Load template's source from $resource_name into current template object
      *
@@ -46,11 +38,10 @@ class StringEval extends RecompiledPlugin
      *@uses decode() to decode base64 and urlencoded template_resources
      *
      */
-    public function getContent(\Smarty\Template\Source $source)
+    public function get_content(\Smarty\Template\Source $source)
     {
         return $this->decode($source->name);
     }
-
     /**
      * decode base64 and urlencode
      *
@@ -72,7 +63,6 @@ class StringEval extends RecompiledPlugin
         }
         return $string;
     }
-
     /**
      * Determine basename for compiled filename
      *
@@ -80,7 +70,7 @@ class StringEval extends RecompiledPlugin
      *
      * @return string                 resource's basename
      */
-    public function getBasename(\Smarty\Template\Source $source): string
+    public function get_basename(\Smarty\Template\Source $source): string
     {
         return '';
     }

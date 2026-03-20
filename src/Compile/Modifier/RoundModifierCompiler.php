@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Modifier;
 
 /**
@@ -11,12 +10,10 @@ namespace Smarty\Compile\Modifier;
  * Purpose:  Returns the rounded value of num to specified precision (number of digits after the decimal point)
  *
  */
-
-class RoundModifierCompiler extends Base
+class Round_Modifier_Compiler extends Base
 {
     public function compile($params, \Smarty\Compiler\Template $compiler): string
     {
         return 'round((float) ' . $params[0] . ', (int) ' . ($params[1] ?? 0) . ', (int) ' . ($params[2] ?? PHP_ROUND_HALF_UP) . ')';
     }
-
 }

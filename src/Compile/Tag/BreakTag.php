@@ -1,26 +1,20 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Internal Plugin Compile Break
  * Compiles the {break} tag
  *
-
-
  * @author     Uwe Tews
  */
-
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Break Class
  *
-
-
  */
-class BreakTag extends Base
+class Break_Tag extends Base
 {
     /**
      * Attribute definition: Overwrites base class.
@@ -29,7 +23,6 @@ class BreakTag extends Base
      * @see BasePlugin
      */
     protected $optional_attributes = ['levels'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
@@ -37,14 +30,12 @@ class BreakTag extends Base
      * @see BasePlugin
      */
     protected $shorttag_order = ['levels'];
-
     /**
      * Tag name may be overloaded by ContinueTag
      *
      * @var string
      */
     protected $tag = 'break';
-
     /**
      * Compiles code for the {break} tag
      *
@@ -56,19 +47,18 @@ class BreakTag extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        [$levels, $foreachLevels] = $this->checkLevels($args, $compiler);
+        [$levels, $foreach_levels] = $this->check_levels($args, $compiler);
         $output = '<?php ';
-        if ($foreachLevels > 0 && $this->tag === 'continue') {
-            $foreachLevels--;
+        if ($foreach_levels > 0 && $this->tag === 'continue') {
+            $foreach_levels--;
         }
-        if ($foreachLevels > 0) {
+        if ($foreach_levels > 0) {
             /* @var ForeachTag $foreachCompiler */
-            $foreachCompiler = $compiler->getTagCompiler('foreach');
-            $output .= $foreachCompiler->compileRestore($foreachLevels);
+            $foreach_compiler = $compiler->get_tag_compiler('foreach');
+            $output .= $foreach_compiler->compile_restore($foreach_levels);
         }
         return $output . "{$this->tag} {$levels};?>";
     }
-
     /**
      * check attributes and return array of break and foreach levels
      *
@@ -77,11 +67,11 @@ class BreakTag extends Base
      *
      * @throws \Smarty\CompilerException
      */
-    public function checkLevels($args, \Smarty\Compiler\Template $compiler): array
+    public function check_levels($args, \Smarty\Compiler\Template $compiler): array
     {
         static $_is_loopy = ['for' => true, 'foreach' => true, 'while' => true, 'section' => true];
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         if ($_attr['nocache'] === true) {
             $compiler->trigger_template_error('nocache option not allowed', null, true);
         }
@@ -94,21 +84,19 @@ class BreakTag extends Base
             $levels = 1;
         }
         $level_count = $levels;
-
-        $tagStack = $compiler->getTagStack();
-        $stack_count = count($tagStack) - 1;
-
-        $foreachLevels = 0;
-        $lastTag = '';
+        $tag_stack = $compiler->get_tag_stack();
+        $stack_count = count($tag_stack) - 1;
+        $foreach_levels = 0;
+        $last_tag = '';
         while ($level_count > 0 && $stack_count >= 0) {
-            if (isset($_is_loopy[$tagStack[$stack_count][0]])) {
-                $lastTag = $tagStack[$stack_count][0];
+            if (isset($_is_loopy[$tag_stack[$stack_count][0]])) {
+                $last_tag = $tag_stack[$stack_count][0];
                 if ($level_count === 0) {
                     break;
                 }
                 $level_count--;
-                if ($tagStack[$stack_count][0] === 'foreach') {
-                    $foreachLevels++;
+                if ($tag_stack[$stack_count][0] === 'foreach') {
+                    $foreach_levels++;
                 }
             }
             $stack_count--;
@@ -116,9 +104,9 @@ class BreakTag extends Base
         if ($level_count !== 0) {
             $compiler->trigger_template_error("cannot {$this->tag} {$levels} level(s)", null, true);
         }
-        if ($lastTag === 'foreach' && $this->tag === 'break' && $foreachLevels > 0) {
-            $foreachLevels--;
+        if ($last_tag === 'foreach' && $this->tag === 'break' && $foreach_levels > 0) {
+            $foreach_levels--;
         }
-        return [$levels, $foreachLevels];
+        return [$levels, $foreach_levels];
     }
 }

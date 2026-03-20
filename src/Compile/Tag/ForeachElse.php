@@ -1,18 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Foreachelse Class
  *
-
-
  */
-class ForeachElse extends Base
+class Foreach_Else extends Base
 {
     /**
      * Compiles code for the {foreachelse} tag
@@ -24,13 +20,12 @@ class ForeachElse extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-
-        [$openTag, $nocache_pushed, $localVariablePrefix, $item, $restore] = $this->closeTag($compiler, ['foreach']);
-        $this->openTag($compiler, 'foreachelse', ['foreachelse', $nocache_pushed, $localVariablePrefix, $item, false]);
+        [$open_tag, $nocache_pushed, $local_variable_prefix, $item, $restore] = $this->close_tag($compiler, ['foreach']);
+        $this->open_tag($compiler, 'foreachelse', ['foreachelse', $nocache_pushed, $local_variable_prefix, $item, false]);
         $output = "<?php\n";
         if ($restore) {
-            $output .= "\$_smarty_tpl->setVariable('{$item}', {$localVariablePrefix}Backup);\n";
+            $output .= "\$_smarty_tpl->setVariable('{$item}', {$local_variable_prefix}Backup);\n";
         }
-        return $output . "}\nif ({$localVariablePrefix}DoElse) {\n?>";
+        return $output . "}\nif ({$local_variable_prefix}DoElse) {\n?>";
     }
 }

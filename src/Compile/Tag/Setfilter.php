@@ -1,16 +1,12 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Setfilter Class
  *
-
-
  */
 class Setfilter extends Base
 {
@@ -25,18 +21,15 @@ class Setfilter extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        $compiler->variable_filter_stack[] = $compiler->getSmarty()->getDefaultModifiers();
-
+        $compiler->variable_filter_stack[] = $compiler->get_smarty()->get_default_modifiers();
         // The modifier_list is passed as an array of array's. The inner arrays have the modifier at index 0,
         // and, possibly, parameters at subsequent indexes, e.g. [ ['escape','"mail"'] ]
         // We will collapse them so the syntax is OK for ::setDefaultModifiers() as follows: [ 'escape:"mail"' ]
-        $newList = [];
+        $new_list = [];
         foreach ($parameter['modifier_list'] as $modifier) {
-            $newList[] = implode(':', $modifier);
+            $new_list[] = implode(':', $modifier);
         }
-
-        $compiler->getSmarty()->setDefaultModifiers($newList);
-
+        $compiler->get_smarty()->set_default_modifiers($new_list);
         return '';
     }
 }

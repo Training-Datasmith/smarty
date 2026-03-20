@@ -1,23 +1,17 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 /**
  * Smarty Internal Plugin Compile Append
  * Compiles the {append} tag
  *
-
-
  * @author     Uwe Tews
  */
-
 /**
  * Smarty Internal Plugin Compile Append Class
  *
-
-
  */
 class Append extends Assign
 {
@@ -25,7 +19,6 @@ class Append extends Assign
      * @inheritdoc
      */
     protected $optional_attributes = ['scope', 'index'];
-
     /**
      * Compiles code for the {append} tag
      *
@@ -38,16 +31,14 @@ class Append extends Assign
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
-
+        $_attr = $this->get_attributes($compiler, $args);
         // map to compile assign attributes
-        if (isset($_attr[ 'index' ])) {
-            $_params[ 'smarty_internal_index' ] = '[' . $_attr[ 'index' ] . ']';
-            unset($_attr[ 'index' ]);
+        if (isset($_attr['index'])) {
+            $_params['smarty_internal_index'] = '[' . $_attr['index'] . ']';
+            unset($_attr['index']);
         } else {
-            $_params[ 'smarty_internal_index' ] = '[]';
+            $_params['smarty_internal_index'] = '[]';
         }
         $_new_attr = [];
         foreach ($_attr as $key => $value) {

@@ -1,18 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Compile\Tag;
 
 use Smarty\Compile\Base;
-
 /**
  * Smarty Internal Plugin Compile Else Class
  *
-
-
  */
-class ElseTag extends Base
+class Else_Tag extends Base
 {
     /**
      * Compiles code for the {else} tag
@@ -24,8 +20,8 @@ class ElseTag extends Base
      */
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        [$nesting, $compiler->tag_nocache] = $this->closeTag($compiler, ['if', 'elseif']);
-        $this->openTag($compiler, 'else', [$nesting, $compiler->tag_nocache]);
+        [$nesting, $compiler->tag_nocache] = $this->close_tag($compiler, ['if', 'elseif']);
+        $this->open_tag($compiler, 'else', [$nesting, $compiler->tag_nocache]);
         return '<?php } else { ?>';
     }
 }

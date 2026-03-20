@@ -1,24 +1,19 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * Smarty Resource Plugin
  *
-
-
  * @author     Rodney Rehm
  */
-
 namespace Smarty\Resource;
 
 /**
  * Smarty Resource Plugin
  * Base implementation for resource plugins that don't compile cache
  *
-
-
  */
-abstract class RecompiledPlugin extends BasePlugin
+abstract class Recompiled_Plugin extends Base_Plugin
 {
     /**
      * Flag that it's an recompiled resource
@@ -26,24 +21,22 @@ abstract class RecompiledPlugin extends BasePlugin
      * @var bool
      */
     public $recompiled = true;
-
     /**
      * Flag if resource does allow compilation
      */
-    public function supportsCompiledTemplates(): bool
+    public function supports_compiled_templates(): bool
     {
         return false;
     }
-
     /*
-       * Disable timestamp checks for recompiled resource.
-       *
-       * @return bool
-       */
+     * Disable timestamp checks for recompiled resource.
+     *
+     * @return bool
+     */
     /**
      * @return bool
      */
-    public function checkTimestamps()
+    public function check_timestamps()
     {
         return false;
     }
