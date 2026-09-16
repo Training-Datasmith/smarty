@@ -717,7 +717,7 @@ class DefaultExtension extends Base
             $search = substr($search, 0, $pos);
         }
         // reject patterns containing eval-modifier
-        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && preg_match('!(?<![a-zA-Z])[eE](?![a-zA-Z])!', $match[1])) {
+        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && (strpos($match[1], 'e') !== false)) {
             trigger_error('regex_replace: the /e modifier is not allowed', E_USER_WARNING);
             return false;
         }

@@ -36,7 +36,7 @@ class PluginModifierRegexReplaceTest extends PHPUnit_Smarty
 
     public function testUmlautsReplace()
     {
-        $tpl = $this->smarty->createTemplate('string:{"Infertility unlikely tä be passed on, experts say."|regex_replace:"#[ä]#":"ae"}');
+        $tpl = $this->smarty->createTemplate('string:{"Infertility unlikely tä be passed on, experts say."|regex_replace:"#[ä]#u":"ae"}');
         $this->assertEquals('Infertility unlikely tae be passed on, experts say.', $this->smarty->fetch($tpl));
     }
 }
