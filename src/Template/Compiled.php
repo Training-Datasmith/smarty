@@ -140,12 +140,12 @@ class Compiled extends GeneratedPhpFile
         if ($this->exists && !$_smarty_tpl->getSmarty()->force_compile
             && !($_smarty_tpl->compile_check && $_smarty_tpl->getSource()->getTimeStamp() > $this->getTimeStamp())
         ) {
-            $this->loadCompiledTemplate(false);
+            $this->loadCompiledTemplate($_smarty_tpl, false);
         }
 
         if (!$this->isValid) {
             $this->compileAndWrite($_smarty_tpl);
-            $this->loadCompiledTemplate();
+            $this->loadCompiledTemplate($_smarty_tpl);
         }
 
         $this->processed = true;
@@ -245,12 +245,11 @@ class Compiled extends GeneratedPhpFile
      * Load fresh compiled template by including the PHP file
      * HHVM requires a workaround because of a PHP incompatibility
      *
+     * @param Template $_smarty_tpl do not change/remove variable name, is used by compiled template
      * @param bool $invalidateCachedFiles forces a revalidation of the file in opcache or apc cache (if available)
-     *
      */
-    private function loadCompiledTemplate(bool $invalidateCachedFiles = true): void
+    private function loadCompiledTemplate(Template $_smarty_tpl, bool $invalidateCachedFiles = true): void
     {
-
         if ($invalidateCachedFiles) {
             if (function_exists('opcache_invalidate')
                  && (!function_exists('ini_get') || strlen(ini_get('opcache.restrict_api')) < 1)

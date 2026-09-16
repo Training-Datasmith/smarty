@@ -17,7 +17,7 @@ use Smarty\Template\Source;
 
 class Smarty_Resource_Db3 extends Smarty\Resource\BasePlugin
 {
-    public function populate(Source $source, ?Template $_template = null)
+    public function populate(Source $source, ?Template $_template = null): void
     {
         $source->uid = sha1($source->resource);
         $source->timestamp = 0;

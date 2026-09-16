@@ -313,7 +313,7 @@ class Template extends TemplateBase
         return isset($this->parent) && $this->parent instanceof Template;
     }
 
-    public function assign($tpl_var, $value = null, $nocache = false, $scope = null)
+    public function assign($tpl_var, $value = null, $nocache = false, $scope = null): static
     {
         return parent::assign($tpl_var, $value, $nocache, $scope);
     }
@@ -585,7 +585,7 @@ class Template extends TemplateBase
     /**
      * @inheritdoc
      */
-    public function configLoad($config_file, $sections = null)
+    public function configLoad($config_file, $sections = null): static
     {
         $confObj = parent::configLoad($config_file, $sections);
 

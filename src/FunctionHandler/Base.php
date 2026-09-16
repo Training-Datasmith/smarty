@@ -18,7 +18,7 @@ class Base implements FunctionHandlerInterface
         return $this->cacheable;
     }
 
-    public function handle($params, Template $template): void
+    public function handle($params, Template $template)
     {
         // TODO: Implement handle() method.
     }

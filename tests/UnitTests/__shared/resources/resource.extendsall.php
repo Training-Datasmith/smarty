@@ -24,7 +24,7 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
      *
      * @return void
      */
-    public function populate(Source $source, ?Template $_template = null)
+    public function populate(Source $source, ?Template $_template = null): void
     {
         $uid = '';
         $sources = [];
@@ -64,7 +64,7 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
      *
      * @return bool false
      */
-    public function checkTimestamps()
+    public function checkTimestamps(): bool
     {
         return false;
     }

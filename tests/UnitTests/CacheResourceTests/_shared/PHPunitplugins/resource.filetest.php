@@ -14,7 +14,7 @@ class Smarty_Resource_FiletestPlugin extends FilePlugin
      * @param Source   $source    source object
      * @param Template $_template template object
      */
-    public function populate(Source $source, ?Template $_template = null)
+    public function populate(Source $source, ?Template $_template = null): void
     {
         parent::populate($source, $_template);
         if ($source->exists) {
