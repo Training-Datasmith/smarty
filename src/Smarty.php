@@ -1346,7 +1346,7 @@ class Smarty extends \Smarty\TemplateBase
         if ($_compile_dir === '/') { //We should never want to delete this!
             return 0;
         }
-        $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', $compile_id) : null;
+        $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', (string) $compile_id) : null;
         $_dir_sep = $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
         if (isset($resource_name)) {
             $_save_stat = $this->caching;

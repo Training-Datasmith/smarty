@@ -104,7 +104,7 @@ class HtmlSelectTime extends Base
                 case 'display_seconds':
                 case 'display_meridian':
                 case 'use_24_hours':
-                    ${$_key} = (bool)$_value;
+                    ${$_key} = smarty_string_to_bool($_value);
                     break;
                 case 'minute_interval':
                 case 'second_interval':

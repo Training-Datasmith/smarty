@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 use Smarty\Compile\AttributeCompiler;
-use Smarty\Compiler\Template;
+
+require_once __DIR__ . '/CompilerStub.php';
 
 class AttributeCompilerTest extends PHPUnit\Framework\TestCase
 {
@@ -23,7 +24,7 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
      */
     protected function setUp(): void
     {
-        $this->template_compiler = $this->createMock(Template::class);
+        $this->template_compiler = new CompilerStub();
 
         // reset attributes to empty arrays
         $this->attributes = [
@@ -54,6 +55,7 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
     {
         $this->attributes['shorttag_order'] = ['shorttag'];
         $this->attributes['required_attributes'] = ['required'];
+        $this->attributes['optional_attributes'] = ['shorttag'];
         $this->attributes['option_flags'] = ['option', 'option_two'];
 
         $payload = [
@@ -65,14 +67,14 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals(
-            $this->createAttributeCompiler()
-                ->getAttributes($this->template_compiler, $payload),
             [
                 'shorttag' => 'shorttag value',
                 'required' => 'required_value',
                 'option' => true,
                 'option_two' => false,
-            ]
+            ],
+            $this->createAttributeCompiler()
+                ->getAttributes($this->template_compiler, $payload)
         );
     }
 
@@ -90,17 +92,17 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals(
-            $this->createAttributeCompiler()
-                ->getAttributes($this->template_compiler, $payload),
             [
                 'optional' => 'optional value',
-            ]
+            ],
+            $this->createAttributeCompiler()
+                ->getAttributes($this->template_compiler, $payload)
         );
 
         $this->assertEquals(
+            [],
             $this->createAttributeCompiler()
-                ->getAttributes($this->template_compiler, []),
-            []
+                ->getAttributes($this->template_compiler, [])
         );
     }
 
@@ -121,12 +123,12 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
         ];
 
         $this->assertEquals(
-            $this->createAttributeCompiler()
-                ->getAttributes($this->template_compiler, $payload),
             [
                 'optional' => 'optional value',
                 'optional_two' => 'optional value two',
-            ]
+            ],
+            $this->createAttributeCompiler()
+                ->getAttributes($this->template_compiler, $payload)
         );
     }
 
@@ -139,10 +141,8 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
             0 => 'option one',
         ];
 
-        $this->template_compiler
-            ->expects(self::once())
-            ->method('trigger_template_error')
-            ->with('too many shorthand attributes', null, true);
+        $this->expectException(\Smarty\Exception::class);
+        $this->expectExceptionMessage('too many shorthand attributes');
 
         $this->createAttributeCompiler()
             ->getAttributes($this->template_compiler, $payload);
@@ -155,10 +155,8 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
     {
         $this->attributes['required_attributes'] = ['required'];
 
-        $this->template_compiler
-            ->expects(self::once())
-            ->method('trigger_template_error')
-            ->with('missing \'required\' attribute', null, true);
+        $this->expectException(\Smarty\Exception::class);
+        $this->expectExceptionMessage('missing \'required\' attribute');
 
         $this->createAttributeCompiler()
             ->getAttributes($this->template_compiler, []);
@@ -171,10 +169,8 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
     {
         $this->attributes['option_flags'] = ['option'];
 
-        $this->template_compiler
-            ->expects(self::once())
-            ->method('trigger_template_error')
-            ->with('illegal value \'\'foo\'\' for options flag \'option\'', null, true);
+        $this->expectException(\Smarty\Exception::class);
+        $this->expectExceptionMessage('illegal value');
 
         $this->createAttributeCompiler()
             ->getAttributes($this->template_compiler, [0 => ['option' => 'foo']]);
@@ -185,10 +181,8 @@ class AttributeCompilerTest extends PHPUnit\Framework\TestCase
      */
     public function testAttributeCompilerWithInvalidUnexpectedAttribute(): void
     {
-        $this->template_compiler
-            ->expects(self::once())
-            ->method('trigger_template_error')
-            ->with('unexpected \'unexpected\' attribute', null, true);
+        $this->expectException(\Smarty\Exception::class);
+        $this->expectExceptionMessage('unexpected \'unexpected\' attribute');
 
         $this->createAttributeCompiler()
             ->getAttributes($this->template_compiler, [0 => ['unexpected' => 'bar']]);

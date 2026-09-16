@@ -156,7 +156,7 @@ class HtmlOptions extends Base
      *
      * @return string
      */
-    private function output($key, $value, $selected, ?string $id, ?string $class, string &$idx)
+    private function output($key, $value, $selected, ?string $id, ?string $class, int &$idx)
     {
         if (!is_array($value)) {
             $_key = smarty_function_escape_special_chars($key);

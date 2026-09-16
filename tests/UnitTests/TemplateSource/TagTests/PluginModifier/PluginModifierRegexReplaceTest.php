@@ -28,12 +28,15 @@ class PluginModifierRegexReplaceTest extends PHPUnit_Smarty
         $this->assertEquals('Infertility unlikely to be passed on, experts say.', $this->smarty->fetch($tpl));
     }
 
-    public function testUmlauts()
+    public function testUmlautsNewlines()
     {
         $tpl = $this->smarty->createTemplate('string:{"Infertility unlikely tö\näe passed on, experts say."|regex_replace:"/[\r\t\n]/u":" "}');
         $this->assertEquals('Infertility unlikely tö äe passed on, experts say.', $this->smarty->fetch($tpl));
+    }
 
-        $tpl = $this->smarty->createTemplate('string:{"Infertility unlikely tä be passed on, experts say."|regex_replace:"/[ä]/ue":"ae"}');
+    public function testUmlautsReplace()
+    {
+        $tpl = $this->smarty->createTemplate('string:{"Infertility unlikely tä be passed on, experts say."|regex_replace:"#[ä]#":"ae"}');
         $this->assertEquals('Infertility unlikely tae be passed on, experts say.', $this->smarty->fetch($tpl));
     }
 }

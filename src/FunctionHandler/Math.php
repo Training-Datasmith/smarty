@@ -97,7 +97,7 @@ class Math extends Base
         foreach ($params as $key => $val) {
             if ($key !== 'equation' && $key !== 'format' && $key !== 'assign') {
                 // make sure value is not empty
-                if (strlen($val) === 0) {
+                if ((string) $val === '') {
                     trigger_error("math: parameter '{$key}' is empty", E_USER_WARNING);
                     return;
                 }

@@ -769,7 +769,7 @@ class Template extends BaseCompiler
      */
     public function getId($input)
     {
-        if (preg_match('~^([\'"]*)([0-9]*[a-zA-Z_]\w*)\1$~', $input, $match)) {
+        if (is_string($input) && preg_match('~^([\'"]*)([0-9]*[a-zA-Z_]\w*)\1$~', $input, $match)) {
             return $match[2];
         }
         return false;
@@ -1127,7 +1127,7 @@ class Template extends BaseCompiler
      * @throws Exception
      * @throws CompilerException
      */
-    private function compileTag2(string $tag, array $args, array $parameter)
+    private function compileTag2(string $tag, array $args, array|int $parameter = [])
     {
         // $args contains the attributes parsed and compiled by the lexer/parser
 

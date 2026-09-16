@@ -50,7 +50,7 @@ class RegisteredResourceTest extends PHPUnit_Smarty
     {
         $tpl = $this->smarty->createTemplate('rr:test');
         $this->assertTrue(is_integer($tpl->getSource()->getTimeStamp()));
-        $this->assertEquals(10, strlen($tpl->getSource()->getTimeStamp()));
+        $this->assertEquals(10, strlen((string) $tpl->getSource()->getTimeStamp()));
     }
 
     /**

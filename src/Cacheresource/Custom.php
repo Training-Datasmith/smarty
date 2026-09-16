@@ -89,8 +89,8 @@ abstract class Custom extends Base
      */
     public function populate(\Smarty\Template\Cached $cached, Template $_template): void
     {
-        $_cache_id = isset($cached->cache_id) ? preg_replace('![^\w\|]+!', '_', $cached->cache_id) : null;
-        $_compile_id = isset($cached->compile_id) ? preg_replace('![^\w]+!', '_', $cached->compile_id) : null;
+        $_cache_id = isset($cached->cache_id) ? preg_replace('![^\w\|]+!', '_', (string) $cached->cache_id) : null;
+        $_compile_id = isset($cached->compile_id) ? preg_replace('![^\w]+!', '_', (string) $cached->compile_id) : null;
         $path = $cached->getSource()->uid . $_cache_id . $_compile_id;
         $cached->filepath = sha1($path);
         if ($_template->getSmarty()->cache_locking) {

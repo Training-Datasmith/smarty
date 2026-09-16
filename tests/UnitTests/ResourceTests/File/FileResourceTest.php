@@ -83,7 +83,7 @@ class FileResourceTest extends PHPUnit_Smarty
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertTrue(is_integer($tpl->getSource()->getTimeStamp()));
-        $this->assertEquals(10, strlen($tpl->getSource()->getTimeStamp()));
+        $this->assertEquals(10, strlen((string) $tpl->getSource()->getTimeStamp()));
     }
 
     public function testGetTemplateSource()
@@ -122,7 +122,7 @@ class FileResourceTest extends PHPUnit_Smarty
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
         $this->assertTrue(is_integer($tpl->getCompiled()->getTimeStamp()));
-        $this->assertEquals(10, strlen($tpl->getCompiled()->getTimeStamp()));
+        $this->assertEquals(10, strlen((string) $tpl->getCompiled()->getTimeStamp()));
         $this->assertEquals($tpl->getCompiled()->getTimeStamp(), $tpl->getSource()->getTimeStamp());
     }
 

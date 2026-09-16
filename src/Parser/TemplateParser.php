@@ -188,14 +188,14 @@ class TemplateParser
      *
      *
      */
-    private function mergePrefixCode(string $code): \Smarty\ParseTree\Tag
+    private function mergePrefixCode(?string $code): \Smarty\ParseTree\Tag
     {
         $tmp = '';
         foreach ($this->compiler->prefix_code as $preCode) {
             $tmp .= $preCode;
         }
         $this->compiler->prefix_code = [];
-        $tmp .= $code;
+        $tmp .= $code ?? '';
         return new Tag($this, $this->compiler->processNocacheCode($tmp));
     }
 

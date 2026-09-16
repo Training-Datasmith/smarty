@@ -23,6 +23,27 @@ function smarty_ucfirst_ascii($string): string
 }
 
 /**
+ * Interpret Smarty tag attribute values as booleans (false, 0, "false", "", etc.).
+ */
+function smarty_string_to_bool($value): bool
+{
+    if (is_bool($value)) {
+        return $value;
+    }
+    if ($value === null || $value === false || $value === 0 || $value === 0.0) {
+        return false;
+    }
+    if (is_string($value)) {
+        $normalized = strtolower(trim($value));
+        if ($normalized === '' || $normalized === '0' || $normalized === 'false' || $normalized === 'no' || $normalized === 'off') {
+            return false;
+        }
+    }
+
+    return (bool) $value;
+}
+
+/**
  * Converts all uppercase ASCII characters (A-Z) in $string to lowercase (a-z).
  *
  * May not be required when running PHP8.2+: https://wiki.php.net/rfc/strtolower-ascii
@@ -66,8 +87,9 @@ function smarty_make_timestamp($string)
         || (interface_exists('DateTimeInterface', false) && $string instanceof DateTimeInterface)) {
         return (int)$string->format('U');
         // PHP 5.2 BC
-    } elseif (strlen($string) === 14 && ctype_digit((string)$string)) {
+    } elseif (strlen((string) $string) === 14 && ctype_digit((string) $string)) {
         // it is mysql timestamp format of YYYYMMDDHHMMSS?
+        $string = (string) $string;
         return mktime(
             substr($string, 8, 2),
             substr($string, 10, 2),
@@ -76,9 +98,9 @@ function smarty_make_timestamp($string)
             substr($string, 6, 2),
             substr($string, 0, 4)
         );
-    } elseif (is_numeric($string)) {
-        // it is a numeric string, we handle it as timestamp
-        return (int)$string;
+    } elseif (is_int($string) || is_float($string) || (is_string($string) && is_numeric($string))) {
+        // unix timestamp as number
+        return (int) $string;
     } else {
         // strtotime should handle it
         $time = strtotime($string);
@@ -210,7 +232,7 @@ function smarty_mb_wordwrap($str, $width = 75, string $break = "\n", $cut = fals
     $_previous = false;
     $_space = false;
     foreach ($tokens as $_token) {
-        $token_length = mb_strlen($_token, \Smarty\Smarty::$_CHARSET);
+        $token_length = mb_strlen((string) $_token, \Smarty\Smarty::$_CHARSET);
         $_tokens = [$_token];
         if ($token_length > $width) {
             if ($cut) {
@@ -224,7 +246,7 @@ function smarty_mb_wordwrap($str, $width = 75, string $break = "\n", $cut = fals
         }
         foreach ($_tokens as $token) {
             $_space = !!preg_match('!^\s$!S' . \Smarty\Smarty::$_UTF8_MODIFIER, $token);
-            $token_length = mb_strlen($token, \Smarty\Smarty::$_CHARSET);
+            $token_length = mb_strlen((string) $token, \Smarty\Smarty::$_CHARSET);
             $length += $token_length;
             if ($length > $width) {
                 // remove space before inserted break

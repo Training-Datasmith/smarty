@@ -3,40 +3,63 @@
 declare(strict_types=1);
 
 use Smarty\Compile\FunctionCallCompiler;
-use Smarty\Compiler\Template;
 use Smarty\FunctionHandler\AttributeFunctionHandlerInterface;
+use Smarty\FunctionHandler\FunctionHandlerInterface;
 use Smarty\Smarty;
+
+require_once __DIR__ . '/TemplateCompilerTestStub.php';
 
 class FunctionCallCompilerTest extends PHPUnit\Framework\TestCase
 {
-    /**
-     * @inheritDoc
-     * Set up attribute compiler class
-     */
+    private Smarty $smarty;
+
+    private TemplateCompilerTestStub $template_compiler;
+
     protected function setUp(): void
     {
-        $this->smarty = $this->createMock(Smarty::class);
-        $this->template_compiler = $this->createMock(Template::class);
-        $this->template_compiler
-            ->expects(self::once())
-            ->method('getSmarty')
-            ->willReturn($this->smarty);
+        $handler = new class implements AttributeFunctionHandlerInterface {
+            public function handle($params, \Smarty\Template $template)
+            {
+                return '';
+            }
+
+            public function isCacheable(): bool
+            {
+                return true;
+            }
+
+            public function getSupportedAttributes(): array
+            {
+                return [
+                    'required_attributes' => ['required'],
+                    'optional_attributes' => ['optional', 'short'],
+                    'shorttag_order' => ['short'],
+                    'option_flags' => ['option'],
+                ];
+            }
+        };
+
+        $this->smarty = new class($handler) extends Smarty {
+            public function __construct(private FunctionHandlerInterface $testHandler)
+            {
+                parent::__construct();
+            }
+
+            public function getFunctionHandler(string $functionName): ?\Smarty\FunctionHandler\FunctionHandlerInterface
+            {
+                if ($functionName === 'method') {
+                    return $this->testHandler;
+                }
+
+                return parent::getFunctionHandler($functionName);
+            }
+        };
+
+        $this->template_compiler = new TemplateCompilerTestStub($this->smarty);
     }
 
     public function testAttributeFunctionHandlerInterface(): void
     {
-        $attribute_function_handler = $this->createMock(AttributeFunctionHandlerInterface::class);
-
-        $attribute_function_handler
-            ->expects(self::once())
-            ->method('getSupportedAttributes')
-            ->willReturn([
-                'required_attributes' => ['required'],
-                'optional_attributes' => ['optional'],
-                'shorttag_order' => ['short'],
-                'option_flags' => ['option'],
-            ]);
-
         $args = [
             0 => 'short',
             1 => 'option',
@@ -48,17 +71,11 @@ class FunctionCallCompilerTest extends PHPUnit\Framework\TestCase
             ],
         ];
 
-        $this->smarty
-            ->expects(self::once())
-            ->method('getFunctionHandler')
-            ->with('method')
-            ->willReturn($attribute_function_handler);
-
         $function_call_compiler = new FunctionCallCompiler();
 
         $this->assertEquals(
-            $function_call_compiler->compile($args, $this->template_compiler, [], null, 'method'),
-            '$_smarty_tpl->getSmarty()->getFunctionHandler(\'method\')->handle(array(\'short\'=>short,\'option\'=>1,\'optional\'=>optional,\'required\'=>required), $_smarty_tpl)'
+            '$_smarty_tpl->getSmarty()->getFunctionHandler(\'method\')->handle(array(\'short\'=>short,\'option\'=>1,\'optional\'=>optional,\'required\'=>required), $_smarty_tpl)',
+            $function_call_compiler->compile($args, $this->template_compiler, [], null, 'method')
         );
     }
 }

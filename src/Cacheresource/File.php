@@ -48,11 +48,11 @@ class File extends Base
                                          '_',
                                          $_compile_dir_sep,
                                      ],
-                $_template->cache_id
+                (string) $_template->cache_id
             ) . $_compile_dir_sep;
         }
         if (isset($_template->compile_id)) {
-            $cached->filepath .= preg_replace('![^\w]+!', '_', $_template->compile_id) . $_compile_dir_sep;
+            $cached->filepath .= preg_replace('![^\w]+!', '_', (string) $_template->compile_id) . $_compile_dir_sep;
         }
         // if use_sub_dirs, break file into directories
         if ($smarty->use_sub_dirs) {
@@ -172,8 +172,8 @@ class File extends Base
      */
     public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time): int
     {
-        $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
-        $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', $compile_id) : null;
+        $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', (string) $cache_id) : null;
+        $_compile_id = isset($compile_id) ? preg_replace('![^\w]+!', '_', (string) $compile_id) : null;
         $_dir_sep = $smarty->use_sub_dirs ? '/' : '^';
         $_compile_id_offset = $smarty->use_sub_dirs ? 3 : 0;
         $_dir = $smarty->getCacheDir();

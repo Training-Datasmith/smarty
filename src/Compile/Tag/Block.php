@@ -75,7 +75,7 @@ class Block extends Inheritance
         // check and get attributes
         $_attr = $this->getAttributes($compiler, $args);
         ++$compiler->_cache['blockNesting'];
-        $_className = 'Block_' . preg_replace('![^\w]+!', '_', uniqid(mt_rand(), true));
+        $_className = 'Block_' . preg_replace('![^\w]+!', '_', uniqid((string) mt_rand(), true));
 
         $this->openTag(
             $compiler,

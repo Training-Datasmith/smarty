@@ -49,7 +49,7 @@ class HtmlSelectDate extends Base
         static $_month_timestamps = null;
         static $_current_year = null;
         if ($_month_timestamps === null) {
-            $_current_year = date('Y');
+            $_current_year = (int) date('Y');
             $_month_timestamps = [];
             for ($i = 1; $i <= 12; $i++) {
                 $_month_timestamps[$i] = mktime(0, 0, 0, $i, 1, 2000);
@@ -149,7 +149,7 @@ class HtmlSelectDate extends Base
                 case 'display_years':
                 case 'year_as_text':
                 case 'reverse_years':
-                    ${$_key} = (bool)$_value;
+                    ${$_key} = smarty_string_to_bool($_value);
                     break;
                 default:
                     if (!is_array($_value)) {
@@ -189,7 +189,7 @@ class HtmlSelectDate extends Base
                 // no date found, use NOW
                 [$_year, $_month, $_day] = explode('-', date('Y-m-d'));
             }
-        } elseif (isset($time) && preg_match("/(\d*)-(\d*)-(\d*)/", $time, $matches)) {
+        } elseif (isset($time) && is_string($time) && preg_match("/(\d*)-(\d*)-(\d*)/", $time, $matches)) {
             $_year = $_month = $_day = null;
             if ($matches[1] > '') {
                 $_year = (int)$matches[1];

@@ -60,7 +60,7 @@ class Compiled extends GeneratedPhpFile
         $smarty = $_template->getSmarty();
         $this->filepath = $smarty->getCompileDir();
         if (isset($_template->compile_id)) {
-            $this->filepath .= preg_replace('![^\w]+!', '_', $_template->compile_id) .
+            $this->filepath .= preg_replace('![^\w]+!', '_', (string) $_template->compile_id) .
                 ($smarty->use_sub_dirs ? DIRECTORY_SEPARATOR : '^');
         }
         // if use_sub_dirs, break file into directories

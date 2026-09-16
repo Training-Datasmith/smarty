@@ -214,7 +214,7 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
         $this->setUpSmarty(__DIR__);
         $this->smarty->setErrorReporting(E_ALL & ~E_DEPRECATED);
 
-        $year = date('Y');
+        $year = (int) date('Y');
         $this->now = mktime(15, 0, 0, 2, 20, $year);
         $o = '';
         for ($i = 2005; $i < $year; $i++) {
@@ -547,7 +547,7 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
 
     public function testYearText()
     {
-        $year = date('Y');
+        $year = (int) date('Y');
         $n = "\n";
         $result = '<select name="Date_Month">' . $n . $this->months['default'] . $n . '</select>'
             . $n . '<select name="Date_Day">' . $n . $this->days['default'] . $n . '</select>'

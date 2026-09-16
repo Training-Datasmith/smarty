@@ -717,7 +717,7 @@ class DefaultExtension extends Base
             $search = substr($search, 0, $pos);
         }
         // reject patterns containing eval-modifier
-        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && (strpos($match[ 1 ], 'e') !== false)) {
+        if (preg_match('!([a-zA-Z\s]+)$!s', $search, $match) && preg_match('!(?<![a-zA-Z])[eE](?![a-zA-Z])!', $match[1])) {
             trigger_error('regex_replace: the /e modifier is not allowed', E_USER_WARNING);
             return false;
         }
@@ -767,6 +767,7 @@ class DefaultExtension extends Base
         if ($length === 0 || $string === null) {
             return '';
         }
+        $string = (string) $string;
         if (mb_strlen($string, \Smarty\Smarty::$_CHARSET) > $length) {
             $length -= min($length, mb_strlen($etc, \Smarty\Smarty::$_CHARSET));
             if (!$break_words && !$middle) {
