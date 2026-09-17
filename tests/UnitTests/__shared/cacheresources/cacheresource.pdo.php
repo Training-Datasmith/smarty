@@ -309,20 +309,20 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
         $where = [];
         // equal test name
         if ($name !== null) {
-            $where[] = 'name = ' . $this->pdo->quote($name);
+            $where[] = 'name = ' . $this->pdo->quote((string) $name);
         }
         // equal test cache_id and match sub-groups
         if ($cache_id !== null) {
             $where[] =
                 '(cache_id = ' .
-                $this->pdo->quote($cache_id) .
+                $this->pdo->quote((string) $cache_id) .
                 ' OR cache_id LIKE ' .
-                $this->pdo->quote($cache_id . '|%') .
+                $this->pdo->quote((string) $cache_id . '|%') .
                 ')';
         }
         // equal test compile_id
         if ($compile_id !== null) {
-            $where[] = 'compile_id = ' . $this->pdo->quote($compile_id);
+            $where[] = 'compile_id = ' . $this->pdo->quote((string) $compile_id);
         }
         // for clearing expired caches
         if ($exp_time === \Smarty\Smarty::CLEAR_EXPIRED) {

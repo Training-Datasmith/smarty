@@ -160,7 +160,11 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
                 throw new Exception('Mysql Resource failed: ' . $e->getMessage());
             }
             $timezone = date_default_timezone_get();
-            $j = PHPUnit_Smarty::$pdo->exec("SET time_zone = '{$timezone}';");
+            try {
+                PHPUnit_Smarty::$pdo->exec("SET time_zone = '{$timezone}'");
+            } catch (PDOException) {
+                PHPUnit_Smarty::$pdo->exec('SET time_zone = \'+00:00\'');
+            }
 
         }
     }
@@ -172,7 +176,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
     public function initMysqlResource()
     {
         $this->getConnection();
-        PHPUnit_Smarty::$pdo->exec('DROP TABLE `templates`');
+        PHPUnit_Smarty::$pdo->exec('DROP TABLE IF EXISTS `templates`');
         PHPUnit_Smarty::$pdo->exec('CREATE TABLE IF NOT EXISTS `templates` (
  `name` varchar(100) NOT NULL,
  `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -186,16 +190,19 @@ PRIMARY KEY (`name`)
      * Create table for Mysql cache resource
      *
      */
-    public function initMysqlCache()
+    public function initMysqlCache(bool $recreate = true)
     {
         $this->getConnection();
-        PHPUnit_Smarty::$pdo->exec('DROP TABLE `output_cache`');
+        if ($recreate) {
+            PHPUnit_Smarty::$pdo->exec('DROP TABLE IF EXISTS `output_cache`');
+        }
         PHPUnit_Smarty::$pdo->exec('CREATE TABLE IF NOT EXISTS `output_cache` (
  `name` varchar(256) NOT NULL,
  `id` char(40) NOT NULL,
  `cache_id` varchar(250) DEFAULT NULL,
  `compile_id` varchar(250) DEFAULT NULL,
 `modified` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+ `expire` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
  `content` mediumblob NOT NULL,
 PRIMARY KEY (`id`),
 KEY `cache_id` (`cache_id`),

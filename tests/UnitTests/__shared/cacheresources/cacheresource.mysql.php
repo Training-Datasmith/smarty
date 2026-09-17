@@ -169,11 +169,11 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
         $where = [];
         // equal test name
         if ($name !== null) {
-            $where[] = 'name = ' . $this->db()->quote($name);
+            $where[] = 'name = ' . $this->db()->quote((string) $name);
         }
         // equal test compile_id
         if ($compile_id !== null) {
-            $where[] = 'compile_id = ' . $this->db()->quote($compile_id);
+            $where[] = 'compile_id = ' . $this->db()->quote((string) $compile_id);
         }
         // range test expiration time
         if ($exp_time !== null) {
@@ -183,9 +183,9 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
         if ($cache_id !== null) {
             $where[] =
                 '(cache_id = ' .
-                $this->db()->quote($cache_id) .
+                $this->db()->quote((string) $cache_id) .
                 ' OR cache_id LIKE ' .
-                $this->db()->quote($cache_id . '|%') .
+                $this->db()->quote((string) $cache_id . '|%') .
                 ')';
         }
         // run delete query
