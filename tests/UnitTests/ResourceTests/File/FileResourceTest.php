@@ -95,7 +95,8 @@ class FileResourceTest extends PHPUnit_Smarty
     public function testUsesCompiler()
     {
         $tpl = $this->smarty->createTemplate('helloworld.tpl');
-        $this->markTestIncomplete();
+        $this->assertTrue($tpl->getSource()->handler->supportsCompiledTemplates());
+        $this->assertNotEmpty($tpl->getCompiled()->filepath);
     }
 
     public function testIsEvaluated()

@@ -84,7 +84,8 @@ class StringResourceTest extends PHPUnit_Smarty
     public function testUsesCompiler()
     {
         $tpl = $this->smarty->createTemplate('string:hello world');
-        $this->markTestIncomplete();
+        $this->assertTrue($tpl->getSource()->handler->supportsCompiledTemplates());
+        $this->assertNotEmpty($tpl->getCompiled()->filepath);
     }
 
     /**
