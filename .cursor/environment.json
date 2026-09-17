@@ -1,0 +1,7 @@
+{
+  "install": "bash .cursor/install.sh",
+  "start": "bash .cursor/start.sh",
+  "env": {
+    "SMARTY_ENABLE_PDO_CACHE_TESTS": "1"
+  }
+}
