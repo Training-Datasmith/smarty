@@ -371,6 +371,19 @@ class Cached extends GeneratedPhpFile
      */
     public function getContent(Template $template)
     {
+        if ($this->handler instanceof \Smarty\Cacheresource\Custom) {
+            $this->handler->populateTimestamp($this);
+            if (!$this->exists) {
+                $this->content = null;
+                $this->valid = null;
+                if ($this->processed) {
+                    $this->processed = false;
+
+                    return null;
+                }
+                $this->processed = false;
+            }
+        }
         ob_start();
         $this->render($template);
         return ob_get_clean();

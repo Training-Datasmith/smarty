@@ -108,7 +108,7 @@ abstract class Custom extends Base
     {
         $mtime =
             $this->fetchTimestamp($cached->filepath, $cached->getSource()->name, $cached->cache_id, $cached->compile_id);
-        if ($mtime !== null) {
+        if ($mtime !== null && $mtime !== false) {
             $cached->timestamp = $mtime;
             $cached->exists = !!$cached->timestamp;
             return;
@@ -259,7 +259,8 @@ abstract class Custom extends Base
         $id = $cached->lock_id;
         $name = $cached->getSource()->name . '.lock';
         $mtime = $this->fetchTimestamp($id, $name, $cached->cache_id, $cached->compile_id);
-        if ($mtime === null) {
+        $content = null;
+        if ($mtime === null || $mtime === false) {
             $this->fetch($id, $name, $cached->cache_id, $cached->compile_id, $content, $mtime);
         }
         return $mtime && ($t = time()) - $mtime < $smarty->locking_timeout;
