@@ -53,7 +53,7 @@ function residue_in_text(string $text, array $patterns): array
 }
 
 /**
- * @return list<array{path: string, class: string, member: string|null}>
+ * @return list<array{path: string, class: string, member: string}>
  */
 function parse_allowlist_entries(array $lines): array
 {
@@ -63,53 +63,236 @@ function parse_allowlist_entries(array $lines): array
         if ($line === '' || str_starts_with($line, '#')) {
             continue;
         }
-        if (preg_match('/^(.+?)\s+([A-Za-z_*][A-Za-z0-9_]*)::([A-Za-z_][A-Za-z0-9_]*)$/', $line, $m)) {
-            $rules[] = ['path' => trim($m[1]), 'class' => $m[2], 'member' => $m[3]];
+        if (preg_match('/^(.+?)\s+([A-Za-z_][A-Za-z0-9_]*)::([A-Za-z_][A-Za-z0-9_]*)$/', $line, $m)) {
+            $path = trim($m[1]);
+            $class = $m[2];
+            $member = $m[3];
+            if (str_contains($path, '*') || str_contains($class, '*') || str_contains($member, '*')) {
+                fwrite(STDERR, "check-rename-residue: allowlist wildcards are not allowed: {$line}\n");
+                exit(1);
+            }
+            $rules[] = ['path' => $path, 'class' => $class, 'member' => $member];
             continue;
         }
-        if (preg_match('/^(.+?)\s+([A-Za-z_*][A-Za-z0-9_]*)$/', $line, $m)) {
-            $rules[] = ['path' => trim($m[1]), 'class' => $m[2], 'member' => null];
-            continue;
-        }
-        fwrite(STDERR, "check-rename-residue: invalid allowlist line: {$line}\n");
+        fwrite(STDERR, "check-rename-residue: invalid allowlist line (expected path Class::member): {$line}\n");
         exit(1);
     }
 
     return $rules;
 }
 
-function allowlist_path_matches(string $rulePath, string $rel): bool
-{
-    if (str_ends_with($rulePath, '*')) {
-        return str_starts_with($rel, substr($rulePath, 0, -1));
-    }
-
-    return $rel === $rulePath;
-}
-
 /**
- * @param list<array{path: string, class: string, member: string|null}> $rules
+ * @param list<array{path: string, class: string, member: string}> $rules
  */
 function is_allowed_at_site(string $rel, ?string $ownerClass, string $kind, string $token, array $rules): bool
 {
+    if ($ownerClass === null) {
+        return false;
+    }
     foreach ($rules as $rule) {
-        if (!allowlist_path_matches($rule['path'], $rel)) {
+        if ($rel !== $rule['path'] || $ownerClass !== $rule['class'] || $token !== $rule['member']) {
             continue;
         }
-        if ($rule['member'] === null) {
-            if ($kind === 'class' && $token === $rule['class']) {
-                return true;
-            }
-            continue;
-        }
-        if (!in_array($kind, ['method', 'property'], true) || $token !== $rule['member']) {
-            continue;
-        }
-        if ($rule['class'] !== '*' && $ownerClass !== $rule['class']) {
+        if (!in_array($kind, ['method', 'property'], true)) {
             continue;
         }
 
         return true;
+    }
+
+    return false;
+}
+
+function is_phpunit_lifecycle_hook(string $name): bool
+{
+    return in_array($name, ['setUp', 'tearDown', 'setUpBeforeClass', 'tearDownAfterClass'], true);
+}
+
+function class_name_in_phpunit_framework(string $name): bool
+{
+    return $name === 'PHPUnit_Smarty' || str_starts_with($name, 'PHPUnit\\');
+}
+
+function resolve_class_extends_parent(string $contents, string $shortClass): ?string
+{
+    if (!preg_match('/\bclass\s+' . preg_quote($shortClass, '/') . '\s+extends\s+([A-Za-z0-9_\\\\]+)/', $contents, $m)) {
+        return null;
+    }
+
+    return ltrim($m[1], '\\');
+}
+
+function find_php_class_definition_file(string $repoRoot, string $shortClass): ?string
+{
+    static $cache = [];
+    if (isset($cache[$shortClass])) {
+        return $cache[$shortClass];
+    }
+    foreach (['tests', 'libs', 'src', 'demo'] as $subdir) {
+        $root = $repoRoot . '/' . $subdir;
+        if (!is_dir($root)) {
+            continue;
+        }
+        $iterator = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
+        );
+        $pattern = '/\bclass\s+' . preg_quote($shortClass, '/') . '\b/';
+        /** @var SplFileInfo $file */
+        foreach ($iterator as $file) {
+            if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
+                continue;
+            }
+            $contents = file_get_contents($file->getPathname());
+            if ($contents !== false && preg_match($pattern, $contents)) {
+                $cache[$shortClass] = $file->getPathname();
+
+                return $cache[$shortClass];
+            }
+        }
+    }
+    $cache[$shortClass] = null;
+
+    return null;
+}
+
+function class_inherits_phpunit_testcase(string $repoRoot, string $contents, string $shortClass): bool
+{
+    $seen = [];
+    $parent = resolve_class_extends_parent($contents, $shortClass);
+    while ($parent !== null) {
+        if ($parent === 'PHPUnit_Smarty' || $parent === 'PHPUnit\\Framework\\TestCase'
+            || str_starts_with($parent, 'PHPUnit\\Framework\\')) {
+            return true;
+        }
+        if (isset($seen[$parent])) {
+            return false;
+        }
+        $seen[$parent] = true;
+        $parentFile = find_php_class_definition_file($repoRoot, $parent);
+        if ($parentFile === null) {
+            return false;
+        }
+        $parentContents = file_get_contents($parentFile);
+        if ($parentContents === false) {
+            return false;
+        }
+        $parent = resolve_class_extends_parent($parentContents, $parent);
+    }
+
+    return false;
+}
+
+function phpunit_framework_declares_lifecycle_hook(string $methodName): bool
+{
+    ensure_phpunit_test_bootstrap(dirname(__DIR__));
+    $framework = new ReflectionClass(\PHPUnit\Framework\TestCase::class);
+
+    return $framework->hasMethod($methodName);
+}
+
+function reflection_class_from_file(string $absPath, string $className): ?ReflectionClass
+{
+    static $loaded = [];
+    if (!isset($loaded[$absPath])) {
+        $loaded[$absPath] = false;
+        if (is_readable($absPath)) {
+            try {
+                require_once $absPath;
+                $loaded[$absPath] = true;
+            } catch (Throwable) {
+                return null;
+            }
+        }
+    }
+    if (!class_exists($className)) {
+        return null;
+    }
+
+    try {
+        return new ReflectionClass($className);
+    } catch (ReflectionException) {
+        return null;
+    }
+}
+
+function class_extends_phpunit_framework(ReflectionClass $ref): bool
+{
+    for ($cur = $ref; $cur !== false; $cur = $cur->getParentClass()) {
+        if (class_name_in_phpunit_framework($cur->getName())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function ensure_phpunit_test_bootstrap(string $repoRoot): void
+{
+    static $done = false;
+    if ($done) {
+        return;
+    }
+    $bootstrap = $repoRoot . '/tests/Bootstrap.php';
+    if (is_readable($bootstrap)) {
+        require_once $bootstrap;
+    }
+    $done = true;
+}
+
+function phpunit_lifecycle_hook_overrides_framework(
+    string $repoRoot,
+    string $absPath,
+    string $className,
+    string $methodName,
+    string $contents,
+    string $ownerClassShort
+): bool {
+    if (!is_phpunit_lifecycle_hook($methodName) || !phpunit_framework_declares_lifecycle_hook($methodName)) {
+        return false;
+    }
+    ensure_phpunit_test_bootstrap($repoRoot);
+    $ref = reflection_class_from_file($absPath, $className);
+    if ($ref !== null && $ref->hasMethod($methodName) && class_extends_phpunit_framework($ref)) {
+        for ($parent = $ref->getParentClass(); $parent !== false; $parent = $parent->getParentClass()) {
+            if (class_name_in_phpunit_framework($parent->getName()) && $parent->hasMethod($methodName)) {
+                return true;
+            }
+        }
+    }
+
+    return class_inherits_phpunit_testcase($repoRoot, $contents, $ownerClassShort);
+}
+
+/**
+ * @param list<array{path: string, class: string, member: string}> $rules
+ */
+function camel_case_method_allowed(
+    string $repoRoot,
+    string $rel,
+    ?string $ownerClass,
+    string $token,
+    string $contents,
+    ?string $absPath,
+    array $allowRules,
+    ?string $ownerFqn = null
+): bool {
+    if (is_allowed_at_site($rel, $ownerClass, 'method', $token, $allowRules)) {
+        return true;
+    }
+    if ($ownerClass === null || !is_phpunit_lifecycle_hook($token)) {
+        return false;
+    }
+    if ($absPath !== null && $absPath !== '' && is_readable($absPath)) {
+        $reflectClass = $ownerFqn ?? $ownerClass;
+
+        return phpunit_lifecycle_hook_overrides_framework(
+            $repoRoot,
+            $absPath,
+            $reflectClass,
+            $token,
+            $contents,
+            $ownerClass
+        );
     }
 
     return false;
@@ -235,21 +418,32 @@ function scan_test_class_basenames(string $repoRoot): array
 }
 
 /**
- * @param list<array{path: string, class: string, member: string|null}> $allowRules
+ * @param list<array{path: string, class: string, member: string}> $allowRules
  */
-function scan_camel_case_contents(string $rel, string $contents, array $allowRules): array
-{
+function scan_camel_case_contents(
+    string $repoRoot,
+    string $rel,
+    string $contents,
+    array $allowRules,
+    ?string $absPath = null
+): array {
     $failures = [];
+    $namespace = '';
     $ownerClass = null;
+    $ownerFqn = null;
     foreach (preg_split('/\R/', $contents) as $line) {
         if (preg_match('/^\s*(\/\/|\*|#)/', $line)) {
             continue;
         }
         $code_line = preg_replace('/\'[^\']*\'|"[^"\\\\]*(?:\\\\.[^"\\\\]*)*"/', '', $line) ?? $line;
+        if (preg_match('/^\s*namespace\s+([^;{]+)\s*;/', $code_line, $m)) {
+            $namespace = trim($m[1], " \t\\");
+        }
         if (preg_match('/\bclass\s+([A-Za-z_][A-Za-z0-9_]*)/', $code_line, $m)) {
             $ownerClass = $m[1];
+            $ownerFqn = $namespace === '' ? $ownerClass : $namespace . '\\' . $ownerClass;
             $token = $m[1];
-            if (camel_case_repo_owned($token) && !is_allowed_at_site($rel, $ownerClass, 'class', $token, $allowRules)) {
+            if (camel_case_repo_owned($token)) {
                 $failures[] = "{$rel}: camelCase repo-owned class '{$token}'";
             }
         }
@@ -258,7 +452,17 @@ function scan_camel_case_contents(string $rel, string $contents, array $allowRul
             if (str_starts_with($token, 'test')) {
                 continue;
             }
-            if (camel_case_repo_owned($token) && !is_allowed_at_site($rel, $ownerClass, 'method', $token, $allowRules)) {
+            if (camel_case_repo_owned($token)
+                && !camel_case_method_allowed(
+                    $repoRoot,
+                    $rel,
+                    $ownerClass,
+                    $token,
+                    $contents,
+                    $absPath,
+                    $allowRules,
+                    $ownerFqn
+                )) {
                 $failures[] = "{$rel}: camelCase repo-owned method '{$token}'";
             }
         }
@@ -274,7 +478,7 @@ function scan_camel_case_contents(string $rel, string $contents, array $allowRul
 }
 
 /**
- * @param list<array{path: string, class: string, member: string|null}> $allowRules
+ * @param list<array{path: string, class: string, member: string}> $allowRules
  */
 function scan_camel_case(string $repoRoot, array $allowRules): array
 {
@@ -292,15 +496,19 @@ function scan_camel_case(string $repoRoot, array $allowRules): array
             if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
                 continue;
             }
-            $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($repoRoot) + 1));
+            $absPath = $file->getPathname();
+            $rel = str_replace('\\', '/', substr($absPath, strlen($repoRoot) + 1));
             if (str_contains($rel, '/templates_c/') || preg_match('#/cache/[^/]+\.tpl\.php$#', $rel)) {
                 continue;
             }
-            $contents = file_get_contents($file->getPathname());
+            $contents = file_get_contents($absPath);
             if ($contents === false) {
                 continue;
             }
-            $failures = array_merge($failures, scan_camel_case_contents($rel, $contents, $allowRules));
+            $failures = array_merge(
+                $failures,
+                scan_camel_case_contents($repoRoot, $rel, $contents, $allowRules, $absPath)
+            );
         }
     }
 
@@ -346,21 +554,34 @@ if ($demo === '--demo-grammar-old') {
     exit(0);
 }
 if ($demo === '--demo-allowlist-site') {
+    $repoRoot = dirname(__DIR__);
     $okRel = 'tests/_Residue_Allowlist_Demo_Ok.php';
     $badRel = 'tests/_Residue_Allowlist_Demo_Bad.php';
     $class = 'Allowlist_Demo_Fixture';
+    $otherClass = 'Allowlist_Demo_Other_Fixture';
     $method = 'siteScopedCamel';
     $demoRules = parse_allowlist_entries(["{$okRel} {$class}::{$method}"]);
     $snippet = "<?php\nclass {$class} {\n    public function {$method}() {}\n}\n";
-    if (scan_camel_case_contents($okRel, $snippet, $demoRules) !== []) {
+    if (scan_camel_case_contents($repoRoot, $okRel, $snippet, $demoRules) !== []) {
         fwrite(STDERR, "check-rename-residue: allowlist demo should accept token at listed site.\n");
         exit(1);
     }
-    if (scan_camel_case_contents($badRel, $snippet, $demoRules) === []) {
-        fwrite(STDERR, "check-rename-residue: allowlist demo should reject same token at unlisted site.\n");
+    if (scan_camel_case_contents($repoRoot, $badRel, $snippet, $demoRules) === []) {
+        fwrite(STDERR, "check-rename-residue: allowlist demo should reject same token at unlisted file.\n");
         exit(1);
     }
-    fwrite(STDOUT, "check-rename-residue: demo site-scoped allowlist accepted listed site and rejected other file.\n");
+    $sameFileSnippet = "<?php\nclass {$class} {\n    public function {$method}() {}\n}\n"
+        . "class {$otherClass} {\n    public function {$method}() {}\n}\n";
+    if (scan_camel_case_contents($repoRoot, $okRel, $sameFileSnippet, $demoRules) === []) {
+        fwrite(STDERR, "check-rename-residue: allowlist demo should reject same token on unlisted class in listed file.\n");
+        exit(1);
+    }
+    $hookSnippet = "<?php\nclass Not_A_Test_Fixture {\n    public function setUp(): void {}\n}\n";
+    if (scan_camel_case_contents($repoRoot, $okRel, $hookSnippet, $demoRules) === []) {
+        fwrite(STDERR, "check-rename-residue: allowlist demo should reject PHPUnit hook name without PHPUnit parent.\n");
+        exit(1);
+    }
+    fwrite(STDOUT, "check-rename-residue: demo site-scoped allowlist accepted listed site and rejected other file/class/hook.\n");
     exit(0);
 }
 if ($demo === '--demo-camel') {
