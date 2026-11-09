@@ -14,7 +14,7 @@ use Smarty\Template\Source;
 
  * @author  Rodney Rehm
  */
-class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
+class My_Resource_Extendsall extends \Smarty\Resource\Extends_Plugin
 {
     /**
      * populate Source Object with meta data from Resource
@@ -29,11 +29,11 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
         $uid = '';
         $sources = [];
         $timestamp = 0;
-        foreach ($source->getSmarty()->getTemplateDir() as $key => $directory) {
+        foreach ($source->get_smarty()->get_template_dir() as $key => $directory) {
             try {
                 $s = \Smarty\Template\Source::load(
                     null,
-                    $source->getSmarty(),
+                    $source->get_smarty(),
                     'file:' . '[' . $key . ']' . $source->name
                 );
                 if (!$s->exists) {
@@ -53,7 +53,7 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
         reset($sources);
         $s = current($sources);
         $source->components = $sources;
-        $source->uid = sha1($uid . $source->getSmarty()->_joined_template_dir);
+        $source->uid = sha1($uid . $source->get_smarty()->_joined_template_dir);
         $source->exists = true;
         $source->timestamp = $timestamp;
     }
@@ -64,7 +64,7 @@ class My_Resource_Extendsall extends \Smarty\Resource\ExtendsPlugin
      *
      * @return bool false
      */
-    public function checkTimestamps(): bool
+    public function check_timestamps(): bool
     {
         return false;
     }

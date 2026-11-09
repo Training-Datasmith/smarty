@@ -6,14 +6,14 @@ class Smarty_CacheResource_Filetest extends \Smarty\Cacheresource\File
 {
     public $lockTime = 0;
 
-    public function hasLock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
+    public function has_lock(\Smarty\Smarty $smarty, \Smarty\Template\Cached $cached)
     {
         if ($this->lockTime) {
             $this->lockTime--;
             if (!$this->lockTime) {
-                $this->releaseLock($smarty, $cached);
+                $this->release_lock($smarty, $cached);
             }
         }
-        return parent::hasLock($smarty, $cached);
+        return parent::has_lock($smarty, $cached);
     }
 }

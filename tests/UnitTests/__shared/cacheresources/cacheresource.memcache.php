@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 /**
  * Memcache CacheResource
- * CacheResource Implementation based on the KeyValueStore API to use
+ * CacheResource Implementation based on the Key_Value_Store API to use
  * memcache as the storage resource for Smarty's output caching.
  * Note that memcache has a limitation of 256 characters per cache-key.
  * To avoid complications all cache-keys are translated to a sha1 hash.
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
  * @author  Rodney Rehm
  */
-class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\KeyValueStore
+class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Store
 {
     /**
      * memcache instance

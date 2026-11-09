@@ -1,49 +1,40 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty\Extension;
 
-class Base implements ExtensionInterface
+class Base implements Extension_Interface
 {
-    public function getTagCompiler(string $tag): ?\Smarty\Compile\CompilerInterface
+    public function get_tag_compiler(string $tag): ?\Smarty\Compile\Compiler_Interface
     {
         return null;
     }
-
-    public function getModifierCompiler(string $modifier): ?\Smarty\Compile\Modifier\ModifierCompilerInterface
+    public function get_modifier_compiler(string $modifier): ?\Smarty\Compile\Modifier\Modifier_Compiler_Interface
     {
         return null;
     }
-
-    public function getFunctionHandler(string $functionName): ?\Smarty\FunctionHandler\FunctionHandlerInterface
+    public function get_function_handler(string $function_name): ?\Smarty\Function_Handler\Function_Handler_Interface
     {
         return null;
     }
-
-    public function getBlockHandler(string $blockTagName): ?\Smarty\BlockHandler\BlockHandlerInterface
+    public function get_block_handler(string $block_tag_name): ?\Smarty\Block_Handler\Block_Handler_Interface
     {
         return null;
     }
-
-    public function getModifierCallback(string $modifierName)
+    public function get_modifier_callback(string $modifier_name)
     {
         return null;
     }
-
-    public function getPreFilters(): array
+    public function get_pre_filters(): array
     {
         return [];
     }
-
-    public function getPostFilters(): array
+    public function get_post_filters(): array
     {
         return [];
     }
-
-    public function getOutputFilters(): array
+    public function get_output_filters(): array
     {
         return [];
     }
-
 }

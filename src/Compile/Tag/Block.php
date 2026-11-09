@@ -1,6 +1,6 @@
 <?php
 
-declare(strict_types=1);
+declare (strict_types=1);
 /**
  * This file is part of Smarty.
  *
@@ -9,11 +9,9 @@ declare(strict_types=1);
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 namespace Smarty\Compile\Tag;
 
-use Smarty\ParseTree\Template;
-
+use Smarty\Parse_Tree\Template;
 /**
  * Smarty Internal Plugin Compile Block Class
  *
@@ -25,34 +23,30 @@ class Block extends Inheritance
      * Attribute definition: Overwrites base class.
      *
      * @var array
-     * @see BasePlugin
+     * @see Base_Plugin
      */
     public $required_attributes = ['name'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
-     * @see BasePlugin
+     * @see Base_Plugin
      */
     public $shorttag_order = ['name'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
-     * @see BasePlugin
+     * @see Base_Plugin
      */
     protected $option_flags = ['hide', 'nocache'];
-
     /**
      * Attribute definition: Overwrites base class.
      *
      * @var array
-     * @see BasePlugin
+     * @see Base_Plugin
      */
     public $optional_attributes = ['assign'];
-
     /**
      * Compiles code for the {block} tag
      *
@@ -67,27 +61,27 @@ class Block extends Inheritance
         }
         if ($compiler->_cache['blockNesting'] === 0) {
             // make sure that inheritance gets initialized in template code
-            $this->registerInit($compiler);
+            $this->register_init($compiler);
             $this->option_flags = ['hide', 'nocache', 'append', 'prepend'];
         } else {
             $this->option_flags = ['hide', 'nocache'];
         }
         // check and get attributes
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         ++$compiler->_cache['blockNesting'];
         $_className = 'Block_' . preg_replace('![^\w]+!', '_', uniqid((string) mt_rand(), true));
 
-        $this->openTag(
+        $this->open_tag(
             $compiler,
             'block',
             [
-                $_attr, $compiler->tag_nocache, $compiler->getParser()->current_buffer,
-                $compiler->getTemplate()->getCompiled()->getNocacheCode(), $_className,
+                $_attr, $compiler->tag_nocache, $compiler->get_parser()->current_buffer,
+                $compiler->get_template()->get_compiled()->get_nocache_code(), $_className,
             ]
         );
 
-        $compiler->getParser()->current_buffer = new Template();
-        $compiler->getTemplate()->getCompiled()->setNocacheCode(false);
+        $compiler->get_parser()->current_buffer = new Template();
+        $compiler->get_template()->get_compiled()->set_nocache_code(false);
         $compiler->suppressNocacheProcessing = true;
         return '';
     }

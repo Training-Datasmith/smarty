@@ -1,0 +1,437 @@
+<?php
+
+declare (strict_types=1);
+namespace Smarty\Cacheresource;
+
+use Smarty\Smarty;
+use Smarty\Template;
+use Smarty\Template\Cached;
+/**
+ * Smarty Internal Plugin
+ *
+ */
+/**
+ * Smarty Cache Handler Base for Key/Value Storage Implementations
+ * This class implements the functionality required to use simple key/value stores
+ * for hierarchical cache groups. key/value stores like memcache or APC do not support
+ * wildcards in keys, therefore a cache group cannot be cleared like "a|*" - which
+ * is no problem to filesystem and RDBMS implementations.
+ * This implementation is based on the concept of invalidation. While one specific cache
+ * can be identified and cleared, any range of caches cannot be identified. For this reason
+ * each level of the cache group hierarchy can have its own value in the store. These values
+ * are nothing but microtimes, telling us when a particular cache group was cleared for the
+ * last time. These keys are evaluated for every cache read to determine if the cache has
+ * been invalidated since it was created and should hence be treated as inexistent.
+ * Although deep hierarchies are possible, they are not recommended. Try to keep your
+ * cache groups as shallow as possible. Anything up 3-5 parents should be ok. So
+ * »a|b|c« is a good depth where »a|b|c|d|e|f|g|h|i|j|k« isn't. Try to join correlating
+ * cache groups: if your cache groups look somewhat like »a|b|$page|$items|$whatever«
+ * consider using »a|b|c|$page-$items-$whatever« instead.
+ *
+ * @author     Rodney Rehm
+ */
+abstract class Key_Value_Store extends Base
+{
+    /**
+     * cache for contents
+     *
+     * @var array
+     */
+    protected $contents = [];
+    /**
+     * cache for timestamps
+     *
+     * @var array
+     */
+    protected $timestamps = [];
+    /**
+     * populate Cached Object with meta data from Resource
+     *
+     * @param Cached   $cached    cached object
+     * @param Template $_template template object
+     */
+    public function populate(Cached $cached, Template $_template): void
+    {
+        $cached->filepath = $_template->get_source()->uid . '#' . $this->sanitize($cached->get_source()->resource) . '#' . $this->sanitize($cached->cache_id) . '#' . $this->sanitize($cached->compile_id);
+        $this->populate_timestamp($cached);
+    }
+    /**
+     * populate Cached Object with timestamp and exists from Resource
+     *
+     * @param Cached $cached cached object
+     */
+    public function populate_timestamp(Cached $cached): void
+    {
+        if (!$this->fetch($cached->filepath, $cached->get_source()->name, $cached->cache_id, $cached->compile_id, $content, $timestamp, $cached->get_source()->uid)) {
+            return;
+        }
+        $cached->content = $content;
+        $cached->timestamp = (int) $timestamp;
+        $cached->exists = !!$cached->timestamp;
+    }
+    /**
+     * Read the cached template and process the header
+     *
+     * @param Template $_smarty_tpl do not change variable name, is used by compiled template
+     * @param Cached|null $cached cached object
+     * @param boolean $update flag if called because cache update
+     *
+     * @return boolean                 true or false if the cached content does not exist
+     */
+    public function process(Template $_smarty_tpl, ?Cached $cached = null, $update = false)
+    {
+        if (!$cached) {
+            $cached = $_smarty_tpl->get_cached();
+        }
+        $content = $cached->content ?: null;
+        $timestamp = $cached->timestamp ?: null;
+        if ($content === null || !$timestamp) {
+            if (!$this->fetch($_smarty_tpl->get_cached()->filepath, $_smarty_tpl->get_source()->name, $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, $content, $timestamp, $_smarty_tpl->get_source()->uid)) {
+                return false;
+            }
+        }
+        if (isset($content)) {
+            eval('?>' . $content);
+            return true;
+        }
+        return false;
+    }
+    /**
+     * Write the rendered template output to cache
+     *
+     * @param Template $_template template object
+     * @param string                   $content   content to cache
+     *
+     * @return boolean                  success
+     */
+    public function store_cached_content(Template $_template, $content)
+    {
+        $this->add_meta_timestamp($content);
+        return $this->write([$_template->get_cached()->filepath => $content], $_template->cache_lifetime);
+    }
+    /**
+     * Read cached template from cache
+     *
+     * @param Template $_template template object
+     *
+     * @return string|false  content
+     */
+    public function retrieve_cached_content(Template $_template)
+    {
+        $content = $_template->get_cached()->content ?: null;
+        $timestamp = null;
+        if ($content !== null) {
+            return $content ?? false;
+        }
+        if (!$this->fetch($_template->get_cached()->filepath, $_template->get_source()->name, $_template->cache_id, $_template->compile_id, $content, $timestamp, $_template->get_source()->uid)) {
+            return false;
+        }
+        return $content ?? false;
+    }
+    /**
+     * Empty cache
+     * {@internal the $exp_time argument is ignored altogether }}
+     *
+     * @param Smarty  $smarty   Smarty object
+     * @param integer $exp_time expiration time [being ignored]
+     *
+     * @return integer number of cache files deleted [always -1]
+     * @uses   purge() to clear the whole store
+     * @uses   invalidate() to mark everything outdated if purge() is inapplicable
+     */
+    public function clear_all(Smarty $smarty, $exp_time = null)
+    {
+        if (!$this->purge()) {
+            $this->invalidate();
+        }
+        return -1;
+    }
+    /**
+     * Empty cache for a specific template
+     * {@internal the $exp_time argument is ignored altogether}}
+     *
+     * @param Smarty  $smarty        Smarty object
+     * @param string  $resource_name template name
+     * @param string  $cache_id      cache id
+     * @param string  $compile_id    compile id
+     * @param integer $exp_time      expiration time [being ignored]
+     *
+     * @return int number of cache files deleted [always -1]
+     * @throws \Smarty\Exception
+     * @uses   buildCachedFilepath() to generate the CacheID
+     * @uses   invalidate() to mark CacheIDs parent chain as outdated
+     * @uses   delete() to remove CacheID from cache
+     */
+    public function clear(Smarty $smarty, $resource_name, $cache_id, $compile_id, $exp_time)
+    {
+        $uid = $this->get_template_uid($smarty, $resource_name);
+        $cid = $uid . '#' . $this->sanitize($resource_name) . '#' . $this->sanitize($cache_id) . '#' . $this->sanitize($compile_id);
+        $this->delete([$cid]);
+        $this->invalidate($cid, $resource_name, $cache_id, $compile_id, $uid);
+        return -1;
+    }
+    /**
+     * Get template's unique ID
+     *
+     * @param Smarty $smarty        Smarty object
+     * @param string $resource_name template name
+     *
+     * @return string filepath of cache file
+     * @throws \Smarty\Exception
+     */
+    protected function get_template_uid(Smarty $smarty, $resource_name)
+    {
+        if (isset($resource_name)) {
+            $source = \Smarty\Template\Source::load(null, $smarty, $resource_name);
+            if ($source->exists) {
+                return $source->uid;
+            }
+        }
+        return '';
+    }
+    /**
+     * Sanitize CacheID components
+     *
+     * @param string $string CacheID component to sanitize
+     *
+     * @return string sanitized CacheID component
+     */
+    protected function sanitize($string)
+    {
+        $string = trim((string) $string, '|');
+        if (!$string) {
+            return '';
+        }
+        return preg_replace('#[^\w\|]+#S', '_', $string);
+    }
+    /**
+     * Fetch and prepare a cache object.
+     *
+     * @param string  $cid           CacheID to fetch
+     * @param string  $resource_name template name
+     * @param string  $cache_id      cache id
+     * @param string  $compile_id    compile id
+     * @param string  $content       cached content
+     * @param integer &$timestamp    cached timestamp (epoch)
+     * @param string  $resource_uid  resource's uid
+     *
+     * @return boolean success
+     */
+    protected function fetch($cid, $resource_name = null, $cache_id = null, $compile_id = null, &$content = null, &$timestamp = null, $resource_uid = null)
+    {
+        $t = $this->read([$cid]);
+        $content = !empty($t[$cid]) ? $t[$cid] : null;
+        $timestamp = null;
+        if ($content && $timestamp = $this->get_meta_timestamp($content)) {
+            $invalidated = $this->get_latest_invalidation_timestamp($cid, $resource_name, $cache_id, $compile_id, $resource_uid);
+            if ($invalidated > $timestamp) {
+                $timestamp = null;
+                $content = null;
+            }
+        }
+        return !!$content;
+    }
+    /**
+     * Add current microtime to the beginning of $cache_content
+     * {@internal the header uses 8 Bytes, the first 4 Bytes are the seconds, the second 4 Bytes are the microseconds}}
+     *
+     * @param string &$content the content to be cached
+     */
+    protected function add_meta_timestamp(&$content)
+    {
+        $mt = explode(' ', microtime());
+        $ts = pack('NN', $mt[1], (int) ($mt[0] * 100000000));
+        $content = $ts . $content;
+    }
+    /**
+     * Extract the timestamp the $content was cached
+     *
+     * @param string &$content the cached content
+     *
+     * @return float  the microtime the content was cached
+     */
+    protected function get_meta_timestamp(&$content)
+    {
+        $unpacked = unpack('N1s/N1m/a*content', $content);
+        $s = (int) $unpacked['s'];
+        $m = (int) $unpacked['m'];
+        $content = $unpacked['content'];
+        return $s + $m / 100000000;
+    }
+    /**
+     * Invalidate CacheID
+     *
+     * @param string $cid           CacheID
+     * @param string $resource_name template name
+     * @param string $cache_id      cache id
+     * @param string $compile_id    compile id
+     * @param string $resource_uid  source's uid
+     *
+     * @return void
+     */
+    protected function invalidate($cid = null, $resource_name = null, $cache_id = null, $compile_id = null, $resource_uid = null)
+    {
+        $now = microtime(true);
+        $key = null;
+        // invalidate everything
+        if (!$resource_name && !$cache_id && !$compile_id) {
+            $key = 'IVK#ALL';
+        } else if ($resource_name && !$cache_id && !$compile_id) {
+            $key = 'IVK#TEMPLATE#' . $resource_uid . '#' . $this->sanitize($resource_name);
+        } else if (!$resource_name && $cache_id && !$compile_id) {
+            $key = 'IVK#CACHE#' . $this->sanitize($cache_id);
+        } else if (!$resource_name && !$cache_id && $compile_id) {
+            $key = 'IVK#COMPILE#' . $this->sanitize($compile_id);
+        } else {
+            $key = 'IVK#CID#' . $cid;
+        }
+        $this->write([$key => $now]);
+    }
+    /**
+     * Determine the latest timestamp known to the invalidation chain
+     *
+     * @param string $cid           CacheID to determine latest invalidation timestamp of
+     * @param string $resource_name template name
+     * @param string $cache_id      cache id
+     * @param string $compile_id    compile id
+     * @param string $resource_uid  source's filepath
+     *
+     * @return float  the microtime the CacheID was invalidated
+     */
+    protected function get_latest_invalidation_timestamp($cid, $resource_name = null, $cache_id = null, $compile_id = null, $resource_uid = null)
+    {
+        // abort if there are no InvalidationKeys to check
+        if (!$_cid = $this->list_invalidation_keys($cid, $resource_name, $cache_id, $compile_id, $resource_uid)) {
+            return 0;
+        }
+        // there are no InValidationKeys
+        if (!$values = $this->read($_cid)) {
+            return 0;
+        }
+        // make sure we're dealing with floats
+        $values = array_map('floatval', $values);
+        return max($values);
+    }
+    /**
+     * Translate a CacheID into the list of applicable InvalidationKeys.
+     * Splits 'some|chain|into|an|array' into array( '#clear_all#', 'some', 'some|chain', 'some|chain|into', ... )
+     *
+     * @param string $cid           CacheID to translate
+     * @param string $resource_name template name
+     * @param string $cache_id      cache id
+     * @param string $compile_id    compile id
+     * @param string $resource_uid  source's filepath
+     *
+     * @return array  list of InvalidationKeys
+     * @uses   $invalidationKeyPrefix to prepend to each InvalidationKey
+     */
+    protected function list_invalidation_keys($cid, $resource_name = null, $cache_id = null, $compile_id = null, $resource_uid = null)
+    {
+        $t = ['IVK#ALL'];
+        $_name = $_compile = '#';
+        if ($resource_name) {
+            $_name .= $resource_uid . '#' . $this->sanitize($resource_name);
+            $t[] = 'IVK#TEMPLATE' . $_name;
+        }
+        if ($compile_id) {
+            $_compile .= $this->sanitize($compile_id);
+            $t[] = 'IVK#COMPILE' . $_compile;
+        }
+        $_name .= '#';
+        $cid = trim((string) $cache_id, '|');
+        if (!$cid) {
+            return $t;
+        }
+        $i = 0;
+        while (true) {
+            // determine next delimiter position
+            $i = strpos($cid, '|', $i);
+            // add complete CacheID if there are no more delimiters
+            if ($i === false) {
+                $t[] = 'IVK#CACHE#' . $cid;
+                $t[] = 'IVK#CID' . $_name . $cid . $_compile;
+                $t[] = 'IVK#CID' . $_name . $_compile;
+                break;
+            }
+            $part = substr($cid, 0, $i);
+            // add slice to list
+            $t[] = 'IVK#CACHE#' . $part;
+            $t[] = 'IVK#CID' . $_name . $part . $_compile;
+            // skip past delimiter position
+            $i++;
+        }
+        return $t;
+    }
+    /**
+     * Check is cache is locked for this template
+     *
+     * @param Smarty                 $smarty Smarty object
+     * @param Cached $cached cached object
+     *
+     * @return boolean               true or false if cache is locked
+     */
+    public function has_lock(Smarty $smarty, Cached $cached)
+    {
+        $key = 'LOCK#' . $cached->filepath;
+        $data = $this->read([$key]);
+        return $data && time() - $data[$key] < $smarty->locking_timeout;
+    }
+    /**
+     * Lock cache for this template
+     *
+     * @param Smarty                 $smarty Smarty object
+     * @param Cached $cached cached object
+     */
+    public function acquire_lock(Smarty $smarty, Cached $cached): void
+    {
+        $cached->is_locked = true;
+        $key = 'LOCK#' . $cached->filepath;
+        $this->write([$key => time()], $smarty->locking_timeout);
+    }
+    /**
+     * Unlock cache for this template
+     *
+     * @param Smarty                 $smarty Smarty object
+     * @param Cached $cached cached object
+     */
+    public function release_lock(Smarty $smarty, Cached $cached): void
+    {
+        $cached->is_locked = false;
+        $key = 'LOCK#' . $cached->filepath;
+        $this->delete([$key]);
+    }
+    /**
+     * Read values for a set of keys from cache
+     *
+     * @param array $keys list of keys to fetch
+     *
+     * @return array list of values with the given keys used as indexes
+     */
+    abstract protected function read(array $keys);
+    /**
+     * Save values for a set of keys to cache
+     *
+     * @param array $keys   list of values to save
+     * @param int   $expire expiration time
+     *
+     * @return boolean true on success, false on failure
+     */
+    abstract protected function write(array $keys, $expire = null);
+    /**
+     * Remove values from cache
+     *
+     * @param array $keys list of keys to delete
+     *
+     * @return boolean true on success, false on failure
+     */
+    abstract protected function delete(array $keys);
+    /**
+     * Remove *all* values from cache
+     *
+     * @return boolean true on success, false on failure
+     */
+    protected function purge()
+    {
+        return false;
+    }
+}

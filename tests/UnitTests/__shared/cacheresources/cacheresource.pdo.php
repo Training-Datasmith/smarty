@@ -25,8 +25,8 @@ use Smarty\Exception;
  * ) ENGINE=InnoDB
  * Example usage :
  *      $cnx    =   new PDO("mysql:host=localhost;dbname=mydb", "username", "password");
- *      $smarty->setCachingType('pdo');
- *      $smarty->registerCacheResource('pdo', new Smarty_CacheResource_Pdo($cnx, 'smarty_cache'));
+ *      $smarty->set_caching_type('pdo');
+ *      $smarty->register_cache_resource('pdo', new Smarty_CacheResource_Pdo($cnx, 'smarty_cache'));
  *
  * @author Beno!t POLASZEK - 2014
  */
@@ -227,7 +227,7 @@ class Smarty_CacheResource_Pdo extends \Smarty\Cacheresource\Custom
      * @return integer|boolean timestamp (epoch) the template was modified, or false if not found
      * @access protected
      */
-    //    protected function fetchTimestamp($id, $name, $cache_id = null, $compile_id = null) {
+    //    protected function fetch_timestamp($id, $name, $cache_id = null, $compile_id = null) {
     //        $stmt       =   $this->getFetchStatement($this->fetchTimestampColumns, $id, $cache_id, $compile_id);
     //        $stmt       ->  execute();
     //        $mtime      =   strtotime($stmt->fetchColumn());

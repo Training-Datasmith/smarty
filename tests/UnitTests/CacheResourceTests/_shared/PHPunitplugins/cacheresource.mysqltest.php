@@ -15,14 +15,14 @@ class Smarty_CacheResource_Mysqltest extends Smarty_CacheResource_Mysql
         return PHPUnit_Smarty::$pdo;
     }
 
-    public function hasLock(\Smarty\Smarty $smarty, Cached $cached)
+    public function has_lock(\Smarty\Smarty $smarty, Cached $cached)
     {
         if ($this->lockTime) {
             $this->lockTime--;
             if (!$this->lockTime) {
-                $this->releaseLock($smarty, $cached);
+                $this->release_lock($smarty, $cached);
             }
         }
-        return parent::hasLock($smarty, $cached);
+        return parent::has_lock($smarty, $cached);
     }
 }

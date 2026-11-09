@@ -19,9 +19,9 @@
     <testsuites>
         <testsuite name="foo">
             <directory>./tests/UnitTests/</directory>
-            <exclude>./tests/UnitTests/CacheResourceTests/Memcache/CacheResourceCustomMemcacheTest.php</exclude>
-            <exclude>./tests/UnitTests/CacheResourceTests/Apc/CacheResourceCustomApcTest.php</exclude>
-            <exclude>./tests/UnitTests/CacheModify/ModifiedSince/HttpModifiedSinceTest.php</exclude>
+            <exclude>./tests/UnitTests/CacheResourceTests/Memcache/Cache_Resource_Custom_Memcache_Test.php</exclude>
+            <exclude>./tests/UnitTests/CacheResourceTests/Apc/Cache_Resource_Custom_Apc_Test.php</exclude>
+            <exclude>./tests/UnitTests/CacheModify/ModifiedSince/Http_Modified_Since_Test.php</exclude>
         </testsuite>
     </testsuites>
     <filter>

@@ -1,0 +1,20 @@
+<?php
+
+declare (strict_types=1);
+namespace Smarty\Compile\Modifier;
+
+/**
+ * Smarty string_format modifier plugin
+ * Type:     modifier
+ * Name:     string_format
+ * Purpose:  format strings via sprintf
+ *
+ * @author Uwe Tews
+ */
+class String_Format_Modifier_Compiler extends Base
+{
+    public function compile($params, \Smarty\Compiler\Template $compiler): string
+    {
+        return 'sprintf(' . $params[1] . ',' . $params[0] . ')';
+    }
+}

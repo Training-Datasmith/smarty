@@ -1,0 +1,139 @@
+<?php
+
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
+
+use Smarty\Exception;
+use Smarty\Template;
+/**
+ * Smarty {html_image} function plugin
+ * Type:     function
+ * Name:     html_image
+ * Date:     Feb 24, 2003
+ * Purpose:  format HTML tags for the image
+ * Examples: {html_image file="/images/masthead.gif"}
+ * Output:   <img src="/images/masthead.gif" width=400 height=23>
+ * Params:
+ *
+ * - file        - (required) - file (and path) of image
+ * - height      - (optional) - image height (default actual height)
+ * - width       - (optional) - image width (default actual width)
+ * - basedir     - (optional) - base directory for absolute paths, default is environment variable DOCUMENT_ROOT
+ * - path_prefix - prefix for path output (optional, default empty)
+ *
+ * @author  Monte Ohrt <monte at ohrt dot com>
+ * @author  credits to Duda <duda@big.hu>
+ * @version 1.0
+ *
+ * @param array                    $params   parameters
+ * @param Template $template template object
+ *
+ * @throws Exception
+ * @return string|null
+ * @uses    smarty_function_escape_special_chars()
+ */
+class Html_Image extends Base
+{
+    public function handle($params, Template $template): ?string
+    {
+        $alt = '';
+        $file = '';
+        $height = '';
+        $width = '';
+        $extra = '';
+        $prefix = '';
+        $suffix = '';
+        $path_prefix = '';
+        $basedir = $_SERVER['DOCUMENT_ROOT'] ?? '';
+        foreach ($params as $_key => $_val) {
+            switch ($_key) {
+                case 'file':
+                case 'height':
+                case 'width':
+                case 'dpi':
+                case 'path_prefix':
+                case 'basedir':
+                    ${$_key} = $_val;
+                    break;
+                case 'alt':
+                    if (!is_array($_val)) {
+                        ${$_key} = smarty_function_escape_special_chars($_val);
+                    } else {
+                        throw new Exception("html_image: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
+                    }
+                    break;
+                case 'link':
+                case 'href':
+                    $prefix = '<a href="' . htmlspecialchars((string) $_val, ENT_QUOTES, 'UTF-8') . '">';
+                    $suffix = '</a>';
+                    break;
+                default:
+                    if (!is_array($_val)) {
+                        $extra .= ' ' . $_key . '="' . smarty_function_escape_special_chars($_val) . '"';
+                    } else {
+                        throw new Exception("html_image: extra attribute '{$_key}' cannot be an array", E_USER_NOTICE);
+                    }
+                    break;
+            }
+        }
+        if (empty($file)) {
+            trigger_error('html_image: missing \'file\' parameter', E_USER_NOTICE);
+            return null;
+        }
+        if ($file[0] === '/') {
+            $_image_path = $basedir . $file;
+        } else {
+            $_image_path = $file;
+        }
+        // strip file protocol
+        if (stripos($params['file'], 'file://') === 0) {
+            $params['file'] = substr($params['file'], 7);
+        }
+        $protocol = strpos($params['file'], '://');
+        if ($protocol !== false) {
+            $protocol = strtolower(substr($params['file'], 0, $protocol));
+        }
+        if (isset($template->get_smarty()->security_policy)) {
+            if ($protocol) {
+                // remote resource (or php stream, …)
+                if (!$template->get_smarty()->security_policy->is_trusted_uri($params['file'])) {
+                    return null;
+                }
+            } else if (!$template->get_smarty()->security_policy->is_trusted_resource_dir($_image_path)) {
+                return null;
+            }
+        }
+        if (!isset($params['width']) || !isset($params['height'])) {
+            // FIXME: (rodneyrehm) getimagesize() loads the complete file off a remote resource, use custom [jpg,png,gif]header reader!
+            if (!$_image_data = @getimagesize($_image_path)) {
+                if (!file_exists($_image_path)) {
+                    trigger_error("html_image: unable to find '{$_image_path}'", E_USER_NOTICE);
+                    return null;
+                } elseif (!is_readable($_image_path)) {
+                    trigger_error("html_image: unable to read '{$_image_path}'", E_USER_NOTICE);
+                    return null;
+                } else {
+                    trigger_error("html_image: '{$_image_path}' is not a valid image file", E_USER_NOTICE);
+                    return null;
+                }
+            }
+            if (!isset($params['width'])) {
+                $width = $_image_data[0];
+            }
+            if (!isset($params['height'])) {
+                $height = $_image_data[1];
+            }
+        }
+        if (isset($params['dpi'])) {
+            if (strstr($_SERVER['HTTP_USER_AGENT'] ?? '', 'Mac')) {
+                $dpi_default = 72;
+            } else {
+                $dpi_default = 96;
+            }
+            $_resize = $dpi_default / $params['dpi'];
+            $width = round($width * $_resize);
+            $height = round($height * $_resize);
+        }
+        return $prefix . '<img src="' . $path_prefix . $file . '" alt="' . $alt . '" width="' . $width . '" height="' . $height . '"' . $extra . ' />' . $suffix;
+    }
+}

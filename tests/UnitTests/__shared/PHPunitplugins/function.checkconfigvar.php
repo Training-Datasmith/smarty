@@ -29,12 +29,12 @@ function smarty_function_checkconfigvar($params, $template)
     $ptr = $template;
     while ($ptr) {
         if (in_array('template', $types) && $ptr instanceof Template) {
-            $output .= "#{$ptr->getSource()->name}:\${$var} =";
-            $output .= $ptr->hasConfigVariable($var) ? preg_replace('/\s/', '', var_export($ptr->getConfigVariable($var), true)) : 'null';
+            $output .= "#{$ptr->get_source()->name}:\${$var} =";
+            $output .= $ptr->has_config_variable($var) ? preg_replace('/\s/', '', var_export($ptr->get_config_variable($var), true)) : 'null';
             $ptr = $ptr->parent;
         } elseif (in_array('data', $types) && !($ptr instanceof Template || $ptr instanceof \Smarty\Smarty)) {
             $output .= "#data:\${$var} =";
-            $output .= $ptr->hasConfigVariable($var) ? preg_replace('/\s/', '', var_export($ptr->getConfigVariable($var), true)) : 'null';
+            $output .= $ptr->has_config_variable($var) ? preg_replace('/\s/', '', var_export($ptr->get_config_variable($var), true)) : 'null';
             $ptr = $ptr->parent;
         } else {
             $ptr = null;
@@ -42,8 +42,8 @@ function smarty_function_checkconfigvar($params, $template)
     }
     if (in_array('global', $types)) {
         $output .= "#global:\${$var} =";
-        $output .= $template->getSmarty()->hasConfigVariable($var) ?
-            preg_replace('/\s/', '', var_export($template->getSmarty()->getConfigVariable($var), true)) : 'null';
+        $output .= $template->get_smarty()->has_config_variable($var) ?
+            preg_replace('/\s/', '', var_export($template->get_smarty()->get_config_variable($var), true)) : 'null';
     }
     return $output;
 }

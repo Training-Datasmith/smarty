@@ -1,24 +1,18 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\ParseTree;
+declare (strict_types=1);
+namespace Smarty\Parse_Tree;
 
 /**
  * Smarty Internal Plugin Templateparser Parse Tree
  * These are classes to build parse tree in the template parser
  *
-
-
  * @author     Thue Kristensen
  * @author     Uwe Tews
  */
-
 /**
  * Template element
  *
-
-
  * @ignore
  */
 class Template extends Base
@@ -29,81 +23,66 @@ class Template extends Base
      * @var array
      */
     public $subtrees = [];
-
     /**
      * Append buffer to subtree
      */
-    public function append_subtree(\Smarty\Parser\TemplateParser $parser, Base $subtree): void
+    public function append_subtree(\Smarty\Parser\Template_Parser $parser, Base $subtree): void
     {
         if (!empty($subtree->subtrees)) {
             $this->subtrees = array_merge($this->subtrees, $subtree->subtrees);
-        } else {
-            if ($subtree->data !== '') {
-                $this->subtrees[] = $subtree;
-            }
+        } else if ($subtree->data !== '') {
+            $this->subtrees[] = $subtree;
         }
     }
-
     /**
      * Append array to subtree
      *
      * @param Base[] $array
      */
-    public function append_array(\Smarty\Parser\TemplateParser $parser, $array = []): void
+    public function append_array(\Smarty\Parser\Template_Parser $parser, $array = []): void
     {
         if (!empty($array)) {
-            $this->subtrees = array_merge($this->subtrees, (array)$array);
+            $this->subtrees = array_merge($this->subtrees, (array) $array);
         }
     }
-
     /**
      * Prepend array to subtree
      *
      * @param Base[] $array
      */
-    public function prepend_array(\Smarty\Parser\TemplateParser $parser, $array = []): void
+    public function prepend_array(\Smarty\Parser\Template_Parser $parser, $array = []): void
     {
         if (!empty($array)) {
-            $this->subtrees = array_merge((array)$array, $this->subtrees);
+            $this->subtrees = array_merge((array) $array, $this->subtrees);
         }
     }
-
     /**
      * Sanitize and merge subtree buffers together
      *
      *
      * @return string template code content
      */
-    public function to_smarty_php(\Smarty\Parser\TemplateParser $parser)
+    public function to_smarty_php(\Smarty\Parser\Template_Parser $parser)
     {
         $code = '';
-
-        foreach ($this->getChunkedSubtrees() as $chunk) {
+        foreach ($this->get_chunked_subtrees() as $chunk) {
             $text = '';
             switch ($chunk['mode']) {
                 case 'textstripped':
                     foreach ($chunk['subtrees'] as $subtree) {
                         $text .= $subtree->to_smarty_php($parser);
                     }
-                    $code .= preg_replace(
-                        '/((<%)|(%>)|(<\?php)|(<\?)|(\?>)|(<\/?script))/',
-                        "<?php echo '\$1'; ?>\n",
-                        $parser->compiler->processText($text)
-                    );
+                    $code .= preg_replace('/((<%)|(%>)|(<\?php)|(<\?)|(\?>)|(<\/?script))/', "<?php echo '\$1'; ?>\n", $parser->compiler->process_text($text));
                     break;
                 case 'text':
                     foreach ($chunk['subtrees'] as $subtree) {
                         $text .= $subtree->to_smarty_php($parser);
                     }
-                    $code .= preg_replace(
-                        '/((<%)|(%>)|(<\?php)|(<\?)|(\?>)|(<\/?script))/',
-                        "<?php echo '\$1'; ?>\n",
-                        $text
-                    );
+                    $code .= preg_replace('/((<%)|(%>)|(<\?php)|(<\?)|(\?>)|(<\/?script))/', "<?php echo '\$1'; ?>\n", $text);
                     break;
                 case 'tag':
                     foreach ($chunk['subtrees'] as $subtree) {
-                        $text = $parser->compiler->appendCode($text, (string) $subtree->to_smarty_php($parser));
+                        $text = $parser->compiler->append_code($text, (string) $subtree->to_smarty_php($parser));
                     }
                     $code .= $text;
                     break;
@@ -112,53 +91,41 @@ class Template extends Base
                         $text = $subtree->to_smarty_php($parser);
                     }
                     $code .= $text;
-
             }
         }
         return $code;
     }
-
     /**
      * @return array{mode: ('other' | 'tag' | 'text' | 'textstripped' | null), subtrees: list}[]
      */
-    private function getChunkedSubtrees(): array
+    private function get_chunked_subtrees(): array
     {
         $chunks = [];
-        $currentMode = null;
-        $currentChunk = [];
+        $current_mode = null;
+        $current_chunk = [];
         for ($key = 0, $cnt = count($this->subtrees); $key < $cnt; $key++) {
-
-            if ($this->subtrees[ $key ]->data === '' && in_array($currentMode, ['textstripped', 'text', 'tag'])) {
+            if ($this->subtrees[$key]->data === '' && in_array($current_mode, ['textstripped', 'text', 'tag'])) {
                 continue;
             }
-
-            if ($this->subtrees[ $key ] instanceof Text
-                && $this->subtrees[ $key ]->isToBeStripped()) {
-                $newMode = 'textstripped';
-            } elseif ($this->subtrees[ $key ] instanceof Text) {
-                $newMode = 'text';
-            } elseif ($this->subtrees[ $key ] instanceof Tag) {
-                $newMode = 'tag';
+            if ($this->subtrees[$key] instanceof Text && $this->subtrees[$key]->is_to_be_stripped()) {
+                $new_mode = 'textstripped';
+            } elseif ($this->subtrees[$key] instanceof Text) {
+                $new_mode = 'text';
+            } elseif ($this->subtrees[$key] instanceof Tag) {
+                $new_mode = 'tag';
             } else {
-                $newMode = 'other';
+                $new_mode = 'other';
             }
-
-            if ($newMode == $currentMode) {
-                $currentChunk[] = $this->subtrees[ $key ];
+            if ($new_mode == $current_mode) {
+                $current_chunk[] = $this->subtrees[$key];
             } else {
-                $chunks[] = [
-                    'mode' => $currentMode,
-                    'subtrees' => $currentChunk,
-                ];
-                $currentMode = $newMode;
-                $currentChunk = [$this->subtrees[ $key ]];
+                $chunks[] = ['mode' => $current_mode, 'subtrees' => $current_chunk];
+                $current_mode = $new_mode;
+                $current_chunk = [$this->subtrees[$key]];
             }
         }
-        if ($currentMode && $currentChunk) {
-            $chunks[] = [
-                'mode' => $currentMode,
-                'subtrees' => $currentChunk,
-            ];
+        if ($current_mode && $current_chunk) {
+            $chunks[] = ['mode' => $current_mode, 'subtrees' => $current_chunk];
         }
         return $chunks;
     }

@@ -1,11 +1,9 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Template;
-
 /**
  * Smarty {mailto} function plugin
  * Type:     function
@@ -49,22 +47,14 @@ class Mailto extends Base
 {
     public function handle($params, Template $template)
     {
-        static $_allowed_encoding = [
-            'javascript' => true,
-            'javascript_charcode' => true,
-            'hex' => true,
-            'none' => true,
-        ];
-
+        static $_allowed_encoding = ['javascript' => true, 'javascript_charcode' => true, 'hex' => true, 'none' => true];
         $extra = '';
         if (empty($params['address'])) {
             trigger_error("mailto: missing 'address' parameter", E_USER_WARNING);
             return;
         }
         $address = $params['address'];
-
         $text = $address;
-
         // netscape and mozilla do not decode %40 (@) in BCC field (bug?)
         // so, don't encode it.
         $mail_parms = [];
@@ -84,25 +74,19 @@ class Mailto extends Base
                 case 'extra':
                 case 'text':
                     ${$var} = $value;
-                    // no break
+                // no break
                 default:
             }
         }
-
         if ($mail_parms) {
             $address .= '?' . join('&', $mail_parms);
         }
-        $encode = (empty($params['encode'])) ? 'none' : $params['encode'];
+        $encode = empty($params['encode']) ? 'none' : $params['encode'];
         if (!isset($_allowed_encoding[$encode])) {
-            trigger_error(
-                "mailto: 'encode' parameter must be none, javascript, javascript_charcode or hex",
-                E_USER_WARNING
-            );
+            trigger_error("mailto: 'encode' parameter must be none, javascript, javascript_charcode or hex", E_USER_WARNING);
             return;
         }
-
-        $string = '<a href="mailto:' . htmlspecialchars($address, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) .
-            '" ' . $extra . '>' . htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) . '</a>';
+        $string = '<a href="mailto:' . htmlspecialchars($address, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) . '" ' . $extra . '>' . htmlspecialchars($text, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, \Smarty\Smarty::$_CHARSET) . '</a>';
         if ($encode === 'javascript') {
             $js_encode = '';
             for ($x = 0, $_length = strlen($string); $x < $_length; $x++) {
@@ -116,7 +100,6 @@ class Mailto extends Base
             }
             return '<script>document.write(String.fromCharCode(' . implode(',', $ord) . '))</script>';
         }
-
         if ($encode === 'hex') {
             preg_match('!^(.*)(\?.*)$!', $address, $match);
             if (!empty($match[2])) {

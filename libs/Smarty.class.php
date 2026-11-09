@@ -12,7 +12,7 @@ declare(strict_types=1);
 // require_once("/path/to/smarty/libs/Smarty.class.php");          //
 //                                                                 //
 // $smarty = new Smarty\Smarty;                                    //
-// $smarty->testInstall();                                         //
+// $smarty->test_install();                                         //
 /////////////////////////////////////////////////////////////////////
 
 define('__SMARTY_DIR', __DIR__ . '/../src/');

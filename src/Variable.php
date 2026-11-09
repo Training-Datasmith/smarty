@@ -1,17 +1,14 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty;
 
 /**
  * class for the Smarty variable object
  * This class defines the Smarty variable object
  *
-
-
  */
-#[\AllowDynamicProperties]
+#[\Allow_Dynamic_Properties]
 class Variable
 {
     /**
@@ -20,7 +17,6 @@ class Variable
      * @var mixed
      */
     public $value;
-
     /**
      * Other r/w properties for foreach, for, while, etc.
      */
@@ -32,27 +28,23 @@ class Variable
     public $show;
     public $iteration;
     public $index;
-
     /**
      * @param mixed|null $value
      */
-    public function setValue($value): void
+    public function set_value($value): void
     {
         $this->value = $value;
     }
-
     /**
      * if true any output of this variable will be not cached
      *
      * @var boolean
      */
     private $nocache = false;
-
-    public function setNocache(bool $nocache): void
+    public function set_nocache(bool $nocache): void
     {
         $this->nocache = $nocache;
     }
-
     /**
      * create Smarty variable object
      *
@@ -64,20 +56,17 @@ class Variable
         $this->value = $value;
         $this->nocache = $nocache;
     }
-
-    public function getValue()
+    public function get_value()
     {
         return $this->value;
     }
-
     /**
      * <<magic>> String conversion
      */
     public function __toString(): string
     {
-        return (string)$this->value;
+        return (string) $this->value;
     }
-
     /**
      * Handles ++$a and --$a in templates.
      *
@@ -86,7 +75,7 @@ class Variable
      * @return int|mixed
      * @throws Exception
      */
-    public function preIncDec($operator = '++')
+    public function pre_inc_dec($operator = '++')
     {
         if ($operator == '--') {
             return --$this->value;
@@ -96,7 +85,6 @@ class Variable
         }
         throw new Exception("Invalid incdec operator. Use '--' or '++'.");
     }
-
     /**
      * Handles $a++ and $a-- in templates.
      *
@@ -105,7 +93,7 @@ class Variable
      * @return int|mixed
      * @throws Exception
      */
-    public function postIncDec($operator = '++')
+    public function post_inc_dec($operator = '++')
     {
         if ($operator == '--') {
             return $this->value--;
@@ -115,10 +103,8 @@ class Variable
         }
         throw new Exception("Invalid incdec operator. Use '--' or '++'.");
     }
-
-    public function isNocache(): bool
+    public function is_nocache(): bool
     {
         return $this->nocache;
     }
-
 }

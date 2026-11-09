@@ -29,12 +29,12 @@ function smarty_function_checkvar($params, \Smarty\Template $template)
     $ptr = $template;
     while ($ptr) {
         if (in_array('template', $types) && $ptr instanceof Template) {
-            $output .= "#{$ptr->getSource()->name}:\${$var} =";
-            $output .= $ptr->hasVariable($var) ? preg_replace('/\s/', '', var_export($ptr->getValue($var), true)) : '>unassigned<';
+            $output .= "#{$ptr->get_source()->name}:\${$var} =";
+            $output .= $ptr->has_variable($var) ? preg_replace('/\s/', '', var_export($ptr->get_value($var), true)) : '>unassigned<';
             $ptr = $ptr->parent;
         } elseif (in_array('data', $types) && !($ptr instanceof Template || $ptr instanceof \Smarty\Smarty)) {
             $output .= "#data:\${$var} =";
-            $output .= $ptr->hasVariable($var) ? preg_replace('/\s/', '', var_export($ptr->getValue($var), true)) : '>unassigned<';
+            $output .= $ptr->has_variable($var) ? preg_replace('/\s/', '', var_export($ptr->get_value($var), true)) : '>unassigned<';
             $ptr = $ptr->parent;
         } else {
             $ptr = null;
@@ -42,8 +42,8 @@ function smarty_function_checkvar($params, \Smarty\Template $template)
     }
     if (in_array('global', $types)) {
         $output .= "#global:\${$var} =";
-        $output .= $template->getSmarty()->hasVariable($var) ?
-            preg_replace('/\s/', '', var_export($template->getSmarty()->getValue($var), true)) : '>unassigned<';
+        $output .= $template->get_smarty()->has_variable($var) ?
+            preg_replace('/\s/', '', var_export($template->get_smarty()->get_value($var), true)) : '>unassigned<';
     }
     return $output;
 }

@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Exception;
 use Smarty\Template;
-
 /**
  * Smarty {fetch} plugin
  * Type:     function
@@ -37,17 +35,14 @@ class Fetch extends Base
         if ($protocol !== false) {
             $protocol = strtolower(substr($params['file'], 0, $protocol));
         }
-        if (isset($template->getSmarty()->security_policy)) {
+        if (isset($template->get_smarty()->security_policy)) {
             if ($protocol) {
                 // remote resource (or php stream, …)
-                if (!$template->getSmarty()->security_policy->isTrustedUri($params['file'])) {
+                if (!$template->get_smarty()->security_policy->is_trusted_uri($params['file'])) {
                     return;
                 }
-            } else {
-                // local file
-                if (!$template->getSmarty()->security_policy->isTrustedResourceDir($params['file'])) {
-                    return;
-                }
+            } else if (!$template->get_smarty()->security_policy->is_trusted_resource_dir($params['file'])) {
+                return;
             }
         }
         $content = '';
@@ -112,9 +107,9 @@ class Fetch extends Base
                             break;
                         case 'proxy_port':
                             if (!preg_match('!\D!', $param_value)) {
-                                $proxy_port = (int)$param_value;
+                                $proxy_port = (int) $param_value;
                             } else {
-                                trigger_error("[plugin] invalid value for attribute '{$param_key }'", E_USER_NOTICE);
+                                trigger_error("[plugin] invalid value for attribute '{$param_key}'", E_USER_NOTICE);
                                 return;
                             }
                             break;
@@ -130,7 +125,7 @@ class Fetch extends Base
                             break;
                         case 'timeout':
                             if (!preg_match('!\D!', $param_value)) {
-                                $timeout = (int)$param_value;
+                                $timeout = (int) $param_value;
                             } else {
                                 trigger_error("[plugin] invalid value for attribute '{$param_key}'", E_USER_NOTICE);
                                 return;
@@ -148,25 +143,25 @@ class Fetch extends Base
                     $fp = fsockopen($server_name, $port, $errno, $errstr, $timeout);
                 }
                 if (!$fp) {
-                    trigger_error("[plugin] unable to fetch: $errstr ($errno)", E_USER_NOTICE);
+                    trigger_error("[plugin] unable to fetch: {$errstr} ({$errno})", E_USER_NOTICE);
                     return;
                 }
                 if ($_is_proxy) {
                     fputs($fp, 'GET ' . $params['file'] . " HTTP/1.0\r\n");
                 } else {
-                    fputs($fp, "GET $uri HTTP/1.0\r\n");
+                    fputs($fp, "GET {$uri} HTTP/1.0\r\n");
                 }
                 if (!empty($host)) {
-                    fputs($fp, "Host: $host\r\n");
+                    fputs($fp, "Host: {$host}\r\n");
                 }
                 if (!empty($accept)) {
-                    fputs($fp, "Accept: $accept\r\n");
+                    fputs($fp, "Accept: {$accept}\r\n");
                 }
                 if (!empty($agent)) {
-                    fputs($fp, "User-Agent: $agent\r\n");
+                    fputs($fp, "User-Agent: {$agent}\r\n");
                 }
                 if (!empty($referer)) {
-                    fputs($fp, "Referer: $referer\r\n");
+                    fputs($fp, "Referer: {$referer}\r\n");
                 }
                 if (isset($extra_headers) && is_array($extra_headers)) {
                     foreach ($extra_headers as $curr_header) {
@@ -174,7 +169,7 @@ class Fetch extends Base
                     }
                 }
                 if (!empty($user) && !empty($pass)) {
-                    fputs($fp, 'Authorization: BASIC ' . base64_encode("$user:$pass") . "\r\n");
+                    fputs($fp, 'Authorization: BASIC ' . base64_encode("{$user}:{$pass}") . "\r\n");
                 }
                 fputs($fp, "\r\n");
                 while (!feof($fp)) {

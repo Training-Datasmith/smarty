@@ -21,8 +21,8 @@ use Smarty\Template;
 function smarty_function_getvar($params, Template $template)
 {
     if (isset($params[ 'assign' ])) {
-        $template->assign($params[ 'assign' ], $template->getTemplateVars($params[ 'var' ]));
+        $template->assign($params[ 'assign' ], $template->get_template_vars($params[ 'var' ]));
     } else {
-        return $template->getTemplateVars($params[ 'var' ]);
+        return $template->get_template_vars($params[ 'var' ]);
     }
 }

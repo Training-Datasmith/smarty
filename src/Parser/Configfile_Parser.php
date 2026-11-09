@@ -1,0 +1,749 @@
+<?php
+
+declare (strict_types=1);
+// line 12 "src/Parser/Configfile_Parser.y"
+namespace Smarty\Parser;
+
+use Smarty\Compiler\Configfile as Configfile;
+use Smarty\Lexer\Configfile_Lexer as Lexer;
+/**
+* Smarty Internal Plugin Configfileparse
+*
+* This is the config file parser.
+* It is generated from the Configfile_Parser.y file
+* @package Smarty
+* @subpackage Compiler
+* @author Uwe Tews
+*/
+class Configfile_Parser
+{
+    // line 31 "src/Parser/Configfile_Parser.y"
+    /**
+     * result status
+     *
+     * @var bool
+     */
+    public $successful = true;
+    /**
+     * return value
+     *
+     * @var mixed
+     */
+    public $retvalue = 0;
+    /**
+     * @var
+     */
+    public $yymajor;
+    /**
+     * internal error flag
+     *
+     * @var bool
+     */
+    private $internal_error = false;
+    /**
+     * compiler object
+     *
+     * @var Configfile
+     */
+    public $compiler;
+    /**
+     * smarty object
+     *
+     * @var Smarty
+     */
+    public $smarty;
+    /**
+     * copy of config_overwrite property
+     *
+     * @var bool
+     */
+    private $config_overwrite = false;
+    /**
+     * copy of config_read_hidden property
+     *
+     * @var bool
+     */
+    private $config_read_hidden = false;
+    /**
+     * helper map
+     *
+     * @var array
+     */
+    private static $escapes_single = ['\\' => '\\', '\'' => '\''];
+    /**
+     * constructor
+     */
+    public function __construct(Lexer $lex, Configfile $compiler)
+    {
+        $this->smarty = $compiler->get_smarty();
+        $this->compiler = $compiler;
+        $this->config_overwrite = $this->smarty->config_overwrite;
+        $this->config_read_hidden = $this->smarty->config_read_hidden;
+    }
+    /**
+     * parse optional boolean keywords
+     *
+     * @param string $str
+     */
+    private function parse_bool($str): bool
+    {
+        $str = strtolower($str);
+        if (in_array($str, ['on', 'yes', 'true'])) {
+            return true;
+        }
+        return false;
+    }
+    /**
+     * parse single quoted string
+     *  remove outer quotes
+     *  unescape inner quotes
+     *
+     * @param string $qstr
+     */
+    private static function parse_single_quoted_string($qstr): string
+    {
+        $escaped_string = substr($qstr, 1, strlen($qstr) - 2);
+        //remove outer quotes
+        $ss = preg_split('/(\\\\.)/', $escaped_string, -1, PREG_SPLIT_DELIM_CAPTURE);
+        $str = '';
+        foreach ($ss as $s) {
+            if (strlen($s) === 2 && $s[0] === '\\') {
+                if (isset(self::$escapes_single[$s[1]])) {
+                    $s = self::$escapes_single[$s[1]];
+                }
+            }
+            $str .= $s;
+        }
+        return $str;
+    }
+    /**
+     * parse double quoted string
+     *
+     * @param string $qstr
+     */
+    private static function parse_double_quoted_string($qstr): string
+    {
+        $inner_str = substr($qstr, 1, strlen($qstr) - 2);
+        return stripcslashes($inner_str);
+    }
+    /**
+     * parse triple quoted string
+     *
+     * @param string $qstr
+     */
+    private static function parse_tripple_double_quoted_string($qstr): string
+    {
+        return stripcslashes($qstr);
+    }
+    /**
+     * set a config variable in target array
+     */
+    private function set_var(array $var, array &$target_array): void
+    {
+        $key = $var['key'];
+        $value = $var['value'];
+        if ($this->config_overwrite || !isset($target_array['vars'][$key])) {
+            $target_array['vars'][$key] = $value;
+        } else {
+            settype($target_array['vars'][$key], 'array');
+            $target_array['vars'][$key][] = $value;
+        }
+    }
+    /**
+     * add config variable to global vars
+     */
+    private function add_global_vars(array $vars): void
+    {
+        if (!isset($this->compiler->config_data['vars'])) {
+            $this->compiler->config_data['vars'] = [];
+        }
+        foreach ($vars as $var) {
+            $this->set_var($var, $this->compiler->config_data);
+        }
+    }
+    /**
+     * add config variable to section
+     *
+     * @param string $section_name
+     */
+    private function add_section_vars($section_name, array $vars): void
+    {
+        if (!isset($this->compiler->config_data['sections'][$section_name]['vars'])) {
+            $this->compiler->config_data['sections'][$section_name]['vars'] = [];
+        }
+        foreach ($vars as $var) {
+            $this->set_var($var, $this->compiler->config_data['sections'][$section_name]);
+        }
+    }
+    public const TPC_OPENB = 1;
+    public const TPC_SECTION = 2;
+    public const TPC_CLOSEB = 3;
+    public const TPC_DOT = 4;
+    public const TPC_ID = 5;
+    public const TPC_EQUAL = 6;
+    public const TPC_FLOAT = 7;
+    public const TPC_INT = 8;
+    public const TPC_BOOL = 9;
+    public const TPC_SINGLE_QUOTED_STRING = 10;
+    public const TPC_DOUBLE_QUOTED_STRING = 11;
+    public const TPC_TRIPPLE_QUOTES = 12;
+    public const TPC_TRIPPLE_TEXT = 13;
+    public const TPC_TRIPPLE_QUOTES_END = 14;
+    public const TPC_NAKED_STRING = 15;
+    public const TPC_OTHER = 16;
+    public const TPC_NEWLINE = 17;
+    public const TPC_COMMENTSTART = 18;
+    public const YY_NO_ACTION = 60;
+    public const YY_ACCEPT_ACTION = 59;
+    public const YY_ERROR_ACTION = 58;
+    public const YY_SZ_ACTTAB = 39;
+    public static $yy_action = [24, 25, 26, 27, 28, 12, 15, 23, 31, 32, 59, 8, 9, 3, 21, 22, 33, 13, 33, 13, 14, 10, 18, 16, 30, 11, 17, 20, 34, 7, 5, 1, 2, 29, 4, 19, 52, 35, 6];
+    public static $yy_lookahead = [7, 8, 9, 10, 11, 12, 5, 27, 15, 16, 20, 21, 25, 23, 25, 26, 17, 18, 17, 18, 2, 25, 4, 13, 14, 1, 15, 24, 17, 22, 3, 23, 23, 14, 6, 2, 28, 17, 3];
+    public const YY_SHIFT_USE_DFLT = -8;
+    public const YY_SHIFT_MAX = 19;
+    public static $yy_shift_ofst = [-8, 1, 1, 1, -7, -1, -1, 24, -8, -8, -8, 18, 10, 11, 27, 28, 19, 20, 33, 35];
+    public const YY_REDUCE_USE_DFLT = -21;
+    public const YY_REDUCE_MAX = 10;
+    public static $yy_reduce_ofst = [-10, -11, -11, -11, -20, -13, -4, 3, 7, 8, 9];
+    public static $yy_expected_tokens = [[], [5, 17, 18], [5, 17, 18], [5, 17, 18], [7, 8, 9, 10, 11, 12, 15, 16], [17, 18], [17, 18], [1], [], [], [], [2, 4], [13, 14], [15, 17], [3], [6], [14], [17], [2], [3], [], [], [], [], [], [], [], [], [], [], [], [], [], [], [], []];
+    public static $yy_default = [44, 40, 41, 37, 58, 58, 58, 36, 39, 44, 44, 58, 58, 58, 58, 58, 58, 58, 58, 58, 38, 42, 43, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
+    public const YYNOCODE = 29;
+    public const YYSTACKDEPTH = 100;
+    public const YYNSTATE = 36;
+    public const YYNRULE = 22;
+    public const YYERRORSYMBOL = 19;
+    public const YYERRSYMDT = 'yy0';
+    public const YYFALLBACK = 0;
+    public static $yy_fallback = [];
+    public function Trace($trace_file, $z_trace_prompt): void
+    {
+        if (!$trace_file) {
+            $z_trace_prompt = 0;
+        } elseif (!$z_trace_prompt) {
+            $trace_file = 0;
+        }
+        $this->yy_trace_file = $trace_file;
+        $this->yy_trace_prompt = $z_trace_prompt;
+    }
+    public function print_trace(): void
+    {
+        $this->yy_trace_file = fopen('php://output', 'w');
+        $this->yy_trace_prompt = '<br>';
+    }
+    public $yy_trace_file;
+    public $yy_trace_prompt;
+    public $yyidx;
+    /* Index of top element in stack */
+    public $yyerrcnt;
+    /* Shifts left before out of the error */
+    public $yystack = [];
+    /* The parser's stack */
+    public $yy_token_name = ['$', 'OPENB', 'SECTION', 'CLOSEB', 'DOT', 'ID', 'EQUAL', 'FLOAT', 'INT', 'BOOL', 'SINGLE_QUOTED_STRING', 'DOUBLE_QUOTED_STRING', 'TRIPPLE_QUOTES', 'TRIPPLE_TEXT', 'TRIPPLE_QUOTES_END', 'NAKED_STRING', 'OTHER', 'NEWLINE', 'COMMENTSTART', 'error', 'start', 'global_vars', 'sections', 'var_list', 'section', 'newline', 'var', 'value'];
+    public static $yy_rule_name = ['start ::= global_vars sections', 'global_vars ::= var_list', 'sections ::= sections section', 'sections ::=', 'section ::= OPENB SECTION CLOSEB newline var_list', 'section ::= OPENB DOT SECTION CLOSEB newline var_list', 'var_list ::= var_list newline', 'var_list ::= var_list var', 'var_list ::=', 'var ::= ID EQUAL value', 'value ::= FLOAT', 'value ::= INT', 'value ::= BOOL', 'value ::= SINGLE_QUOTED_STRING', 'value ::= DOUBLE_QUOTED_STRING', 'value ::= TRIPPLE_QUOTES TRIPPLE_TEXT TRIPPLE_QUOTES_END', 'value ::= TRIPPLE_QUOTES TRIPPLE_QUOTES_END', 'value ::= NAKED_STRING', 'value ::= OTHER', 'newline ::= NEWLINE', 'newline ::= COMMENTSTART NEWLINE', 'newline ::= COMMENTSTART NAKED_STRING NEWLINE'];
+    public function token_name($token_type)
+    {
+        if ($token_type === 0) {
+            return 'End of Input';
+        }
+        if ($token_type > 0 && $token_type < count($this->yy_token_name)) {
+            return $this->yy_token_name[$token_type];
+        }
+        return 'Unknown';
+    }
+    public static function yy_destructor($yymajor, $yypminor): void
+    {
+        switch ($yymajor) {
+            default:
+                break;
+        }
+    }
+    public function yy_pop_parser_stack()
+    {
+        if (empty($this->yystack)) {
+            return;
+        }
+        $yytos = array_pop($this->yystack);
+        if ($this->yy_trace_file && $this->yyidx >= 0) {
+            fwrite($this->yy_trace_file, $this->yy_trace_prompt . 'Popping ' . $this->yy_token_name[$yytos->major] . "\n");
+        }
+        $yymajor = $yytos->major;
+        self::yy_destructor($yymajor, $yytos->minor);
+        $this->yyidx--;
+        return $yymajor;
+    }
+    public function __destruct()
+    {
+        while ($this->yystack !== []) {
+            $this->yy_pop_parser_stack();
+        }
+        if (is_resource($this->yy_trace_file)) {
+            fclose($this->yy_trace_file);
+        }
+    }
+    public function yy_get_expected_tokens($token)
+    {
+        static $res3 = [];
+        static $res4 = [];
+        $state = $this->yystack[$this->yyidx]->stateno;
+        $expected = self::$yy_expected_tokens[$state];
+        if (isset($res3[$state][$token])) {
+            if ($res3[$state][$token]) {
+                return $expected;
+            }
+        } else if ($res3[$state][$token] = in_array($token, self::$yy_expected_tokens[$state], true)) {
+            return $expected;
+        }
+        $stack = $this->yystack;
+        $yyidx = $this->yyidx;
+        do {
+            $yyact = $this->yy_find_shift_action($token);
+            if ($yyact >= self::YYNSTATE && $yyact < self::YYNSTATE + self::YYNRULE) {
+                // reduce action
+                $done = 0;
+                do {
+                    if ($done++ === 100) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        // too much recursion prevents proper detection
+                        // so give up
+                        return array_unique($expected);
+                    }
+                    $yyruleno = $yyact - self::YYNSTATE;
+                    $this->yyidx -= self::$yy_rule_info[$yyruleno][1];
+                    $nextstate = $this->yy_find_reduce_action($this->yystack[$this->yyidx]->stateno, self::$yy_rule_info[$yyruleno][0]);
+                    if (isset(self::$yy_expected_tokens[$nextstate])) {
+                        $expected = array_merge($expected, self::$yy_expected_tokens[$nextstate]);
+                        if (isset($res4[$nextstate][$token])) {
+                            if ($res4[$nextstate][$token]) {
+                                $this->yyidx = $yyidx;
+                                $this->yystack = $stack;
+                                return array_unique($expected);
+                            }
+                        } else if ($res4[$nextstate][$token] = in_array($token, self::$yy_expected_tokens[$nextstate], true)) {
+                            $this->yyidx = $yyidx;
+                            $this->yystack = $stack;
+                            return array_unique($expected);
+                        }
+                    }
+                    if ($nextstate < self::YYNSTATE) {
+                        // we need to shift a non-terminal
+                        $this->yyidx++;
+                        $x = (object) ['stateno' => null, 'major' => null, 'minor' => null];
+                        $x->stateno = $nextstate;
+                        $x->major = self::$yy_rule_info[$yyruleno][0];
+                        $this->yystack[$this->yyidx] = $x;
+                        continue 2;
+                    }
+                    if ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        // the last token was just ignored, we can't accept
+                        // by ignoring input, this is in essence ignoring a
+                        // syntax error!
+                        return array_unique($expected);
+                    }
+                    if ($nextstate === self::YY_NO_ACTION) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        // input accepted, but not shifted (I guess)
+                        return $expected;
+                    }
+                    $yyact = $nextstate;
+                } while (true);
+            }
+            break;
+        } while (true);
+        $this->yyidx = $yyidx;
+        $this->yystack = $stack;
+        return array_unique($expected);
+    }
+    public function yy_is_expected_token($token): bool
+    {
+        static $res = [];
+        static $res2 = [];
+        if ($token === 0) {
+            return true;
+            // 0 is not part of this
+        }
+        $state = $this->yystack[$this->yyidx]->stateno;
+        if (isset($res[$state][$token])) {
+            if ($res[$state][$token]) {
+                return true;
+            }
+        } else if ($res[$state][$token] = in_array($token, self::$yy_expected_tokens[$state], true)) {
+            return true;
+        }
+        $stack = $this->yystack;
+        $yyidx = $this->yyidx;
+        do {
+            $yyact = $this->yy_find_shift_action($token);
+            if ($yyact >= self::YYNSTATE && $yyact < self::YYNSTATE + self::YYNRULE) {
+                // reduce action
+                $done = 0;
+                do {
+                    if ($done++ === 100) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        // too much recursion prevents proper detection
+                        // so give up
+                        return true;
+                    }
+                    $yyruleno = $yyact - self::YYNSTATE;
+                    $this->yyidx -= self::$yy_rule_info[$yyruleno][1];
+                    $nextstate = $this->yy_find_reduce_action($this->yystack[$this->yyidx]->stateno, self::$yy_rule_info[$yyruleno][0]);
+                    if (isset($res2[$nextstate][$token])) {
+                        if ($res2[$nextstate][$token]) {
+                            $this->yyidx = $yyidx;
+                            $this->yystack = $stack;
+                            return true;
+                        }
+                    } else if ($res2[$nextstate][$token] = isset(self::$yy_expected_tokens[$nextstate]) && in_array($token, self::$yy_expected_tokens[$nextstate], true)) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        return true;
+                    }
+                    if ($nextstate < self::YYNSTATE) {
+                        // we need to shift a non-terminal
+                        $this->yyidx++;
+                        $x = (object) ['stateno' => null, 'major' => null, 'minor' => null];
+                        $x->stateno = $nextstate;
+                        $x->major = self::$yy_rule_info[$yyruleno][0];
+                        $this->yystack[$this->yyidx] = $x;
+                        continue 2;
+                    }
+                    if ($nextstate === self::YYNSTATE + self::YYNRULE + 1) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        if (!$token) {
+                            // end of input: this is valid
+                            return true;
+                        }
+                        // the last token was just ignored, we can't accept
+                        // by ignoring input, this is in essence ignoring a
+                        // syntax error!
+                        return false;
+                    }
+                    if ($nextstate === self::YY_NO_ACTION) {
+                        $this->yyidx = $yyidx;
+                        $this->yystack = $stack;
+                        // input accepted, but not shifted (I guess)
+                        return true;
+                    }
+                    $yyact = $nextstate;
+                } while (true);
+            }
+            break;
+        } while (true);
+        $this->yyidx = $yyidx;
+        $this->yystack = $stack;
+        return true;
+    }
+    public function yy_find_shift_action($i_look_ahead)
+    {
+        $stateno = $this->yystack[$this->yyidx]->stateno;
+        /* if ($this->yyidx < 0) return self::YY_NO_ACTION;  */
+        if (!isset(self::$yy_shift_ofst[$stateno])) {
+            // no shift actions
+            return self::$yy_default[$stateno];
+        }
+        $i = self::$yy_shift_ofst[$stateno];
+        if ($i === self::YY_SHIFT_USE_DFLT) {
+            return self::$yy_default[$stateno];
+        }
+        if ($i_look_ahead === self::YYNOCODE) {
+            return self::YY_NO_ACTION;
+        }
+        $i += $i_look_ahead;
+        if ($i < 0 || $i >= self::YY_SZ_ACTTAB || self::$yy_lookahead[$i] != $i_look_ahead) {
+            if (count(self::$yy_fallback) && $i_look_ahead < count(self::$yy_fallback) && ($i_fallback = self::$yy_fallback[$i_look_ahead]) != 0) {
+                if ($this->yy_trace_file) {
+                    fwrite($this->yy_trace_file, $this->yy_trace_prompt . 'FALLBACK ' . $this->yy_token_name[$i_look_ahead] . ' => ' . $this->yy_token_name[$i_fallback] . "\n");
+                }
+                return $this->yy_find_shift_action($i_fallback);
+            }
+            return self::$yy_default[$stateno];
+        }
+        return self::$yy_action[$i];
+    }
+    public function yy_find_reduce_action($stateno, $i_look_ahead)
+    {
+        /* $stateno = $this->yystack[$this->yyidx]->stateno; */
+        if (!isset(self::$yy_reduce_ofst[$stateno])) {
+            return self::$yy_default[$stateno];
+        }
+        $i = self::$yy_reduce_ofst[$stateno];
+        if ($i === self::YY_REDUCE_USE_DFLT) {
+            return self::$yy_default[$stateno];
+        }
+        if ($i_look_ahead === self::YYNOCODE) {
+            return self::YY_NO_ACTION;
+        }
+        $i += $i_look_ahead;
+        if ($i < 0 || $i >= self::YY_SZ_ACTTAB || self::$yy_lookahead[$i] != $i_look_ahead) {
+            return self::$yy_default[$stateno];
+        }
+        return self::$yy_action[$i];
+    }
+    public function yy_shift($yy_new_state, $yy_major, $yyp_minor): void
+    {
+        $this->yyidx++;
+        if ($this->yyidx >= self::YYSTACKDEPTH) {
+            $this->yyidx--;
+            if ($this->yy_trace_file) {
+                fprintf($this->yy_trace_file, "%sStack Overflow!\n", $this->yy_trace_prompt);
+            }
+            while ($this->yyidx >= 0) {
+                $this->yy_pop_parser_stack();
+            }
+            // line 245 "src/Parser/Configfile_Parser.y"
+            $this->internal_error = true;
+            $this->compiler->trigger_config_file_error('Stack overflow in configfile parser');
+            return;
+        }
+        $yytos = (object) ['stateno' => null, 'major' => null, 'minor' => null];
+        $yytos->stateno = $yy_new_state;
+        $yytos->major = $yy_major;
+        $yytos->minor = $yyp_minor;
+        $this->yystack[] = $yytos;
+        if ($this->yy_trace_file && $this->yyidx > 0) {
+            fprintf($this->yy_trace_file, "%sShift %d\n", $this->yy_trace_prompt, $yy_new_state);
+            fprintf($this->yy_trace_file, '%sStack:', $this->yy_trace_prompt);
+            for ($i = 1; $i <= $this->yyidx; $i++) {
+                fprintf($this->yy_trace_file, ' %s', $this->yy_token_name[$this->yystack[$i]->major]);
+            }
+            fwrite($this->yy_trace_file, "\n");
+        }
+    }
+    public static $yy_rule_info = [[0 => 20, 1 => 2], [0 => 21, 1 => 1], [0 => 22, 1 => 2], [0 => 22, 1 => 0], [0 => 24, 1 => 5], [0 => 24, 1 => 6], [0 => 23, 1 => 2], [0 => 23, 1 => 2], [0 => 23, 1 => 0], [0 => 26, 1 => 3], [0 => 27, 1 => 1], [0 => 27, 1 => 1], [0 => 27, 1 => 1], [0 => 27, 1 => 1], [0 => 27, 1 => 1], [0 => 27, 1 => 3], [0 => 27, 1 => 2], [0 => 27, 1 => 1], [0 => 27, 1 => 1], [0 => 25, 1 => 1], [0 => 25, 1 => 2], [0 => 25, 1 => 3]];
+    public static $yy_reduce_map = [0 => 0, 2 => 0, 3 => 0, 19 => 0, 20 => 0, 21 => 0, 1 => 1, 4 => 4, 5 => 5, 6 => 6, 7 => 7, 8 => 8, 9 => 9, 10 => 10, 11 => 11, 12 => 12, 13 => 13, 14 => 14, 15 => 15, 16 => 16, 17 => 17, 18 => 17];
+    // line 251 "src/Parser/Configfile_Parser.y"
+    public function yy_r0(): void
+    {
+        $this->_retvalue = null;
+    }
+    // line 256 "src/Parser/Configfile_Parser.y"
+    public function yy_r1(): void
+    {
+        $this->add_global_vars($this->yystack[$this->yyidx + 0]->minor);
+        $this->_retvalue = null;
+    }
+    // line 270 "src/Parser/Configfile_Parser.y"
+    public function yy_r4(): void
+    {
+        $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
+        $this->_retvalue = null;
+    }
+    // line 275 "src/Parser/Configfile_Parser.y"
+    public function yy_r5(): void
+    {
+        if ($this->config_read_hidden) {
+            $this->add_section_vars($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor);
+        }
+        $this->_retvalue = null;
+    }
+    // line 283 "src/Parser/Configfile_Parser.y"
+    public function yy_r6(): void
+    {
+        $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
+    }
+    // line 287 "src/Parser/Configfile_Parser.y"
+    public function yy_r7(): void
+    {
+        $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor, [$this->yystack[$this->yyidx + 0]->minor]);
+    }
+    // line 291 "src/Parser/Configfile_Parser.y"
+    public function yy_r8(): void
+    {
+        $this->_retvalue = [];
+    }
+    // line 297 "src/Parser/Configfile_Parser.y"
+    public function yy_r9(): void
+    {
+        $this->_retvalue = ['key' => $this->yystack[$this->yyidx + -2]->minor, 'value' => $this->yystack[$this->yyidx + 0]->minor];
+    }
+    // line 302 "src/Parser/Configfile_Parser.y"
+    public function yy_r10(): void
+    {
+        $this->_retvalue = (float) $this->yystack[$this->yyidx + 0]->minor;
+    }
+    // line 306 "src/Parser/Configfile_Parser.y"
+    public function yy_r11(): void
+    {
+        $this->_retvalue = (int) $this->yystack[$this->yyidx + 0]->minor;
+    }
+    // line 310 "src/Parser/Configfile_Parser.y"
+    public function yy_r12(): void
+    {
+        $this->_retvalue = $this->parse_bool($this->yystack[$this->yyidx + 0]->minor);
+    }
+    // line 314 "src/Parser/Configfile_Parser.y"
+    public function yy_r13(): void
+    {
+        $this->_retvalue = self::parse_single_quoted_string($this->yystack[$this->yyidx + 0]->minor);
+    }
+    // line 318 "src/Parser/Configfile_Parser.y"
+    public function yy_r14(): void
+    {
+        $this->_retvalue = self::parse_double_quoted_string($this->yystack[$this->yyidx + 0]->minor);
+    }
+    // line 322 "src/Parser/Configfile_Parser.y"
+    public function yy_r15(): void
+    {
+        $this->_retvalue = self::parse_tripple_double_quoted_string($this->yystack[$this->yyidx + -1]->minor);
+    }
+    // line 326 "src/Parser/Configfile_Parser.y"
+    public function yy_r16(): void
+    {
+        $this->_retvalue = '';
+    }
+    // line 330 "src/Parser/Configfile_Parser.y"
+    public function yy_r17(): void
+    {
+        $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
+    }
+    private $_retvalue;
+    public function yy_reduce($yyruleno): void
+    {
+        if ($this->yy_trace_file && $yyruleno >= 0 && $yyruleno < count(self::$yy_rule_name)) {
+            fprintf($this->yy_trace_file, "%sReduce (%d) [%s].\n", $this->yy_trace_prompt, $yyruleno, self::$yy_rule_name[$yyruleno]);
+        }
+        $this->_retvalue = $yy_lefthand_side = null;
+        if (isset(self::$yy_reduce_map[$yyruleno])) {
+            // call the action
+            $this->_retvalue = null;
+            $this->{'yy_r' . self::$yy_reduce_map[$yyruleno]}();
+            $yy_lefthand_side = $this->_retvalue;
+        }
+        $yygoto = self::$yy_rule_info[$yyruleno][0];
+        $yysize = self::$yy_rule_info[$yyruleno][1];
+        $this->yyidx -= $yysize;
+        for ($i = $yysize; $i; $i--) {
+            // pop all of the right-hand side parameters
+            array_pop($this->yystack);
+        }
+        $yyact = $this->yy_find_reduce_action($this->yystack[$this->yyidx]->stateno, $yygoto);
+        if ($yyact < self::YYNSTATE) {
+            if (!$this->yy_trace_file && $yysize) {
+                $this->yyidx++;
+                $x = (object) ['stateno' => null, 'major' => null, 'minor' => null];
+                $x->stateno = $yyact;
+                $x->major = $yygoto;
+                $x->minor = $yy_lefthand_side;
+                $this->yystack[$this->yyidx] = $x;
+            } else {
+                $this->yy_shift($yyact, $yygoto, $yy_lefthand_side);
+            }
+        } elseif ($yyact === self::YYNSTATE + self::YYNRULE + 1) {
+            $this->yy_accept();
+        }
+    }
+    public function yy_parse_failed(): void
+    {
+        if ($this->yy_trace_file) {
+            fprintf($this->yy_trace_file, "%sFail!\n", $this->yy_trace_prompt);
+        }
+        while ($this->yyidx >= 0) {
+            $this->yy_pop_parser_stack();
+        }
+    }
+    public function yy_syntax_error($yymajor, $TOKEN): void
+    {
+        // line 238 "src/Parser/Configfile_Parser.y"
+        $this->internal_error = true;
+        $this->yymajor = $yymajor;
+        $this->compiler->trigger_config_file_error();
+    }
+    public function yy_accept(): void
+    {
+        if ($this->yy_trace_file) {
+            fprintf($this->yy_trace_file, "%sAccept!\n", $this->yy_trace_prompt);
+        }
+        while ($this->yyidx >= 0) {
+            $this->yy_pop_parser_stack();
+        }
+        // line 231 "src/Parser/Configfile_Parser.y"
+        $this->successful = !$this->internal_error;
+        $this->internal_error = false;
+        $this->retvalue = $this->_retvalue;
+    }
+    public function do_parse($yymajor, $yytokenvalue): void
+    {
+        $yyerrorhit = 0;
+        /* True if yymajor has invoked an error */
+        if ($this->yyidx === null || $this->yyidx < 0) {
+            $this->yyidx = 0;
+            $this->yyerrcnt = -1;
+            $x = (object) ['stateno' => null, 'major' => null, 'minor' => null];
+            $x->stateno = 0;
+            $x->major = 0;
+            $this->yystack = [];
+            $this->yystack[] = $x;
+        }
+        $yyendofinput = $yymajor == 0;
+        if ($this->yy_trace_file) {
+            fprintf($this->yy_trace_file, "%sInput %s\n", $this->yy_trace_prompt, $this->yy_token_name[$yymajor]);
+        }
+        do {
+            $yyact = $this->yy_find_shift_action($yymajor);
+            if ($yymajor < self::YYERRORSYMBOL && !$this->yy_is_expected_token($yymajor)) {
+                // force a syntax error
+                $yyact = self::YY_ERROR_ACTION;
+            }
+            if ($yyact < self::YYNSTATE) {
+                $this->yy_shift($yyact, $yymajor, $yytokenvalue);
+                $this->yyerrcnt--;
+                if ($yyendofinput && $this->yyidx >= 0) {
+                    $yymajor = 0;
+                } else {
+                    $yymajor = self::YYNOCODE;
+                }
+            } elseif ($yyact < self::YYNSTATE + self::YYNRULE) {
+                $this->yy_reduce($yyact - self::YYNSTATE);
+            } elseif ($yyact === self::YY_ERROR_ACTION) {
+                if ($this->yy_trace_file) {
+                    fprintf($this->yy_trace_file, "%sSyntax Error!\n", $this->yy_trace_prompt);
+                }
+                if (self::YYERRORSYMBOL) {
+                    if ($this->yyerrcnt < 0) {
+                        $this->yy_syntax_error($yymajor, $yytokenvalue);
+                    }
+                    $yymx = $this->yystack[$this->yyidx]->major;
+                    if ($yymx === self::YYERRORSYMBOL || $yyerrorhit) {
+                        if ($this->yy_trace_file) {
+                            fprintf($this->yy_trace_file, "%sDiscard input token %s\n", $this->yy_trace_prompt, $this->yy_token_name[$yymajor]);
+                        }
+                        static::yy_destructor($yymajor, $yytokenvalue);
+                        $yymajor = self::YYNOCODE;
+                    } else {
+                        while ($this->yyidx >= 0 && $yymx !== self::YYERRORSYMBOL && ($yyact = $this->yy_find_shift_action(self::YYERRORSYMBOL)) >= self::YYNSTATE) {
+                            $this->yy_pop_parser_stack();
+                        }
+                        if ($this->yyidx < 0 || $yymajor == 0) {
+                            static::yy_destructor($yymajor, $yytokenvalue);
+                            $this->yy_parse_failed();
+                            $yymajor = self::YYNOCODE;
+                        } elseif ($yymx !== self::YYERRORSYMBOL) {
+                            $u2 = 0;
+                            $this->yy_shift($yyact, self::YYERRORSYMBOL, $u2);
+                        }
+                    }
+                    $this->yyerrcnt = 3;
+                    $yyerrorhit = 1;
+                } else {
+                    if ($this->yyerrcnt <= 0) {
+                        $this->yy_syntax_error($yymajor, $yytokenvalue);
+                    }
+                    $this->yyerrcnt = 3;
+                    static::yy_destructor($yymajor, $yytokenvalue);
+                    if ($yyendofinput) {
+                        $this->yy_parse_failed();
+                    }
+                    $yymajor = self::YYNOCODE;
+                }
+            } else {
+                $this->yy_accept();
+                $yymajor = self::YYNOCODE;
+            }
+        } while ($yymajor !== self::YYNOCODE && $this->yyidx >= 0);
+    }
+}

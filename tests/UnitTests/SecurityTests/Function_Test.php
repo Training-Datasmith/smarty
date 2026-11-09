@@ -1,0 +1,40 @@
+<?php
+
+declare(strict_types=1);
+/**
+ * Smarty PHPunit tests of function calls
+ *
+
+ * @author  Uwe Tews
+ */
+
+/**
+ * class for function tests
+ *
+ *
+ *
+ *
+ */
+class FunctionTest extends PHPUnit_Smarty
+{
+    public function setUp(): void
+    {
+        $this->setUpSmarty(__DIR__);
+    }
+
+    public function testInit()
+    {
+        $this->cleanDirs();
+    }
+
+    /**
+     * test unknown function error
+     */
+    public function testUnknownFunction()
+    {
+        $this->smarty->enable_security();
+        $this->expectException(\Smarty\Compiler_Exception::class);
+        $this->expectExceptionMessage('unknown modifier');
+        $this->smarty->fetch('eval:{unknown()}');
+    }
+}

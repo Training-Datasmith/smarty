@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Smarty\Exception;
-use Smarty\Resource\FilePlugin;
+use Smarty\Resource\File_Plugin;
 use Smarty\Template;
 use Smarty\Template\Source;
 
@@ -13,7 +13,7 @@ use Smarty\Template\Source;
 
  * @author  Rodney Rehm
  */
-class Smarty_Resource_AmbiguousPlugin extends FilePlugin
+class Smarty_Resource_AmbiguousPlugin extends File_Plugin
 {
     protected $directory;
     protected $segment;
@@ -42,14 +42,14 @@ class Smarty_Resource_AmbiguousPlugin extends FilePlugin
             $segment = rtrim($this->segment, '/\\') . DIRECTORY_SEPARATOR;
         }
 
-        $source->uid = sha1($segment . '#' . $source->getResourceName());
-        if ($_template->getSmarty()->getCompileCheck() && !isset($source->timestamp)) {
+        $source->uid = sha1($segment . '#' . $source->get_resource_name());
+        if ($_template->get_smarty()->get_compile_check() && !isset($source->timestamp)) {
             $source->timestamp = @filemtime($this->directory . $segment . $source->name);
             $source->exists = !!$source->timestamp;
         }
     }
 
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
 
         $segment = '';
@@ -61,7 +61,7 @@ class Smarty_Resource_AmbiguousPlugin extends FilePlugin
             return file_get_contents($this->directory . $segment . $source->name);
         }
         throw new Exception(
-            'Unable to read ' . ($source->isConfig ? 'config' : 'template') .
+            'Unable to read ' . ($source->is_config ? 'config' : 'template') .
             " {$source->type} '{$source->name}'"
         );
     }

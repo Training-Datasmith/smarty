@@ -115,7 +115,7 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      *
      * @return integer|boolean timestamp (epoch) the template was modified, or false if not found
      */
-    protected function fetchTimestamp($id, $name, $cache_id, $compile_id)
+    protected function fetch_timestamp($id, $name, $cache_id, $compile_id)
     {
         $this->fetchTimestampQuery()->execute(['id' => $id]);
         $mtime = strtotime($this->fetchTimestampQuery()->fetchColumn());

@@ -7,3 +7,4 @@ phpunit*
 .phpunit.result.cache
 vendor/*
 composer.lock
+.system-test/

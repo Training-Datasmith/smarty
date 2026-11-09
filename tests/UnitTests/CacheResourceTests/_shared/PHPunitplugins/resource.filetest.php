@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-use Smarty\Resource\FilePlugin;
+use Smarty\Resource\File_Plugin;
 use Smarty\Template;
 use Smarty\Template\Source;
 
-class Smarty_Resource_FiletestPlugin extends FilePlugin
+class Smarty_Resource_FiletestPlugin extends File_Plugin
 {
     /**
      * populate Source Object with metadata from Resource
@@ -18,8 +18,8 @@ class Smarty_Resource_FiletestPlugin extends FilePlugin
     {
         parent::populate($source, $_template);
         if ($source->exists) {
-            if (isset(CacheResourceTestCommon::$touchResource[$source->getResourceName()])) {
-                $source->timestamp = CacheResourceTestCommon::$touchResource[$source->getResourceName()];
+            if (isset(Cache_Resource_Test_Common::$touchResource[$source->get_resource_name()])) {
+                $source->timestamp = Cache_Resource_Test_Common::$touchResource[$source->get_resource_name()];
             }
         }
     }

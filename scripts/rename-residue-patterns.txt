@@ -1,0 +1,21 @@
+# High-signal old repo-owned identifiers that must not remain in PHP/config after rename.
+TemplateBase
+assignGlobal
+getTemplateVars
+setTemplateVars
+clearAllAssign
+clearAllCache
+createTemplate
+BlockHandlerInterface
+FunctionHandlerInterface
+AttributeFunctionHandlerInterface
+ModifierCompilerInterface
+BCPluginsAdapter
+BCPluginWrapper
+DefaultExtension
+CoreExtension
+TemplateCompiler
+ConfigfileParser
+TemplateParser
+TemplateLexer
+ConfigfileLexer

@@ -16,7 +16,7 @@ use Smarty\Template;
 use Smarty\Template\Config;
 use Smarty\Template\Source;
 
-class Smarty_Resource_Db4 extends Smarty\Resource\BasePlugin
+class Smarty_Resource_Db4 extends Smarty\Resource\Base_Plugin
 {
     public function populate(Source $source, ?Template $_template = null): void
     {
@@ -25,7 +25,7 @@ class Smarty_Resource_Db4 extends Smarty\Resource\BasePlugin
         $source->exists = true;
     }
 
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
         if ($source instanceof Config) {
             return "foo = 'bar'\n";

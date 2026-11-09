@@ -10,7 +10,7 @@ class smarty_compiler_testclose extends Base
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
 
-        $this->closeTag($compiler, 'test');
+        $this->close_tag($compiler, 'test');
 
         return '';
     }

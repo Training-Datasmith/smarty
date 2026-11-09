@@ -15,7 +15,7 @@ declare(strict_types=1);
 use Smarty\Template;
 use Smarty\Template\Source;
 
-class Smarty_Resource_Db3 extends Smarty\Resource\BasePlugin
+class Smarty_Resource_Db3 extends Smarty\Resource\Base_Plugin
 {
     public function populate(Source $source, ?Template $_template = null): void
     {
@@ -24,7 +24,7 @@ class Smarty_Resource_Db3 extends Smarty\Resource\BasePlugin
         $source->exists = true;
     }
 
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
         return '{$x="hello world"}{$x}';
     }

@@ -1,0 +1,29 @@
+services:
+  mariadb:
+    image: mariadb:11.4@sha256:d1891ede5a559f1086f55053bb8cc1569b0298338c4d72d71725a7f74f6ba620
+    network_mode: host
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: test
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+  app:
+    build:
+      context: .
+      dockerfile: docker/system-test/Dockerfile
+    working_dir: /app
+    network_mode: host
+    volumes:
+      - .:/app
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    environment:
+      SMARTY_ENABLE_PDO_CACHE_TESTS: "1"
+      SMARTY_TEST_DB_DSN: mysql:dbname=test;host=127.0.0.1
+      SMARTY_TEST_DB_USER: root
+      SMARTY_TEST_DB_PASSWD: ""

@@ -1,0 +1,24 @@
+<?php
+
+declare (strict_types=1);
+namespace Smarty\Compile;
+
+/**
+ * This class does extend all internal compile plugins
+ *
+ */
+interface Compiler_Interface
+{
+    /**
+     * Compiles code for the tag
+     *
+     * @param array $args array with attributes from parser
+     * @param \Smarty\Compiler\Template $compiler compiler object
+     * @param array $parameter array with compilation parameter
+     *
+     * @return string compiled code as a string
+     * @throws \Smarty\Compiler_Exception
+     */
+    public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string;
+    public function is_cacheable(): bool;
+}

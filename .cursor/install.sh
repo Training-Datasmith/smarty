@@ -8,4 +8,4 @@ if ! php -m | grep -qi pdo_mysql; then
   exit 1
 fi
 
-composer install --no-interaction --prefer-dist
+composer update --no-interaction --prefer-dist

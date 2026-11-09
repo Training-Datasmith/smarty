@@ -1,12 +1,10 @@
 <?php
 
-declare(strict_types=1);
-
-namespace Smarty\FunctionHandler;
+declare (strict_types=1);
+namespace Smarty\Function_Handler;
 
 use Smarty\Exception;
 use Smarty\Template;
-
 /**
  * count(Countable|array $value, int $mode = COUNT_NORMAL): int
  * If the optional mode parameter is set to COUNT_RECURSIVE (or 1), count() will recursively count the array.
@@ -19,21 +17,15 @@ class Count extends Base
 {
     public function handle($params, Template $template): int
     {
-
         $params = array_values($params ?? []);
-
         if (count($params) < 1 || count($params) > 2) {
             throw new Exception('Invalid number of arguments for count. count expects 1 or 2 parameters.');
         }
-
         $value = $params[0];
-
         if ($value instanceof \Countable) {
             return $value->count();
         }
-
         $mode = count($params) == 2 ? (int) $params[1] : COUNT_NORMAL;
         return count((array) $value, $mode);
     }
-
 }

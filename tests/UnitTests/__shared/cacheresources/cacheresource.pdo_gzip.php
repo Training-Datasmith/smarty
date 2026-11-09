@@ -8,8 +8,8 @@ require_once __DIR__ . '/cacheresource.pdo.php';
  * PDO Cache Handler with GZIP support
  * Example usage :
  *      $cnx    =   new PDO("mysql:host=localhost;dbname=mydb", "username", "password");
- *      $smarty->setCachingType('pdo_gzip');
- *      $smarty->registerCacheResource('pdo_gzip', new Smarty_CacheResource_Pdo_Gzip($cnx, 'smarty_cache'));
+ *      $smarty->set_caching_type('pdo_gzip');
+ *      $smarty->register_cache_resource('pdo_gzip', new Smarty_CacheResource_Pdo_Gzip($cnx, 'smarty_cache'));
  *
  * @require Smarty_CacheResource_Pdo class
  * @author  Beno!t POLASZEK - 2014

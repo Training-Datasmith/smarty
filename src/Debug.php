@@ -1,7 +1,6 @@
 <?php
 
-declare(strict_types=1);
-
+declare (strict_types=1);
 namespace Smarty;
 
 /**
@@ -18,28 +17,24 @@ class Debug extends Data
      * @var array
      */
     public $template_data = [];
-
     /**
      * List of uid's which shall be ignored
      *
      * @var array
      */
     public $ignore_uid = [];
-
     /**
      * Index of display() and fetch() calls
      *
      * @var int
      */
     public $index = 0;
-
     /**
      * Counter for window offset
      *
      * @var int
      */
     public $offset = 0;
-
     /**
      * Start logging template
      *
@@ -48,15 +43,14 @@ class Debug extends Data
      */
     public function start_template(Template $template, $mode = null): void
     {
-        if (isset($mode) && !$template->_isSubTpl()) {
+        if (isset($mode) && !$template->_is_sub_tpl()) {
             $this->index++;
             $this->offset++;
-            $this->template_data[ $this->index ] = null;
+            $this->template_data[$this->index] = null;
         }
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'start_template_time' ] = microtime(true);
+        $this->template_data[$this->index][$key]['start_template_time'] = microtime(true);
     }
-
     /**
      * End logging of cache time
      *
@@ -65,66 +59,58 @@ class Debug extends Data
     public function end_template(Template $template): void
     {
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'total_time' ] +=
-            microtime(true) - $this->template_data[ $this->index ][ $key ][ 'start_template_time' ];
+        $this->template_data[$this->index][$key]['total_time'] += microtime(true) - $this->template_data[$this->index][$key]['start_template_time'];
     }
-
     /**
      * Start logging of compile time
      */
     public function start_compile(Template $template): void
     {
         static $_is_stringy = ['string' => true, 'eval' => true];
-        if (!empty($template->getCompiler()->trace_uid)) {
-            $key = $template->getCompiler()->trace_uid;
-            if (!isset($this->template_data[ $this->index ][ $key ])) {
-                $this->saveTemplateData($_is_stringy, $template, $key);
+        if (!empty($template->get_compiler()->trace_uid)) {
+            $key = $template->get_compiler()->trace_uid;
+            if (!isset($this->template_data[$this->index][$key])) {
+                $this->save_template_data($_is_stringy, $template, $key);
             }
         } else {
-            if (isset($this->ignore_uid[ $template->getSource()->uid ])) {
+            if (isset($this->ignore_uid[$template->get_source()->uid])) {
                 return;
             }
             $key = $this->get_key($template);
         }
-        $this->template_data[ $this->index ][ $key ][ 'start_time' ] = microtime(true);
+        $this->template_data[$this->index][$key]['start_time'] = microtime(true);
     }
-
     /**
      * End logging of compile time
      */
     public function end_compile(Template $template): void
     {
-        if (!empty($template->getCompiler()->trace_uid)) {
-            $key = $template->getCompiler()->trace_uid;
+        if (!empty($template->get_compiler()->trace_uid)) {
+            $key = $template->get_compiler()->trace_uid;
         } else {
-            if (isset($this->ignore_uid[ $template->getSource()->uid ])) {
+            if (isset($this->ignore_uid[$template->get_source()->uid])) {
                 return;
             }
             $key = $this->get_key($template);
         }
-        $this->template_data[ $this->index ][ $key ][ 'compile_time' ] +=
-            microtime(true) - $this->template_data[ $this->index ][ $key ][ 'start_time' ];
+        $this->template_data[$this->index][$key]['compile_time'] += microtime(true) - $this->template_data[$this->index][$key]['start_time'];
     }
-
     /**
      * Start logging of render time
      */
     public function start_render(Template $template): void
     {
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'start_time' ] = microtime(true);
+        $this->template_data[$this->index][$key]['start_time'] = microtime(true);
     }
-
     /**
      * End logging of compile time
      */
     public function end_render(Template $template): void
     {
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'render_time' ] +=
-            microtime(true) - $this->template_data[ $this->index ][ $key ][ 'start_time' ];
+        $this->template_data[$this->index][$key]['render_time'] += microtime(true) - $this->template_data[$this->index][$key]['start_time'];
     }
-
     /**
      * Start logging of cache time
      *
@@ -133,9 +119,8 @@ class Debug extends Data
     public function start_cache(Template $template): void
     {
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'start_time' ] = microtime(true);
+        $this->template_data[$this->index][$key]['start_time'] = microtime(true);
     }
-
     /**
      * End logging of cache time
      *
@@ -144,10 +129,8 @@ class Debug extends Data
     public function end_cache(Template $template): void
     {
         $key = $this->get_key($template);
-        $this->template_data[ $this->index ][ $key ][ 'cache_time' ] +=
-            microtime(true) - $this->template_data[ $this->index ][ $key ][ 'start_time' ];
+        $this->template_data[$this->index][$key]['cache_time'] += microtime(true) - $this->template_data[$this->index][$key]['start_time'];
     }
-
     /**
      * Register template object
      *
@@ -156,7 +139,6 @@ class Debug extends Data
     public function register_template(Template $template)
     {
     }
-
     /**
      * Register data object
      *
@@ -165,7 +147,6 @@ class Debug extends Data
     public static function register_data(Data $data)
     {
     }
-
     /**
      * Opens a window for the Smarty Debugging Console and display the data
      *
@@ -178,24 +159,24 @@ class Debug extends Data
     {
         if (!$full) {
             $this->offset++;
-            $savedIndex = $this->index;
+            $saved_index = $this->index;
             $this->index = 9999;
         }
-        $smarty = $obj->getSmarty();
+        $smarty = $obj->get_smarty();
         // create fresh instance of smarty for displaying the debug console
         // to avoid problems if the application did overload the Smarty class
-        $debObj = new Smarty();
+        $deb_obj = new Smarty();
         // copy the working dirs from application
-        $debObj->setCompileDir($smarty->getCompileDir());
-        $debObj->compile_check = Smarty::COMPILECHECK_ON;
-        $debObj->security_policy = null;
-        $debObj->debugging = false;
-        $debObj->debugging_ctrl = 'NONE';
-        $debObj->error_reporting = E_ALL & ~E_NOTICE;
-        $debObj->debug_tpl = $smarty->debug_tpl ?? 'file:' . __DIR__ . '/debug.tpl';
-        $debObj->registered_resources = [];
-        $debObj->escape_html = true;
-        $debObj->caching = Smarty::CACHING_OFF;
+        $deb_obj->set_compile_dir($smarty->get_compile_dir());
+        $deb_obj->compile_check = Smarty::COMPILECHECK_ON;
+        $deb_obj->security_policy = null;
+        $deb_obj->debugging = false;
+        $deb_obj->debugging_ctrl = 'NONE';
+        $deb_obj->error_reporting = E_ALL & ~E_NOTICE;
+        $deb_obj->debug_tpl = $smarty->debug_tpl ?? 'file:' . __DIR__ . '/debug.tpl';
+        $deb_obj->registered_resources = [];
+        $deb_obj->escape_html = true;
+        $deb_obj->caching = Smarty::CACHING_OFF;
         // prepare information of assigned variables
         $ptr = $this->get_debug_vars($obj);
         $_assigned_vars = $ptr->tpl_vars;
@@ -203,12 +184,12 @@ class Debug extends Data
         $_config_vars = $ptr->config_vars;
         ksort($_config_vars);
         $debugging = $smarty->debugging;
-        $templateName = $obj->getSource()->type . ':' . $obj->getSource()->name;
-        $displayMode = $debugging === 2 || !$full;
+        $template_name = $obj->get_source()->type . ':' . $obj->get_source()->name;
+        $display_mode = $debugging === 2 || !$full;
         $offset = $this->offset * 50;
-        $_template = $debObj->doCreateTemplate($debObj->debug_tpl);
+        $_template = $deb_obj->do_create_template($deb_obj->debug_tpl);
         if ($obj instanceof Template) {
-            $_template->assign('template_name', $templateName);
+            $_template->assign('template_name', $template_name);
         } elseif ($obj instanceof Smarty || $full) {
             $_template->assign('template_data', $this->template_data[$this->index]);
         } else {
@@ -217,15 +198,14 @@ class Debug extends Data
         $_template->assign('assigned_vars', $_assigned_vars);
         $_template->assign('config_vars', $_config_vars);
         $_template->assign('execution_time', microtime(true) - $smarty->start_time);
-        $_template->assign('targetWindow', $displayMode ? md5("$offset$templateName") : '__Smarty__');
+        $_template->assign('targetWindow', $display_mode ? md5("{$offset}{$template_name}") : '__Smarty__');
         $_template->assign('offset', $offset);
         echo $_template->fetch();
         $this->index--;
         if (!$full) {
-            $this->index = $savedIndex;
+            $this->index = $saved_index;
         }
     }
-
     /**
      * Recursively gets variables from all template/data scopes
      *
@@ -244,17 +224,13 @@ class Debug extends Data
         foreach ($obj->tpl_vars as $key => $var) {
             foreach ($var as $varkey => $varvalue) {
                 if ($varkey === 'value') {
-                    $tpl_vars[ $key ][ $varkey ] = $varvalue;
-                } else {
-                    if ($varkey === 'nocache') {
-                        if ($varvalue === true) {
-                            $tpl_vars[ $key ][ $varkey ] = $varvalue;
-                        }
-                    } else {
-                        if ($varkey !== 'scope' || $varvalue !== 0) {
-                            $tpl_vars[ $key ][ 'attributes' ][ $varkey ] = $varvalue;
-                        }
+                    $tpl_vars[$key][$varkey] = $varvalue;
+                } else if ($varkey === 'nocache') {
+                    if ($varvalue === true) {
+                        $tpl_vars[$key][$varkey] = $varvalue;
                     }
+                } else if ($varkey !== 'scope' || $varvalue !== 0) {
+                    $tpl_vars[$key]['attributes'][$varkey] = $varvalue;
                 }
             }
             $tpl_vars[$key]['scope'] = get_class($obj) . ':' . spl_object_id($obj);
@@ -262,21 +238,20 @@ class Debug extends Data
         if (isset($obj->parent)) {
             $parent = $this->get_debug_vars($obj->parent);
             foreach ($parent->tpl_vars as $name => $pvar) {
-                if (isset($tpl_vars[ $name ]) && $tpl_vars[ $name ][ 'value' ] === $pvar[ 'value' ]) {
-                    $tpl_vars[ $name ][ 'scope' ] = $pvar[ 'scope' ];
+                if (isset($tpl_vars[$name]) && $tpl_vars[$name]['value'] === $pvar['value']) {
+                    $tpl_vars[$name]['scope'] = $pvar['scope'];
                 }
             }
             $tpl_vars = array_merge($parent->tpl_vars, $tpl_vars);
             foreach ($parent->config_vars as $name => $pvar) {
-                if (isset($config_vars[ $name ]) && $config_vars[ $name ][ 'value' ] === $pvar[ 'value' ]) {
-                    $config_vars[ $name ][ 'scope' ] = $pvar[ 'scope' ];
+                if (isset($config_vars[$name]) && $config_vars[$name]['value'] === $pvar['value']) {
+                    $config_vars[$name]['scope'] = $pvar['scope'];
                 }
             }
             $config_vars = array_merge($parent->config_vars, $config_vars);
         }
-        return (object)['tpl_vars' => $tpl_vars, 'config_vars' => $config_vars];
+        return (object) ['tpl_vars' => $tpl_vars, 'config_vars' => $config_vars];
     }
-
     /**
      * Return key into $template_data for template
      *
@@ -287,31 +262,28 @@ class Debug extends Data
     private function get_key(Template $template)
     {
         static $_is_stringy = ['string' => true, 'eval' => true];
-
-        $key = $template->getSource()->uid;
-        if (isset($this->template_data[ $this->index ][ $key ])) {
+        $key = $template->get_source()->uid;
+        if (isset($this->template_data[$this->index][$key])) {
             return $key;
         }
-        $this->saveTemplateData($_is_stringy, $template, $key);
-        $this->template_data[ $this->index ][ $key ][ 'total_time' ] = 0;
+        $this->save_template_data($_is_stringy, $template, $key);
+        $this->template_data[$this->index][$key]['total_time'] = 0;
         return $key;
     }
-
     /**
      * Ignore template
      */
     public function ignore(Template $template): void
     {
-        $this->ignore_uid[$template->getSource()->uid] = true;
+        $this->ignore_uid[$template->get_source()->uid] = true;
     }
-
     /**
      * handle 'URL' debugging mode
      */
-    public function debugUrl(Smarty $smarty): void
+    public function debug_url(Smarty $smarty): void
     {
-        if (isset($_SERVER[ 'QUERY_STRING' ])) {
-            $_query_string = $_SERVER[ 'QUERY_STRING' ];
+        if (isset($_SERVER['QUERY_STRING'])) {
+            $_query_string = $_SERVER['QUERY_STRING'];
         } else {
             $_query_string = '';
         }
@@ -328,20 +300,16 @@ class Debug extends Data
                 // enable debugging for this page
                 $smarty->debugging = true;
             }
-        } else {
-            if (isset($_COOKIE[ 'SMARTY_DEBUG' ])) {
-                $smarty->debugging = true;
-            }
+        } else if (isset($_COOKIE['SMARTY_DEBUG'])) {
+            $smarty->debugging = true;
         }
     }
-
-    private function saveTemplateData(array $_is_stringy, Template $template, string $key): void
+    private function save_template_data(array $_is_stringy, Template $template, string $key): void
     {
-        if (isset($_is_stringy[$template->getSource()->type])) {
-            $this->template_data[$this->index][$key]['name'] =
-                '\'' . substr($template->getSource()->name, 0, 25) . '...\'';
+        if (isset($_is_stringy[$template->get_source()->type])) {
+            $this->template_data[$this->index][$key]['name'] = '\'' . substr($template->get_source()->name, 0, 25) . '...\'';
         } else {
-            $this->template_data[$this->index][$key]['name'] = $template->getSource()->getResourceName();
+            $this->template_data[$this->index][$key]['name'] = $template->get_source()->get_resource_name();
         }
         $this->template_data[$this->index][$key]['compile_time'] = 0;
         $this->template_data[$this->index][$key]['render_time'] = 0;

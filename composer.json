@@ -29,13 +29,23 @@
         "issues": "https://github.com/smarty-php/smarty/issues",
         "forum": "https://github.com/smarty-php/smarty/discussions"
     },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://raw.githubusercontent.com/Training-Datasmith/composer-index/remote-test-2026-11-09",
+            "canonical": false
+        }
+    ],
     "require": {
         "php": "^7.2 || ^8.0",
-        "symfony/polyfill-mbstring": "^1.27"
+        "symfony/polyfill-mbstring": "dev-remote-test-2026-10-07 as 1.33.99"
     },
     "autoload": {
         "psr-4" : {
-            "Smarty\\" : "src/"
+            "Smarty\\" : "src/",
+            "Smarty\\Block_Handler\\": "src/BlockHandler/",
+            "Smarty\\Function_Handler\\": "src/FunctionHandler/",
+            "Smarty\\Parse_Tree\\": "src/ParseTree/"
         },
         "files": [
             "src/functions.php"
@@ -47,7 +57,19 @@
         }
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.5 || ^7.5",
+        "phpunit/phpunit": "^8.5.52",
         "smarty/smarty-lexer": "^4.0.2"
+    },
+    "scripts": {
+        "test": [
+            "@php scripts/check-cluster-pins.php",
+            "@php scripts/check-rename-residue.php",
+            "vendor/bin/phpunit --colors=never"
+        ],
+        "check-pins": "@php scripts/check-cluster-pins.php",
+        "check-rename-residue": "@php scripts/check-rename-residue.php"
+    },
+    "config": {
+        "sort-packages": true
     }
 }

@@ -12,11 +12,11 @@ declare(strict_types=1);
  * -------------------------------------------------------------
  */
 
-use Smarty\Resource\RecompiledPlugin;
+use Smarty\Resource\Recompiled_Plugin;
 use Smarty\Template;
 use Smarty\Template\Source;
 
-class Smarty_Resource_Db2 extends RecompiledPlugin
+class Smarty_Resource_Db2 extends Recompiled_Plugin
 {
     public function populate(Source $source, ?Template $_template = null): void
     {
@@ -25,7 +25,7 @@ class Smarty_Resource_Db2 extends RecompiledPlugin
         $source->exists = true;
     }
 
-    public function getContent(Source $source)
+    public function get_content(Source $source)
     {
         return '{$x="hello world"}{$x}';
     }

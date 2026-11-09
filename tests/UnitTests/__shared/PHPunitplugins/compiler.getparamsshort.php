@@ -45,7 +45,7 @@ class smarty_compiler_getparamsshort extends Base
 
     public function compile($args, \Smarty\Compiler\Template $compiler, $parameter = [], $tag = null, $function = null): string
     {
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
         $output = '<?php echo "array(';
         foreach ($_attr as $key => $value) {
             $output .= "'{$key}'=>\" . ";

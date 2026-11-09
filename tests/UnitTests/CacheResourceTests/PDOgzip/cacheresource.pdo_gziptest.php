@@ -10,14 +10,14 @@ class Smarty_CacheResource_Pdo_Gziptest extends Smarty_CacheResource_Pdo_Gzip
 {
     public $lockTime = 0;
 
-    public function hasLock(\Smarty\Smarty $smarty, Cached $cached)
+    public function has_lock(\Smarty\Smarty $smarty, Cached $cached)
     {
         if ($this->lockTime) {
             $this->lockTime--;
             if (!$this->lockTime) {
-                $this->releaseLock($smarty, $cached);
+                $this->release_lock($smarty, $cached);
             }
         }
-        return parent::hasLock($smarty, $cached);
+        return parent::has_lock($smarty, $cached);
     }
 }

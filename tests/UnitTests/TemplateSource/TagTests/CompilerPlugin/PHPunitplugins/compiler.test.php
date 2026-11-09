@@ -11,9 +11,9 @@ class smarty_compiler_test extends Base
     {
         $this->required_attributes = ['data'];
 
-        $_attr = $this->getAttributes($compiler, $args);
+        $_attr = $this->get_attributes($compiler, $args);
 
-        $this->openTag($compiler, 'test');
+        $this->open_tag($compiler, 'test');
 
         return "<?php echo 'test output'; ?>";
     }

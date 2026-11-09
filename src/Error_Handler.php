@@ -1,0 +1,84 @@
+<?php
+
+declare (strict_types=1);
+namespace Smarty;
+
+/**
+ * Smarty error handler to fix new error levels in PHP8 for backwards compatibility
+ * @author     Simon Wisselink
+ */
+class Error_Handler
+{
+    /**
+     * Allows {$foo->propName} where propName is undefined.
+     * @var bool
+     */
+    public $allow_undefined_properties = true;
+    /**
+     * Allows {$foo.bar} where bar is unset and {$foo.bar1.bar2} where either bar1 or bar2 is unset.
+     * @var bool
+     */
+    public $allow_undefined_array_keys = true;
+    /**
+     * Allows {$foo->bar} where bar is not an object (e.g. null or false).
+     * @var bool
+     */
+    public $allow_dereferencing_non_objects = true;
+    private $previous_error_handler;
+    /**
+     * Enable error handler to intercept errors
+     */
+    public function activate(): void
+    {
+        /*
+            Error muting is done because some people implemented custom error_handlers using
+            https://php.net/set_error_handler and for some reason did not understand the following paragraph:
+        
+            It is important to remember that the standard PHP error handler is completely bypassed for the
+            error types specified by error_types unless the callback function returns FALSE.
+            error_reporting() settings will have no effect and your error handler will be called regardless -
+            however you are still able to read the current value of error_reporting and act appropriately.
+            Of particular note is that this value will be 0 if the statement that caused the error was
+            prepended by the @ error-control operator.
+        */
+        $this->previous_error_handler = set_error_handler([$this, 'handle_error']);
+    }
+    /**
+     * Disable error handler
+     */
+    public function deactivate(): void
+    {
+        restore_error_handler();
+        $this->previous_error_handler = null;
+    }
+    /**
+     * Error Handler to mute expected messages
+     *
+     * @link https://php.net/set_error_handler
+     *
+     * @param integer $errno Error level
+     * @param         $errstr
+     * @param         $errfile
+     * @param         $errline
+     * @param         $errcontext
+     *
+     * @return bool
+     */
+    public function handle_error($errno, $errstr, $errfile, $errline, $errcontext = [])
+    {
+        if ($this->allow_undefined_properties && preg_match('/^(Undefined property)/', $errstr)) {
+            return true;
+            // suppresses this error
+        }
+        if ($this->allow_undefined_array_keys && preg_match('/^(Undefined index|Undefined array key|Trying to access array offset on)/', $errstr)) {
+            return true;
+            // suppresses this error
+        }
+        if ($this->allow_dereferencing_non_objects && preg_match('/^Attempt to read property ".+?" on/', $errstr)) {
+            return true;
+            // suppresses this error
+        }
+        // pass all other errors through to the previous error handler or to the default PHP error handler
+        return $this->previous_error_handler ? call_user_func($this->previous_error_handler, $errno, $errstr, $errfile, $errline, $errcontext) : false;
+    }
+}
