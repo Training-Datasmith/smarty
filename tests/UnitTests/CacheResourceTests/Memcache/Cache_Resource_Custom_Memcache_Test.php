@@ -29,17 +29,17 @@ class Cache_Resource_Custom_Memcache_Test extends Cache_Resource_Test_Common
         if (!class_exists('Memcache')) {
             $this->markTestSkipped('Memcache not available');
         }
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         parent::setUp();
-        $this->smarty->set_caching_type('memcachetest');
+        $this->smarty->set_cache_resource(new Smarty_CacheResource_Memcachetest());
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
-    protected function doClearCacheAssertion($a, $b)
+    protected function do_clear_cache_assertion($a, $b)
     {
         $this->assertEquals(- 1, $b);
     }

@@ -13,18 +13,18 @@ use Smarty\Compiler_Exception;
 /**
  * class for security test
  */
-class SecurityTest extends PHPUnit_Smarty
+class Security_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
         $this->smarty->set_force_compile(true);
         $this->smarty->enable_security();
     }
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -269,7 +269,7 @@ class SecurityTest extends PHPUnit_Smarty
      */
     public function testTemplateTrustedStream()
     {
-        stream_wrapper_register('global', ResourceStreamSecurity::class)
+        stream_wrapper_register('global', Resource_Stream_Security::class)
         or die('Failed to register protocol');
         $fp = fopen('global://mytest', 'r+');
         fwrite($fp, 'hello world {$foo}');
@@ -288,7 +288,7 @@ class SecurityTest extends PHPUnit_Smarty
     {
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('stream \'global\' not allowed by security setting');
-        stream_wrapper_register('global', ResourceStreamSecurity::class)
+        stream_wrapper_register('global', Resource_Stream_Security::class)
         or die('Failed to register protocol');
         $fp = fopen('global://mytest', 'r+');
         fwrite($fp, 'hello world {$foo}');
@@ -349,7 +349,7 @@ class mysecuritystaticclass
 }
 
 #[AllowDynamicProperties]
-class ResourceStreamSecurity
+class Resource_Stream_Security
 {
     private $position;
     private $varname;
@@ -402,20 +402,20 @@ class ResourceStreamSecurity
         $p = &$this->position;
         switch ($whence) {
             case SEEK_SET:
-                $newPos = $offset;
+                $new_Pos = $offset;
                 break;
             case SEEK_CUR:
-                $newPos = $p + $offset;
+                $new_Pos = $p + $offset;
                 break;
             case SEEK_END:
-                $newPos = $l + $offset;
+                $new_Pos = $l + $offset;
                 break;
             default:
                 return false;
         }
-        $ret = ($newPos >= 0 && $newPos <= $l);
+        $ret = ($new_Pos >= 0 && $new_Pos <= $l);
         if ($ret) {
-            $p = $newPos;
+            $p = $new_Pos;
         }
         return $ret;
     }

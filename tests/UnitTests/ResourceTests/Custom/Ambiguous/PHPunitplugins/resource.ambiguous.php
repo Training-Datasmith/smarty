@@ -24,7 +24,7 @@ class Smarty_Resource_AmbiguousPlugin extends File_Plugin
         //        parent::__construct();
     }
 
-    public function setSegment($segment)
+    public function set_segment($segment)
     {
         $this->segment = $segment;
     }

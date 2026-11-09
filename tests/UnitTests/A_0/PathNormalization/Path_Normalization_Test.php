@@ -12,14 +12,14 @@ declare(strict_types=1);
  *
  *
  */
-class PathNormalizationTest extends PHPUnit_Smarty
+class Path_Normalization_Test extends PHPUnit_Smarty
 {
     /*
      * Setup test fixture
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testNormalizeToAbsolute()

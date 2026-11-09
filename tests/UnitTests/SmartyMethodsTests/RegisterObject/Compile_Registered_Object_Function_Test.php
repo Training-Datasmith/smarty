@@ -15,27 +15,27 @@ declare(strict_types=1);
  *
  *
  */
-class CompileRegisteredObjectFunctionTest extends PHPUnit_Smarty
+class Compile_Registered_Object_Function_Test extends PHPUnit_Smarty
 {
     /**
-     * @var RegObject
+     * @var Reg_Object
      */
     private $object;
 
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
         $this->smarty->set_force_compile(true);
         $this->smarty->disable_security();
-        $this->object = new RegObject();
+        $this->object = new Reg_Object();
         $this->smarty->register_object('objecttest', $this->object, 'myhello', true, 'myblock');
         $this->smarty->register_object('objectprop', $this->object);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test resgistered object as function
@@ -92,7 +92,7 @@ class CompileRegisteredObjectFunctionTest extends PHPUnit_Smarty
      */
 }
 
-class RegObject
+class Reg_Object
 {
     public $prop = 'hello world';
 

@@ -15,17 +15,17 @@ declare(strict_types=1);
  *
  *
  */
-class CompileCaptureTest extends PHPUnit_Smarty
+class Compile_Capture_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -33,20 +33,20 @@ class CompileCaptureTest extends PHPUnit_Smarty
      *
      * @not                 runInSeparateProcess
      *
-     * @dataProvider        dataTestCapture
+     * @dataProvider data_test_capture
      */
-    public function testCapture($code, $result, $testName, $testNumber)
+    public function testCapture($code, $result, $testName, $test_number)
     {
-        $file = "testCapture{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code);
-        $this->smarty->assign_global('file', $file);
+        $file = "testCapture{$test_number}.tpl";
+        $this->make_template_file($file, $code);
+        $this->smarty->assign('file', $file);
         $this->assertEquals($result, $this->smarty->fetch($file), "testCapture - {$code} - {$testName}");
     }
 
     /*
       * Data provider für testCapture
       */
-    public function dataTestCapture()
+    public function data_test_capture()
     {
         $i = 1;
         /*
@@ -109,14 +109,14 @@ class CompileCaptureTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -129,7 +129,7 @@ class CompileCaptureTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*

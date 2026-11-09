@@ -5,16 +5,16 @@ declare(strict_types=1);
 /**
  * Tests the ::has_variable method
  */
-class HasVariableTest extends PHPUnit_Smarty
+class Has_Variable_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testSimpleTrue()

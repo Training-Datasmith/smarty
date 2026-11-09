@@ -5,16 +5,16 @@ declare(strict_types=1);
 /**
  * class testing fetch function
  */
-class PluginFunctionFetchTest extends PHPUnit_Smarty
+class Plugin_Function_Fetch_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -48,7 +48,7 @@ class PluginFunctionFetchTest extends PHPUnit_Smarty
     {
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('not trusted file path');
-        $this->cleanDirs();
+        $this->clean_dirs();
         $dir = $this->smarty->get_template_dir();
         $this->smarty->enable_security();
         $this->smarty->fetch('string:{fetch file=\''. $dir[0]. '../../../../../etc/passwd\'}');
@@ -63,7 +63,7 @@ class PluginFunctionFetchTest extends PHPUnit_Smarty
     {
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('not trusted file path');
-        $this->cleanDirs();
+        $this->clean_dirs();
         $this->smarty->get_template_dir();
         $this->smarty->enable_security();
         $this->smarty->set_template_dir('/templates');

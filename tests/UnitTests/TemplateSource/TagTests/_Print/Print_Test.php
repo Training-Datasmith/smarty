@@ -15,29 +15,29 @@ declare(strict_types=1);
  *
  *
  */
-class PrintTest extends PHPUnit_Smarty
+class Print_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * Test Output spacings
      *
      *
-     * @dataProvider        dataTestOutputSpacing
+     * @dataProvider data_test_output_spacing
      *
      */
-    public function testOutputSpacing($code, $result, $testName, $testNumber)
+    public function testOutputSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testSpacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -50,12 +50,12 @@ class PrintTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestOutputSpacing
+     * @dataProvider data_test_output_spacing
      *
      */
-    public function testOutputSpacingNocache($code, $result, $testName, $testNumber)
+    public function testOutputSpacingNocache($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testSpacing_{$name}.tpl";
         $this->smarty->set_compile_id('1');
         $this->smarty->set_caching(1);
@@ -71,12 +71,12 @@ class PrintTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestOutputSpacing
+     * @dataProvider data_test_output_spacing
      *
      */
-    public function testOutputSpacingNocache2($code, $result, $testName, $testNumber)
+    public function testOutputSpacingNocache2($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testSpacing_{$name}.tpl";
         $this->smarty->set_compile_id('1');
         $this->smarty->set_caching(1);
@@ -92,7 +92,7 @@ class PrintTest extends PHPUnit_Smarty
     /*
       * Data provider für testOutputSpacing
       */
-    public function dataTestOutputSpacing()
+    public function data_test_output_spacing()
     {
         $i = 1;
         /*

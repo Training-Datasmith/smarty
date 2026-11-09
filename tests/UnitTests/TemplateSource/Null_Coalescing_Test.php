@@ -1,13 +1,12 @@
 <?php
 
 declare(strict_types=1);
-
-class NullCoalescingTest extends PHPUnit_Smarty
+class Null_Coalescing_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(sys_get_temp_dir());
-        $this->cleanDirs();
+        $this->set_up_smarty(sys_get_temp_dir());
+        $this->clean_dirs();
     }
 
     public function testUndefined()
@@ -17,7 +16,7 @@ class NullCoalescingTest extends PHPUnit_Smarty
     }
 
     /**
-     * @dataProvider dataForOther
+     * @dataProvider data_for_other
      */
     public function testOther($value, $expected)
     {
@@ -26,7 +25,7 @@ class NullCoalescingTest extends PHPUnit_Smarty
         $this->assertEquals($expected, $this->smarty->fetch($tpl));
     }
 
-    public function dataForOther()
+    public function data_for_other()
     {
         return [
             [null, 'undefined'],

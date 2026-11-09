@@ -23,11 +23,11 @@ function smarty_test_env_enabled(string $name): bool
     return in_array(strtolower($value), ['1', 'true', 'yes', 'on'], true);
 }
 
-$pdoCacheTests = smarty_test_env_enabled('SMARTY_ENABLE_PDO_CACHE_TESTS');
+$pdo_cache_tests = smarty_test_env_enabled('SMARTY_ENABLE_PDO_CACHE_TESTS');
 
 define('MysqlCacheEnable', false);
-define('PdoCacheEnable', $pdoCacheTests);
-define('PdoGzipCacheEnable', $pdoCacheTests);
+define('PdoCacheEnable', $pdo_cache_tests);
+define('PdoGzipCacheEnable', $pdo_cache_tests);
 define('MysqlResourceEnable', false);
 define('DB_DSN', getenv('SMARTY_TEST_DB_DSN') ?: 'mysql:dbname=test;host=localhost');
 define('DB_USER', getenv('SMARTY_TEST_DB_USER') ?: 'root');

@@ -15,18 +15,18 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileBlockPluginTest extends PHPUnit_Smarty
+class Compile_Block_Plugin_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $this->smarty->disable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -180,7 +180,10 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
      */
     public function testBlockPluginDefault1()
     {
-        $this->smarty->register_default_plugin_handler('my_block_plugin_handler');
+        $this->assert_user_deprecation(
+            'register_default_plugin_handler',
+            fn () => $this->smarty->register_default_plugin_handler('my_block_plugin_handler')
+        );
         $this->assertEquals('scriptblock hello world', $this->smarty->fetch('default1.tpl'));
     }
 
@@ -189,45 +192,48 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
      */
     public function testBlockPluginDefault2()
     {
-        $this->smarty->register_default_plugin_handler('my_block_plugin_handler');
+        $this->assert_user_deprecation(
+            'register_default_plugin_handler',
+            fn () => $this->smarty->register_default_plugin_handler('my_block_plugin_handler')
+        );
         $this->assertEquals('defaultblock hello world', $this->smarty->fetch('default2.tpl'));
     }
 
     /**
      * Test caching
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCache(
         $is_cached,
         $caching,
         $cachable,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
-        $resultNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
+        $result_Number,
         $nocache,
         $compileid,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'prefilterTest']);
+        $this->smarty->register_filter('pre', [$this, 'prefilter_test']);
         $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_BLOCK, 'cachetest', 'myblockplugintest2', $cachable);
         $this->smarty->set_compile_id($compileid);
         $this->smarty->caching = $caching;
         $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('test', $testNumber);
-        $this->smarty->assign('var', $testNumber, $nocache);
+        $this->smarty->assign('test', $test_number);
+        $this->smarty->assign('var', $test_number, $nocache);
         $tpl = $this->smarty->create_template('caching.tpl', null, null, $this->smarty);
         if (isset($is_cached)) {
             $this->assertEquals($is_cached, $tpl->is_cached(), $testName . ' - is_cached()');
         }
         $result = $this->smarty->fetch($tpl);
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure test number'
         );
-        $this->assertStringContainsString("block test{$resultNumber}", $result, $testName . ' - fetch() failure result');
+        $this->assertStringContainsString("block test{$result_Number}", $result, $testName . ' - fetch() failure result');
     }
 
     public function data()
@@ -249,13 +255,13 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /**
      * Test spacings
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testSpacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -268,7 +274,7 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*
@@ -290,15 +296,18 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /**
      * Test spacings
      *
-     * @dataProvider        dataTestDefaultSpacing
+     * @dataProvider data_test_default_spacing
      */
-    public function testSpacingDefault($code, $result, $testName, $testNumber)
+    public function testSpacingDefault($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testSpacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
-        $this->smarty->register_default_plugin_handler('my_block_plugin_handler');
+        $this->assert_user_deprecation(
+            'register_default_plugin_handler',
+            fn () => $this->smarty->register_default_plugin_handler('my_block_plugin_handler')
+        );
         $this->smarty->set_compile_id('default');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -311,7 +320,7 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestDefaultSpacing()
+    public function data_test_default_spacing()
     {
         $i = 1;
         /*
@@ -334,13 +343,13 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /**
      * Test nocache block spacings
      *
-     * @dataProvider        dataTestNocacheSpacing
+     * @dataProvider data_test_nocache_spacing
      */
-    public function testBlockNocache($code, $result, $testName, $testNumber)
+    public function testBlockNocache($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Nocache_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_compile_id('nocache');
         $this->smarty->set_caching(1);
         $this->smarty->set_template_dir('./templates_tmp');
@@ -354,11 +363,11 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /**
      * Test nocache block spacings
      *
-     * @dataProvider        dataTestNocacheSpacing
+     * @dataProvider data_test_nocache_spacing
      */
-    public function testBlockNocache2($code, $result, $testName, $testNumber)
+    public function testBlockNocache2($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Nocache_{$name}.tpl";
         $this->smarty->set_compile_id('nocache');
         $this->smarty->set_caching(1);
@@ -374,7 +383,7 @@ class CompileBlockPluginTest extends PHPUnit_Smarty
     /*
   * Data provider für testSpacing
   */
-    public function dataTestNocacheSpacing()
+    public function data_test_nocache_spacing()
     {
         $i = 1;
         /*

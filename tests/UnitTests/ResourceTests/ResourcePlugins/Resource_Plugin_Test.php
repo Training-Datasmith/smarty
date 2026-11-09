@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class ResourcePluginTest extends PHPUnit_Smarty
+class Resource_Plugin_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -32,7 +32,7 @@ class ResourcePluginTest extends PHPUnit_Smarty
      */
     public function testResourcePlugin()
     {
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $this->assertEquals('hello world', $this->smarty->fetch('db:test'));
     }
 
@@ -41,7 +41,7 @@ class ResourcePluginTest extends PHPUnit_Smarty
      */
     public function testResourcePluginObject()
     {
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $this->assertEquals('hello world', $this->smarty->fetch('db2:test'));
     }
 
@@ -50,7 +50,7 @@ class ResourcePluginTest extends PHPUnit_Smarty
      */
     public function testResourcePluginRegisteredInstance()
     {
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $this->smarty->register_resource('db2a', new Smarty_Resource_Db2('db2a'));
         $this->assertEquals('hello world', $this->smarty->fetch('db2a:test'));
     }
@@ -60,7 +60,7 @@ class ResourcePluginTest extends PHPUnit_Smarty
      */
     public function testResourcePluginRecompiledCompiledFilepath()
     {
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $tpl = $this->smarty->create_template('db2:test.tpl');
         $expected = realpath('./templates_c/' . sha1('db2:test.tpl') . '.db2.test.tpl.php');
         $this->assertFalse(!!$expected);
@@ -72,7 +72,7 @@ class ResourcePluginTest extends PHPUnit_Smarty
      */
     public function testResourcePluginTimestamp()
     {
-        $this->smarty->add_plugins_dir('./PHPunitplugins/');
+        $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         $tpl = $this->smarty->create_template('db:test');
         $this->assertTrue(is_integer($tpl->get_source()->get_time_stamp()));
         $this->assertEquals(10, strlen((string) $tpl->get_source()->get_time_stamp()));

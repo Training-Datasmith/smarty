@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class CompileSectionTest extends PHPUnit_Smarty
+class Compile_Section_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test {section} tag
@@ -67,14 +67,14 @@ class CompileSectionTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', [1,2]);
         $this->assertEquals(
@@ -87,7 +87,7 @@ class CompileSectionTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*
@@ -113,14 +113,14 @@ class CompileSectionTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestElseSpacing
+     * @dataProvider data_test_else_spacing
      *
      */
-    public function testElseSpacing($code, $result, $testName, $testNumber)
+    public function testElseSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_Else_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', []);
         $this->smarty->assign('bar', 'bar');
@@ -134,7 +134,7 @@ class CompileSectionTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestElseSpacing()
+    public function data_test_else_spacing()
     {
         $i = 1;
         /*

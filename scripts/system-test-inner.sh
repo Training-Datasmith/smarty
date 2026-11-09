@@ -35,7 +35,8 @@ if [[ ${composer_status} -ne 0 ]]; then
 fi
 rm -f "${composer_out}"
 
-php scripts/check-cluster-pins.php --wrong-sha-demo
+php scripts/check-cluster-pins.php --wrong-installed-php-demo
+php scripts/check-cluster-pins.php --wrong-installed-json-demo
 
 audit_out="$(mktemp)"
 set +e
@@ -56,6 +57,9 @@ rm -f "${audit_out}"
 php scripts/check-cluster-pins.php
 
 php scripts/check-rename-residue.php --demo-inject
+php scripts/check-rename-residue.php --demo-class-mismatch
+php scripts/check-rename-residue.php --demo-grammar-old
+php scripts/check-rename-residue.php --demo-camel
 
 php scripts/check-rename-residue.php
 

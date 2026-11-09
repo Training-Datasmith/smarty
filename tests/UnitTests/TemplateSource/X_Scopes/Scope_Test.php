@@ -15,33 +15,33 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class ScopeTest extends PHPUnit_Smarty
+class Scope_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('../../__shared/templates/');
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
      * Test scope
      *
-     * @dataProvider        dataTestAppendScope
+     * @dataProvider data_test_append_scope
      */
-    public function testAppendScope($code, $useSmarty, $result, $testName, $testNumber)
+    public function testAppendScope($code, $use_Smarty, $result, $testName, $test_number)
     {
-        $file = "testAppendScope_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code . '{checkvar var=foo}');
+        $file = "testAppendScope_{$test_number}.tpl";
+        $this->make_template_file($file, $code . '{checkvar var=foo}');
         $this->smarty->assign('file', $file);
         $this->smarty->assign('foo', 'global');
-        $data1 = $this->smarty->create_data($useSmarty ? $this->smarty : null);
+        $data1 = $this->smarty->create_data($use_Smarty ? $this->smarty : null);
         $data = $this->smarty->create_data($data1);
         $data1->assign('foo', 'data1');
         $data->assign('foo', 'data');
@@ -54,7 +54,7 @@ class ScopeTest extends PHPUnit_Smarty
     /**
      * Data provider for testAppendScope
      */
-    public function dataTestAppendScope()
+    public function data_test_append_scope()
     {
         $i = 0;
         /*
@@ -114,15 +114,15 @@ class ScopeTest extends PHPUnit_Smarty
 
     /**
      * Test scope
-     * @dataProvider        dataTestAssignScope
+     * @dataProvider data_test_assign_scope
      */
-    public function testAssignScope($code, $useSmarty, $result, $testName, $testNumber)
+    public function testAssignScope($code, $use_Smarty, $result, $testName, $test_number)
     {
-        $file = "testAssignScope_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code . '{checkvar var=foo}');
+        $file = "testAssignScope_{$test_number}.tpl";
+        $this->make_template_file($file, $code . '{checkvar var=foo}');
 
         $this->smarty->assign('foo', 'global');
-        $data = $this->smarty->create_data($useSmarty ? $this->smarty : null);
+        $data = $this->smarty->create_data($use_Smarty ? $this->smarty : null);
         $data->assign('file', $file);
         $data->assign('foo', 'data');
 
@@ -134,7 +134,7 @@ class ScopeTest extends PHPUnit_Smarty
     /*
      * Data provider for testAssignScope
      */
-    public function dataTestAssignScope()
+    public function data_test_assign_scope()
     {
         $i = 0;
         /*
@@ -185,7 +185,7 @@ class ScopeTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestScopeNocache
+     * @dataProvider data_test_scope_nocache
      */
     public function testScopeNocache($var, $file, $result)
     {
@@ -193,14 +193,14 @@ class ScopeTest extends PHPUnit_Smarty
         $this->smarty->assign('bar', $var, true);
         $this->smarty->assign('buh', $var);
         $this->smarty->assign('foo', 'smarty');
-        $this->smarty->assign_global('foo', 'global');
+        $this->smarty->assign('foo', 'global');
         $this->assertEquals($result, $this->smarty->fetch($file), "test - {$file} {$var}");
     }
 
     /*
   * Data provider für testscopenocache
   */
-    public function dataTestScopeNocache()
+    public function data_test_scope_nocache()
     {
         /*
          * variable value
@@ -218,14 +218,14 @@ class ScopeTest extends PHPUnit_Smarty
 
     /**
      * Test scope
-     * @dataProvider        dataTestIncludeScope
+     * @dataProvider data_test_include_scope
      */
-    public function testIncludeScope($code, $useSmarty, $result, $testName, $testNumber = null)
+    public function testIncludeScope($code, $use_Smarty, $result, $testName, $test_number = null)
     {
-        $file = "testIncludeScope_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $file = "testIncludeScope_{$test_number}.tpl";
+        $this->make_template_file($file, $code);
         $this->smarty->assign('foo', 'global');
-        $data = $this->smarty->create_data($useSmarty ? $this->smarty : null);
+        $data = $this->smarty->create_data($use_Smarty ? $this->smarty : null);
         $data->assign('foo', 'data');
         $data->assign('file', $file);
         $tpl = $this->smarty->create_template('test_scope.tpl', $data);
@@ -235,7 +235,7 @@ class ScopeTest extends PHPUnit_Smarty
     /*
      * Data provider for testIncludeScope
      */
-    public function dataTestIncludeScope()
+    public function data_test_include_scope()
     {
         $i = 0;
         return [
@@ -282,14 +282,14 @@ class ScopeTest extends PHPUnit_Smarty
 
     /**
      * Test scope
-     * @dataProvider        dataTestConfigScope
+     * @dataProvider data_test_config_scope
      */
-    public function testConfigScope($code, $useSmarty, $result, $testName, $testNumber)
+    public function testConfigScope($code, $use_Smarty, $result, $testName, $test_number)
     {
-        $file = "testConfigScope_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code . '{checkconfigvar var=foo}');
+        $file = "testConfigScope_{$test_number}.tpl";
+        $this->make_template_file($file, $code . '{checkconfigvar var=foo}');
         $this->smarty->config_load('smarty.conf');
-        $data = $this->smarty->create_data($useSmarty ? $this->smarty : null);
+        $data = $this->smarty->create_data($use_Smarty ? $this->smarty : null);
         $data->assign('file', $file);
         $data->config_load('data.conf');
         $tpl = $this->smarty->create_template('scope_tag.tpl', $data);
@@ -304,7 +304,7 @@ class ScopeTest extends PHPUnit_Smarty
     /*
      * Data provider for testConfigScope
      */
-    public function dataTestConfigScope()
+    public function data_test_config_scope()
     {
         $i = 0;
         /*

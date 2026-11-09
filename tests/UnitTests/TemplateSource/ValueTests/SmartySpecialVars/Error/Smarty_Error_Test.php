@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class SmartyErrorTest extends PHPUnit_Smarty
+class Smarty_Error_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test undefined Smarty special variable

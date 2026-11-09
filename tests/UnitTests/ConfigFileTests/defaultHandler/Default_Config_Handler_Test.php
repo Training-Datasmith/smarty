@@ -17,7 +17,7 @@ use Smarty\Smarty;
  * @preserveGlobalState    disabled
  *
  */
-class DefaultConfigHandlerTest extends PHPUnit_Smarty
+class Default_Config_Handler_Test extends PHPUnit_Smarty
 {
     /**
      * Sets up the fixture
@@ -26,7 +26,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_force_compile(true);
     }
 
@@ -59,7 +59,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
      */
     public function testDefaultConfigHandlerReplacement()
     {
-        $this->smarty->register_default_config_handler('configHandlerData');
+        $this->smarty->register_default_config_handler('config_handler_data');
         $this->smarty->config_load('foo.conf');
         $this->assertEquals('bar', $this->smarty->fetch('foo.tpl'));
     }
@@ -72,7 +72,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
      */
     public function testDefaultConfigHandlerReplacementByConfigFile()
     {
-        $this->smarty->register_default_config_handler('configHandlerFile');
+        $this->smarty->register_default_config_handler('config_handler_file');
         $this->smarty->config_load('foo.conf');
         $this->assertEquals('123.4', $this->smarty->fetch('number.tpl'));
     }
@@ -81,7 +81,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
     {
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage("Unable to load default file 'no.conf' for 'file:fo.conf'");
-        $this->smarty->register_default_config_handler('configHandlerFile');
+        $this->smarty->register_default_config_handler('config_handler_file');
         $this->smarty->config_load('fo.conf');
         $this->assertEquals('123.4', $this->smarty->fetch('number.tpl'));
     }
@@ -103,7 +103,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
     {
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('No config default content for \'file:bla.conf\'');
-        $this->smarty->register_default_config_handler('configHandlerData');
+        $this->smarty->register_default_config_handler('config_handler_data');
         $this->smarty->config_load('bla.conf');
     }
 
@@ -120,7 +120,7 @@ class DefaultConfigHandlerTest extends PHPUnit_Smarty
  *
  * @return bool
  */
-function configHandlerData($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
+function config_handler_data($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
 {
     if ($resource_name !== 'foo.conf') {
         return false;
@@ -143,7 +143,7 @@ function configHandlerData($resource_type, $resource_name, &$config_source, &$co
  *
  * @return string
  */
-function configHandlerFile($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
+function config_handler_file($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
 {
     if ($resource_name !== 'foo.conf') {
         return 'no.conf';
@@ -163,7 +163,7 @@ function configHandlerFile($resource_type, $resource_name, &$config_source, &$co
  *
  * @return bool
  */
-function configHandlerFalse($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
+function config_handler_false($resource_type, $resource_name, &$config_source, &$config_timestamp, \Smarty\Smarty $smarty)
 {
     return false;
 }

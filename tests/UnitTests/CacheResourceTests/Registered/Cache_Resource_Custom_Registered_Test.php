@@ -25,21 +25,20 @@ if (MysqlCacheEnable == true) {
                 $this->markTestSkipped('mysql tests are disabled');
             }
             if (self::$init) {
-                $this->getConnection();
+                $this->get_connection();
             }
-            $this->setUpSmarty(__DIR__);
+            $this->set_up_smarty(__DIR__);
             parent::setUp();
             if (!class_exists('Smarty_CacheResource_Mysqltest', false)) {
                 require_once(__DIR__ . '/../_shared/PHPunitplugins/cacheresource.mysqltest.php');
             }
-            $this->smarty->set_caching_type('foobar');
-            $this->smarty->register_cache_resource('foobar', new Smarty_CacheResource_Mysqltest());
+            $this->smarty->set_cache_resource(new Smarty_CacheResource_Mysqltest());
         }
 
         public function testInit()
         {
-            $this->cleanDirs();
-            $this->initMysqlCache();
+            $this->clean_dirs();
+            $this->init_mysql_cache();
         }
     }
 }

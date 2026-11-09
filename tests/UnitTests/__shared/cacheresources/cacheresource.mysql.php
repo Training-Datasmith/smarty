@@ -34,9 +34,9 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      */
     protected function db(): PDO
     {
-        static $dbConn = null;
+        static $db_conn = null;
         try {
-            return $dbConn ?? ($dbConn = new PDO('mysql:dbname=test;host=127.0.0.1', 'smarty'));
+            return $db_conn ?? ($db_conn = new PDO('mysql:dbname=test;host=127.0.0.1', 'smarty'));
         } catch (PDOException $e) {
             throw new Exception('Mysql Resource failed: ' . $e->getMessage());
         }
@@ -46,7 +46,7 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      * @return false|PDOStatement
      * @throws Exception
      */
-    protected function fetchQuery()
+    protected function fetch_query()
     {
         static $query = null;
         return $query ?? $query = $this->db()->prepare('SELECT modified, content FROM output_cache WHERE id = :id');
@@ -56,7 +56,7 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      * @return false|PDOStatement
      * @throws Exception
      */
-    protected function fetchTimestampQuery()
+    protected function fetch_timestamp_query()
     {
         static $query = null;
         return $query ?? $query = $this->db()->prepare('SELECT modified FROM output_cache WHERE id = :id');
@@ -66,7 +66,7 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      * @return false|PDOStatement
      * @throws Exception
      */
-    protected function saveQuery()
+    protected function save_query()
     {
         static $query = null;
         return $query ?? $query = $this->db()->prepare(
@@ -90,9 +90,9 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      */
     protected function fetch($id, $name, $cache_id, $compile_id, &$content, &$mtime)
     {
-        $this->fetchQuery()->execute(['id' => $id]);
-        $row = $this->fetchQuery()->fetch();
-        $this->fetchQuery()->closeCursor();
+        $this->fetch_query()->execute(['id' => $id]);
+        $row = $this->fetch_query()->fetch();
+        $this->fetch_query()->closeCursor();
         if ($row) {
             $content = $row[ 'content' ];
             $mtime = strtotime($row[ 'modified' ]);
@@ -117,9 +117,9 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      */
     protected function fetch_timestamp($id, $name, $cache_id, $compile_id)
     {
-        $this->fetchTimestampQuery()->execute(['id' => $id]);
-        $mtime = strtotime($this->fetchTimestampQuery()->fetchColumn());
-        $this->fetchTimestampQuery()->closeCursor();
+        $this->fetch_timestamp_query()->execute(['id' => $id]);
+        $mtime = strtotime($this->fetch_timestamp_query()->fetchColumn());
+        $this->fetch_timestamp_query()->closeCursor();
         return $mtime;
     }
 
@@ -137,14 +137,14 @@ class Smarty_CacheResource_Mysql extends \Smarty\Cacheresource\Custom
      */
     protected function save($id, $name, $cache_id, $compile_id, $exp_time, $content)
     {
-        $this->saveQuery()->execute(
+        $this->save_query()->execute(
             ['id' => $id,
                   'name' => $name,
                   'cache_id' => $cache_id,
                   'compile_id' => $compile_id,
                   'content' => $content,]
         );
-        return !!$this->saveQuery()->rowCount();
+        return !!$this->save_query()->rowCount();
     }
 
     /**

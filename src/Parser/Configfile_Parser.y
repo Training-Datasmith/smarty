@@ -1,5 +1,5 @@
 /**
-* ConfigfileParser
+* Configfile_Parser
 *
 * This is the config file parser
 * 
@@ -13,19 +13,19 @@
 
 namespace Smarty\Parser;
 
-use \Smarty\Lexer\ConfigfileLexer as Lexer;
+use \Smarty\Lexer\Configfile_Lexer as Lexer;
 use \Smarty\Compiler\Configfile as Configfile;
 
 /**
 * Smarty Internal Plugin Configfileparse
 *
 * This is the config file parser.
-* It is generated from the ConfigfileParser.y file
+* It is generated from the Configfile_Parser.y file
 * @package Smarty
 * @subpackage Compiler
 * @author Uwe Tews
 */
-class ConfigfileParser
+class Configfile_Parser
 }
 %include_class
 {

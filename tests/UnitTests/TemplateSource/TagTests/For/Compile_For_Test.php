@@ -15,30 +15,30 @@ declare(strict_types=1);
  *
  *
  */
-class CompileForTest extends PHPUnit_Smarty
+class Compile_For_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
      * Test For
      *
      *
-     * @dataProvider        dataTestFor
+     * @dataProvider data_test_for
      *
      */
-    public function testFor($code, $result, $testName, $testNumber)
+    public function testFor($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "For_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->assertEquals(
             $result,
@@ -50,7 +50,7 @@ class CompileForTest extends PHPUnit_Smarty
     /*
       * Data provider für testFor
       */
-    public function dataTestFor()
+    public function data_test_for()
     {
         $i = 1;
         /*
@@ -155,14 +155,14 @@ class CompileForTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('buh', 'buh');
         $this->assertEquals(
@@ -175,7 +175,7 @@ class CompileForTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*

@@ -15,18 +15,18 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileForeachTest extends PHPUnit_Smarty
+class Compile_Foreach_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -34,12 +34,12 @@ class CompileForeachTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestForeach
+     * @dataProvider data_test_foreach
      */
-    public function testForeach($code, $foo, $result, $testName, $testNumber)
+    public function testForeach($code, $foo, $result, $testName, $test_number)
     {
-        $file = "testForeach_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $file = "testForeach_{$test_number}.tpl";
+        $this->make_template_file($file, $code);
         $this->smarty->assign('x', 'x');
         $this->smarty->assign('y', 'y');
         if ($foo !== null) {
@@ -55,7 +55,7 @@ class CompileForeachTest extends PHPUnit_Smarty
     /*
       * Data provider für testForeach
       */
-    public function dataTestForeach()
+    public function data_test_foreach()
     {
         $i = 0;
         /*
@@ -107,17 +107,17 @@ class CompileForeachTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestForeachNocache
+     * @dataProvider data_test_foreach_nocache
      */
-    public function testForeachCaching($code, $new, $assignNocache, $foo, $result, $testName, $testNumber)
+    public function testForeachCaching($code, $new, $assign_Nocache, $foo, $result, $testName, $test_number)
     {
         $this->smarty->caching = true;
-        $file = "testForeachNocache_{$testNumber}.tpl";
+        $file = "testForeachNocache_{$test_number}.tpl";
         if ($new) {
-            $this->makeTemplateFile($file, $code);
+            $this->make_template_file($file, $code);
         }
         if ($foo !== null) {
-            $this->smarty->assign('foo', $foo, $assignNocache);
+            $this->smarty->assign('foo', $foo, $assign_Nocache);
         } else {
             // unassigned $from parameter
             $this->smarty->set_error_reporting(error_reporting() & ~(E_NOTICE | E_USER_NOTICE));
@@ -129,7 +129,7 @@ class CompileForeachTest extends PHPUnit_Smarty
     /*
    * Data provider für testForeachNocache
    */
-    public function dataTestForeachNocache()
+    public function data_test_foreach_nocache()
     {
         $i = 0;
         /*
@@ -327,14 +327,14 @@ class CompileForeachTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', [1,2]);
         $this->assertEquals(
@@ -347,7 +347,7 @@ class CompileForeachTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*
@@ -373,14 +373,14 @@ class CompileForeachTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestElseSpacing
+     * @dataProvider data_test_else_spacing
      *
      */
-    public function testElseSpacing($code, $result, $testName, $testNumber)
+    public function testElseSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_Else_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', []);
         $this->smarty->assign('buh', 'buh');
@@ -394,7 +394,7 @@ class CompileForeachTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestElseSpacing()
+    public function data_test_else_spacing()
     {
         $i = 1;
         /*

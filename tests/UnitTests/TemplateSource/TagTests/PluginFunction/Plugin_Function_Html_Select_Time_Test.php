@@ -15,11 +15,11 @@ declare(strict_types=1);
  *
  *
  */
-class PluginFunctionHtmlSelectTimeTest extends PHPUnit_Smarty
+class Plugin_Function_Html_Select_Time_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->now = mktime(16, 15, 11, 2, 20, 2011);
     }
 

@@ -16,17 +16,17 @@ declare(strict_types=1);
  *
  *
  */
-class ClearCompiledTest extends PHPUnit_Smarty
+class Clear_Compiled_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->add_template_dir('./templates_2/');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     // helpers
     /**
@@ -34,9 +34,9 @@ class ClearCompiledTest extends PHPUnit_Smarty
      *
      * @return void
      */
-    protected function clearFiles()
+    protected function clear_files()
     {
-        $this->cleanCompileDir();
+        $this->clean_compile_dir();
     }
 
     /**
@@ -52,7 +52,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
      * @uses $_files to store references
      * @return array list of files array( id => path )
      */
-    protected function makeFiles()
+    protected function make_files()
     {
         $this->_files = [];
         $directory_length = strlen($this->get_smarty()->get_compile_dir());
@@ -81,7 +81,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
      *
      * @return array list of (sorted) compiled file paths
      */
-    protected function expectFiles($keys)
+    protected function expect_files($keys)
     {
         $files = [];
         foreach ($keys as $key) {
@@ -102,7 +102,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
      *
      * @return void
      */
-    protected function touchFiles($keys, $offset = 0)
+    protected function touch_files($keys, $offset = 0)
     {
         $base = $this->get_smarty()->get_compile_dir();
         $time = time();
@@ -120,7 +120,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
      *
      * @return array list of (sorted) compiled file paths
      */
-    protected function getFiles()
+    protected function get_files()
     {
         $directory = realpath($this->get_smarty()->get_compile_dir());
         if (!$directory) {
@@ -149,53 +149,53 @@ class ClearCompiledTest extends PHPUnit_Smarty
     // Smarty::clear_compiled_template(null, null, null)
     public function testClearAll()
     {
-        $this->runClearAll(false);
+        $this->run_clear_all(false);
     }
 
     public function testSubsClearAll()
     {
-        $this->runClearAll(true);
+        $this->run_clear_all(true);
     }
 
-    public function runClearAll($useSubDirs)
+    public function run_clear_all($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [];
         $this->assertEquals(12, $this->get_smarty()->clear_compiled_template());
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template($template, null, null)
     public function testClearTemplate()
     {
-        $this->runClearTemplate(false);
+        $this->run_clear_template(false);
     }
 
     public function testSubsClearTemplate()
     {
-        $this->runClearTemplate(true);
+        $this->run_clear_template(true);
     }
 
     public function testClearOtherTemplate()
     {
-        $this->runClearOtherTemplate(false);
+        $this->run_clear_other_template(false);
     }
 
     public function testSubsClearOtherTemplate()
     {
-        $this->runClearOtherTemplate(true);
+        $this->run_clear_other_template(true);
     }
 
-    public function runClearTemplate($useSubDirs)
+    public function run_clear_template($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld2.tpl#', 'helloworld2.tpl#compile1', 'helloworld2.tpl#compile2',
@@ -204,49 +204,49 @@ class ClearCompiledTest extends PHPUnit_Smarty
         ];
         $this->assertEquals(3, $this->get_smarty()->clear_compiled_template('helloworld.tpl'));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
-    public function runClearOtherTemplate($useSubDirs)
+    public function run_clear_other_template($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = array_keys($this->_files);
         $this->assertEquals(0, $this->get_smarty()->clear_compiled_template('foobar.tpl'));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template(null, $cache_id, null)
     public function testClearCompileid()
     {
-        $this->runClearCompileid(false);
+        $this->run_clear_compileid(false);
     }
 
     public function testSubsClearCompileid()
     {
-        $this->runClearCompileid(true);
+        $this->run_clear_compileid(true);
     }
 
     public function testClearOtherCompileid()
     {
-        $this->runClearOtherCompileid(false);
+        $this->run_clear_other_compileid(false);
     }
 
     public function testSubsClearOtherCompileid()
     {
-        $this->runClearOtherCompileid(true);
+        $this->run_clear_other_compileid(true);
     }
 
-    public function runClearCompileid($useSubDirs)
+    public function run_clear_compileid($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld.tpl#', 'helloworld.tpl#compile2',
@@ -257,64 +257,64 @@ class ClearCompiledTest extends PHPUnit_Smarty
         $count = $this->get_smarty()->clear_compiled_template(null, 'compile1');
         $this->assertEquals(4, $count);
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
-    public function runClearOtherCompileid($useSubDirs)
+    public function run_clear_other_compileid($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = array_keys($this->_files);
         $this->assertEquals(0, $this->get_smarty()->clear_compiled_template(null, 'other'));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template(null, null, $expired)
     public function testClearExpired()
     {
-        $this->runClearExpired(false);
+        $this->run_clear_expired(false);
     }
 
     public function testSubsClearExpired()
     {
-        $this->runClearExpired(true);
+        $this->run_clear_expired(true);
     }
 
-    public function runClearExpired($useSubDirs)
+    public function run_clear_expired($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = ['helloworld.tpl#', 'helloworld2.tpl#'];
-        $this->touchFiles(array_diff(array_keys($this->_files), $expected), - 1000);
+        $this->touch_files(array_diff(array_keys($this->_files), $expected), - 1000);
         $this->assertEquals(10, $this->get_smarty()->clear_compiled_template(null, null, 500));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template($template, null, $expired)
     public function testClearTemplateExpired()
     {
-        $this->runClearTemplateExpired(false);
+        $this->run_clear_template_expired(false);
     }
 
     public function testSubsClearTemplateExpired()
     {
-        $this->runClearTemplateExpired(true);
+        $this->run_clear_template_expired(true);
     }
 
-    public function runClearTemplateExpired($useSubDirs)
+    public function run_clear_template_expired($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld.tpl#', 'helloworld.tpl#compile2',
@@ -322,29 +322,29 @@ class ClearCompiledTest extends PHPUnit_Smarty
             'ambiguous/case1/foobar.tpl#', 'ambiguous/case1/foobar.tpl#compile1', 'ambiguous/case1/foobar.tpl#compile2',
             '[1]ambiguous/case1/foobar.tpl#', '[1]ambiguous/case1/foobar.tpl#compile1', '[1]ambiguous/case1/foobar.tpl#compile2',
         ];
-        $this->touchFiles(['helloworld.tpl#compile1'], - 1000);
+        $this->touch_files(['helloworld.tpl#compile1'], - 1000);
         $this->assertEquals(1, $this->get_smarty()->clear_compiled_template('helloworld.tpl', null, 500));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template($template, $cache_id, $expired)
     public function testClearTemplateCacheidExpired()
     {
-        $this->runClearTemplateCacheidExpired(false);
+        $this->run_clear_template_cacheid_expired(false);
     }
 
     public function testSubsClearTemplateCacheidExpired()
     {
-        $this->runClearTemplateCacheidExpired(true);
+        $this->run_clear_template_cacheid_expired(true);
     }
 
-    public function runClearTemplateCacheidExpired($useSubDirs)
+    public function run_clear_template_cacheid_expired($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld.tpl#', 'helloworld.tpl#compile2',
@@ -352,29 +352,29 @@ class ClearCompiledTest extends PHPUnit_Smarty
             'ambiguous/case1/foobar.tpl#', 'ambiguous/case1/foobar.tpl#compile1', 'ambiguous/case1/foobar.tpl#compile2',
             '[1]ambiguous/case1/foobar.tpl#', '[1]ambiguous/case1/foobar.tpl#compile1', '[1]ambiguous/case1/foobar.tpl#compile2',
         ];
-        $this->touchFiles(['helloworld.tpl#compile1', 'helloworld.tpl#compile2'], - 1000);
+        $this->touch_files(['helloworld.tpl#compile1', 'helloworld.tpl#compile2'], - 1000);
         $this->assertEquals(1, $this->get_smarty()->clear_compiled_template('helloworld.tpl', 'compile1', 500));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template(null, $cache_id, $expired)
     public function testClearCacheidExpired()
     {
-        $this->runClearCacheidExpired(false);
+        $this->run_clear_cacheid_expired(false);
     }
 
     public function testSubsClearCacheidExpired()
     {
-        $this->runClearCacheidExpired(true);
+        $this->run_clear_cacheid_expired(true);
     }
 
-    public function runClearCacheidExpired($useSubDirs)
+    public function run_clear_cacheid_expired($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld.tpl#', 'helloworld.tpl#compile2',
@@ -382,29 +382,29 @@ class ClearCompiledTest extends PHPUnit_Smarty
             'ambiguous/case1/foobar.tpl#', 'ambiguous/case1/foobar.tpl#compile1', 'ambiguous/case1/foobar.tpl#compile2',
             '[1]ambiguous/case1/foobar.tpl#', '[1]ambiguous/case1/foobar.tpl#compile1', '[1]ambiguous/case1/foobar.tpl#compile2',
         ];
-        $this->touchFiles(['helloworld.tpl#compile1'], - 1000);
+        $this->touch_files(['helloworld.tpl#compile1'], - 1000);
         $this->assertEquals(1, $this->get_smarty()->clear_compiled_template(null, 'compile1', 500));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     // Smarty::clear_compiled_template($template, $cache_id, null)
     public function testClearTemplateCacheid()
     {
-        $this->runClearTemplateCacheid(false);
+        $this->run_clear_template_cacheid(false);
     }
 
     public function testSubsClearTemplateCacheid()
     {
-        $this->runClearTemplateCacheid(true);
+        $this->run_clear_template_cacheid(true);
     }
 
-    public function runClearTemplateCacheid($useSubDirs)
+    public function run_clear_template_cacheid($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         $expected = [
             'helloworld.tpl#', 'helloworld.tpl#compile2',
@@ -414,25 +414,25 @@ class ClearCompiledTest extends PHPUnit_Smarty
         ];
         $this->assertEquals(1, $this->get_smarty()->clear_compiled_template('helloworld.tpl', 'compile1'));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 
     public function testClearAmbiguousTemplate()
     {
-        $this->runClearAmbiguousTemplate(false);
+        $this->run_clear_ambiguous_template(false);
     }
 
     public function testSubsAmbiguousTemplate()
     {
-        $this->runClearAmbiguousTemplate(true);
+        $this->run_clear_ambiguous_template(true);
     }
 
-    public function runClearAmbiguousTemplate($useSubDirs)
+    public function run_clear_ambiguous_template($use_sub_dirs)
     {
-        $this->get_smarty()->set_use_sub_dirs($useSubDirs);
-        $this->clearFiles();
-        $this->makeFiles();
+        $this->get_smarty()->set_use_sub_dirs($use_sub_dirs);
+        $this->clear_files();
+        $this->make_files();
 
         // TODO: uwe.tews - shouldn't clear_compiled_template("foo.tpl") remove "{$template_dir[0]}/foo.tpl" AND "{$template_dir[1]}/foo.tpl"?
         // currently it kills only the first one found (through regular template file identification methods)
@@ -444,7 +444,7 @@ class ClearCompiledTest extends PHPUnit_Smarty
         ];
         $this->assertEquals(3, $this->get_smarty()->clear_compiled_template('ambiguous/case1/foobar.tpl'));
 
-        $this->assertEquals($this->expectFiles($expected), $this->getFiles());
-        $this->clearFiles();
+        $this->assertEquals($this->expect_files($expected), $this->get_files());
+        $this->clear_files();
     }
 }

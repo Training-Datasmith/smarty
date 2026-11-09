@@ -15,17 +15,17 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class ModifierIssue327Test extends PHPUnit_Smarty
+class Modifier_Issue327Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->register_plugin('modifier', 'substr', 'substr');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testModifier327()

@@ -15,18 +15,18 @@ declare(strict_types=1);
  *
  *
  */
-class PluginBlockTextformatTest extends PHPUnit_Smarty
+class Plugin_Block_Textformat_Test extends PHPUnit_Smarty
 {
     protected $string = "\n\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\nThis is foo.\n\nThis is bar.\n\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\nbar foo bar foo     foo.\n\n";
 
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testDefault()

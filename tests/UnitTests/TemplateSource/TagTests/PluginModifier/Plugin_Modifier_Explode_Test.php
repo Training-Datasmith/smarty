@@ -11,29 +11,29 @@ namespace UnitTests\TemplateSource\TagTests\PluginModifier;
  *
  *
  */
-class PluginModifierExplodeTest extends \PHPUnit_Smarty
+class Plugin_Modifier_Explode_Test extends \PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->register_plugin('modifier', 'json_encode', 'json_encode');
     }
 
     /**
      * @deprecated
-     * @dataProvider explodeDataProvider
+     * @dataProvider explode_data_provider
      */
-    public function testExplode($template, $subject, $expectedString)
+    public function testExplode($template, $subject, $expected_String)
     {
         $this->smarty->assign('subject', $subject);
 
         $tpl = $this->smarty->create_template($template);
-        $res = $this->smarty->fetch($tpl);
+        $res = $this->fetch_with_user_deprecation('Using explode is deprecated', $tpl);
 
-        $this->assertEquals($expectedString, $res);
+        $this->assertEquals($expected_String, $res);
     }
 
-    public function explodeDataProvider()
+    public function explode_data_provider()
     {
         return [
             'default'  => [

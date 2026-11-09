@@ -34,7 +34,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      *
      * @var bool
      */
-    public static $testNumber = 0;
+    public static $test_number = 0;
 
     /**
      * Configuration data from config.xml
@@ -57,7 +57,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      */
     public static $pdo = null;
 
-    public static $pluginsdir = null;
+    public static $plugins_dir = null;
 
     /**
      * This method is called before the first test of this test class is run.
@@ -65,9 +65,9 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        error_reporting(E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED);
+        error_reporting(E_ALL);
         self::$init = true;
-        self::$pluginsdir = self::getSmartyPluginsDir();
+        self::$plugins_dir = self::get_smarty_plugins_dir();
     }
 
     /**
@@ -77,7 +77,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
     public static function tearDownAfterClass(): void
     {
         //self::$pdo = null;
-        self::$testNumber = 0;
+        self::$test_number = 0;
     }
 
     /**
@@ -85,15 +85,15 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      *
      * @param string $name
      * @param array  $data
-     * @param string $dataName
+     * @param string $data_Name
      */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function __construct($name = null, array $data = [], $data_Name = '')
     {
         date_default_timezone_set('Europe/Berlin');
         if (!defined('individualFolders')) {
             define('individualFolders', true);
         }
-        parent::__construct($name, $data, $dataName);
+        parent::__construct($name, $data, $data_Name);
     }
 
     /**
@@ -101,7 +101,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      *
      * @param null $dir working directory
      */
-    public function setUpSmarty($dir)
+    public function set_up_smarty($dir)
     {
         static $s_dir;
         // set up current working directory
@@ -117,10 +117,10 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
             }
             if (individualFolders != 'true') {
                 if (!isset($s_dir[ $dir ])) {
-                    $this->cleanDir($dir . '/templates_c');
-                    $this->cleanDir($dir . '/cache');
+                    $this->clean_dir($dir . '/templates_c');
+                    $this->clean_dir($dir . '/cache');
                     if (is_dir($dir . '/templates_tmp')) {
-                        $this->cleanDir($dir . '/templates_tmp');
+                        $this->clean_dir($dir . '/templates_tmp');
                     }
                     $s_dir[ $dir ] = true;
                 }
@@ -151,7 +151,7 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      * Create Mysql PDO object
      *
      */
-    final public function getConnection()
+    final public function get_connection()
     {
         if (PHPUnit_Smarty::$pdo == null) {
             try {
@@ -173,9 +173,9 @@ class PHPUnit_Smarty extends PHPUnit\Framework\TestCase
      * Create table for Mysql resource
      *
      */
-    public function initMysqlResource()
+    public function init_mysql_resource()
     {
-        $this->getConnection();
+        $this->get_connection();
         PHPUnit_Smarty::$pdo->exec('DROP TABLE IF EXISTS `templates`');
         PHPUnit_Smarty::$pdo->exec('CREATE TABLE IF NOT EXISTS `templates` (
  `name` varchar(100) NOT NULL,
@@ -190,9 +190,9 @@ PRIMARY KEY (`name`)
      * Create table for Mysql cache resource
      *
      */
-    public function initMysqlCache(bool $recreate = true)
+    public function init_mysql_cache(bool $recreate = true)
     {
-        $this->getConnection();
+        $this->get_connection();
         if ($recreate) {
             PHPUnit_Smarty::$pdo->exec('DROP TABLE IF EXISTS `output_cache`');
         }
@@ -232,12 +232,12 @@ KEY `name` (`name`)
      * Delete files in templates_c and cache folders
      *
      */
-    public function cleanDirs()
+    public function clean_dirs()
     {
-        $this->cleanCompileDir();
-        $this->cleanCacheDir();
+        $this->clean_compile_dir();
+        $this->clean_cache_dir();
         if (is_dir(self::$cwd . '/templates_tmp')) {
-            $this->cleanDir(self::$cwd . '/templates_tmp');
+            $this->clean_dir(self::$cwd . '/templates_tmp');
         }
         $this->assertTrue(true);
     }
@@ -246,26 +246,26 @@ KEY `name` (`name`)
      * Make temporary template file
      *
      */
-    public function makeTemplateFile($name, $code)
+    public function make_template_file($name, $code)
     {
         if (!is_dir(self::$cwd . '/templates_tmp')) {
             mkdir(self::$cwd . '/templates_tmp');
             chmod(self::$cwd . '/templates_tmp', 0775);
         }
-        $fileName = self::$cwd . '/templates_tmp/' . "{$name}";
-        file_put_contents($fileName, $code);
+        $file_name = self::$cwd . '/templates_tmp/' . "{$name}";
+        file_put_contents($file_name, $code);
     }
 
     /**
      * Delete files in templates_c folder
      *
      */
-    public function cleanCompileDir()
+    public function clean_compile_dir()
     {
         $smarty = $this->get_smarty();
         if (isset($smarty)) {
             $dir = $smarty->get_compile_dir();
-            $this->cleanDir($dir);
+            $this->clean_dir($dir);
         }
     }
 
@@ -273,12 +273,12 @@ KEY `name` (`name`)
      * Delete files in cache folder
      *
      */
-    public function cleanCacheDir()
+    public function clean_cache_dir()
     {
         $smarty = $this->get_smarty();
         if (isset($smarty)) {
             $dir = $smarty->get_cache_dir();
-            $this->cleanDir($dir);
+            $this->clean_dir($dir);
         }
     }
 
@@ -287,7 +287,7 @@ KEY `name` (`name`)
      *
      * @param string $dir
      */
-    public function cleanDir($dir)
+    public function clean_dir($dir)
     {
         $di = new RecursiveDirectoryIterator($dir);
         $ri = new RecursiveIteratorIterator($di, RecursiveIteratorIterator::CHILD_FIRST);
@@ -310,7 +310,7 @@ KEY `name` (`name`)
      *
      * @return null|PDO
      */
-    final public function getPDO()
+    final public function get_pdo()
     {
         return PHPUnit_Smarty::$pdo;
     }
@@ -322,7 +322,7 @@ KEY `name` (`name`)
      *
      * @return mixed
      */
-    public function normalizeString($in)
+    public function normalize_string($in)
     {
         if (is_string($in)) {
             return str_replace(["\r", "\t"], ['', '    '], $in);
@@ -358,7 +358,7 @@ KEY `name` (`name`)
      * @return string
      * @throws \Exception
      */
-    public function buildSourcePath($tpl, $name = null, $type = null, $dir = null)
+    public function build_source_path($tpl, $name = null, $type = null, $dir = null)
     {
         $name = isset($name) ? $name : $tpl->get_source()->name;
         $type = isset($type) ? $type : $tpl->get_source()->type;
@@ -367,7 +367,7 @@ KEY `name` (`name`)
             case 'file':
             case 'filetest':
             case 'php':
-                return $this->normalizePath($dir . $name);
+                return $this->normalize_path($dir . $name);
             case 'mysqltest':
             case 'mysql':
                 return sha1($type . ':' . $name);
@@ -390,7 +390,7 @@ KEY `name` (`name`)
      * @return string
      * @throws \Exception
      */
-    public function buildUid($tpl, $value = null, $name = null, $type = null)
+    public function build_uid($tpl, $value = null, $name = null, $type = null)
     {
         $type = isset($type) ? $type : $tpl->get_source()->type;
         $name = isset($name) ? $name : $tpl->get_source()->name;
@@ -399,7 +399,7 @@ KEY `name` (`name`)
             case 'file':
             case 'filetest':
                 if ($tpl instanceof \Smarty\Smarty) {
-                    return sha1($this->normalizePath($this->smarty->get_template_dir(0) . $name) .
+                    return sha1($this->normalize_path($this->smarty->get_template_dir(0) . $name) .
                                 $this->smarty->_joined_template_dir);
                 }
                 return sha1($tpl->get_source()->uid . $this->smarty->_joined_template_dir);
@@ -423,7 +423,7 @@ KEY `name` (`name`)
      *
      * @return string
      */
-    public function normalizePath($path, $ds = null, $absolute = true)
+    public function normalize_path($path, $ds = null, $absolute = true)
     {
         $ds = isset($ds) ? $ds : DIRECTORY_SEPARATOR;
         $nds = $ds == '/' ? '\\' : '/';
@@ -499,7 +499,7 @@ KEY `name` (`name`)
      * @return string
      * @throws \Exception
      */
-    public function buildCompiledPath(
+    public function build_compiled_path(
         Template $tpl,
         $sub = true,
         $caching = false,
@@ -510,8 +510,8 @@ KEY `name` (`name`)
     ) {
         $sep = DIRECTORY_SEPARATOR;
         $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
-        $sp = $this->buildSourcePath($tpl, $name, $type, $dir);
-        $uid = $this->buildUid($tpl, $sp, $name, $type);
+        $sp = $this->build_source_path($tpl, $name, $type, $dir);
+        $uid = $this->build_uid($tpl, $sp, $name, $type);
         $_flag = '';
         if ($tpl->get_source() && $tpl->get_source()->is_config) {
             $_flag = '_' . ((int) $tpl->get_smarty()->config_read_hidden + (int) $tpl->get_smarty()->config_booleanize * 2 +
@@ -560,12 +560,12 @@ KEY `name` (`name`)
      * @param null|string                  $name       optional template name
      * @param null|string                  $type       optional template type
      * @param null|string                  $dir        optional template folder
-     * @param null|string                  $cacheType  optional cache resource type
+     * @param null|string                  $cache_type  optional cache resource type
      *
      * @return string
      * @throws \Exception
      */
-    public function buildCachedPath(
+    public function build_cached_path(
         Template_Base $tpl,
         $sub = true,
         $cache_id = null,
@@ -573,17 +573,17 @@ KEY `name` (`name`)
         $name = null,
         $type = null,
         $dir = null,
-        $cacheType = null
+        $cache_type = null
     ) {
-        $cacheType = $cacheType ?? $tpl->get_smarty()->get_caching_type();
-        switch ($cacheType) {
+        $cache_type = $cache_type ?? $tpl->get_smarty()->get_caching_type();
+        switch ($cache_type) {
             case 'file':
             case 'filetest':
                 $sep = DIRECTORY_SEPARATOR;
                 $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
                 $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
-                $sp = $this->buildSourcePath($tpl, $name, $type, $dir);
-                $uid = $this->buildUid($tpl, $sp, $name, $type);
+                $sp = $this->build_source_path($tpl, $name, $type, $dir);
+                $uid = $this->build_uid($tpl, $sp, $name, $type);
                 $_filepath = $uid;
                 // if use_sub_dirs, break file into directories
                 if ($sub) {
@@ -606,22 +606,22 @@ KEY `name` (`name`)
             case 'mysqltest':
             case 'pdo':
             case 'foobar':
-                $sp = $this->buildSourcePath($tpl, $name, $type, $dir);
-                $uid = $this->buildUid($tpl, $sp, $name, $type);
+                $sp = $this->build_source_path($tpl, $name, $type, $dir);
+                $uid = $this->build_uid($tpl, $sp, $name, $type);
                 $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
                 $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
                 return sha1($uid . $_cache_id . $_compile_id);
             case 'memcachetest':
             case 'apc':
-                $sp = $this->buildSourcePath($tpl, $name, $type, $dir);
-                $uid = $this->buildUid($tpl, $sp, $name, $type);
+                $sp = $this->build_source_path($tpl, $name, $type, $dir);
+                $uid = $this->build_uid($tpl, $sp, $name, $type);
                 $_compile_id = isset($compile_id) ? preg_replace('![^\w\|]+!', '_', $compile_id) : null;
                 $_cache_id = isset($cache_id) ? preg_replace('![^\w\|]+!', '_', $cache_id) : null;
                 return sha1($uid) . '#' . preg_replace('#[^\w\|]+#S', '_', $tpl->template_resource) . '#' . $_cache_id .
                        '#' . $_compile_id;
 
             default:
-                throw new Exception("Unhandled cache resource type '{$cacheType}'");
+                throw new Exception("Unhandled cache resource type '{$cache_type}'");
         }
     }
 
@@ -633,7 +633,7 @@ KEY `name` (`name`)
      *
      * @return string
      */
-    public function prefilterTest($source, Template $tpl)
+    public function prefilter_test($source, Template $tpl)
     {
         return str_replace(
             '#test#',
@@ -651,12 +651,55 @@ KEY `name` (`name`)
         return $this->smarty;
     }
 
-    public static function getSmartyPluginsDir()
+    public static function get_smarty_plugins_dir()
     {
         if (is_dir(__DIR__ . '/../smarty/src/plugins')) {
             return __DIR__ . '/../smarty/src/plugins';
         } elseif (is_dir(__DIR__ . '/../libs/plugins')) {
             return __DIR__ . '/../libs/plugins';
         }
+    }
+
+    /**
+     * Load legacy plugin PHP files from a directory without calling deprecated add_plugins_dir().
+     */
+    protected function load_plugins_dir_for_tests(string $dir): void
+    {
+        $ref = new ReflectionClass($this->smarty);
+        $prop = $ref->getProperty('bc_plugins_adapter');
+        $prop->setAccessible(true);
+        /** @var \Smarty\Extension\Bc_Plugins_Adapter $adapter */
+        $adapter = $prop->getValue($this->smarty);
+        $adapter->load_plugins_from_dir(rtrim($dir, '/\\') . DIRECTORY_SEPARATOR);
+    }
+
+    /**
+     * Run a callback and assert a matching E_USER_DEPRECATED was emitted (handler swallows it for output).
+     *
+     * @return mixed
+     */
+    protected function assert_user_deprecation(string $needle, callable $fn)
+    {
+        $seen = false;
+        set_error_handler(static function (int $errno, string $errstr) use ($needle, &$seen) {
+            if ($errno === E_USER_DEPRECATED && str_contains($errstr, $needle)) {
+                $seen = true;
+                return true;
+            }
+            return false;
+        });
+        try {
+            $result = $fn();
+        } finally {
+            restore_error_handler();
+        }
+        $this->assertTrue($seen, 'Expected user deprecation containing: ' . $needle);
+
+        return $result;
+    }
+
+    protected function fetch_with_user_deprecation(string $needle, Template $tpl): string
+    {
+        return $this->assert_user_deprecation($needle, fn () => $this->smarty->fetch($tpl));
     }
 }

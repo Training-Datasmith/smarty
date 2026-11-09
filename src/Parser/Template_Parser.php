@@ -1,7 +1,7 @@
 <?php
 
 declare (strict_types=1);
-// line 11 "src/Parser/TemplateParser.y"
+// line 11 "src/Parser/Template_Parser.y"
 namespace Smarty\Parser;
 
 use Smarty\Compiler\Template as Template_Compiler;
@@ -16,13 +16,13 @@ use Smarty\Parse_Tree\Template as TemplateParseTree;
 * Smarty Template Parser Class
 *
 * This is the template parser.
-* It is generated from the TemplateParser.y file
+* It is generated from the Template_Parser.y file
 *
 * @author Uwe Tews <uwe.tews@googlemail.com>
 */
 class Template_Parser
 {
-    // line 35 "src/Parser/TemplateParser.y"
+    // line 35 "src/Parser/Template_Parser.y"
     public const ERR1 = 'Security error: Call to private object member not allowed';
     public const ERR2 = 'Security error: Call to dynamic object member not allowed';
     /**
@@ -536,7 +536,7 @@ class Template_Parser
             while ($this->yyidx >= 0) {
                 $this->yy_pop_parser_stack();
             }
-            // line 232 "src/Parser/TemplateParser.y"
+            // line 232 "src/Parser/Template_Parser.y"
             $this->internal_error = true;
             $this->compiler->trigger_template_error('Stack overflow in template parser');
             return;
@@ -557,14 +557,14 @@ class Template_Parser
     }
     public static $yy_rule_info = [[0 => 62, 1 => 1], [0 => 63, 1 => 2], [0 => 63, 1 => 2], [0 => 63, 1 => 2], [0 => 63, 1 => 4], [0 => 64, 1 => 4], [0 => 64, 1 => 1], [0 => 65, 1 => 2], [0 => 65, 1 => 0], [0 => 63, 1 => 2], [0 => 63, 1 => 0], [0 => 66, 1 => 1], [0 => 66, 1 => 1], [0 => 66, 1 => 1], [0 => 66, 1 => 3], [0 => 66, 1 => 2], [0 => 67, 1 => 1], [0 => 67, 1 => 2], [0 => 67, 1 => 2], [0 => 70, 1 => 2], [0 => 69, 1 => 2], [0 => 72, 1 => 1], [0 => 72, 1 => 1], [0 => 72, 1 => 1], [0 => 68, 1 => 3], [0 => 68, 1 => 2], [0 => 68, 1 => 4], [0 => 68, 1 => 5], [0 => 68, 1 => 6], [0 => 68, 1 => 2], [0 => 68, 1 => 3], [0 => 68, 1 => 2], [0 => 68, 1 => 3], [0 => 68, 1 => 8], [0 => 80, 1 => 2], [0 => 80, 1 => 1], [0 => 68, 1 => 5], [0 => 68, 1 => 7], [0 => 68, 1 => 6], [0 => 68, 1 => 8], [0 => 68, 1 => 2], [0 => 68, 1 => 3], [0 => 68, 1 => 4], [0 => 66, 1 => 1], [0 => 68, 1 => 2], [0 => 68, 1 => 3], [0 => 68, 1 => 4], [0 => 68, 1 => 5], [0 => 73, 1 => 2], [0 => 73, 1 => 1], [0 => 73, 1 => 0], [0 => 83, 1 => 4], [0 => 83, 1 => 2], [0 => 83, 1 => 2], [0 => 83, 1 => 2], [0 => 83, 1 => 2], [0 => 83, 1 => 2], [0 => 83, 1 => 4], [0 => 79, 1 => 1], [0 => 79, 1 => 3], [0 => 78, 1 => 3], [0 => 78, 1 => 3], [0 => 78, 1 => 3], [0 => 78, 1 => 3], [0 => 76, 1 => 1], [0 => 76, 1 => 1], [0 => 76, 1 => 1], [0 => 76, 1 => 2], [0 => 76, 1 => 2], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 76, 1 => 2], [0 => 89, 1 => 1], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 76, 1 => 3], [0 => 84, 1 => 4], [0 => 85, 1 => 5], [0 => 85, 1 => 5], [0 => 85, 1 => 5], [0 => 85, 1 => 4], [0 => 75, 1 => 1], [0 => 75, 1 => 2], [0 => 75, 1 => 2], [0 => 75, 1 => 2], [0 => 75, 1 => 2], [0 => 75, 1 => 1], [0 => 75, 1 => 1], [0 => 75, 1 => 3], [0 => 75, 1 => 2], [0 => 75, 1 => 2], [0 => 75, 1 => 1], [0 => 75, 1 => 1], [0 => 75, 1 => 3], [0 => 75, 1 => 3], [0 => 75, 1 => 3], [0 => 75, 1 => 1], [0 => 75, 1 => 1], [0 => 75, 1 => 3], [0 => 75, 1 => 1], [0 => 75, 1 => 2], [0 => 75, 1 => 1], [0 => 75, 1 => 1], [0 => 75, 1 => 3], [0 => 93, 1 => 1], [0 => 93, 1 => 1], [0 => 97, 1 => 3], [0 => 97, 1 => 3], [0 => 97, 1 => 1], [0 => 97, 1 => 1], [0 => 97, 1 => 0], [0 => 98, 1 => 1], [0 => 98, 1 => 1], [0 => 98, 1 => 3], [0 => 98, 1 => 1], [0 => 100, 1 => 3], [0 => 100, 1 => 4], [0 => 100, 1 => 3], [0 => 100, 1 => 4], [0 => 74, 1 => 1], [0 => 74, 1 => 1], [0 => 71, 1 => 2], [0 => 71, 1 => 2], [0 => 101, 1 => 2], [0 => 101, 1 => 0], [0 => 102, 1 => 2], [0 => 102, 1 => 2], [0 => 102, 1 => 4], [0 => 102, 1 => 2], [0 => 102, 1 => 2], [0 => 102, 1 => 4], [0 => 102, 1 => 3], [0 => 102, 1 => 5], [0 => 102, 1 => 3], [0 => 102, 1 => 3], [0 => 102, 1 => 3], [0 => 102, 1 => 3], [0 => 102, 1 => 3], [0 => 102, 1 => 3], [0 => 102, 1 => 2], [0 => 81, 1 => 1], [0 => 81, 1 => 1], [0 => 81, 1 => 2], [0 => 103, 1 => 1], [0 => 103, 1 => 1], [0 => 103, 1 => 3], [0 => 99, 1 => 2], [0 => 105, 1 => 0], [0 => 105, 1 => 1], [0 => 104, 1 => 1], [0 => 104, 1 => 2], [0 => 106, 1 => 3], [0 => 106, 1 => 3], [0 => 106, 1 => 5], [0 => 106, 1 => 6], [0 => 106, 1 => 2], [0 => 92, 1 => 5], [0 => 107, 1 => 4], [0 => 107, 1 => 4], [0 => 108, 1 => 3], [0 => 108, 1 => 1], [0 => 108, 1 => 0], [0 => 77, 1 => 3], [0 => 77, 1 => 2], [0 => 109, 1 => 3], [0 => 109, 1 => 2], [0 => 82, 1 => 2], [0 => 82, 1 => 0], [0 => 110, 1 => 2], [0 => 110, 1 => 3], [0 => 110, 1 => 2], [0 => 95, 1 => 1], [0 => 95, 1 => 2], [0 => 95, 1 => 1], [0 => 95, 1 => 2], [0 => 95, 1 => 2], [0 => 95, 1 => 3], [0 => 87, 1 => 1], [0 => 87, 1 => 1], [0 => 86, 1 => 1], [0 => 88, 1 => 1], [0 => 91, 1 => 1], [0 => 96, 1 => 3], [0 => 96, 1 => 3], [0 => 111, 1 => 1], [0 => 111, 1 => 3], [0 => 111, 1 => 2], [0 => 111, 1 => 0], [0 => 112, 1 => 3], [0 => 112, 1 => 3], [0 => 112, 1 => 1], [0 => 94, 1 => 2], [0 => 94, 1 => 3], [0 => 113, 1 => 2], [0 => 113, 1 => 1], [0 => 114, 1 => 3], [0 => 114, 1 => 3], [0 => 114, 1 => 1], [0 => 114, 1 => 3], [0 => 114, 1 => 3], [0 => 114, 1 => 1], [0 => 114, 1 => 1]];
     public static $yy_reduce_map = [0 => 0, 1 => 1, 2 => 2, 3 => 3, 4 => 4, 5 => 5, 6 => 6, 21 => 6, 22 => 6, 23 => 6, 35 => 6, 55 => 6, 56 => 6, 64 => 6, 65 => 6, 66 => 6, 84 => 6, 89 => 6, 90 => 6, 95 => 6, 99 => 6, 100 => 6, 104 => 6, 105 => 6, 107 => 6, 123 => 6, 151 => 6, 187 => 6, 193 => 6, 7 => 7, 8 => 8, 150 => 8, 9 => 9, 11 => 11, 12 => 12, 13 => 13, 14 => 14, 15 => 15, 16 => 16, 17 => 17, 18 => 18, 19 => 19, 20 => 20, 24 => 24, 25 => 25, 26 => 26, 27 => 27, 28 => 28, 29 => 29, 30 => 30, 32 => 30, 31 => 31, 33 => 33, 34 => 34, 36 => 36, 37 => 37, 38 => 38, 39 => 39, 40 => 40, 41 => 41, 42 => 42, 43 => 43, 44 => 44, 45 => 45, 46 => 46, 47 => 47, 48 => 48, 49 => 49, 58 => 49, 111 => 49, 112 => 49, 163 => 49, 167 => 49, 171 => 49, 173 => 49, 50 => 50, 113 => 50, 164 => 50, 170 => 50, 51 => 51, 52 => 52, 53 => 52, 54 => 54, 146 => 54, 57 => 57, 59 => 59, 60 => 60, 61 => 60, 62 => 62, 63 => 63, 67 => 67, 68 => 68, 69 => 69, 70 => 70, 71 => 70, 72 => 72, 73 => 73, 74 => 74, 75 => 75, 76 => 76, 77 => 77, 78 => 78, 79 => 79, 80 => 80, 81 => 81, 82 => 81, 83 => 83, 85 => 85, 87 => 85, 88 => 85, 126 => 85, 86 => 86, 91 => 91, 92 => 92, 93 => 93, 94 => 94, 96 => 96, 97 => 97, 98 => 97, 101 => 101, 102 => 102, 103 => 103, 106 => 106, 108 => 108, 109 => 109, 110 => 109, 162 => 109, 114 => 114, 115 => 115, 116 => 116, 117 => 117, 118 => 118, 119 => 119, 120 => 120, 121 => 121, 122 => 122, 124 => 124, 125 => 125, 127 => 127, 190 => 127, 128 => 128, 129 => 129, 130 => 130, 131 => 131, 132 => 132, 133 => 133, 141 => 133, 134 => 134, 135 => 135, 136 => 136, 137 => 136, 139 => 136, 140 => 136, 138 => 138, 142 => 142, 143 => 143, 144 => 144, 194 => 144, 145 => 145, 147 => 147, 148 => 148, 149 => 149, 152 => 152, 153 => 153, 154 => 154, 155 => 155, 156 => 156, 157 => 157, 158 => 158, 159 => 159, 160 => 160, 161 => 161, 165 => 165, 166 => 166, 168 => 168, 169 => 169, 172 => 172, 174 => 174, 175 => 175, 176 => 176, 177 => 177, 178 => 178, 179 => 179, 180 => 180, 181 => 181, 182 => 182, 183 => 183, 184 => 184, 185 => 185, 186 => 185, 188 => 188, 189 => 189, 191 => 191, 192 => 192, 195 => 195, 196 => 196, 197 => 197, 198 => 198, 201 => 198, 199 => 199, 202 => 199, 200 => 200, 203 => 203, 204 => 204];
-    // line 245 "src/Parser/TemplateParser.y"
+    // line 245 "src/Parser/Template_Parser.y"
     public function yy_r0(): void
     {
         $this->root_buffer->prepend_array($this, $this->template_prefix);
         $this->root_buffer->append_array($this, $this->template_postfix);
         $this->_retvalue = $this->root_buffer->to_smarty_php($this);
     }
-    // line 252 "src/Parser/TemplateParser.y"
+    // line 252 "src/Parser/Template_Parser.y"
     public function yy_r1(): void
     {
         $text = $this->yystack[$this->yyidx + 0]->minor;
@@ -573,49 +573,49 @@ class Template_Parser
         }
         $this->current_buffer->append_subtree($this, new \Smarty\Parse_Tree\Text($text, $this->strip));
     }
-    // line 262 "src/Parser/TemplateParser.y"
+    // line 262 "src/Parser/Template_Parser.y"
     public function yy_r2(): void
     {
         $this->strip = true;
     }
-    // line 266 "src/Parser/TemplateParser.y"
+    // line 266 "src/Parser/Template_Parser.y"
     public function yy_r3(): void
     {
         $this->strip = false;
     }
-    // line 271 "src/Parser/TemplateParser.y"
+    // line 271 "src/Parser/Template_Parser.y"
     public function yy_r4(): void
     {
         $this->current_buffer->append_subtree($this, new \Smarty\Parse_Tree\Text($this->yystack[$this->yyidx + -1]->minor));
     }
-    // line 276 "src/Parser/TemplateParser.y"
+    // line 276 "src/Parser/Template_Parser.y"
     public function yy_r5(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . $this->yystack[$this->yyidx + -1]->minor;
     }
-    // line 279 "src/Parser/TemplateParser.y"
+    // line 279 "src/Parser/Template_Parser.y"
     public function yy_r6(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 283 "src/Parser/TemplateParser.y"
+    // line 283 "src/Parser/Template_Parser.y"
     public function yy_r7(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 288 "src/Parser/TemplateParser.y"
+    // line 288 "src/Parser/Template_Parser.y"
     public function yy_r8(): void
     {
         $this->_retvalue = '';
     }
-    // line 292 "src/Parser/TemplateParser.y"
+    // line 292 "src/Parser/Template_Parser.y"
     public function yy_r9(): void
     {
         $this->current_buffer->append_subtree($this, $this->merge_prefix_code($this->yystack[$this->yyidx + 0]->minor));
         $this->compiler->has_variable_string = false;
         $this->block_nesting_level = $this->compiler->get_tag_stack_count();
     }
-    // line 302 "src/Parser/TemplateParser.y"
+    // line 302 "src/Parser/Template_Parser.y"
     public function yy_r11(): void
     {
         $var = trim(substr($this->yystack[$this->yyidx + 0]->minor, $this->compiler->get_ldel_length(), -$this->compiler->get_rdel_length()), ' $');
@@ -627,7 +627,7 @@ class Template_Parser
         $this->compiler->trigger_tag_no_cache($var);
         $this->_retvalue = $this->compiler->compile_print_expression('$_smarty_tpl->get_value(\'' . $var . '\')', $attributes);
     }
-    // line 314 "src/Parser/TemplateParser.y"
+    // line 314 "src/Parser/Template_Parser.y"
     public function yy_r12(): void
     {
         $tag = trim(substr($this->yystack[$this->yyidx + 0]->minor, $this->compiler->get_ldel_length(), -$this->compiler->get_rdel_length()));
@@ -645,7 +645,7 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_tag($tag, []);
         }
     }
-    // line 335 "src/Parser/TemplateParser.y"
+    // line 335 "src/Parser/Template_Parser.y"
     public function yy_r13(): void
     {
         $j = strrpos($this->yystack[$this->yyidx + 0]->minor, '.');
@@ -657,42 +657,42 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_parent_block();
         }
     }
-    // line 346 "src/Parser/TemplateParser.y"
+    // line 346 "src/Parser/Template_Parser.y"
     public function yy_r14(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-    // line 350 "src/Parser/TemplateParser.y"
+    // line 350 "src/Parser/Template_Parser.y"
     public function yy_r15(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-    // line 354 "src/Parser/TemplateParser.y"
+    // line 354 "src/Parser/Template_Parser.y"
     public function yy_r16(): void
     {
         $this->_retvalue = $this->compiler->compile_print_expression($this->yystack[$this->yyidx + 0]->minor[0], $this->yystack[$this->yyidx + 0]->minor[1]);
     }
-    // line 363 "src/Parser/TemplateParser.y"
+    // line 363 "src/Parser/Template_Parser.y"
     public function yy_r17(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('assign', array_merge([['value' => $this->yystack[$this->yyidx + 0]->minor[0]], ['var' => '\'' . substr($this->yystack[$this->yyidx + -1]->minor, 1) . '\'']], $this->yystack[$this->yyidx + 0]->minor[1]));
     }
-    // line 367 "src/Parser/TemplateParser.y"
+    // line 367 "src/Parser/Template_Parser.y"
     public function yy_r18(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('assign', array_merge([['value' => $this->yystack[$this->yyidx + 0]->minor[0]], ['var' => $this->yystack[$this->yyidx + -1]->minor['var']]], $this->yystack[$this->yyidx + 0]->minor[1]), ['smarty_internal_index' => $this->yystack[$this->yyidx + -1]->minor['smarty_internal_index']]);
     }
-    // line 371 "src/Parser/TemplateParser.y"
+    // line 371 "src/Parser/Template_Parser.y"
     public function yy_r19(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 375 "src/Parser/TemplateParser.y"
+    // line 375 "src/Parser/Template_Parser.y"
     public function yy_r20(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 390 "src/Parser/TemplateParser.y"
+    // line 390 "src/Parser/Template_Parser.y"
     public function yy_r24(): void
     {
         if (defined($this->yystack[$this->yyidx + -1]->minor)) {
@@ -704,7 +704,7 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
         }
     }
-    // line 400 "src/Parser/TemplateParser.y"
+    // line 400 "src/Parser/Template_Parser.y"
     public function yy_r25(): void
     {
         if (defined($this->yystack[$this->yyidx + 0]->minor)) {
@@ -716,7 +716,7 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + 0]->minor, []);
         }
     }
-    // line 413 "src/Parser/TemplateParser.y"
+    // line 413 "src/Parser/Template_Parser.y"
     public function yy_r26(): void
     {
         if (defined($this->yystack[$this->yyidx + -2]->minor)) {
@@ -728,80 +728,80 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor, ['modifierlist' => $this->yystack[$this->yyidx + -1]->minor]);
         }
     }
-    // line 425 "src/Parser/TemplateParser.y"
+    // line 425 "src/Parser/Template_Parser.y"
     public function yy_r27(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -3]->minor, $this->yystack[$this->yyidx + 0]->minor, ['object_method' => $this->yystack[$this->yyidx + -1]->minor]);
     }
-    // line 430 "src/Parser/TemplateParser.y"
+    // line 430 "src/Parser/Template_Parser.y"
     public function yy_r28(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -4]->minor, $this->yystack[$this->yyidx + 0]->minor, ['modifierlist' => $this->yystack[$this->yyidx + -1]->minor, 'object_method' => $this->yystack[$this->yyidx + -2]->minor]);
     }
-    // line 435 "src/Parser/TemplateParser.y"
+    // line 435 "src/Parser/Template_Parser.y"
     public function yy_r29(): void
     {
         $tag = trim(substr($this->yystack[$this->yyidx + -1]->minor, $this->compiler->get_ldel_length()));
         $this->_retvalue = $this->compiler->compile_tag($tag === 'else if' ? 'elseif' : $tag, [], ['if condition' => $this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 440 "src/Parser/TemplateParser.y"
+    // line 440 "src/Parser/Template_Parser.y"
     public function yy_r30(): void
     {
         $tag = trim(substr($this->yystack[$this->yyidx + -2]->minor, $this->compiler->get_ldel_length()));
         $this->_retvalue = $this->compiler->compile_tag($tag === 'else if' ? 'elseif' : $tag, $this->yystack[$this->yyidx + 0]->minor, ['if condition' => $this->yystack[$this->yyidx + -1]->minor]);
     }
-    // line 445 "src/Parser/TemplateParser.y"
+    // line 445 "src/Parser/Template_Parser.y"
     public function yy_r31(): void
     {
         $tag = trim(substr($this->yystack[$this->yyidx + -1]->minor, $this->compiler->get_ldel_length()));
         $this->_retvalue = $this->compiler->compile_tag($tag === 'else if' ? 'elseif' : $tag, [], ['if condition' => $this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 456 "src/Parser/TemplateParser.y"
+    // line 456 "src/Parser/Template_Parser.y"
     public function yy_r33(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('for', array_merge($this->yystack[$this->yyidx + 0]->minor, [['start' => $this->yystack[$this->yyidx + -6]->minor], ['ifexp' => $this->yystack[$this->yyidx + -4]->minor], ['var' => $this->yystack[$this->yyidx + -2]->minor], ['step' => $this->yystack[$this->yyidx + -1]->minor]]), 1);
     }
-    // line 460 "src/Parser/TemplateParser.y"
+    // line 460 "src/Parser/Template_Parser.y"
     public function yy_r34(): void
     {
         $this->_retvalue = '=' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 468 "src/Parser/TemplateParser.y"
+    // line 468 "src/Parser/Template_Parser.y"
     public function yy_r36(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('for', array_merge($this->yystack[$this->yyidx + 0]->minor, [['start' => $this->yystack[$this->yyidx + -3]->minor], ['to' => $this->yystack[$this->yyidx + -1]->minor]]), 0);
     }
-    // line 472 "src/Parser/TemplateParser.y"
+    // line 472 "src/Parser/Template_Parser.y"
     public function yy_r37(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('for', array_merge($this->yystack[$this->yyidx + 0]->minor, [['start' => $this->yystack[$this->yyidx + -5]->minor], ['to' => $this->yystack[$this->yyidx + -3]->minor], ['step' => $this->yystack[$this->yyidx + -1]->minor]]), 0);
     }
-    // line 477 "src/Parser/TemplateParser.y"
+    // line 477 "src/Parser/Template_Parser.y"
     public function yy_r38(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('foreach', array_merge($this->yystack[$this->yyidx + 0]->minor, [['from' => $this->yystack[$this->yyidx + -3]->minor], ['item' => $this->yystack[$this->yyidx + -1]->minor]]));
     }
-    // line 481 "src/Parser/TemplateParser.y"
+    // line 481 "src/Parser/Template_Parser.y"
     public function yy_r39(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('foreach', array_merge($this->yystack[$this->yyidx + 0]->minor, [['from' => $this->yystack[$this->yyidx + -5]->minor], ['item' => $this->yystack[$this->yyidx + -1]->minor], ['key' => $this->yystack[$this->yyidx + -3]->minor]]));
     }
-    // line 484 "src/Parser/TemplateParser.y"
+    // line 484 "src/Parser/Template_Parser.y"
     public function yy_r40(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('foreach', $this->yystack[$this->yyidx + 0]->minor);
     }
-    // line 489 "src/Parser/TemplateParser.y"
+    // line 489 "src/Parser/Template_Parser.y"
     public function yy_r41(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('setfilter', [], ['modifier_list' => [array_merge([$this->yystack[$this->yyidx + -1]->minor], $this->yystack[$this->yyidx + 0]->minor)]]);
     }
-    // line 493 "src/Parser/TemplateParser.y"
+    // line 493 "src/Parser/Template_Parser.y"
     public function yy_r42(): void
     {
         $this->_retvalue = $this->compiler->compile_tag('setfilter', [], ['modifier_list' => array_merge([array_merge([$this->yystack[$this->yyidx + -2]->minor], $this->yystack[$this->yyidx + -1]->minor)], $this->yystack[$this->yyidx + 0]->minor)]);
     }
-    // line 499 "src/Parser/TemplateParser.y"
+    // line 499 "src/Parser/Template_Parser.y"
     public function yy_r43(): void
     {
         $tag = trim(substr($this->yystack[$this->yyidx + 0]->minor, $this->compiler->get_ldel_length(), -$this->compiler->get_rdel_length()), ' /');
@@ -812,43 +812,43 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_tag($tag . 'close', []);
         }
     }
-    // line 508 "src/Parser/TemplateParser.y"
+    // line 508 "src/Parser/Template_Parser.y"
     public function yy_r44(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + 0]->minor . 'close', []);
     }
-    // line 512 "src/Parser/TemplateParser.y"
+    // line 512 "src/Parser/Template_Parser.y"
     public function yy_r45(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -1]->minor . 'close', [], ['modifier_list' => $this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 517 "src/Parser/TemplateParser.y"
+    // line 517 "src/Parser/Template_Parser.y"
     public function yy_r46(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -2]->minor . 'close', [], ['object_method' => $this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 521 "src/Parser/TemplateParser.y"
+    // line 521 "src/Parser/Template_Parser.y"
     public function yy_r47(): void
     {
         $this->_retvalue = $this->compiler->compile_tag($this->yystack[$this->yyidx + -3]->minor . 'close', [], ['object_method' => $this->yystack[$this->yyidx + -1]->minor, 'modifier_list' => $this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 529 "src/Parser/TemplateParser.y"
+    // line 529 "src/Parser/Template_Parser.y"
     public function yy_r48(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
         $this->_retvalue[] = $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 535 "src/Parser/TemplateParser.y"
+    // line 535 "src/Parser/Template_Parser.y"
     public function yy_r49(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 540 "src/Parser/TemplateParser.y"
+    // line 540 "src/Parser/Template_Parser.y"
     public function yy_r50(): void
     {
         $this->_retvalue = [];
     }
-    // line 545 "src/Parser/TemplateParser.y"
+    // line 545 "src/Parser/Template_Parser.y"
     public function yy_r51(): void
     {
         if (defined($this->yystack[$this->yyidx + 0]->minor)) {
@@ -860,146 +860,148 @@ class Template_Parser
             $this->_retvalue = [$this->yystack[$this->yyidx + -2]->minor => '\'' . $this->yystack[$this->yyidx + 0]->minor . '\''];
         }
     }
-    // line 556 "src/Parser/TemplateParser.y"
+    // line 556 "src/Parser/Template_Parser.y"
     public function yy_r52(): void
     {
         $this->_retvalue = [trim($this->yystack[$this->yyidx + -1]->minor, " =\n\r\t") => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 564 "src/Parser/TemplateParser.y"
+    // line 564 "src/Parser/Template_Parser.y"
     public function yy_r54(): void
     {
         $this->_retvalue = '\'' . $this->yystack[$this->yyidx + 0]->minor . '\'';
     }
-    // line 576 "src/Parser/TemplateParser.y"
+    // line 576 "src/Parser/Template_Parser.y"
     public function yy_r57(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -2]->minor => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 589 "src/Parser/TemplateParser.y"
+    // line 589 "src/Parser/Template_Parser.y"
     public function yy_r59(): void
     {
         $this->yystack[$this->yyidx + -2]->minor[] = $this->yystack[$this->yyidx + 0]->minor;
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor;
     }
-    // line 594 "src/Parser/TemplateParser.y"
+    // line 594 "src/Parser/Template_Parser.y"
     public function yy_r60(): void
     {
         $this->_retvalue = ['var' => '\'' . substr($this->yystack[$this->yyidx + -2]->minor, 1) . '\'', 'value' => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 601 "src/Parser/TemplateParser.y"
+    // line 601 "src/Parser/Template_Parser.y"
     public function yy_r62(): void
     {
         $this->_retvalue = ['var' => $this->yystack[$this->yyidx + -2]->minor, 'value' => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 605 "src/Parser/TemplateParser.y"
+    // line 605 "src/Parser/Template_Parser.y"
     public function yy_r63(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-    // line 630 "src/Parser/TemplateParser.y"
+    // line 630 "src/Parser/Template_Parser.y"
     public function yy_r67(): void
     {
         $this->_retvalue = '$_smarty_tpl->get_variable(\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\')->pre_inc_dec(\'' . $this->yystack[$this->yyidx + -1]->minor . '\')';
     }
-    // line 635 "src/Parser/TemplateParser.y"
+    // line 635 "src/Parser/Template_Parser.y"
     public function yy_r68(): void
     {
         $this->_retvalue = '$_smarty_tpl->get_variable(\'' . substr($this->yystack[$this->yyidx + -1]->minor, 1) . '\')->post_inc_dec(\'' . $this->yystack[$this->yyidx + 0]->minor . '\')';
     }
-    // line 640 "src/Parser/TemplateParser.y"
+    // line 640 "src/Parser/Template_Parser.y"
     public function yy_r69(): void
     {
         $this->_retvalue = '$_smarty_tpl->get_stream_variable(\'' . substr($this->yystack[$this->yyidx + -2]->minor, 1) . '://' . $this->yystack[$this->yyidx + 0]->minor . '\')';
     }
-    // line 645 "src/Parser/TemplateParser.y"
+    // line 645 "src/Parser/Template_Parser.y"
     public function yy_r70(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 655 "src/Parser/TemplateParser.y"
+    // line 655 "src/Parser/Template_Parser.y"
     public function yy_r72(): void
     {
-        $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor['pre'] . $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + -1]->minor['op'] . $this->yystack[$this->yyidx + 0]->minor . ')';
+        $clause = $this->yystack[$this->yyidx + -1]->minor;
+        $suffix = $clause['suf'] ?? ')';
+        $this->_retvalue = $clause['pre'] . $this->yystack[$this->yyidx + -2]->minor . $clause['op'] . $this->yystack[$this->yyidx + 0]->minor . $suffix;
     }
-    // line 659 "src/Parser/TemplateParser.y"
+    // line 659 "src/Parser/Template_Parser.y"
     public function yy_r73(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 663 "src/Parser/TemplateParser.y"
+    // line 663 "src/Parser/Template_Parser.y"
     public function yy_r74(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor . $this->yystack[$this->yyidx + -1]->minor . ')';
     }
-    // line 667 "src/Parser/TemplateParser.y"
+    // line 667 "src/Parser/Template_Parser.y"
     public function yy_r75(): void
     {
         static $isin = ['isin' => 'in_array(', 'isnotin' => '!in_array('];
         $op = strtolower(str_replace(' ', '', $this->yystack[$this->yyidx + 0]->minor));
         $this->_retvalue = $isin[$op];
     }
-    // line 676 "src/Parser/TemplateParser.y"
+    // line 676 "src/Parser/Template_Parser.y"
     public function yy_r76(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + -2]->minor . ',' . $this->yystack[$this->yyidx + 0]->minor . ')';
     }
-    // line 680 "src/Parser/TemplateParser.y"
+    // line 680 "src/Parser/Template_Parser.y"
     public function yy_r77(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + -2]->minor . ',(array)' . $this->yystack[$this->yyidx + 0]->minor . ')';
     }
-    // line 685 "src/Parser/TemplateParser.y"
+    // line 685 "src/Parser/Template_Parser.y"
     public function yy_r78(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor . ',' . $this->yystack[$this->yyidx + -2]->minor . ') ';
     }
-    // line 690 "src/Parser/TemplateParser.y"
+    // line 690 "src/Parser/Template_Parser.y"
     public function yy_r79(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . ' ?? ' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 697 "src/Parser/TemplateParser.y"
+    // line 697 "src/Parser/Template_Parser.y"
     public function yy_r80(): void
     {
         $this->compiler->trigger_tag_no_cache(substr($this->yystack[$this->yyidx + -2]->minor, 1));
         $this->_retvalue = $this->yystack[$this->yyidx + -4]->minor . ' ? $_smarty_tpl->get_value(\'' . substr($this->yystack[$this->yyidx + -2]->minor, 1) . '\') : ' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 702 "src/Parser/TemplateParser.y"
+    // line 702 "src/Parser/Template_Parser.y"
     public function yy_r81(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -4]->minor . ' ? ' . $this->yystack[$this->yyidx + -2]->minor . ' : ' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 711 "src/Parser/TemplateParser.y"
+    // line 711 "src/Parser/Template_Parser.y"
     public function yy_r83(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . ' ?: ' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 721 "src/Parser/TemplateParser.y"
+    // line 721 "src/Parser/Template_Parser.y"
     public function yy_r85(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 726 "src/Parser/TemplateParser.y"
+    // line 726 "src/Parser/Template_Parser.y"
     public function yy_r86(): void
     {
         $this->_retvalue = '!' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 747 "src/Parser/TemplateParser.y"
+    // line 747 "src/Parser/Template_Parser.y"
     public function yy_r91(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . '.' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 751 "src/Parser/TemplateParser.y"
+    // line 751 "src/Parser/Template_Parser.y"
     public function yy_r92(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . '.';
     }
-    // line 755 "src/Parser/TemplateParser.y"
+    // line 755 "src/Parser/Template_Parser.y"
     public function yy_r93(): void
     {
         $this->_retvalue = '.' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 760 "src/Parser/TemplateParser.y"
+    // line 760 "src/Parser/Template_Parser.y"
     public function yy_r94(): void
     {
         if (defined($this->yystack[$this->yyidx + 0]->minor)) {
@@ -1011,17 +1013,17 @@ class Template_Parser
             $this->_retvalue = '\'' . $this->yystack[$this->yyidx + 0]->minor . '\'';
         }
     }
-    // line 777 "src/Parser/TemplateParser.y"
+    // line 777 "src/Parser/Template_Parser.y"
     public function yy_r96(): void
     {
         $this->_retvalue = '(' . $this->yystack[$this->yyidx + -1]->minor . ')';
     }
-    // line 781 "src/Parser/TemplateParser.y"
+    // line 781 "src/Parser/Template_Parser.y"
     public function yy_r97(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 799 "src/Parser/TemplateParser.y"
+    // line 799 "src/Parser/Template_Parser.y"
     public function yy_r101(): void
     {
         if ($this->security && $this->security->static_classes !== []) {
@@ -1036,7 +1038,7 @@ class Template_Parser
         }
         $this->_retvalue = $prefix_var . '::' . $this->yystack[$this->yyidx + 0]->minor[0] . $this->yystack[$this->yyidx + 0]->minor[1];
     }
-    // line 814 "src/Parser/TemplateParser.y"
+    // line 814 "src/Parser/Template_Parser.y"
     public function yy_r102(): void
     {
         $prefix_var = $this->compiler->get_new_prefix_variable();
@@ -1044,12 +1046,12 @@ class Template_Parser
         $this->compiler->append_prefix_code($this->compiler->append_code($tmp, "<?php {$prefix_var} = ob_get_clean();?>"));
         $this->_retvalue = $prefix_var;
     }
-    // line 821 "src/Parser/TemplateParser.y"
+    // line 821 "src/Parser/Template_Parser.y"
     public function yy_r103(): void
     {
         $this->_retvalue = $this->compiler->compile_modifier($this->yystack[$this->yyidx + 0]->minor, $this->yystack[$this->yyidx + -1]->minor);
     }
-    // line 834 "src/Parser/TemplateParser.y"
+    // line 834 "src/Parser/Template_Parser.y"
     public function yy_r106(): void
     {
         if (!in_array(strtolower($this->yystack[$this->yyidx + -2]->minor), ['self', 'parent']) && (!$this->security || $this->security->is_trusted_static_class_access($this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + 0]->minor, $this->compiler))) {
@@ -1062,23 +1064,23 @@ class Template_Parser
             $this->compiler->trigger_template_error('static class \'' . $this->yystack[$this->yyidx + -2]->minor . '\' is undefined or not allowed by security setting');
         }
     }
-    // line 853 "src/Parser/TemplateParser.y"
+    // line 853 "src/Parser/Template_Parser.y"
     public function yy_r108(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 861 "src/Parser/TemplateParser.y"
+    // line 861 "src/Parser/Template_Parser.y"
     public function yy_r109(): void
     {
         $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor, [$this->yystack[$this->yyidx + 0]->minor]);
     }
-    // line 888 "src/Parser/TemplateParser.y"
+    // line 888 "src/Parser/Template_Parser.y"
     public function yy_r114(): void
     {
         $this->compiler->trigger_tag_no_cache(substr($this->yystack[$this->yyidx + 0]->minor, 1));
         $this->_retvalue = ['$_smarty_tpl->has_variable(\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\')', '$_smarty_tpl->get_value(\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\')'];
     }
-    // line 892 "src/Parser/TemplateParser.y"
+    // line 892 "src/Parser/Template_Parser.y"
     public function yy_r115(): void
     {
         if ($this->yystack[$this->yyidx + 0]->minor['var'] === '\'smarty\'') {
@@ -1092,142 +1094,142 @@ class Template_Parser
             $this->_retvalue = ['true', '$_smarty_tpl->get_value(' . $this->yystack[$this->yyidx + 0]->minor['var'] . ')' . $this->yystack[$this->yyidx + 0]->minor['smarty_internal_index']];
         }
     }
-    // line 906 "src/Parser/TemplateParser.y"
+    // line 906 "src/Parser/Template_Parser.y"
     public function yy_r116(): void
     {
         $this->_retvalue = ['true', '$_smarty_tpl->get_variable(' . $this->yystack[$this->yyidx + -2]->minor . ')->' . $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 911 "src/Parser/TemplateParser.y"
+    // line 911 "src/Parser/Template_Parser.y"
     public function yy_r117(): void
     {
         $this->_retvalue = ['true', $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 916 "src/Parser/TemplateParser.y"
+    // line 916 "src/Parser/Template_Parser.y"
     public function yy_r118(): void
     {
         $this->_retvalue = $this->compiler->compile_config_variable('\'' . $this->yystack[$this->yyidx + -1]->minor . '\'');
     }
-    // line 920 "src/Parser/TemplateParser.y"
+    // line 920 "src/Parser/Template_Parser.y"
     public function yy_r119(): void
     {
         $this->_retvalue = '(is_array($tmp = ' . $this->compiler->compile_config_variable('\'' . $this->yystack[$this->yyidx + -2]->minor . '\'') . ') ? $tmp' . $this->yystack[$this->yyidx + 0]->minor . ' :null)';
     }
-    // line 924 "src/Parser/TemplateParser.y"
+    // line 924 "src/Parser/Template_Parser.y"
     public function yy_r120(): void
     {
         $this->_retvalue = $this->compiler->compile_config_variable($this->yystack[$this->yyidx + -1]->minor);
     }
-    // line 928 "src/Parser/TemplateParser.y"
+    // line 928 "src/Parser/Template_Parser.y"
     public function yy_r121(): void
     {
         $this->_retvalue = '(is_array($tmp = ' . $this->compiler->compile_config_variable($this->yystack[$this->yyidx + -2]->minor) . ') ? $tmp' . $this->yystack[$this->yyidx + 0]->minor . ' : null)';
     }
-    // line 932 "src/Parser/TemplateParser.y"
+    // line 932 "src/Parser/Template_Parser.y"
     public function yy_r122(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor[1];
     }
-    // line 940 "src/Parser/TemplateParser.y"
+    // line 940 "src/Parser/Template_Parser.y"
     public function yy_r124(): void
     {
         $this->_retvalue = ['var' => '\'' . substr($this->yystack[$this->yyidx + -1]->minor, 1) . '\'', 'smarty_internal_index' => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 943 "src/Parser/TemplateParser.y"
+    // line 943 "src/Parser/Template_Parser.y"
     public function yy_r125(): void
     {
         $this->_retvalue = ['var' => $this->yystack[$this->yyidx + -1]->minor, 'smarty_internal_index' => $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 956 "src/Parser/TemplateParser.y"
+    // line 956 "src/Parser/Template_Parser.y"
     public function yy_r127()
     {
     }
-    // line 962 "src/Parser/TemplateParser.y"
+    // line 962 "src/Parser/Template_Parser.y"
     public function yy_r128(): void
     {
         $this->compiler->trigger_tag_no_cache(substr($this->yystack[$this->yyidx + 0]->minor, 1));
         $this->_retvalue = '[$_smarty_tpl->get_value(\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\')]';
     }
-    // line 966 "src/Parser/TemplateParser.y"
+    // line 966 "src/Parser/Template_Parser.y"
     public function yy_r129(): void
     {
         $this->compiler->trigger_tag_no_cache($this->yystack[$this->yyidx + 0]->minor);
         $this->_retvalue = '[$_smarty_tpl->get_value(' . $this->yystack[$this->yyidx + 0]->minor . ')]';
     }
-    // line 971 "src/Parser/TemplateParser.y"
+    // line 971 "src/Parser/Template_Parser.y"
     public function yy_r130(): void
     {
         $this->compiler->trigger_tag_no_cache($this->yystack[$this->yyidx + -2]->minor);
         $this->_retvalue = '[$_smarty_tpl->get_value(' . $this->yystack[$this->yyidx + -2]->minor . ')->' . $this->yystack[$this->yyidx + 0]->minor . ']';
     }
-    // line 976 "src/Parser/TemplateParser.y"
+    // line 976 "src/Parser/Template_Parser.y"
     public function yy_r131(): void
     {
         $this->_retvalue = '[\'' . $this->yystack[$this->yyidx + 0]->minor . '\']';
     }
-    // line 980 "src/Parser/TemplateParser.y"
+    // line 980 "src/Parser/Template_Parser.y"
     public function yy_r132(): void
     {
         $this->_retvalue = '[' . $this->yystack[$this->yyidx + 0]->minor . ']';
     }
-    // line 985 "src/Parser/TemplateParser.y"
+    // line 985 "src/Parser/Template_Parser.y"
     public function yy_r133(): void
     {
         $this->_retvalue = '[' . $this->yystack[$this->yyidx + -1]->minor . ']';
     }
-    // line 990 "src/Parser/TemplateParser.y"
+    // line 990 "src/Parser/Template_Parser.y"
     public function yy_r134(): void
     {
         $this->_retvalue = '[' . (new \Smarty\Compile\Special_Variable_Compiler())->compile([], $this->compiler, '[\'section\'][\'' . $this->yystack[$this->yyidx + -1]->minor . '\'][\'index\']') . ']';
     }
-    // line 994 "src/Parser/TemplateParser.y"
+    // line 994 "src/Parser/Template_Parser.y"
     public function yy_r135(): void
     {
         $this->_retvalue = '[' . (new \Smarty\Compile\Special_Variable_Compiler())->compile([], $this->compiler, '[\'section\'][\'' . $this->yystack[$this->yyidx + -3]->minor . '\'][\'' . $this->yystack[$this->yyidx + -1]->minor . '\']') . ']';
     }
-    // line 997 "src/Parser/TemplateParser.y"
+    // line 997 "src/Parser/Template_Parser.y"
     public function yy_r136(): void
     {
         $this->_retvalue = '[' . $this->yystack[$this->yyidx + -1]->minor . ']';
     }
-    // line 1003 "src/Parser/TemplateParser.y"
+    // line 1003 "src/Parser/Template_Parser.y"
     public function yy_r138(): void
     {
         $this->compiler->trigger_tag_no_cache(substr($this->yystack[$this->yyidx + -1]->minor, 1));
         $this->_retvalue = '[$_smarty_tpl->get_value(\'' . substr($this->yystack[$this->yyidx + -1]->minor, 1) . '\')]';
     }
-    // line 1020 "src/Parser/TemplateParser.y"
+    // line 1020 "src/Parser/Template_Parser.y"
     public function yy_r142(): void
     {
         $this->_retvalue = '[]';
     }
-    // line 1030 "src/Parser/TemplateParser.y"
+    // line 1030 "src/Parser/Template_Parser.y"
     public function yy_r143(): void
     {
         $this->_retvalue = '\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\'';
     }
-    // line 1034 "src/Parser/TemplateParser.y"
+    // line 1034 "src/Parser/Template_Parser.y"
     public function yy_r144(): void
     {
         $this->_retvalue = '\'\'';
     }
-    // line 1039 "src/Parser/TemplateParser.y"
+    // line 1039 "src/Parser/Template_Parser.y"
     public function yy_r145(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . '.' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1047 "src/Parser/TemplateParser.y"
+    // line 1047 "src/Parser/Template_Parser.y"
     public function yy_r147(): void
     {
         $var = trim(substr($this->yystack[$this->yyidx + 0]->minor, $this->compiler->get_ldel_length(), -$this->compiler->get_rdel_length()), ' $');
         $this->compiler->trigger_tag_no_cache($var);
         $this->_retvalue = '$_smarty_tpl->get_value(\'' . $var . '\')';
     }
-    // line 1054 "src/Parser/TemplateParser.y"
+    // line 1054 "src/Parser/Template_Parser.y"
     public function yy_r148(): void
     {
         $this->_retvalue = '(' . $this->yystack[$this->yyidx + -1]->minor . ')';
     }
-    // line 1061 "src/Parser/TemplateParser.y"
+    // line 1061 "src/Parser/Template_Parser.y"
     public function yy_r149(): void
     {
         if ($this->yystack[$this->yyidx + -1]->minor['var'] === '\'smarty\'') {
@@ -1237,17 +1239,17 @@ class Template_Parser
             $this->_retvalue = '$_smarty_tpl->get_value(' . $this->yystack[$this->yyidx + -1]->minor['var'] . ')' . $this->yystack[$this->yyidx + -1]->minor['smarty_internal_index'] . $this->yystack[$this->yyidx + 0]->minor;
         }
     }
-    // line 1081 "src/Parser/TemplateParser.y"
+    // line 1081 "src/Parser/Template_Parser.y"
     public function yy_r152(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1086 "src/Parser/TemplateParser.y"
+    // line 1086 "src/Parser/Template_Parser.y"
     public function yy_r153(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1091 "src/Parser/TemplateParser.y"
+    // line 1091 "src/Parser/Template_Parser.y"
     public function yy_r154(): void
     {
         if ($this->security && substr($this->yystack[$this->yyidx + -1]->minor, 0, 1) === '_') {
@@ -1255,7 +1257,7 @@ class Template_Parser
         }
         $this->_retvalue = '->' . $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1098 "src/Parser/TemplateParser.y"
+    // line 1098 "src/Parser/Template_Parser.y"
     public function yy_r155(): void
     {
         if ($this->security) {
@@ -1264,7 +1266,7 @@ class Template_Parser
         $this->compiler->trigger_tag_no_cache($this->yystack[$this->yyidx + -1]->minor);
         $this->_retvalue = '->{$_smarty_tpl->get_value(' . $this->yystack[$this->yyidx + -1]->minor . ')' . $this->yystack[$this->yyidx + 0]->minor . '}';
     }
-    // line 1106 "src/Parser/TemplateParser.y"
+    // line 1106 "src/Parser/Template_Parser.y"
     public function yy_r156(): void
     {
         if ($this->security) {
@@ -1272,7 +1274,7 @@ class Template_Parser
         }
         $this->_retvalue = '->{' . $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + 0]->minor . '}';
     }
-    // line 1113 "src/Parser/TemplateParser.y"
+    // line 1113 "src/Parser/Template_Parser.y"
     public function yy_r157(): void
     {
         if ($this->security) {
@@ -1280,12 +1282,12 @@ class Template_Parser
         }
         $this->_retvalue = '->{\'' . $this->yystack[$this->yyidx + -4]->minor . '\'.' . $this->yystack[$this->yyidx + -2]->minor . $this->yystack[$this->yyidx + 0]->minor . '}';
     }
-    // line 1121 "src/Parser/TemplateParser.y"
+    // line 1121 "src/Parser/Template_Parser.y"
     public function yy_r158(): void
     {
         $this->_retvalue = '->' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1129 "src/Parser/TemplateParser.y"
+    // line 1129 "src/Parser/Template_Parser.y"
     public function yy_r159(): void
     {
         if ($this->yystack[$this->yyidx + -4]->minor == 'isset') {
@@ -1322,7 +1324,7 @@ class Template_Parser
             $this->_retvalue = $this->compiler->compile_modifier_in_expression($this->yystack[$this->yyidx + -4]->minor, $p) . $this->yystack[$this->yyidx + 0]->minor;
         }
     }
-    // line 1170 "src/Parser/TemplateParser.y"
+    // line 1170 "src/Parser/Template_Parser.y"
     public function yy_r160(): void
     {
         if ($this->security && substr($this->yystack[$this->yyidx + -3]->minor, 0, 1) === '_') {
@@ -1330,7 +1332,7 @@ class Template_Parser
         }
         $this->_retvalue = $this->yystack[$this->yyidx + -3]->minor . '(' . implode(',', $this->yystack[$this->yyidx + -1]->minor) . ')';
     }
-    // line 1177 "src/Parser/TemplateParser.y"
+    // line 1177 "src/Parser/Template_Parser.y"
     public function yy_r161(): void
     {
         if ($this->security) {
@@ -1341,155 +1343,162 @@ class Template_Parser
         $this->compiler->append_prefix_code("<?php {$prefix_var} = \$_smarty_tpl->get_value('" . substr($this->yystack[$this->yyidx + -3]->minor, 1) . '\')' . ';?>');
         $this->_retvalue = $prefix_var . '(' . implode(',', $this->yystack[$this->yyidx + -1]->minor) . ')';
     }
-    // line 1206 "src/Parser/TemplateParser.y"
+    // line 1206 "src/Parser/Template_Parser.y"
     public function yy_r165(): void
     {
         $this->_retvalue = array_merge($this->yystack[$this->yyidx + -2]->minor, [array_merge($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor)]);
     }
-    // line 1210 "src/Parser/TemplateParser.y"
+    // line 1210 "src/Parser/Template_Parser.y"
     public function yy_r166(): void
     {
         $this->_retvalue = [array_merge($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor)];
     }
-    // line 1218 "src/Parser/TemplateParser.y"
+    // line 1218 "src/Parser/Template_Parser.y"
     public function yy_r168(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 1226 "src/Parser/TemplateParser.y"
+    // line 1226 "src/Parser/Template_Parser.y"
     public function yy_r169(): void
     {
         $this->_retvalue = array_merge($this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor);
     }
-    // line 1239 "src/Parser/TemplateParser.y"
+    // line 1239 "src/Parser/Template_Parser.y"
     public function yy_r172(): void
     {
         $this->_retvalue = [trim($this->yystack[$this->yyidx + -1]->minor) . $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 1248 "src/Parser/TemplateParser.y"
+    // line 1248 "src/Parser/Template_Parser.y"
     public function yy_r174(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + 0]->minor, '', 'method'];
     }
-    // line 1253 "src/Parser/TemplateParser.y"
+    // line 1253 "src/Parser/Template_Parser.y"
     public function yy_r175(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor, 'method'];
     }
-    // line 1258 "src/Parser/TemplateParser.y"
+    // line 1258 "src/Parser/Template_Parser.y"
     public function yy_r176(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + 0]->minor, ''];
     }
-    // line 1263 "src/Parser/TemplateParser.y"
+    // line 1263 "src/Parser/Template_Parser.y"
     public function yy_r177(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor];
     }
-    // line 1268 "src/Parser/TemplateParser.y"
+    // line 1268 "src/Parser/Template_Parser.y"
     public function yy_r178(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -1]->minor, $this->yystack[$this->yyidx + 0]->minor, 'property'];
     }
-    // line 1273 "src/Parser/TemplateParser.y"
+    // line 1273 "src/Parser/Template_Parser.y"
     public function yy_r179(): void
     {
         $this->_retvalue = [$this->yystack[$this->yyidx + -2]->minor, $this->yystack[$this->yyidx + -1]->minor . $this->yystack[$this->yyidx + 0]->minor, 'property'];
     }
-    // line 1279 "src/Parser/TemplateParser.y"
+    // line 1279 "src/Parser/Template_Parser.y"
     public function yy_r180(): void
     {
         $this->_retvalue = ' ' . trim($this->yystack[$this->yyidx + 0]->minor) . ' ';
     }
-    // line 1283 "src/Parser/TemplateParser.y"
+    // line 1283 "src/Parser/Template_Parser.y"
     public function yy_r181(): void
     {
         static $lops = ['eq' => ' == ', 'ne' => ' != ', 'neq' => ' != ', 'gt' => ' > ', 'ge' => ' >= ', 'gte' => ' >= ', 'lt' => ' < ', 'le' => ' <= ', 'lte' => ' <= ', 'mod' => ' % ', 'and' => ' && ', 'or' => ' || ', 'xor' => ' xor '];
         $op = strtolower(preg_replace('/\s*/', '', $this->yystack[$this->yyidx + 0]->minor));
         $this->_retvalue = $lops[$op];
     }
-    // line 1302 "src/Parser/TemplateParser.y"
+    // line 1302 "src/Parser/Template_Parser.y"
     public function yy_r182(): void
     {
-        static $tlops = ['isdivby' => ['op' => ' % ', 'pre' => '!('], 'isnotdivby' => ['op' => ' % ', 'pre' => '('], 'isevenby' => ['op' => ' / ', 'pre' => '!(1 & '], 'isnotevenby' => ['op' => ' / ', 'pre' => '(1 & '], 'isoddby' => ['op' => ' / ', 'pre' => '(1 & '], 'isnotoddby' => ['op' => ' / ', 'pre' => '!(1 & ']];
+        static $tlops = [
+            'isdivby' => ['op' => ' % ', 'pre' => '!(', 'suf' => ')'],
+            'isnotdivby' => ['op' => ' % ', 'pre' => '(', 'suf' => ')'],
+            'isevenby' => ['op' => ', ', 'pre' => '!(1 & intdiv(', 'suf' => '))'],
+            'isnotevenby' => ['op' => ', ', 'pre' => '(1 & intdiv(', 'suf' => '))'],
+            'isoddby' => ['op' => ', ', 'pre' => '(1 & intdiv(', 'suf' => '))'],
+            'isnotoddby' => ['op' => ', ', 'pre' => '!(1 & intdiv(', 'suf' => '))'],
+        ];
         $op = strtolower(preg_replace('/\s*/', '', $this->yystack[$this->yyidx + 0]->minor));
         $this->_retvalue = $tlops[$op];
     }
-    // line 1315 "src/Parser/TemplateParser.y"
+    // line 1315 "src/Parser/Template_Parser.y"
     public function yy_r183(): void
     {
         static $scond = ['iseven' => '!(1 & ', 'isnoteven' => '(1 & ', 'isodd' => '(1 & ', 'isnotodd' => '!(1 & '];
         $op = strtolower(str_replace(' ', '', $this->yystack[$this->yyidx + 0]->minor));
         $this->_retvalue = $scond[$op];
     }
-    // line 1326 "src/Parser/TemplateParser.y"
+    // line 1326 "src/Parser/Template_Parser.y"
     public function yy_r184(): void
     {
         $this->_retvalue = 'preg_match(';
     }
-    // line 1333 "src/Parser/TemplateParser.y"
+    // line 1333 "src/Parser/Template_Parser.y"
     public function yy_r185(): void
     {
         $this->_retvalue = 'array(' . $this->yystack[$this->yyidx + -1]->minor . ')';
     }
-    // line 1344 "src/Parser/TemplateParser.y"
+    // line 1344 "src/Parser/Template_Parser.y"
     public function yy_r188(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . ',' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1348 "src/Parser/TemplateParser.y"
+    // line 1348 "src/Parser/Template_Parser.y"
     public function yy_r189(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor . ',';
     }
-    // line 1356 "src/Parser/TemplateParser.y"
+    // line 1356 "src/Parser/Template_Parser.y"
     public function yy_r191(): void
     {
         $this->_retvalue = $this->yystack[$this->yyidx + -2]->minor . '=>' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1360 "src/Parser/TemplateParser.y"
+    // line 1360 "src/Parser/Template_Parser.y"
     public function yy_r192(): void
     {
         $this->_retvalue = '\'' . $this->yystack[$this->yyidx + -2]->minor . '\'=>' . $this->yystack[$this->yyidx + 0]->minor;
     }
-    // line 1376 "src/Parser/TemplateParser.y"
+    // line 1376 "src/Parser/Template_Parser.y"
     public function yy_r195(): void
     {
         $this->compiler->leave_double_quote();
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor->to_smarty_php($this);
     }
-    // line 1382 "src/Parser/TemplateParser.y"
+    // line 1382 "src/Parser/Template_Parser.y"
     public function yy_r196(): void
     {
         $this->yystack[$this->yyidx + -1]->minor->append_subtree($this, $this->yystack[$this->yyidx + 0]->minor);
         $this->_retvalue = $this->yystack[$this->yyidx + -1]->minor;
     }
-    // line 1387 "src/Parser/TemplateParser.y"
+    // line 1387 "src/Parser/Template_Parser.y"
     public function yy_r197(): void
     {
         $this->_retvalue = new Dq($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-    // line 1391 "src/Parser/TemplateParser.y"
+    // line 1391 "src/Parser/Template_Parser.y"
     public function yy_r198(): void
     {
         $this->_retvalue = new Code('(string)' . $this->yystack[$this->yyidx + -1]->minor);
     }
-    // line 1395 "src/Parser/TemplateParser.y"
+    // line 1395 "src/Parser/Template_Parser.y"
     public function yy_r199(): void
     {
         $this->_retvalue = new Code('(string)(' . $this->yystack[$this->yyidx + -1]->minor . ')');
     }
-    // line 1399 "src/Parser/TemplateParser.y"
+    // line 1399 "src/Parser/Template_Parser.y"
     public function yy_r200(): void
     {
         $this->_retvalue = new Code('(string)$_smarty_tpl->get_value(\'' . substr($this->yystack[$this->yyidx + 0]->minor, 1) . '\')');
     }
-    // line 1411 "src/Parser/TemplateParser.y"
+    // line 1411 "src/Parser/Template_Parser.y"
     public function yy_r203(): void
     {
         $this->_retvalue = new Tag($this, $this->yystack[$this->yyidx + 0]->minor);
     }
-    // line 1415 "src/Parser/TemplateParser.y"
+    // line 1415 "src/Parser/Template_Parser.y"
     public function yy_r204(): void
     {
         $this->_retvalue = new Dq_Content($this->yystack[$this->yyidx + 0]->minor);
@@ -1541,7 +1550,7 @@ class Template_Parser
     }
     public function yy_syntax_error($yymajor, $TOKEN): void
     {
-        // line 225 "src/Parser/TemplateParser.y"
+        // line 225 "src/Parser/Template_Parser.y"
         $this->internal_error = true;
         $this->yymajor = $yymajor;
         $this->compiler->trigger_template_error();
@@ -1554,7 +1563,7 @@ class Template_Parser
         while ($this->yyidx >= 0) {
             $this->yy_pop_parser_stack();
         }
-        // line 218 "src/Parser/TemplateParser.y"
+        // line 218 "src/Parser/Template_Parser.y"
         $this->successful = !$this->internal_error;
         $this->internal_error = false;
         $this->retvalue = $this->_retvalue;

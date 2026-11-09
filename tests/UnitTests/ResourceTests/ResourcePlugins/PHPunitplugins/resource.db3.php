@@ -29,7 +29,7 @@ class Smarty_Resource_Db3 extends Smarty\Resource\Base_Plugin
         return '{$x="hello world"}{$x}';
     }
 
-    public function getCompiledFilepath(Template $_template)
+    public function get_compiled_filepath(Template $_template)
     {
         return false;
     }

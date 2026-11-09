@@ -11,29 +11,29 @@ namespace UnitTests\TemplateSource\TagTests\PluginModifier;
  *
  *
  */
-class PluginModifierNumberFormatTest extends \PHPUnit_Smarty
+class Plugin_Modifier_Number_Format_Test extends \PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     /**
      * @return void
      * @throws \Smarty\Exception
      *
-     * @dataProvider numberFormatDataProvider
+     * @dataProvider number_format_data_provider
      */
-    public function testNumberFormat($template, $subject, $expectedString)
+    public function testNumberFormat($template, $subject, $expected_String)
     {
         $this->smarty->assign('subject', $subject);
 
         $tpl = $this->smarty->create_template($template);
 
-        $this->assertEquals($expectedString, $this->smarty->fetch($tpl));
+        $this->assertEquals($expected_String, $this->smarty->fetch($tpl));
     }
 
-    public function numberFormatDataProvider()
+    public function number_format_data_provider()
     {
         return [
             'default'  => [

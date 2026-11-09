@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-11-09 22:11:14
+/* Smarty version 5.8.0, created on 2026-11-09 23:08:21
   from 'file:include.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->get_compiled()->is_fresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_c49b6e1aed3cdd098a2617a5',
+  'unifunc' => 'content_dd8929a2c2ca4ef030746f38',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,9 +20,9 @@ if ($_smarty_tpl->get_compiled()->is_fresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_c49b6e1aed3cdd098a2617a5 (\Smarty\Template $_smarty_tpl) {
+function content_dd8929a2c2ca4ef030746f38 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/app/tests/UnitTests/CacheResourceTests/_shared/templates/b';
-$_smarty_tpl->get_compiled()->nocache_hash = '7f041dda58259e50d61b0c0019a6790a';
+$_smarty_tpl->get_compiled()->nocache_hash = '026fc76a6dd01c14caf09ef0c8c35e01';
 ?>
 include b
 <?php }

@@ -11,7 +11,7 @@ declare(strict_types=1);
  *
  *
  */
-class TestConst
+class Constants_Fixture
 {
     public const CONSTVAL = 'okay';
 }
@@ -19,16 +19,16 @@ class TestConst
 /**
  * class for constants tests
  */
-class ConstantsTest extends PHPUnit_Smarty
+class Constants_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test constants
@@ -54,27 +54,27 @@ class ConstantsTest extends PHPUnit_Smarty
 
     public function testConstants4()
     {
-        $tpl = $this->smarty->create_template('eval:{TestConst::CONSTVAL}');
+        $tpl = $this->smarty->create_template('eval:{Constants_Fixture::CONSTVAL}');
         $this->assertEquals('okay', $this->smarty->fetch($tpl));
     }
 
     public function testConstants5()
     {
-        $tpl = $this->smarty->create_template('eval:{if TestConst::CONSTVAL == "okay"}yes{/if}');
+        $tpl = $this->smarty->create_template('eval:{if Constants_Fixture::CONSTVAL == "okay"}yes{/if}');
         $this->assertEquals('yes', $this->smarty->fetch($tpl));
     }
 
     public function testConstants6()
     {
         $tpl = $this->smarty->create_template('eval:{$obj::CONSTVAL}');
-        $tpl->assign('obj', new TestConst());
+        $tpl->assign('obj', new Constants_Fixture());
         $this->assertEquals('okay', $this->smarty->fetch($tpl));
     }
 
     public function testConstants7()
     {
         $tpl = $this->smarty->create_template('eval:{if $obj::CONSTVAL == "okay"}yes{/if}');
-        $tpl->assign('obj', new TestConst());
+        $tpl->assign('obj', new Constants_Fixture());
         $this->assertEquals('yes', $this->smarty->fetch($tpl));
     }
 

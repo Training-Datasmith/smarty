@@ -8,7 +8,7 @@ require_once __DIR__ . '/../../../__shared/cacheresources/cacheresource.mysql.ph
 
 class Smarty_CacheResource_Mysqltest extends Smarty_CacheResource_Mysql
 {
-    public $lockTime = 0;
+    public $lock_time = 0;
 
     protected function db(): PDO
     {
@@ -17,9 +17,9 @@ class Smarty_CacheResource_Mysqltest extends Smarty_CacheResource_Mysql
 
     public function has_lock(\Smarty\Smarty $smarty, Cached $cached)
     {
-        if ($this->lockTime) {
-            $this->lockTime--;
-            if (!$this->lockTime) {
+        if ($this->lock_time) {
+            $this->lock_time--;
+            if (!$this->lock_time) {
                 $this->release_lock($smarty, $cached);
             }
         }

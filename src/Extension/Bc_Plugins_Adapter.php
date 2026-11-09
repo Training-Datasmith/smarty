@@ -184,7 +184,12 @@ class Bc_Plugins_Adapter extends Base
             if ($plugin_name !== null) {
                 require_once $filename;
                 if (class_exists($class_name = 'smarty_' . $type . '_' . $plugin_name)) {
-                    $this->smarty->register_cache_resource($plugin_name, new $class_name());
+                    $ref = new \ReflectionClass($this->smarty);
+                    $prop = $ref->getProperty('registered_cache_resources');
+                    $prop->setAccessible(true);
+                    $registered = $prop->getValue($this->smarty);
+                    $registered[$plugin_name] = new $class_name();
+                    $prop->setValue($this->smarty, $registered);
                 }
             }
         }

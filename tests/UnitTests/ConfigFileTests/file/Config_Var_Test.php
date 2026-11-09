@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  *
  */
-class ConfigVarTest extends PHPUnit_Smarty
+class Config_Var_Test extends PHPUnit_Smarty
 {
     /**
      * Sets up the fixture
@@ -24,7 +24,7 @@ class ConfigVarTest extends PHPUnit_Smarty
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     /**
@@ -32,7 +32,7 @@ class ConfigVarTest extends PHPUnit_Smarty
      */
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -315,7 +315,7 @@ class ConfigVarTest extends PHPUnit_Smarty
 
     public function testConfigResourceDb4()
     {
-        $this->smarty->add_plugins_dir(__DIR__ . '/../../ResourceTests/ResourcePlugins/PHPunitplugins/');
+        $this->load_plugins_dir_for_tests(__DIR__ . '/../../ResourceTests/ResourcePlugins/PHPunitplugins/');
         $this->smarty->config_load('db4:foo.conf');
         $this->assertEquals('bar', $this->smarty->fetch('foo.tpl'));
     }

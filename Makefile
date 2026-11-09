@@ -1,19 +1,19 @@
 all: lexers parsers
 
-lexers: src/Lexer/ConfigfileLexer.php src/Lexer/TemplateLexer.php
-parsers: src/Parser/ConfigfileParser.php src/Parser/TemplateParser.php
+lexers: src/Lexer/Configfile_Lexer.php src/Lexer/Template_Lexer.php
+parsers: src/Parser/Configfile_Parser.php src/Parser/Template_Parser.php
 
-src/Lexer/ConfigfileLexer.php: src/Lexer/ConfigfileLexer.plex
-	php ./utilities/make-lexer.php src/Lexer/ConfigfileLexer.plex src/Lexer/ConfigfileLexer.php
+src/Lexer/Configfile_Lexer.php: src/Lexer/Configfile_Lexer.plex
+	php ./utilities/make-lexer.php src/Lexer/Configfile_Lexer.plex src/Lexer/Configfile_Lexer.php
 
-src/Lexer/TemplateLexer.php: src/Lexer/TemplateLexer.plex
-	php ./utilities/make-lexer.php src/Lexer/TemplateLexer.plex src/Lexer/TemplateLexer.php
+src/Lexer/Template_Lexer.php: src/Lexer/Template_Lexer.plex
+	php ./utilities/make-lexer.php src/Lexer/Template_Lexer.plex src/Lexer/Template_Lexer.php
 
-src/Parser/ConfigfileParser.php: src/Parser/ConfigfileParser.y
-	php ./utilities/make-parser.php src/Parser/ConfigfileParser.y src/Parser/ConfigfileParser.php
+src/Parser/Configfile_Parser.php: src/Parser/Configfile_Parser.y
+	php ./utilities/make-parser.php src/Parser/Configfile_Parser.y src/Parser/Configfile_Parser.php
 
-src/Parser/TemplateParser.php: src/Parser/TemplateParser.y
-	php ./utilities/make-parser.php src/Parser/TemplateParser.y src/Parser/TemplateParser.php
+src/Parser/Template_Parser.php: src/Parser/Template_Parser.y
+	php ./utilities/make-parser.php src/Parser/Template_Parser.y src/Parser/Template_Parser.php
 
 clean:
-	rm -f src/Lexer/ConfigfileLexer.php src/Lexer/TemplateLexer.php src/Parser/ConfigfileParser.php src/Parser/TemplateParser.php
+	rm -f src/Lexer/Configfile_Lexer.php src/Lexer/Template_Lexer.php src/Parser/Configfile_Parser.php src/Parser/Template_Parser.php

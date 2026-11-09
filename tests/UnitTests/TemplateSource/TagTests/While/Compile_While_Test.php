@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class CompileWhileTest extends PHPUnit_Smarty
+class Compile_While_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test {while 'condition'} tag
@@ -48,14 +48,14 @@ class CompileWhileTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 3);
         $this->assertEquals(
@@ -68,7 +68,7 @@ class CompileWhileTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*
@@ -106,14 +106,14 @@ class CompileWhileTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestNocache
+     * @dataProvider data_test_nocache
      */
-    public function testNocache($value, $nocache, $code, $result, $testName, $testNumber)
+    public function testNocache($value, $nocache, $code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Nocache_{$name}.tpl";
         if ($code) {
-            $this->makeTemplateFile($file, $code);
+            $this->make_template_file($file, $code);
         }
         $this->smarty->set_caching(1);
         $this->smarty->set_template_dir('./templates_tmp');
@@ -121,14 +121,14 @@ class CompileWhileTest extends PHPUnit_Smarty
         $this->assertEquals(
             $result,
             $this->smarty->fetch($file),
-            "{$file} - {$testNumber}"
+            "{$file} - {$test_number}"
         );
     }
 
     /*
       * Data provider for testNocache
       */
-    public function dataTestNocache()
+    public function data_test_nocache()
     {
         $i = 1;
         /*

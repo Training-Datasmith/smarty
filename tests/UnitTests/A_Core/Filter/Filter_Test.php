@@ -15,16 +15,16 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class FilterTest extends PHPUnit_Smarty
+class Filter_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -41,7 +41,12 @@ class FilterTest extends PHPUnit_Smarty
      */
     public function testLoadedOutputFilter()
     {
-        $this->smarty->load_filter(\Smarty\Smarty::FILTER_OUTPUT, 'trimwhitespace');
+        $this->assert_user_deprecation(
+            'load filters is deprecated',
+            function () {
+                $this->smarty->load_filter(\Smarty\Smarty::FILTER_OUTPUT, 'trimwhitespace');
+            }
+        );
         $tpl = $this->smarty->create_template('string:{"    <br>hello world"}');
         $this->assertEquals('<br>hello world', $this->smarty->fetch($tpl));
     }
@@ -202,7 +207,12 @@ class FilterTest extends PHPUnit_Smarty
      */
     public function testLoadedVariableFilter()
     {
-        $this->smarty->load_filter(\Smarty\Smarty::FILTER_VARIABLE, 'escape');
+        $this->assert_user_deprecation(
+            'load variable filters is deprecated',
+            function () {
+                $this->smarty->load_filter(\Smarty\Smarty::FILTER_VARIABLE, 'escape');
+            }
+        );
         $tpl = $this->smarty->create_template('eval:{$foo}');
         $tpl->assign('foo', '<?php ?>');
         $this->assertEquals('&lt;?php ?&gt;', $this->smarty->fetch($tpl));
@@ -213,16 +223,21 @@ class FilterTest extends PHPUnit_Smarty
      */
     public function testRegisteredVariableFilter2()
     {
-        $var = new VarFilter();
+        $var = new Var_Filter();
 
-        $this->smarty->register_filter(\Smarty\Smarty::FILTER_VARIABLE, [$var, 'my_filter']);
+        $this->assert_user_deprecation(
+            'register variable filters is deprecated',
+            function () use ($var) {
+                $this->smarty->register_filter(\Smarty\Smarty::FILTER_VARIABLE, [$var, 'my_filter']);
+            }
+        );
         $tpl = $this->smarty->create_template('string:{$foo}');
         $tpl->assign('foo', 'bar');
         $this->assertEquals('var{$foo}bar', $this->smarty->fetch($tpl));
     }
 }
 
-class VarFilter
+class Var_Filter
 {
     public function my_filter($input)
     {

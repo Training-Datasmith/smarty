@@ -24,7 +24,7 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Stor
     /**
      * @return Memcache|Memcached
      */
-    public function getMemcache()
+    public function get_memcache()
     {
         if ($this->memcache ===  null) {
             if (class_exists('Memcached')) {
@@ -50,7 +50,7 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Stor
         $res = [];
         foreach ($keys as $key) {
             $k = sha1($key);
-            $res[$key] = $this->getMemcache()->get($k);
+            $res[$key] = $this->get_memcache()->get($k);
         }
         return $res;
     }
@@ -68,9 +68,9 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Stor
         foreach ($keys as $k => $v) {
             $k = sha1($k);
             if (class_exists('Memcached')) {
-                $this->getMemcache()->set($k, $v, $expire);
+                $this->get_memcache()->set($k, $v, $expire);
             } else {
-                $this->getMemcache()->set($k, $v, 0, $expire);
+                $this->get_memcache()->set($k, $v, 0, $expire);
             }
         }
         return true;
@@ -87,7 +87,7 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Stor
     {
         foreach ($keys as $k) {
             $k = sha1($k);
-            $this->getMemcache()->delete($k);
+            $this->get_memcache()->delete($k);
         }
         return true;
     }
@@ -99,6 +99,6 @@ class Smarty_CacheResource_Memcache extends \Smarty\Cacheresource\Key_Value_Stor
      */
     protected function purge()
     {
-        return $this->getMemcache()->flush();
+        return $this->get_memcache()->flush();
     }
 }

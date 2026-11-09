@@ -17,11 +17,11 @@ require_once(__DIR__ . '/helpers/_object_tostring.php');
  *
  *
  */
-class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
+class Plugin_Function_Html_Options_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testAssociativeArray()
@@ -33,9 +33,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', 9904);
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', 9904);
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -74,9 +74,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', 9904);
-        $tpl->assign('myOptions', new ArrayIterator([
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', 9904);
+        $tpl->assign('my_options', new ArrayIterator([
                                                         1800 => 'Joe Schmoe',
                                                         9904 => 'Jack Smith',
                                                         2003 => 'Charlie Brown',
@@ -338,9 +338,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -358,9 +358,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => new _object_toString('Joe Schmoe'),
             9904 => new _object_toString('Jack Smith'),
             2003 => new _object_toString('Charlie Brown'),
@@ -387,9 +387,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', new _object_noString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', new _object_noString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -413,9 +413,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => new _object_toString('Joe Schmoe'),
             9904 => new _object_noString('Jack Smith'),
             2003 => new _object_toString('Charlie Brown'),
@@ -437,9 +437,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=1}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select disabled=1}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -457,9 +457,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=1 strict=true}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select disabled=1 strict=true}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -474,9 +474,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled=true strict=true}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select disabled=true strict=true}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',
@@ -491,9 +491,9 @@ class PluginFunctionHtmlOptionsTest extends PHPUnit_Smarty
             . $n . '<option value="2003">Charlie Brown</option>'
             . $n . '</select>' . $n;
 
-        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$myOptions selected=$mySelect disabled="disabled" strict=true}');
-        $tpl->assign('mySelect', new _object_toString(9904));
-        $tpl->assign('myOptions', [
+        $tpl = $this->smarty->create_template('eval:{html_options name="foo" options=$my_options selected=$my_select disabled="disabled" strict=true}');
+        $tpl->assign('my_select', new _object_toString(9904));
+        $tpl->assign('my_options', [
             1800 => 'Joe Schmoe',
             9904 => 'Jack Smith',
             2003 => 'Charlie Brown',

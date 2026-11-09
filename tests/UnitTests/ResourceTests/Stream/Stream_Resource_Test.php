@@ -15,14 +15,14 @@ declare(strict_types=1);
  *
  *
  */
-class StreamResourceTest extends PHPUnit_Smarty
+class Stream_Resource_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
         $this->smarty->assign('foo', 'bar');
-        stream_wrapper_register('global', 'ResourceStream')
+        stream_wrapper_register('global', 'Resource_Stream')
         or die('Failed to register protocol');
         $fp = fopen('global://mytest', 'r+');
         fwrite($fp, 'hello world {$foo}');
@@ -31,7 +31,7 @@ class StreamResourceTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     public function tearDown(): void
     {
@@ -94,7 +94,7 @@ class StreamResourceTest extends PHPUnit_Smarty
     }
 
     /**
-     * test getCompiledFilepath
+     * test get_compiled_filepath
      */
     public function testGetCompiledFilepath()
     {
@@ -184,8 +184,8 @@ class StreamResourceTest extends PHPUnit_Smarty
      */
     public function testNoFiles()
     {
-        $this->cleanDir($this->smarty->get_cache_dir());
-        $this->cleanDir($this->smarty->get_compile_dir());
+        $this->clean_dir($this->smarty->get_cache_dir());
+        $this->clean_dir($this->smarty->get_compile_dir());
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 20;
         $tpl = $this->smarty->create_template('global:mytest', null, null, $this->smarty);
@@ -208,7 +208,7 @@ class StreamResourceTest extends PHPUnit_Smarty
 }
 
 #[AllowDynamicProperties]
-class ResourceStream
+class Resource_Stream
 {
     private $position;
     private $varname;
@@ -261,20 +261,20 @@ class ResourceStream
         $p = &$this->position;
         switch ($whence) {
             case SEEK_SET:
-                $newPos = $offset;
+                $new_Pos = $offset;
                 break;
             case SEEK_CUR:
-                $newPos = $p + $offset;
+                $new_Pos = $p + $offset;
                 break;
             case SEEK_END:
-                $newPos = $l + $offset;
+                $new_Pos = $l + $offset;
                 break;
             default:
                 return false;
         }
-        $ret = ($newPos >= 0 && $newPos <= $l);
+        $ret = ($new_Pos >= 0 && $new_Pos <= $l);
         if ($ret) {
-            $p = $newPos;
+            $p = $new_Pos;
         }
         return $ret;
     }

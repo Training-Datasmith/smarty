@@ -18,16 +18,16 @@ use Smarty\Smarty;
  *
  *
  */
-class RegisterFunctionTest extends PHPUnit_Smarty
+class Register_Function_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -175,26 +175,26 @@ class RegisterFunctionTest extends PHPUnit_Smarty
 
     /**
      * Test case (in)sensitivy of plugin functions
-     * @param $registerName
-     * @param $templateString
+     * @param $register_Name
+     * @param $template_String
      * @return void
      * @throws \Smarty\Exception
      * @group issue907
-     * @dataProvider dataProviderForCaseSensitivity
+     * @dataProvider data_provider_for_case_sensitivity
      */
-    public function testCaseSensitivity($registerName, $templateString)
+    public function testCaseSensitivity($register_Name, $template_String)
     {
         $this->smarty->register_plugin(
             Smarty::PLUGIN_FUNCTION,
-            $registerName,
+            $register_Name,
             function ($params, $smarty) {
                 return 'function-output';
             }
         );
-        $this->assertEquals('function-output', $this->smarty->fetch('string:' . $templateString));
+        $this->assertEquals('function-output', $this->smarty->fetch('string:' . $template_String));
     }
 
-    public function dataProviderForCaseSensitivity()
+    public function data_provider_for_case_sensitivity()
     {
         return [
             ['customTag', '{customTag}'],

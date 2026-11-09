@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class RegisterModifierTest extends PHPUnit_Smarty
+class Register_Modifier_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test register->modifier method for function
@@ -92,17 +92,17 @@ class RegisterModifierTest extends PHPUnit_Smarty
 
     /**
      * test cannot call native PHP fuctions by default
-     * @dataProvider dataUnknownModifiers
+     * @dataProvider data_unknown_modifiers
      */
-    public function testNativePHPModifiers($template, $expectedValue)
+    public function testNativePHPModifiers($template, $expected_Value)
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
         $this->expectException(\Smarty\Compiler_Exception::class);
         $this->expectExceptionMessage('unknown modifier');
         $this->smarty->fetch('string:' . $template);
     }
 
-    public function dataUnknownModifiers(): array
+    public function data_unknown_modifiers(): array
     {
         return [
             ['{" blah"|ltrim:" "}', 'blah'],
@@ -114,51 +114,51 @@ class RegisterModifierTest extends PHPUnit_Smarty
 
     /**
      * test register wildcard modifier using extension
-     * @dataProvider dataUnknownModifiers
+     * @dataProvider data_unknown_modifiers
      */
-    public function testUnregisterModifiers($template, $expectedValue)
+    public function testUnregisterModifiers($template, $expected_Value)
     {
-        $this->cleanDirs();
-        $this->smarty->add_extension(new WildcardExtension());
-        $this->assertEquals($expectedValue, $this->smarty->fetch('string:' . $template));
+        $this->clean_dirs();
+        $this->smarty->add_extension(new Wildcard_Extension());
+        $this->assertEquals($expected_Value, $this->smarty->fetch('string:' . $template));
     }
 
     /**
      * test register wildcard modifier using set_extensions
-     * @dataProvider dataUnknownModifiers
+     * @dataProvider data_unknown_modifiers
      */
-    public function testSetExtensions($template, $expectedValue)
+    public function testSetExtensions($template, $expected_Value)
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
         $this->smarty->set_extensions([
             new \Smarty\Extension\Core_Extension(),
-            new WildcardExtension(),
+            new Wildcard_Extension(),
         ]);
-        $this->assertEquals($expectedValue, $this->smarty->fetch('string:' . $template));
+        $this->assertEquals($expected_Value, $this->smarty->fetch('string:' . $template));
     }
 
     public function testRegisterNativePhpFuncAsString()
     {
         $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'strrev', 'strrev');
-        $this->smarty->assign('myVar', 'andersom');
-        $this->assertEquals('mosredna', $this->smarty->fetch('string:{strrev($myVar)}'));
+        $this->smarty->assign('my_var', 'andersom');
+        $this->assertEquals('mosredna', $this->smarty->fetch('string:{strrev($my_var)}'));
     }
 
     public function testRegisterNativePhpFuncUnderDifferentName()
     {
         $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'k_xyz_a', 'strrev');
-        $this->smarty->assign('myVar', 'andersom');
-        $this->assertEquals('mosredna', $this->smarty->fetch('string:{k_xyz_a($myVar)}'));
+        $this->smarty->assign('my_var', 'andersom');
+        $this->assertEquals('mosredna', $this->smarty->fetch('string:{k_xyz_a($my_var)}'));
     }
 
 }
 
-class WildcardExtension extends \Smarty\Extension\Base
+class Wildcard_Extension extends \Smarty\Extension\Base
 {
-    public function get_modifier_callback(string $modifierName)
+    public function get_modifier_callback(string $modifier_Name)
     {
-        if (is_callable($modifierName)) {
-            return $modifierName;
+        if (is_callable($modifier_Name)) {
+            return $modifier_Name;
         }
         return null;
     }

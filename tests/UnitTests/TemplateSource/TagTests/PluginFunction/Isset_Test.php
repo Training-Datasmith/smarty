@@ -3,17 +3,16 @@
 declare(strict_types=1);
 
 namespace UnitTests\TemplateSource\TagTests\PluginFunction;
-
-class IssetTest extends \PHPUnit_Smarty
+class Isset_Test extends \PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testBasicSyntax()
     {
-        $this->assertEquals('nay', $this->smarty->fetch('string:{if isset($noSuch)}yay{else}nay{/if}'));
+        $this->assertEquals('nay', $this->smarty->fetch('string:{if isset($no_Such)}yay{else}nay{/if}'));
     }
 
     public function testEmptyStringIsset()

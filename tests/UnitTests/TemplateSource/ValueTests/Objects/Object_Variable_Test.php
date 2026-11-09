@@ -15,24 +15,24 @@ declare(strict_types=1);
  *
  *
  */
-class ObjectVariableTest extends PHPUnit_Smarty
+class Object_Variable_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_force_compile(true);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test simple object variable
      */
     public function testObjectVariableOutput()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $tpl = $this->smarty->create_template('string:{$object->hello}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello_world', $this->smarty->fetch($tpl));
@@ -43,7 +43,7 @@ class ObjectVariableTest extends PHPUnit_Smarty
      */
     public function testObjectVariableOutputVariableProperty()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $this->smarty->disable_security();
         $tpl = $this->smarty->create_template('string:{$p=\'hello\'}{$object->$p}');
         $tpl->assign('object', $object);
@@ -55,7 +55,7 @@ class ObjectVariableTest extends PHPUnit_Smarty
      */
     public function testObjectVariableOutputMethod()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $tpl = $this->smarty->create_template('string:{$object->myhello()}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
@@ -66,7 +66,7 @@ class ObjectVariableTest extends PHPUnit_Smarty
      */
     public function testObjectVariableOutputVariableMethod()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $this->smarty->disable_security();
         $tpl = $this->smarty->create_template('string:{$p=\'myhello\'}{$object->$p()}');
         $tpl->assign('object', $object);
@@ -78,7 +78,7 @@ class ObjectVariableTest extends PHPUnit_Smarty
      */
     public function testObjectVariableOutputDoubleQuotes()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $tpl = $this->smarty->create_template('string:{"double quoted `$object->hello` okay"}');
         $tpl->assign('object', $object);
         $this->assertEquals('double quoted hello_world okay', $this->smarty->fetch($tpl));
@@ -89,14 +89,14 @@ class ObjectVariableTest extends PHPUnit_Smarty
      */
     public function testObjectVariableOutputDoubleQuotesInclude()
     {
-        $object = new VariableObject();
+        $object = new Variable_Object();
         $tpl = $this->smarty->create_template('string:{include file="`$object->hello`_test.tpl"}');
         $tpl->assign('object', $object);
         $this->assertEquals('hello world', $this->smarty->fetch($tpl));
     }
 }
 
-class VariableObject
+class Variable_Object
 {
     public $hello = 'hello_world';
 

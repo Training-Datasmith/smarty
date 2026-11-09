@@ -3,17 +3,16 @@
 declare(strict_types=1);
 
 require_once __DIR__ . '/../../../../Bootstrap.php';
-
-class MatchesOperatorTest extends PHPUnit_Smarty
+class Matches_Operator_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**

@@ -10,19 +10,19 @@ declare(strict_types=1);
  *
  *
  */
-class UndefinedTemplateVarTest extends PHPUnit_Smarty
+class Undefined_Template_Var_Test extends PHPUnit_Smarty
 {
     /*
      * Setup test fixture
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * Test Error suppression template fetched by Smarty object
@@ -120,7 +120,7 @@ class UndefinedTemplateVarTest extends PHPUnit_Smarty
 
     public function testUndefinedArrayIndexError()
     {
-        $exceptionThrown = false;
+        $exception_thrown = false;
 
         try {
             $tpl = $this->smarty->create_template('string:a{if $ar.undef}def{/if}b');
@@ -128,7 +128,7 @@ class UndefinedTemplateVarTest extends PHPUnit_Smarty
             $this->smarty->fetch($tpl);
         } catch (Exception $e) {
 
-            $exceptionThrown = true;
+            $exception_thrown = true;
             $this->assertStringStartsWith('Undefined ', $e->getMessage());
             $this->assertTrue(in_array(
                 get_class($e),
@@ -138,7 +138,7 @@ class UndefinedTemplateVarTest extends PHPUnit_Smarty
                 ]
             ));
         }
-        $this->assertTrue($exceptionThrown);
+        $this->assertTrue($exception_thrown);
     }
 
     public function testUsingNullAsAnArrayIsMuted()

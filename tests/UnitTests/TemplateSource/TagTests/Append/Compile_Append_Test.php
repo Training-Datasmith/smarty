@@ -15,12 +15,12 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileAppendTest extends PHPUnit_Smarty
+class Compile_Append_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('../../../__shared/templates/');
         $this->smarty->add_template_dir('./templates_tmp');
         $this->smarty->register_plugin('modifier', 'var_export', 'var_export');
@@ -28,7 +28,7 @@ class CompileAppendTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -36,21 +36,21 @@ class CompileAppendTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestAppend
+     * @dataProvider data_test_append
      */
-    public function testAppend($code, $result, $testName, $testNumber)
+    public function testAppend($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Append_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
-        $this->smarty->assign_global('file', $file);
+        $this->make_template_file($file, $code);
+        $this->smarty->assign('file', $file);
         $this->assertEquals($result, $this->smarty->fetch($file), "testAppend - {$code} - {$testName}");
     }
 
     /*
       * Data provider für testAppend
       */
-    public function dataTestAppend()
+    public function data_test_append()
     {
         $i = 0;
         /*
@@ -73,14 +73,14 @@ class CompileAppendTest extends PHPUnit_Smarty
      * Test Assign spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testAppendSpacing($code, $result, $testName, $testNumber)
+    public function testAppendSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -93,12 +93,12 @@ class CompileAppendTest extends PHPUnit_Smarty
      * Test Append nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testAppendSpacingNocache($code, $result, $testName, $testNumber)
+    public function testAppendSpacingNocache($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('1');
         $this->smarty->set_caching(1);
@@ -114,12 +114,12 @@ class CompileAppendTest extends PHPUnit_Smarty
      * Test Append nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testAppendSpacingNocache2($code, $result, $testName, $testNumber)
+    public function testAppendSpacingNocache2($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('1');
         $this->smarty->set_caching(1);
@@ -143,7 +143,7 @@ class CompileAppendTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*

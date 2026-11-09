@@ -8,16 +8,15 @@ declare(strict_types=1);
 namespace UnitTests\TemplateSource\TagTests\PluginModifier;
 
 use PHPUnit_Smarty;
-
-class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
+class Plugin_Modifier_Json_Encode_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     /**
-     * @dataProvider dataForDefault
+     * @dataProvider data_for_default
      */
     public function testDefault($value, $expected)
     {
@@ -27,7 +26,7 @@ class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
     }
 
     /**
-     * @dataProvider dataForDefault
+     * @dataProvider data_for_default
      */
     public function testDefaultAsFunction($value, $expected)
     {
@@ -36,7 +35,7 @@ class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
         $this->assertEquals($expected, $this->smarty->fetch($tpl));
     }
 
-    public function dataForDefault()
+    public function data_for_default()
     {
         return [
             ['abc', '"abc"'],
@@ -46,7 +45,7 @@ class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
     }
 
     /**
-     * @dataProvider dataForForceObject
+     * @dataProvider data_for_force_object
      */
     public function testForceObject($value, $expected)
     {
@@ -56,7 +55,7 @@ class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
     }
 
     /**
-     * @dataProvider dataForForceObject
+     * @dataProvider data_for_force_object
      */
     public function testForceObjectAsFunction($value, $expected)
     {
@@ -65,7 +64,7 @@ class PluginModifierJsonEncodeTest extends PHPUnit_Smarty
         $this->assertEquals($expected, $this->smarty->fetch($tpl));
     }
 
-    public function dataForForceObject()
+    public function data_for_force_object()
     {
         return [
             ['abc', '"abc"'],

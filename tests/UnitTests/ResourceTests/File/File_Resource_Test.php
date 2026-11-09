@@ -17,17 +17,17 @@ use Smarty\Exception;
  *
  *
  */
-class FileResourceTest extends PHPUnit_Smarty
+class File_Resource_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->enable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     protected function relative($path)
@@ -155,7 +155,7 @@ class FileResourceTest extends PHPUnit_Smarty
         $tpl = $this->smarty->create_template('helloworld.tpl');
         $this->assertTrue($tpl->must_compile());
         // clean up for next tests
-        $this->cleanDir($this->smarty->get_compile_dir());
+        $this->clean_dir($this->smarty->get_compile_dir());
     }
 
     public function testCompileTemplateFile()
@@ -303,11 +303,11 @@ class FileResourceTest extends PHPUnit_Smarty
         chdir($cwd);
     }
 
-    protected function _relativeMap($map, $cwd = null)
+    protected function _relative_map($map, $cwd = null)
     {
         foreach ($map as $file => $result) {
-            $this->cleanDir($this->smarty->get_compile_dir());
-            $this->cleanDir($this->smarty->get_cache_dir());
+            $this->clean_dir($this->smarty->get_compile_dir());
+            $this->clean_dir($this->smarty->get_cache_dir());
 
             if ($result === null) {
                 try {
@@ -357,7 +357,7 @@ class FileResourceTest extends PHPUnit_Smarty
                      '../theory/einstein/foo.tpl' => 'einstein', 'templates/relativity/relativity.tpl' => 'relativity',
                      './templates/relativity/relativity.tpl' => 'relativity',];
 
-        $this->_relativeMap($map);
+        $this->_relative_map($map);
     }
 
     public function testRelativity2()
@@ -387,7 +387,7 @@ class FileResourceTest extends PHPUnit_Smarty
             './templates/relativity/relativity.tpl' => 'relativity',
         ];
 
-        $this->_relativeMap($map);
+        $this->_relative_map($map);
     }
 
     public function testRelativityCwd()
@@ -416,7 +416,7 @@ class FileResourceTest extends PHPUnit_Smarty
             '../theory/einstein/foo.tpl' => 'einstein',
         ];
 
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     public function testRelativityPrecedence()
@@ -436,7 +436,7 @@ class FileResourceTest extends PHPUnit_Smarty
 
         chdir($dn . '/templates/relativity/theory/');
         $this->smarty->set_template_dir([$dn . '/templates/relativity/theory/einstein/',]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     public function testRelativityPrecedence2()
@@ -466,7 +466,7 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->set_template_dir([
                                           $dn . '/templates/relativity/theory/einstein/',
                                       ]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     public function testRelativityRelRel()
@@ -484,7 +484,7 @@ class FileResourceTest extends PHPUnit_Smarty
 
         chdir($dn . '/templates/relativity/theory/einstein');
         $this->smarty->set_template_dir(['../..',]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     public function testRelativityRelRel2()
@@ -504,7 +504,7 @@ class FileResourceTest extends PHPUnit_Smarty
 
         chdir($dn . '/templates/relativity/theory/einstein/');
         $this->smarty->set_template_dir(['../..',]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
     public function testRelativityRelRel3()
     {
@@ -536,7 +536,7 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->set_template_dir([
                                           '..',
                                       ]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     public function testRelativityRelRel1()
@@ -568,7 +568,7 @@ class FileResourceTest extends PHPUnit_Smarty
         $this->smarty->set_template_dir([
                                           '..',
                                       ]);
-        $this->_relativeMap($map, $cwd);
+        $this->_relative_map($map, $cwd);
     }
 
     /**

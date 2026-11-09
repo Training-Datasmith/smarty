@@ -17,16 +17,16 @@ require_once __DIR__ . '/../../../__shared/resources/resource.extendsall.php';
  * @preserveGlobalState    disabled
  *
  */
-class ResourceExtendsAllPluginTest extends PHPUnit_Smarty
+class Resource_Extends_All_Plugin_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**

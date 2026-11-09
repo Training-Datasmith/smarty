@@ -15,33 +15,33 @@ declare(strict_types=1);
  *
  *
 */
-class DoubleQuotedStringTest extends PHPUnit_Smarty
+class Double_Quoted_String_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('../../../__shared/templates/');
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
      * Test double qouted strings
      *
      *
-     * @dataProvider        dataTestDoubleQuoted
+     * @dataProvider data_test_double_quoted
      */
-    public function testDoubleQuoted($code, $result, $testName, $testNumber)
+    public function testDoubleQuoted($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testDoubleQuotes_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
-        $this->smarty->assign_global('file', $file);
+        $this->make_template_file($file, $code);
+        $this->smarty->assign('file', $file);
         $this->smarty->assign('bar', 'buh');
         $this->assertEquals(
             $result,
@@ -53,7 +53,7 @@ class DoubleQuotedStringTest extends PHPUnit_Smarty
     /*
       * Data provider für testDoubleQuoted
       */
-    public function dataTestDoubleQuoted()
+    public function data_test_double_quoted()
     {
         $i = 1;
         /*

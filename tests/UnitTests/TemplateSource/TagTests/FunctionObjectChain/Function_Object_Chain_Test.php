@@ -11,7 +11,7 @@ declare(strict_types=1);
 /**
  * Helper class to simulate a chainable collection object
  */
-class ChainableCollection
+class Chainable_Collection_Fixture
 {
     private $data;
 
@@ -37,7 +37,7 @@ class ChainableCollection
         return json_encode($this->data);
     }
 
-    public function toArray()
+    public function to_array()
     {
         return $this->data;
     }
@@ -53,7 +53,7 @@ class ChainableCollection
  */
 function smarty_modifier_collect($data)
 {
-    return new ChainableCollection($data);
+    return new Chainable_Collection_Fixture($data);
 }
 
 /**
@@ -62,12 +62,12 @@ function smarty_modifier_collect($data)
 function smarty_modifier_create_object($value = null)
 {
     return new class () {
-        public function getName()
+        public function get_name()
         {
             return 'TestObject';
         }
 
-        public function getNext()
+        public function get_next()
         {
             return new class () {
                 public function get_value()
@@ -85,11 +85,11 @@ function smarty_modifier_create_object($value = null)
  * @preserveGlobalState    disabled
  *
  */
-class FunctionObjectChainTest extends PHPUnit_Smarty
+class Function_Object_Chain_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
         // Register modifier plugins that return chainable objects
         // These are called like functions: {collect($data)}
@@ -99,7 +99,7 @@ class FunctionObjectChainTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -147,7 +147,7 @@ class FunctionObjectChainTest extends PHPUnit_Smarty
      */
     public function testFunctionCallWithNestedChain()
     {
-        $result = $this->smarty->fetch('string:{create_object("")->getNext()->get_value()}');
+        $result = $this->smarty->fetch('string:{create_object("")->get_next()->get_value()}');
         $this->assertEquals('ChainedValue', $result);
     }
 
@@ -187,8 +187,8 @@ class FunctionObjectChainTest extends PHPUnit_Smarty
         $data = [1, 2, 0, 3, '', 4, null, 5, false, 6];
         $this->smarty->assign('data', $data);
 
-        // Complex chain: collect -> filter -> values -> toArray
-        $result = $this->smarty->fetch('string:{$filtered = collect($data)->filter()->values()->toArray()}{$filtered|@json_encode}');
+        // Complex chain: collect -> filter -> values -> to_array
+        $result = $this->smarty->fetch('string:{$filtered = collect($data)->filter()->values()->to_array()}{$filtered|@json_encode}');
         $this->assertEquals('[1,2,3,4,5,6]', $result);
     }
 

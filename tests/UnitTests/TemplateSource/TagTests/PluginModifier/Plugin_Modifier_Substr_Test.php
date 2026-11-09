@@ -8,12 +8,11 @@ declare(strict_types=1);
 namespace UnitTests\TemplateSource\TagTests\PluginModifier;
 
 use PHPUnit_Smarty;
-
-class PluginModifierSubstrTest extends PHPUnit_Smarty
+class Plugin_Modifier_Substr_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testDefault()

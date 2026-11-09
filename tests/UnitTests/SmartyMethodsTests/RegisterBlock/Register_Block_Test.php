@@ -18,17 +18,17 @@ use Smarty\Smarty;
  *
  *
  */
-class RegisterBlockTest extends PHPUnit_Smarty
+class Register_Block_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->disable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test register_plugin method for block function
@@ -219,7 +219,7 @@ class RegisterBlockTest extends PHPUnit_Smarty
 
     public function testRegisterBlockCaching4Wrapper()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
 
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
@@ -241,9 +241,9 @@ class RegisterBlockTest extends PHPUnit_Smarty
      */
     public function testRegisterBlockWithPositionalParams()
     {
-        $this->cleanDirs();
-        $this->smarty->register_plugin(Smarty::PLUGIN_COMPILER, 'testblock', blockparamsCompiler::class);
-        $this->smarty->register_plugin(Smarty::PLUGIN_COMPILER, 'testblockclose', blockparamsCompiler::class);
+        $this->clean_dirs();
+        $this->smarty->register_plugin(Smarty::PLUGIN_COMPILER, 'testblock', blockparams_Compiler::class);
+        $this->smarty->register_plugin(Smarty::PLUGIN_COMPILER, 'testblockclose', blockparams_Compiler::class);
         $result = $this->smarty->fetch('string:{testblock "foo" "bar"} block 
 		contents
 		{/testblock}');
@@ -300,7 +300,7 @@ function myblockcache($params, $content, &$smarty_tpl, &$repeat)
     return $content;
 }
 
-class blockparamsCompiler extends \Smarty\Compile\Base
+class blockparams_Compiler extends \Smarty\Compile\Base
 {
     protected $shorttag_order = ['first', 'second'];
     protected $optional_attributes = ['first', 'second'];

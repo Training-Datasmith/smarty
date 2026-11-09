@@ -12,14 +12,14 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class TemplateNormalizationTest extends PHPUnit_Smarty
+class Temlate_Dir_Normalization_Test extends PHPUnit_Smarty
 {
     /*
      * Setup test fixture
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testGetTemplateDir()

@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class EvalResourceTest extends PHPUnit_Smarty
+class Eval_Resource_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test template eval exits
@@ -98,7 +98,7 @@ class EvalResourceTest extends PHPUnit_Smarty
     }
 
     /**
-     * test getCompiledFilepath
+     * test get_compiled_filepath
      */
     public function testGetCompiledFilepath()
     {
@@ -138,8 +138,8 @@ class EvalResourceTest extends PHPUnit_Smarty
      */
     public function testNoFiles()
     {
-        $this->cleanDir($this->smarty->get_cache_dir());
-        $this->cleanDir($this->smarty->get_compile_dir());
+        $this->clean_dir($this->smarty->get_cache_dir());
+        $this->clean_dir($this->smarty->get_compile_dir());
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 20;
         $tpl = $this->smarty->create_template('eval:hello world');

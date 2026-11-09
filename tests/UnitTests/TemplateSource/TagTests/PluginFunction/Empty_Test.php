@@ -3,17 +3,16 @@
 declare(strict_types=1);
 
 namespace UnitTests\TemplateSource\TagTests\PluginFunction;
-
-class EmptyTest extends \PHPUnit_Smarty
+class Empty_Test extends \PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testBasicSyntax()
     {
-        $this->assertEquals('yay', $this->smarty->fetch('string:{if empty($noSuch)}yay{/if}'));
+        $this->assertEquals('yay', $this->smarty->fetch('string:{if empty($no_Such)}yay{/if}'));
     }
 
     public function testEmptyStringIsEmpty()

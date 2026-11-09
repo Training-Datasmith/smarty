@@ -15,7 +15,7 @@ declare(strict_types=1);
  *
  *
  */
-class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
+class Plugin_Function_Html_Select_Date_Test extends PHPUnit_Smarty
 {
     public $now = null;
     protected $years = [];
@@ -211,7 +211,7 @@ class PluginFunctionHtmlSelectDateTest extends PHPUnit_Smarty
 
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_error_reporting(E_ALL & ~E_DEPRECATED);
 
         $year = (int) date('Y');

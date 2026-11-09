@@ -17,16 +17,16 @@ declare(strict_types=1);
  *
  * Short syntax of  section properties did not work
  */
-class SectionPropertiesShortSyntaxIssue428Test extends PHPUnit_Smarty
+class Section_Properties_Short_Syntax_Issue428Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testSection_001()

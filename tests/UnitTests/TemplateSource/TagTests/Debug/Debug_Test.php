@@ -10,11 +10,11 @@ use Smarty\Smarty;
 /**
  * Smarty PHPunit tests of {debug} tag
  */
-class PluginModifierStripTagsTest extends PHPUnit_Smarty
+class Debug_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
     public function testDefault()
     {

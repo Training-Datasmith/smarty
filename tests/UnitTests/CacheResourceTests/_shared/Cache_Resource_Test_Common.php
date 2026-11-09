@@ -17,21 +17,21 @@ use Smarty\Template;
  */
 abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
 {
-    public static $touchResource = null;
+    public static $touch_resource = null;
 
     public function setUp(): void
     {
         $this->smarty->set_template_dir(__DIR__ . '/templates');
-        $this->smarty->add_plugins_dir(__DIR__ . '/PHPunitplugins');
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
+        $this->load_plugins_dir_for_tests(__DIR__ . '/PHPunitplugins');
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
     }
 
-    protected function doClearCacheAssertion($a, $b)
+    protected function do_clear_cache_assertion($a, $b)
     {
         $this->assertEquals($a, $b);
     }
 
-    public function compiledPrefilter($text, Template $tpl)
+    public function compiled_prefilter($text, Template $tpl)
     {
         $replace = $tpl->get_template_vars('test');
         return str_replace('#', (string) ($replace ?? ''), $text);
@@ -46,7 +46,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl');
-        $this->assertEquals($this->buildCachedPath($tpl), $tpl->get_cached()->filepath);
+        $this->assertEquals($this->build_cached_path($tpl), $tpl->get_cached()->filepath);
     }
 
     /**
@@ -57,7 +57,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar');
-        $this->assertEquals($this->buildCachedPath($tpl, true, 'foo|bar'), $tpl->get_cached()->filepath);
+        $this->assertEquals($this->build_cached_path($tpl, true, 'foo|bar'), $tpl->get_cached()->filepath);
     }
 
     /**
@@ -68,7 +68,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->create_template('helloworld.tpl', null, 'blar');
-        $this->assertEquals($this->buildCachedPath($tpl, true, null, 'blar'), $tpl->get_cached()->filepath);
+        $this->assertEquals($this->build_cached_path($tpl, true, null, 'blar'), $tpl->get_cached()->filepath);
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
-        $this->assertEquals($this->buildCachedPath($tpl, true, 'foo|bar', 'blar'), $tpl->get_cached()->filepath);
+        $this->assertEquals($this->build_cached_path($tpl, true, 'foo|bar', 'blar'), $tpl->get_cached()->filepath);
     }
 
     /**
@@ -117,7 +117,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world 2', $tpl2->get_cached_content());
         $this->assertEquals('hello world 3', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(2, $this->smarty->clear_cache(null, 'foo|bar'));
+        $this->do_clear_cache_assertion(2, $this->smarty->clear_cache(null, 'foo|bar'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertEquals('hello world 2', $tpl2->get_cached_content());
@@ -141,7 +141,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(2, $this->smarty->clear_cache('helloworld.tpl'));
+        $this->do_clear_cache_assertion(2, $this->smarty->clear_cache('helloworld.tpl'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -165,7 +165,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(2, $this->smarty->clear_cache('helloworld.tpl'));
+        $this->do_clear_cache_assertion(2, $this->smarty->clear_cache('helloworld.tpl'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -189,7 +189,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
+        $this->do_clear_cache_assertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
         // test that caches are deleted properly
         $this->assertEquals('hello world', $tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -213,7 +213,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
+        $this->do_clear_cache_assertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
         // test that caches are deleted properly
         $this->assertEquals('hello world', $tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -237,7 +237,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
+        $this->do_clear_cache_assertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
         // test that caches are deleted properly
         $this->assertEquals('hello world', $tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -261,7 +261,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
+        $this->do_clear_cache_assertion(1, $this->smarty->clear_cache('helloworld.tpl', null, 'blar2'));
         // test that caches are deleted properly
         $this->assertEquals('hello world', $tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -285,7 +285,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(2, $this->smarty->clear_cache(null, null, 'blar'));
+        $this->do_clear_cache_assertion(2, $this->smarty->clear_cache(null, null, 'blar'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertEquals('hello world', $tpl2->get_cached_content());
@@ -309,7 +309,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl2->get_cached_content());
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(2, $this->smarty->clear_cache(null, null, 'blar'));
+        $this->do_clear_cache_assertion(2, $this->smarty->clear_cache(null, null, 'blar'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertEquals('hello world', $tpl2->get_cached_content());
@@ -336,7 +336,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         $this->assertEquals('hello world', $tpl4->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(3, $this->smarty->clear_cache('helloworld.tpl'));
+        $this->do_clear_cache_assertion(3, $this->smarty->clear_cache('helloworld.tpl'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -368,7 +368,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $tpl4->write_cached_content('something else 4');
 
         // test number of deleted caches
-        $this->doClearCacheAssertion(3, $this->smarty->clear_all_cache(2));
+        $this->do_clear_cache_assertion(3, $this->smarty->clear_all_cache(2));
 
         $tpl = $this->smarty->create_template('helloworld.tpl');
         $tpl2 = $this->smarty->create_template('helloworld.tpl', null, 'bar');
@@ -402,7 +402,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertEquals('hello world', $tpl3->get_cached_content());
         $this->assertEquals('hello world', $tpl4->get_cached_content());
         // test number of deleted caches
-        $this->doClearCacheAssertion(3, $this->smarty->clear_cache('helloworld.tpl'));
+        $this->do_clear_cache_assertion(3, $this->smarty->clear_cache('helloworld.tpl'));
         // test that caches are deleted properly
         $this->assertNull($tpl->get_cached_content());
         $this->assertNull($tpl2->get_cached_content());
@@ -414,22 +414,22 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
      * @dataProvider data
      * @group slow
      */
-    public function testCache($lockTime, $lockTimeout, $compile_id, $cache_id, $is_cached, $tmin, $tmax, $forceCompile, $forceCache, $update, $testNumber, $compileTestNumber, $renderTestNumber, $testName)
+    public function testCache($lock_time, $lock_timeout, $compile_id, $cache_id, $is_cached, $tmin, $tmax, $force_Compile, $force_Cache, $update, $test_number, $compile_Test_Number, $render_Test_Number, $testName)
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->smarty->assign('test', $testNumber);
-        if ($lockTimeout) {
+        $this->smarty->assign('test', $test_number);
+        if ($lock_timeout) {
             $this->smarty->cache_locking = true;
-            $this->smarty->locking_timeout = $lockTimeout;
+            $this->smarty->locking_timeout = $lock_timeout;
         }
         $this->smarty->set_compile_id($compile_id);
         $this->smarty->cache_id = $cache_id;
-        $this->smarty->force_compile = $forceCompile;
-        $this->smarty->force_cache = $forceCache;
+        $this->smarty->force_compile = $force_Compile;
+        $this->smarty->force_cache = $force_Cache;
         if ($update) {
             sleep(1);
-            $filepath = $this->buildSourcePath(null, 'cacheresource.tpl', 'file');
+            $filepath = $this->build_source_path(null, 'cacheresource.tpl', 'file');
             touch($filepath, $t = time());
             clearstatcache();
         }
@@ -437,15 +437,15 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         if ($update) {
             $this->assertEquals($t, $tpl->get_source()->get_time_stamp(), $testName . ' - source touch');
         }
-        if ($lockTime) {
+        if ($lock_time) {
             $tpl->get_cached()->handler->acquire_lock($this->smarty, $tpl->get_cached());
-            $tpl->get_cached()->handler->lockTime = $lockTime;
+            $tpl->get_cached()->handler->lock_time = $lock_time;
             $tpl->get_cached()->is_locked = false;
         }
         $start = time();
         if (isset($is_cached)) {
             $this->assertEquals($is_cached, $tpl->is_cached(), $testName . ' - is_cached()');
-            if ($lockTimeout) {
+            if ($lock_timeout) {
                 $time = time() - $start;
                 $this->assertTrue($time >= $tmin && $time <= $tmax, $testName . ' - is_cached() - lock time');
                 $this->assertEquals(!$is_cached, $tpl->get_cached()->handler->has_lock($this->smarty, $tpl->get_cached()), $testName . ' - is_cached() - lock status');
@@ -453,8 +453,8 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
                 $this->assertFalse($tpl->get_cached()->handler->has_lock($this->smarty, $tpl->get_cached()), $testName . ' - is_cached() - unexpected lock');
             }
         }
-        $this->assertEquals("cache resource test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}", $this->smarty->fetch($tpl), $testName . ' - fetch() failure');
-        if ($lockTime) {
+        $this->assertEquals("cache resource test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}", $this->smarty->fetch($tpl), $testName . ' - fetch() failure');
+        if ($lock_time) {
             $time = time() - $start;
             $this->assertTrue($time >= $tmin && $time <= $tmax, $testName . ' - fetch() - lock time');
         }
@@ -532,7 +532,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
 
     /**
      * Test caching
-     * @dataProvider dataDir
+     * @dataProvider data_dir
      *
      */
     public function testCachingTemplateDir($folder, $iscached, $merge, $result)
@@ -552,7 +552,7 @@ abstract class Cache_Resource_Test_Common extends PHPUnit_Smarty
         $this->assertStringContainsString($result, $tpl->fetch());
     }
 
-    public function dataDir()
+    public function data_dir()
     {
         return [
             [0,false,0, 'include a'],

@@ -15,11 +15,11 @@ declare(strict_types=1);
  *
  *
  */
-class PluginModifierTruncateTest extends PHPUnit_Smarty
+class Plugin_Modifier_Truncate_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testDefault()

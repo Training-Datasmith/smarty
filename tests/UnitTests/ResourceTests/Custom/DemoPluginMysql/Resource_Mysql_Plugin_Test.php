@@ -15,7 +15,7 @@ if (MysqlResourceEnable == true) {
      *
      *
      */
-    class ResourceMysqlPluginTest extends PHPUnit_Smarty
+class Resource_Mysql_Plugin_Test extends PHPUnit_Smarty
     {
         public function setUp(): void
         {
@@ -23,10 +23,10 @@ if (MysqlResourceEnable == true) {
                 $this->markTestSkipped('Msqlresource tests are disabled');
             }
             if (self::$init) {
-                $this->getConnection();
+                $this->get_connection();
             }
-            $this->setUpSmarty(__DIR__);
-            $this->smarty->add_plugins_dir('./PHPunitplugins/');
+            $this->set_up_smarty(__DIR__);
+            $this->load_plugins_dir_for_tests('./PHPunitplugins/');
         }
 
         /**
@@ -34,8 +34,8 @@ if (MysqlResourceEnable == true) {
         */
         public function testInit()
         {
-            $this->cleanDirs();
-            $this->initMysqlResource();
+            $this->clean_dirs();
+            $this->init_mysql_resource();
             PHPUnit_Smarty::$pdo->exec("REPLACE INTO templates (name, source) VALUES ('test.tpl', '{\$x = \'hello world\'}{\$x}')");
         }
 
@@ -98,9 +98,9 @@ if (MysqlResourceEnable == true) {
         */
         public function testResourcePluginMysqlCompiledFilepath()
         {
-            //$this->smarty->add_plugins_dir("./PHPunitplugins/");
+            //$this->load_plugins_dir_for_tests("./PHPunitplugins/");
             $tpl = $this->smarty->create_template('mysqltest:test.tpl');
-            $this->assertEquals($this->buildCompiledPath($tpl, false, false, null, 'test.tpl', 'mysqltest', $this->smarty->get_template_dir(0)), $tpl->get_compiled()->filepath);
+            $this->assertEquals($this->build_compiled_path($tpl, false, false, null, 'test.tpl', 'mysqltest', $this->smarty->get_template_dir(0)), $tpl->get_compiled()->filepath);
         }
 
         public function testResourcePluginMysqlCompiledFilepathCache()
@@ -110,7 +110,7 @@ if (MysqlResourceEnable == true) {
             $this->smarty->set_force_compile(true);
             $this->smarty->fetch('mysqltest:test.tpl');
             $tpl = $this->smarty->create_template('mysqltest:test.tpl');
-            $this->assertEquals($this->buildCompiledPath($tpl, false, true, null, 'test.tpl', 'mysqltest', $this->smarty->get_template_dir(0)), $tpl->get_compiled()->filepath);
+            $this->assertEquals($this->build_compiled_path($tpl, false, true, null, 'test.tpl', 'mysqltest', $this->smarty->get_template_dir(0)), $tpl->get_compiled()->filepath);
             $this->smarty->caching = false;
         }
 

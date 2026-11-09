@@ -15,17 +15,17 @@ declare(strict_types=1);
  *
  *
  */
-class StaticClassAccessTest extends PHPUnit_Smarty
+class Static_Class_Access_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->disable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test static class variable

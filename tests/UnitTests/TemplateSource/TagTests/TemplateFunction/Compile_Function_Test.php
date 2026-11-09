@@ -17,21 +17,21 @@ use Smarty\Compiler_Exception;
  *
  *
  */
-class CompileFunctionTest extends PHPUnit_Smarty
+class Compile_Function_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call tag
      */
     public function testSimpleFunction_001($text)
@@ -43,7 +43,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call tag
      *
      */
@@ -57,7 +57,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call tag cached
      */
     public function testSimpleFunctionCached_001($text)
@@ -71,7 +71,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
     * test simple function call tag cached
     */
     public function testSimpleFunctionCached_002($text)
@@ -85,7 +85,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call tag cached no cache default variable
      */
     public function testSimpleFunctionCachedNocacheDefault_002_1($text)
@@ -115,7 +115,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderCachingValue
+     * @dataProvider function_provider_caching_value
      * test simple function call tag plugin
      *
      */
@@ -130,7 +130,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call tag 2
      *
      */
@@ -142,7 +142,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      * test simple function call recursive
      */
     public function testRecursiveFunction($text)
@@ -153,7 +153,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test inherited function call tag
      *
      */
@@ -166,7 +166,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test function definition in include
      *
       */
@@ -180,17 +180,17 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test external function definition cached
      *
      */
     public function testExternalDefinedFunctionCached1($merge, $text)
     {
         $this->smarty->set_merge_compiled_includes($merge);
-        $cacheId = $merge ? 'merge' : null;
+        $cache_Id = $merge ? 'merge' : null;
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->create_template('test_template_function.tpl', $cacheId);
+        $tpl = $this->smarty->create_template('test_template_function.tpl', $cache_Id);
         $tpl->assign('foo', 'foo');
         $this->assertStringContainsString('foo foo', $this->smarty->fetch($tpl), $text);
     }
@@ -212,17 +212,17 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test external function definition cached 2
      *
      */
     public function testExternalDefinedFunctionCached12($merge, $text)
     {
         $this->smarty->set_merge_compiled_includes($merge);
-        $cacheId = $merge ? 'merge' : null;
+        $cache_Id = $merge ? 'merge' : null;
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->create_template('test_template_function.tpl', $cacheId);
+        $tpl = $this->smarty->create_template('test_template_function.tpl', $cache_Id);
         $this->assertTrue($this->smarty->is_cached($tpl), $text);
         $tpl->assign('foo', 'bar');
         $this->assertStringContainsString('foo bar', $this->smarty->fetch($tpl), $text);
@@ -231,17 +231,17 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test external function definition nocache call
      *
      */
     public function testExternalDefinedFunctionNocachedCall1($merge, $text)
     {
         $this->smarty->set_merge_compiled_includes($merge);
-        $cacheId = $merge ? 'merge' : null;
+        $cache_Id = $merge ? 'merge' : null;
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cacheId);
+        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cache_Id);
         $tpl->assign('foo', 'foo');
         $this->assertStringContainsString('foo foo', $this->smarty->fetch($tpl), $text);
     }
@@ -249,17 +249,17 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      * test external function definition nocache call 2
      *
      */
     public function testExternalDefinedFunctionNocachedCall2($merge, $text)
     {
         $this->smarty->set_merge_compiled_includes($merge);
-        $cacheId = $merge ? 'merge' : null;
+        $cache_Id = $merge ? 'merge' : null;
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cacheId);
+        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cache_Id);
         $this->assertTrue($this->smarty->is_cached($tpl), $text);
         $tpl->assign('foo', 'bar');
         $this->assertStringContainsString('bar bar', $this->smarty->fetch($tpl), $text);
@@ -270,15 +270,15 @@ class CompileFunctionTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider functionProviderInline
+     * @dataProvider function_provider_inline
      */
     public function testExternalDefinedFunctionNocachedCall3($merge, $text)
     {
         $this->smarty->set_merge_compiled_includes($merge);
-        $cacheId = $merge ? 'merge' : null;
+        $cache_Id = $merge ? 'merge' : null;
         $this->smarty->caching = 1;
         $this->smarty->cache_lifetime = 1000;
-        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cacheId);
+        $tpl = $this->smarty->create_template('test_template_function_nocache_call.tpl', $cache_Id);
         $this->assertTrue($this->smarty->is_cached($tpl), $text);
         $tpl->assign('foo', 'bar');
         $this->assertStringContainsString('bar bar', $this->smarty->fetch($tpl), $text);
@@ -289,7 +289,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider functionProvider
+     * @dataProvider function_provider
      */
     public function testExternalDefinedFunctionRecursion($text)
     {
@@ -299,7 +299,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      * Function data provider inline
      */
-    public function functionProviderInline()
+    public function function_provider_inline()
     {
         return [
             [false, 'normal compile'],
@@ -311,7 +311,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      * Function data provider
      */
-    public function functionProvider()
+    public function function_provider()
     {
         return [
             ['compile'],
@@ -321,7 +321,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      * Function data provider
      */
-    public function functionProviderCaching()
+    public function function_provider_caching()
     {
         return [
             [false, 'normal compile'],
@@ -333,7 +333,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /**
      * Function data provider
      */
-    public function functionProviderCachingValue()
+    public function function_provider_caching_value()
     {
         return [
             [false, 'normal compile',5,'15 215 5'],
@@ -346,14 +346,14 @@ class CompileFunctionTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->add_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -366,12 +366,12 @@ class CompileFunctionTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacingNocache($code, $result, $testName, $testNumber)
+    public function testSpacingNocache($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('VarNocache');
         $this->smarty->set_caching(1);
@@ -387,12 +387,12 @@ class CompileFunctionTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacingNocache2($code, $result, $testName, $testNumber)
+    public function testSpacingNocache2($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('VarNocache');
         $this->smarty->set_caching(1);
@@ -408,7 +408,7 @@ class CompileFunctionTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*

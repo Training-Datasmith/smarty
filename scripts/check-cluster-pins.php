@@ -13,16 +13,16 @@ $expected = [
     ],
 ];
 
-if (!function_exists('run_check_cluster_pins')) {
+if (!function_exists('cluster_pins_load_installed')) {
     /**
-     * @param array<string, array{alias: string, reference: string}> $map
+     * @return array{versions: array<string, array<string, mixed>>, jsonRefs: array<string, string>}|null
      */
-    function run_check_cluster_pins(array $map): bool
+    function cluster_pins_load_installed(): ?array
     {
         $installedPhp = __DIR__ . '/../vendor/composer/installed.php';
         if (!is_readable($installedPhp)) {
             fwrite(STDERR, "check-cluster-pins: vendor/composer/installed.php not found; run composer update first.\n");
-            return false;
+            return null;
         }
 
         /** @var array{versions: array<string, array{reference?: string, aliases?: list<string>, install_path?: string}>} $installed */
@@ -32,13 +32,13 @@ if (!function_exists('run_check_cluster_pins')) {
         $installedJsonPath = __DIR__ . '/../vendor/composer/installed.json';
         if (!is_readable($installedJsonPath)) {
             fwrite(STDERR, "check-cluster-pins: vendor/composer/installed.json not found; run composer update first.\n");
-            return false;
+            return null;
         }
 
         $raw = file_get_contents($installedJsonPath);
         if ($raw === false) {
             fwrite(STDERR, "check-cluster-pins: could not read installed.json.\n");
-            return false;
+            return null;
         }
 
         /** @var array{packages?: list<array<string, mixed>>, 'packages-dev'?: list<array<string, mixed>>} $installedJson */
@@ -51,6 +51,16 @@ if (!function_exists('run_check_cluster_pins')) {
             $jsonRefs[(string) $package['name']] = strtolower((string) $package['source']['reference']);
         }
 
+        return ['versions' => $versions, 'jsonRefs' => $jsonRefs];
+    }
+}
+
+if (!function_exists('check_cluster_php_references')) {
+    /**
+     * @param array<string, array{alias: string, reference: string}> $map
+     */
+    function check_cluster_php_references(array $map, array $versions): bool
+    {
         $failed = false;
         foreach ($map as $name => $want) {
             if (!isset($versions[$name])) {
@@ -84,7 +94,21 @@ if (!function_exists('run_check_cluster_pins')) {
                 ));
                 $failed = true;
             }
+        }
 
+        return !$failed;
+    }
+}
+
+if (!function_exists('check_cluster_json_references')) {
+    /**
+     * @param array<string, array{alias: string, reference: string}> $map
+     * @param array<string, string> $jsonRefs
+     */
+    function check_cluster_json_references(array $map, array $jsonRefs): bool
+    {
+        $failed = false;
+        foreach ($map as $name => $want) {
             if (!isset($jsonRefs[$name])) {
                 fwrite(STDERR, sprintf("check-cluster-pins: %s is missing from installed.json.\n", $name));
                 $failed = true;
@@ -106,26 +130,58 @@ if (!function_exists('run_check_cluster_pins')) {
     }
 }
 
-if (($argc > 1 && $argv[1] === '--wrong-sha-demo') || getenv('CHECK_CLUSTER_PINS_WRONG_SHA_DEMO') === '1') {
+if (($argc > 1 && $argv[1] === '--wrong-installed-php-demo') || getenv('CHECK_CLUSTER_PINS_WRONG_PHP_DEMO') === '1') {
+    $loaded = cluster_pins_load_installed();
+    if ($loaded === null) {
+        exit(1);
+    }
     $demo = $expected;
     $demo['symfony/polyfill-mbstring']['reference'] = '0000000000000000000000000000000000000000';
-    if (run_check_cluster_pins($demo)) {
-        fwrite(STDERR, "check-cluster-pins: wrong-SHA demo should have failed.\n");
+    $phpFailed = !check_cluster_php_references($demo, $loaded['versions']);
+    $jsonOk = check_cluster_json_references($expected, $loaded['jsonRefs']);
+    if (!$phpFailed) {
+        fwrite(STDERR, "check-cluster-pins: wrong installed.php demo should have failed.\n");
+        exit(1);
+    }
+    if (!$jsonOk) {
+        fwrite(STDERR, "check-cluster-pins: wrong installed.php demo should not affect installed.json check.\n");
         exit(1);
     }
     fwrite(STDOUT, "check-cluster-pins: wrong installed.php SHA demo failed as expected.\n");
-
-    $demo = $expected;
-    $demo['symfony/polyfill-mbstring']['reference'] = '1111111111111111111111111111111111111111';
-    if (run_check_cluster_pins($demo)) {
-        fwrite(STDERR, "check-cluster-pins: wrong installed.json SHA demo should have failed.\n");
-        exit(1);
-    }
-    fwrite(STDOUT, "check-cluster-pins: wrong installed.json SHA demo failed as expected.\n");
+    fwrite(STDOUT, "check-cluster-pins: installed.json check still passes during php demo.\n");
     exit(0);
 }
 
-if (!run_check_cluster_pins($expected)) {
+if (($argc > 1 && $argv[1] === '--wrong-installed-json-demo') || getenv('CHECK_CLUSTER_PINS_WRONG_JSON_DEMO') === '1') {
+    $loaded = cluster_pins_load_installed();
+    if ($loaded === null) {
+        exit(1);
+    }
+    $demo = $expected;
+    $demo['symfony/polyfill-mbstring']['reference'] = '1111111111111111111111111111111111111111';
+    $jsonFailed = !check_cluster_json_references($demo, $loaded['jsonRefs']);
+    $phpOk = check_cluster_php_references($expected, $loaded['versions']);
+    if (!$jsonFailed) {
+        fwrite(STDERR, "check-cluster-pins: wrong installed.json demo should have failed.\n");
+        exit(1);
+    }
+    if (!$phpOk) {
+        fwrite(STDERR, "check-cluster-pins: wrong installed.json demo should not affect installed.php check.\n");
+        exit(1);
+    }
+    fwrite(STDOUT, "check-cluster-pins: wrong installed.json SHA demo failed as expected.\n");
+    fwrite(STDOUT, "check-cluster-pins: installed.php check still passes during json demo.\n");
+    exit(0);
+}
+
+$loaded = cluster_pins_load_installed();
+if ($loaded === null) {
+    exit(1);
+}
+
+$phpOk = check_cluster_php_references($expected, $loaded['versions']);
+$jsonOk = check_cluster_json_references($expected, $loaded['jsonRefs']);
+if (!$phpOk || !$jsonOk) {
     exit(1);
 }
 

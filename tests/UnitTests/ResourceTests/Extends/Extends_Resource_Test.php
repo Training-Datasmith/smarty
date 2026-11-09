@@ -13,20 +13,20 @@ use Smarty\Template;
 /**
  * class for extends resource tests
  */
-class ExtendsResourceTest extends PHPUnit_Smarty
+class Extends_Resource_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->enable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
-    public function compiledPrefilter($text, Template $tpl)
+    public function compiled_prefilter($text, Template $tpl)
     {
         return str_replace('#', (string) $tpl->get_template_vars('test'), $text);
     }
@@ -35,10 +35,10 @@ class ExtendsResourceTest extends PHPUnit_Smarty
      * test  child/parent template chain with prepend
      * @dataProvider data
      */
-    public function testCompileBlockChildPrepend_003($caching, $merge, $testNumber, $compileTestNumber, $renderTestNumber, $testName)
+    public function testCompileBlockChildPrepend_003($caching, $merge, $test_number, $compile_Test_Number, $render_Test_Number, $testName)
     {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->caching = $caching;
         $this->smarty->merge_compiled_includes = $merge;
         if ($merge) {
@@ -51,7 +51,7 @@ class ExtendsResourceTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -61,10 +61,10 @@ class ExtendsResourceTest extends PHPUnit_Smarty
      * test  child/parent template chain with apppend
      * @dataProvider data
      */
-    public function testCompileBlockChildAppend_004($caching, $merge, $testNumber, $compileTestNumber, $renderTestNumber, $testName)
+    public function testCompileBlockChildAppend_004($caching, $merge, $test_number, $compile_Test_Number, $render_Test_Number, $testName)
     {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->caching = $caching;
         $this->smarty->merge_compiled_includes = $merge;
         if ($merge) {
@@ -72,17 +72,17 @@ class ExtendsResourceTest extends PHPUnit_Smarty
         }
         $result = $this->smarty->fetch('extends:004_parent.tpl|004_child_append.tpl');
         $this->assertStringContainsString('Default Title - append', $result, $testName . ' - content');
-        $this->assertStringContainsString("test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}", $result, $testName . ' - fetch() failure');
+        $this->assertStringContainsString("test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}", $result, $testName . ' - fetch() failure');
     }
 
     /**
      * test  child/parent template chain with apppend
      * @dataProvider data
      */
-    public function testCompileBlockAssignInChild_040($caching, $merge, $testNumber, $compileTestNumber, $renderTestNumber, $testName)
+    public function testCompileBlockAssignInChild_040($caching, $merge, $test_number, $compile_Test_Number, $render_Test_Number, $testName)
     {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->caching = $caching;
         $this->smarty->merge_compiled_includes = $merge;
         if ($merge) {
@@ -90,16 +90,16 @@ class ExtendsResourceTest extends PHPUnit_Smarty
         }
         $result = $this->smarty->fetch('extends:040_parent.tpl|040_child.tpl');
         $this->assertStringContainsString('var-bar-var', $result, $testName . ' - content');
-        $this->assertStringContainsString("test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}", $result, $testName . ' - fetch() failure');
+        $this->assertStringContainsString("test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}", $result, $testName . ' - fetch() failure');
     }
 
     /**
      * @dataProvider data
      */
-    public function testCompileBlockIncreaseInChild_050($caching, $merge, $testNumber, $compileTestNumber, $renderTestNumber, $testName)
+    public function testCompileBlockIncreaseInChild_050($caching, $merge, $test_number, $compile_Test_Number, $render_Test_Number, $testName)
     {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->caching = $caching;
         $this->smarty->merge_compiled_includes = $merge;
         if ($merge) {
@@ -107,7 +107,7 @@ class ExtendsResourceTest extends PHPUnit_Smarty
         }
         $result = $this->smarty->fetch('extends:050_parent.tpl|050_child.tpl|050_grandchild.tpl');
         $this->assertStringContainsString('var-bar-var', $result, $testName . ' - content');
-        $this->assertStringContainsString("test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}", $result, $testName . ' - fetch() failure');
+        $this->assertStringContainsString("test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}", $result, $testName . ' - fetch() failure');
     }
 
     /**
@@ -225,18 +225,18 @@ class ExtendsResourceTest extends PHPUnit_Smarty
 
     /**
      * test  relative includes in {block}
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockRelativeIncludes_033(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -247,7 +247,7 @@ class ExtendsResourceTest extends PHPUnit_Smarty
         $this->assertStringContainsString('include child:content include child', $result, $testName . ' - grand');
         $this->assertStringContainsString('include parent:content include parent', $result, $testName . ' - grand');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );

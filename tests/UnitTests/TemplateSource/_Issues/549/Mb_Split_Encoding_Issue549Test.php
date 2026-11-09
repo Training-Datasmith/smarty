@@ -17,7 +17,7 @@ declare(strict_types=1);
  *
  * mb_split breaks if Smarty encoding is not the same as mbstring regex encoding.
  */
-class MbSplitEncodingIssue549Test extends PHPUnit_Smarty
+class Mb_Split_Encoding_Issue549Test extends PHPUnit_Smarty
 {
     /** @var string Saved Smarty charset */
     private $charset;
@@ -33,18 +33,18 @@ class MbSplitEncodingIssue549Test extends PHPUnit_Smarty
     public function setUp(): void
     {
         $this->charset = \Smarty\Smarty::$_CHARSET;
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     protected function tearDown(): void
     {
         \Smarty\Smarty::$_CHARSET = $this->charset ?: \Smarty\Smarty::$_CHARSET;
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /** Provider for testReplaceModifier
      */
-    public function encodingPairsProvider()
+    public function encoding_pairs_provider()
     {
         return [
             'with non-UNICODE src/non-UNICODE regex (PHP < 5.6 default)' => ['Windows-1252', 'EUC-JP'],
@@ -56,7 +56,7 @@ class MbSplitEncodingIssue549Test extends PHPUnit_Smarty
 
     /** Test behavior of `replace` modifier with different source and regex encodings
      *
-     * @dataProvider encodingPairsProvider
+     * @dataProvider encoding_pairs_provider
      */
     public function testReplaceModifier($mb_int_encoding, $mb_regex_encoding)
     {

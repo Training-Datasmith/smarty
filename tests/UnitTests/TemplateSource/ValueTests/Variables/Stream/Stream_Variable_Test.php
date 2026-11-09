@@ -15,13 +15,13 @@ declare(strict_types=1);
  *
  *
  */
-class StreamVariableTest extends PHPUnit_Smarty
+class Stream_Variable_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
-        stream_wrapper_register('var', 'VariableStream')
+        stream_wrapper_register('var', 'Variable_Stream')
         or die('Failed to register protocol');
         $fp = fopen('var://foo', 'r+');
         fwrite($fp, 'hello world');
@@ -30,7 +30,7 @@ class StreamVariableTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     protected function tearDown(): void
@@ -45,19 +45,19 @@ class StreamVariableTest extends PHPUnit_Smarty
     public function testStreamVariable1()
     {
         $tpl = $this->smarty->create_template('eval:{$var:foo}', null, null, $this->smarty);
-        $this->assertEquals('hello world', $this->smarty->fetch($tpl));
+        $this->assertEquals('hello world', $this->fetch_with_user_deprecation('stream variables', $tpl));
     }
     /*
         public function testStreamVariable2()
         {
             $tpl = $this->smarty->create_template('eval:{var:\'foo\'}', null, null, $this->smarty);
-            $this->assertEquals('hello world', $this->smarty->fetch($tpl));
+            $this->assertEquals('hello world', $this->fetch_with_user_deprecation('stream variables', $tpl));
         }
 
         public function testStreamVariable3()
         {
             $tpl = $this->smarty->create_template('eval:{var:"foo"}', null, null, $this->smarty);
-            $this->assertEquals('hello world', $this->smarty->fetch($tpl));
+            $this->assertEquals('hello world', $this->fetch_with_user_deprecation('stream variables', $tpl));
         }
     */
     /**
@@ -66,12 +66,12 @@ class StreamVariableTest extends PHPUnit_Smarty
     //    public function testStreamVariable2()
     //    {
     //        $tpl = $this->smarty->create_template('eval:{$var:bar}', null, null, $this->smarty);
-    //        $this->assertEquals('', $this->smarty->fetch($tpl));
+    //        $this->assertEquals('', $this->fetch_with_user_deprecation('stream variables', $tpl));
     //    }
 }
 
 #[AllowDynamicProperties]
-class VariableStream
+class Variable_Stream
 {
     private $position;
     private $varname;
@@ -120,20 +120,20 @@ class VariableStream
         $p = &$this->position;
         switch ($whence) {
             case SEEK_SET:
-                $newPos = $offset;
+                $new_Pos = $offset;
                 break;
             case SEEK_CUR:
-                $newPos = $p + $offset;
+                $new_Pos = $p + $offset;
                 break;
             case SEEK_END:
-                $newPos = $l + $offset;
+                $new_Pos = $l + $offset;
                 break;
             default:
                 return false;
         }
-        $ret = ($newPos >= 0 && $newPos <= $l);
+        $ret = ($new_Pos >= 0 && $new_Pos <= $l);
         if ($ret) {
-            $p = $newPos;
+            $p = $new_Pos;
         }
         return $ret;
     }

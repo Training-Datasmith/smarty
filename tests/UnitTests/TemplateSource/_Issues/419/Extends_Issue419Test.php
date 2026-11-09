@@ -15,16 +15,16 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class ExtendsIssue419Test extends PHPUnit_Smarty
+class Extends_Issue419Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testextends419()

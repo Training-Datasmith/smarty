@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class CompileCompilerPluginTest extends PHPUnit_Smarty
+class Compile_Compiler_Plugin_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -41,7 +41,7 @@ class CompileCompilerPluginTest extends PHPUnit_Smarty
      */
     public function testCompilerPluginClassStatic()
     {
-        $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_COMPILER, 'compilerplugin', ['CompilerPluginClass', 'statCompile']);
+        $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_COMPILER, 'compilerplugin', ['Compiler_Plugin_Class', 'stat_compile']);
         $this->smarty->set_compile_id('static');
         $this->assertEquals('Static World', $this->smarty->fetch('compilerplugintest.tpl'));
     }
@@ -50,7 +50,7 @@ class CompileCompilerPluginTest extends PHPUnit_Smarty
      */
     public function testCompilerPluginClassObject()
     {
-        $plugin = new CompilerPluginClass();
+        $plugin = new Compiler_Plugin_Class();
         $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_COMPILER, 'compilerplugin', [$plugin, 'compile']);
         $this->smarty->set_compile_id('object');
         $this->assertEquals('Public World', $this->smarty->fetch('compilerplugintest.tpl'));
@@ -62,9 +62,9 @@ function mycompilerplugin($params, $compiler)
     return '<?php echo \'Hello World\';?>';
 }
 
-class CompilerPluginClass
+class Compiler_Plugin_Class
 {
-    public static function statCompile($params, $compiler)
+    public static function stat_compile($params, $compiler)
     {
         return '<?php echo \'Static World\';?>';
     }

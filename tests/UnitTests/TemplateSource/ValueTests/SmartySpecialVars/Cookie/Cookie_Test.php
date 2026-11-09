@@ -15,23 +15,23 @@ declare(strict_types=1);
  *
  *
  */
-class CookieTest extends PHPUnit_Smarty
+class Cookie_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test cookies
      *
      *
      *
-     * @dataProvider dataProvider
+     * @dataProvider data_provider
      */
     public function testCookie($caching, $value)
     {
@@ -55,7 +55,7 @@ class CookieTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider dataProviderModifier
+     * @dataProvider data_provider_modifier
      */
     public function testCookieModifier($caching, $value, $result)
     {
@@ -67,7 +67,7 @@ class CookieTest extends PHPUnit_Smarty
     /**
      * data provider
      */
-    public function dataProvider()
+    public function data_provider()
     {
         return [
             'compile' => [false, 'buh'],
@@ -76,7 +76,7 @@ class CookieTest extends PHPUnit_Smarty
             'cacheded' => [true, 'cached bar'],
         ];
     }
-    public function dataProviderModifier()
+    public function data_provider_modifier()
     {
         return [
             'compile' => [false, 'buh', 3],

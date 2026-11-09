@@ -15,7 +15,7 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileConfigLoadTest extends PHPUnit_Smarty
+class Compile_Config_Load_Test extends PHPUnit_Smarty
 {
     /**
      * Sets up the fixture
@@ -24,8 +24,8 @@ class CompileConfigLoadTest extends PHPUnit_Smarty
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('../../../__shared/templates/');
         $this->smarty->add_template_dir('./templates_tmp');
     }
@@ -35,7 +35,7 @@ class CompileConfigLoadTest extends PHPUnit_Smarty
      */
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**

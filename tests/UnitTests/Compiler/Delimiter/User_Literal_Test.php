@@ -15,20 +15,20 @@ declare(strict_types=1);
  *
  *
  */
-class UserliteralTest extends PHPUnit_Smarty
+class User_Literal_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
         if (!method_exists(\Smarty\Smarty::class, 'set_literals')) {
             $this->markTestSkipped('user literal support');
         } else {
-            $this->setUpSmarty(__DIR__);
+            $this->set_up_smarty(__DIR__);
         }
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testUserLiteral()

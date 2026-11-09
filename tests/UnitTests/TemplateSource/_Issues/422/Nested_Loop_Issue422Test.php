@@ -17,16 +17,16 @@ declare(strict_types=1);
  *
  * Problem with total property of {section} and {foreach} in nested loop
  */
-class NestedLoopIssue422Test extends PHPUnit_Smarty
+class Nested_Loop_Issue422Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testnested422()

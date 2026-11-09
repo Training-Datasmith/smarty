@@ -15,18 +15,18 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileStripTest extends PHPUnit_Smarty
+class Compile_Strip_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -34,20 +34,20 @@ class CompileStripTest extends PHPUnit_Smarty
      *
      * @not                 runInSeparateProcess
      *
-     * @dataProvider        dataTestStrip
+     * @dataProvider data_test_strip
      */
-    public function testStrip($code, $result, $testName, $testNumber)
+    public function testStrip($code, $result, $testName, $test_number)
     {
-        $file = "testStrip_{$testNumber}.tpl";
-        $this->makeTemplateFile($file, "{strip}\n" . $code);
-        $this->smarty->assign_global('file', $file);
+        $file = "testStrip_{$test_number}.tpl";
+        $this->make_template_file($file, "{strip}\n" . $code);
+        $this->smarty->assign('file', $file);
         $this->assertEquals($result, $this->smarty->fetch($file), "testStrip - {$code} - {$testName}");
     }
 
     /*
       * Data provider für testStrip
       */
-    public function dataTestStrip()
+    public function data_test_strip()
     {
         $i = 0;
         /*

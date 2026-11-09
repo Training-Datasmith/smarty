@@ -17,18 +17,18 @@ use Smarty\Resource\Custom_Plugin;
  *
  *
  */
-class RegisteredResourceTest extends PHPUnit_Smarty
+class Registered_Resource_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
-        $this->smarty->register_resource('rr', new RegisteredResourceTest_Resource1Plugin());
+        $this->smarty->register_resource('rr', new Registered_Resource_Test__Resource1_Plugin());
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test resource plugin rendering
@@ -58,7 +58,7 @@ class RegisteredResourceTest extends PHPUnit_Smarty
      */
     public function testResourceCompileIdChange()
     {
-        $this->smarty->register_resource('myresource', new RegisteredResourceTest_Resource2Plugin());
+        $this->smarty->register_resource('myresource', new Registered_Resource_Test__Resource2_Plugin());
         $this->smarty->set_compile_id('a');
         $this->assertEquals('this is template 1', $this->smarty->fetch('myresource:some'));
         $this->assertEquals('this is template 1', $this->smarty->fetch('myresource:some'));
@@ -72,7 +72,7 @@ class RegisteredResourceTest extends PHPUnit_Smarty
      */
     public function testSmartyTemplate()
     {
-        $this->smarty->register_resource('mytpl', new RegisteredResourceTest_Resource3Plugin());
+        $this->smarty->register_resource('mytpl', new Registered_Resource_Test__Resource3_Plugin());
         $this->assertEquals('template = mytpl:foo', $this->smarty->fetch('mytpl:foo'));
     }
     /**
@@ -81,12 +81,12 @@ class RegisteredResourceTest extends PHPUnit_Smarty
      */
     public function testSmartyCurrentDir()
     {
-        $this->smarty->register_resource('mytpl', new RegisteredResourceTest_Resource4Plugin());
+        $this->smarty->register_resource('mytpl', new Registered_Resource_Test__Resource4_Plugin());
         $this->assertEquals('current_dir = .', $this->smarty->fetch('mytpl:bar'));
     }
 }
 
-class RegisteredResourceTest_Resource1Plugin extends Custom_Plugin
+class Registered_Resource_Test__Resource1_Plugin extends Custom_Plugin
 {
     protected function fetch($name, &$source, &$mtime)
     {
@@ -96,7 +96,7 @@ class RegisteredResourceTest_Resource1Plugin extends Custom_Plugin
 
 }
 
-class RegisteredResourceTest_Resource2Plugin extends Custom_Plugin
+class Registered_Resource_Test__Resource2_Plugin extends Custom_Plugin
 {
     protected function fetch($name, &$source, &$mtime)
     {
@@ -118,7 +118,7 @@ class RegisteredResourceTest_Resource2Plugin extends Custom_Plugin
 
 }
 
-class RegisteredResourceTest_Resource3Plugin extends Custom_Plugin
+class Registered_Resource_Test__Resource3_Plugin extends Custom_Plugin
 {
     protected function fetch($name, &$source, &$mtime)
     {
@@ -128,7 +128,7 @@ class RegisteredResourceTest_Resource3Plugin extends Custom_Plugin
 
 }
 
-class RegisteredResourceTest_Resource4Plugin extends Custom_Plugin
+class Registered_Resource_Test__Resource4_Plugin extends Custom_Plugin
 {
     protected function fetch($name, &$source, &$mtime)
     {

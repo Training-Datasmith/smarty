@@ -11,23 +11,23 @@ declare(strict_types=1);
 /**
  * class for compiler plugin tests
  */
-class CompilerPluginTest extends PHPUnit_Smarty
+class Compiler_Plugin_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test compiler plugin
      */
     public function testCompilerPlugin()
     {
-        $this->smarty->add_plugins_dir(__DIR__ . '/PHPunitplugins/');
+        $this->load_plugins_dir_for_tests(__DIR__ . '/PHPunitplugins/');
         $this->assertEquals('test output', $this->smarty->fetch('eval:{test data="test output"}{/test}'));
     }
 }

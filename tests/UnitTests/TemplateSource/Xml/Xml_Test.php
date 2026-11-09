@@ -15,18 +15,18 @@ declare(strict_types=1);
  *
  *
  */
-class XmlTest extends PHPUnit_Smarty
+class Xml_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->enable_security();
         $this->smarty->set_force_compile(true);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test standard xml

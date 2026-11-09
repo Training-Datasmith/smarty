@@ -14,17 +14,17 @@ declare(strict_types=1);
  *
  *
  */
-class AutoliteralTest extends PHPUnit_Smarty
+class Auto_Literal_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../__shared/PHPunitplugins/');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**

@@ -12,14 +12,14 @@ namespace Smarty\Lexer;
  */
 
 /**
- * TemplateLexer
+ * Template_Lexer
  * This is the template file lexer.
- * It is generated from the TemplateLexer.plex file
+ * It is generated from the Template_Lexer.plex file
  *
  *
  * @author Uwe Tews <uwe.tews@googlemail.com>
  */
-class TemplateLexer
+class Template_Lexer
 {
     /**
      * Source
@@ -343,7 +343,7 @@ class TemplateLexer
      /*!lex2php
      %statename TEXT
      emptyjava {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      comment {
        $to = $this->dataLength;
@@ -357,14 +357,14 @@ class TemplateLexer
         return false;
      }
      userliteral {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      ldel literal rdel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LITERALSTART;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LITERALSTART;
         $this->yypushstate(self::LITERAL);
      }
      ldel slash literal rdel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LITERALEND;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LITERALEND;
         $this->yypushstate(self::LITERAL);
      }
      ldel {
@@ -381,65 +381,65 @@ class TemplateLexer
          $to = $match[0][1];
        }
        $this->value = substr($this->data,$this->counter,$to-$this->counter);
-       $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+       $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      */
      /*!lex2php
      %statename TAG
      ldel if {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDELIF;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDELIF;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      ldel for {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDELFOR;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDELFOR;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      ldel foreach {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDELFOREACH;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDELFOREACH;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      ldel setfilter {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDELSETFILTER;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDELSETFILTER;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      ldel id nocacherdel {
         $this->yypopstate();
-        $this->token = \Smarty\Parser\TemplateParser::TP_SIMPLETAG;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SIMPLETAG;
         $this->taglineno = $this->line;
      }
      ldel smartyblockchildparent rdel {
          $this->yypopstate();
-         $this->token = \Smarty\Parser\TemplateParser::TP_SMARTYBLOCKCHILDPARENT;
+         $this->token = \Smarty\Parser\Template_Parser::TP_SMARTYBLOCKCHILDPARENT;
          $this->taglineno = $this->line;
      }
      ldel slash id rdel {
         $this->yypopstate();
-        $this->token = \Smarty\Parser\TemplateParser::TP_CLOSETAG;
+        $this->token = \Smarty\Parser\Template_Parser::TP_CLOSETAG;
         $this->taglineno = $this->line;
      }
      ldel dollar id nocacherdel {
         if ($this->_yy_stack[count($this->_yy_stack)-1] === self::TEXT) {
             $this->yypopstate();
-            $this->token = \Smarty\Parser\TemplateParser::TP_SIMPELOUTPUT;
+            $this->token = \Smarty\Parser\Template_Parser::TP_SIMPELOUTPUT;
             $this->taglineno = $this->line;
         } else {
             $this->value = $this->smarty->getLeftDelimiter();
-            $this->token = \Smarty\Parser\TemplateParser::TP_LDEL;
+            $this->token = \Smarty\Parser\Template_Parser::TP_LDEL;
             $this->yybegin(self::TAGBODY);
             $this->taglineno = $this->line;
         }
      }
      ldel slash {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDELSLASH;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDELSLASH;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      ldel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDEL;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDEL;
         $this->yybegin(self::TAGBODY);
         $this->taglineno = $this->line;
      }
@@ -447,7 +447,7 @@ class TemplateLexer
      /*!lex2php
      %statename TAGBODY
      rdel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_RDEL;
+        $this->token = \Smarty\Parser\Template_Parser::TP_RDEL;
         $this->yypopstate();
      }
      ldel {
@@ -455,146 +455,146 @@ class TemplateLexer
         return true;
      }
      double_quote {
-        $this->token = \Smarty\Parser\TemplateParser::TP_QUOTE;
+        $this->token = \Smarty\Parser\Template_Parser::TP_QUOTE;
         $this->yypushstate(self::DOUBLEQUOTEDSTRING);
         $this->compiler->enterDoubleQuote();
      }
      singlequotestring {
-        $this->token = \Smarty\Parser\TemplateParser::TP_SINGLEQUOTESTRING;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SINGLEQUOTESTRING;
      }
      dollar id {
-        $this->token = \Smarty\Parser\TemplateParser::TP_DOLLARID;
+        $this->token = \Smarty\Parser\Template_Parser::TP_DOLLARID;
      }
      dollar {
-        $this->token = \Smarty\Parser\TemplateParser::TP_DOLLAR;
+        $this->token = \Smarty\Parser\Template_Parser::TP_DOLLAR;
      }
      isin {
-        $this->token = \Smarty\Parser\TemplateParser::TP_ISIN;
+        $this->token = \Smarty\Parser\Template_Parser::TP_ISIN;
      }
      matches {
-        $this->token = \Smarty\Parser\TemplateParser::TP_MATCHES;
+        $this->token = \Smarty\Parser\Template_Parser::TP_MATCHES;
      }
      as {
-        $this->token = \Smarty\Parser\TemplateParser::TP_AS;
+        $this->token = \Smarty\Parser\Template_Parser::TP_AS;
      }
      to {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TO;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TO;
      }
      step {
-        $this->token = \Smarty\Parser\TemplateParser::TP_STEP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_STEP;
      }
      instanceof {
-        $this->token = \Smarty\Parser\TemplateParser::TP_INSTANCEOF;
+        $this->token = \Smarty\Parser\Template_Parser::TP_INSTANCEOF;
      }
      lop {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LOGOP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LOGOP;
      }
      slop {
-        $this->token = \Smarty\Parser\TemplateParser::TP_SLOGOP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SLOGOP;
      }
      tlop {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TLOGOP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TLOGOP;
      }
      scond {
-        $this->token = \Smarty\Parser\TemplateParser::TP_SINGLECOND;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SINGLECOND;
      }
      not{
-        $this->token = \Smarty\Parser\TemplateParser::TP_NOT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_NOT;
      }
      typecast {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TYPECAST;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TYPECAST;
      }
      openP {
-        $this->token = \Smarty\Parser\TemplateParser::TP_OPENP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_OPENP;
      }
      closeP {
-        $this->token = \Smarty\Parser\TemplateParser::TP_CLOSEP;
+        $this->token = \Smarty\Parser\Template_Parser::TP_CLOSEP;
      }
      openB {
-        $this->token = \Smarty\Parser\TemplateParser::TP_OPENB;
+        $this->token = \Smarty\Parser\Template_Parser::TP_OPENB;
      }
      closeB {
-        $this->token = \Smarty\Parser\TemplateParser::TP_CLOSEB;
+        $this->token = \Smarty\Parser\Template_Parser::TP_CLOSEB;
      }
      ptr {
-        $this->token = \Smarty\Parser\TemplateParser::TP_PTR;
+        $this->token = \Smarty\Parser\Template_Parser::TP_PTR;
      }
      aptr {
-        $this->token = \Smarty\Parser\TemplateParser::TP_APTR;
+        $this->token = \Smarty\Parser\Template_Parser::TP_APTR;
      }
      equal {
-        $this->token = \Smarty\Parser\TemplateParser::TP_EQUAL;
+        $this->token = \Smarty\Parser\Template_Parser::TP_EQUAL;
      }
      incdec {
-        $this->token = \Smarty\Parser\TemplateParser::TP_INCDEC;
+        $this->token = \Smarty\Parser\Template_Parser::TP_INCDEC;
      }
      unimath {
-        $this->token = \Smarty\Parser\TemplateParser::TP_UNIMATH;
+        $this->token = \Smarty\Parser\Template_Parser::TP_UNIMATH;
      }
      math {
-        $this->token = \Smarty\Parser\TemplateParser::TP_MATH;
+        $this->token = \Smarty\Parser\Template_Parser::TP_MATH;
      }
      at {
-        $this->token = \Smarty\Parser\TemplateParser::TP_AT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_AT;
      }
      array openP {
-        $this->token = \Smarty\Parser\TemplateParser::TP_ARRAYOPEN;
+        $this->token = \Smarty\Parser\Template_Parser::TP_ARRAYOPEN;
      }
      hatch {
-        $this->token = \Smarty\Parser\TemplateParser::TP_HATCH;
+        $this->token = \Smarty\Parser\Template_Parser::TP_HATCH;
      }
      attr {
         // resolve conflicts with shorttag and right_delimiter starting with '='
         if (substr($this->data, $this->counter + strlen($this->value) - 1, $this->compiler->getRdelLength()) === $this->smarty->getRightDelimiter()) {
             preg_match('/\s+/',$this->value,$match);
             $this->value = $match[0];
-            $this->token = \Smarty\Parser\TemplateParser::TP_SPACE;
+            $this->token = \Smarty\Parser\Template_Parser::TP_SPACE;
         } else {
-            $this->token = \Smarty\Parser\TemplateParser::TP_ATTR;
+            $this->token = \Smarty\Parser\Template_Parser::TP_ATTR;
         }
      }
      namespace {
-        $this->token = \Smarty\Parser\TemplateParser::TP_NAMESPACE;
+        $this->token = \Smarty\Parser\Template_Parser::TP_NAMESPACE;
      }
      id {
-        $this->token = \Smarty\Parser\TemplateParser::TP_ID;
+        $this->token = \Smarty\Parser\Template_Parser::TP_ID;
      }
      integer {
-        $this->token = \Smarty\Parser\TemplateParser::TP_INTEGER;
+        $this->token = \Smarty\Parser\Template_Parser::TP_INTEGER;
      }
      backtick {
-        $this->token = \Smarty\Parser\TemplateParser::TP_BACKTICK;
+        $this->token = \Smarty\Parser\Template_Parser::TP_BACKTICK;
         $this->yypopstate();
      }
      vert {
-        $this->token = \Smarty\Parser\TemplateParser::TP_VERT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_VERT;
      }
      dot {
-        $this->token = \Smarty\Parser\TemplateParser::TP_DOT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_DOT;
      }
      comma {
-        $this->token = \Smarty\Parser\TemplateParser::TP_COMMA;
+        $this->token = \Smarty\Parser\Template_Parser::TP_COMMA;
      }
      semicolon {
-        $this->token = \Smarty\Parser\TemplateParser::TP_SEMICOLON;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SEMICOLON;
      }
      doublecolon {
-        $this->token = \Smarty\Parser\TemplateParser::TP_DOUBLECOLON;
+        $this->token = \Smarty\Parser\Template_Parser::TP_DOUBLECOLON;
      }
      colon {
-        $this->token = \Smarty\Parser\TemplateParser::TP_COLON;
+        $this->token = \Smarty\Parser\Template_Parser::TP_COLON;
      }
      qmark {
-        $this->token = \Smarty\Parser\TemplateParser::TP_QMARK;
+        $this->token = \Smarty\Parser\Template_Parser::TP_QMARK;
      }
      hex {
-        $this->token = \Smarty\Parser\TemplateParser::TP_HEX;
+        $this->token = \Smarty\Parser\Template_Parser::TP_HEX;
      }
      space {
-        $this->token = \Smarty\Parser\TemplateParser::TP_SPACE;
+        $this->token = \Smarty\Parser\Template_Parser::TP_SPACE;
      }
      char {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      */
 
@@ -602,14 +602,14 @@ class TemplateLexer
      %statename LITERAL
      ldel literal rdel {
         $this->literal_cnt++;
-        $this->token = \Smarty\Parser\TemplateParser::TP_LITERAL;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LITERAL;
      }
      ldel slash literal rdel {
         if ($this->literal_cnt) {
              $this->literal_cnt--;
-            $this->token = \Smarty\Parser\TemplateParser::TP_LITERAL;
+            $this->token = \Smarty\Parser\Template_Parser::TP_LITERAL;
         } else {
-            $this->token = \Smarty\Parser\TemplateParser::TP_LITERALEND;
+            $this->token = \Smarty\Parser\Template_Parser::TP_LITERALEND;
             $this->yypopstate();
         }
      }
@@ -625,19 +625,19 @@ class TemplateLexer
           $this->compiler->trigger_template_error ("missing or misspelled literal closing tag");
        }
        $this->value = substr($this->data,$this->counter,$to-$this->counter);
-       $this->token = \Smarty\Parser\TemplateParser::TP_LITERAL;
+       $this->token = \Smarty\Parser\Template_Parser::TP_LITERAL;
      }
      */
      /*!lex2php
      %statename DOUBLEQUOTEDSTRING
      userliteral {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      ldel literal rdel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      ldel slash literal rdel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      ldel slash {
         $this->yypushstate(self::TAG);
@@ -648,33 +648,33 @@ class TemplateLexer
         return true;
      }
      ldel {
-        $this->token = \Smarty\Parser\TemplateParser::TP_LDEL;
+        $this->token = \Smarty\Parser\Template_Parser::TP_LDEL;
         $this->taglineno = $this->line;
         $this->yypushstate(self::TAGBODY);
      }
      double_quote {
-        $this->token = \Smarty\Parser\TemplateParser::TP_QUOTE;
+        $this->token = \Smarty\Parser\Template_Parser::TP_QUOTE;
         $this->yypopstate();
      }
      backtick dollar {
-        $this->token = \Smarty\Parser\TemplateParser::TP_BACKTICK;
+        $this->token = \Smarty\Parser\Template_Parser::TP_BACKTICK;
         $this->value = substr($this->value,0,-1);
         $this->yypushstate(self::TAGBODY);
         $this->taglineno = $this->line;
      }
      dollar id {
-        $this->token = \Smarty\Parser\TemplateParser::TP_DOLLARID;
+        $this->token = \Smarty\Parser\Template_Parser::TP_DOLLARID;
      }
      dollar {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      textdoublequoted {
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
      char {
         $to = $this->dataLength;
         $this->value = substr($this->data,$this->counter,$to-$this->counter);
-        $this->token = \Smarty\Parser\TemplateParser::TP_TEXT;
+        $this->token = \Smarty\Parser\Template_Parser::TP_TEXT;
      }
     */
   }

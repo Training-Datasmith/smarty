@@ -12,14 +12,14 @@ declare(strict_types=1);
  *
  *
  */
-class AutoEscapeTest extends PHPUnit_Smarty
+class Auto_Escape_Test extends PHPUnit_Smarty
 {
     /*
      * Setup test fixture
      */
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_escape_html(true);
     }
 

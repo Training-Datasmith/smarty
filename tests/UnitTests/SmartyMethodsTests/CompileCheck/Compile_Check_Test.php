@@ -4,19 +4,19 @@ declare(strict_types=1);
 /**
  * Smarty PHPunit tests for compile check
  */
-class CompileCheckTest extends PHPUnit_Smarty
+class Compile_Check_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->add_template_dir('./templates_tmp');
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
      * generate templates
      */
-    protected function makeFiles()
+    protected function make_files()
     {
         file_put_contents('./templates_tmp/t1.tpl', 'TPL1');
         file_put_contents('./templates_tmp/t2.tpl', 'TPL2');
@@ -25,7 +25,7 @@ class CompileCheckTest extends PHPUnit_Smarty
     /**
      * remove generated templates
      */
-    protected function removeFiles()
+    protected function remove_files()
     {
         unlink('./templates_tmp/t1.tpl');
         unlink('./templates_tmp/t2.tpl');
@@ -36,7 +36,7 @@ class CompileCheckTest extends PHPUnit_Smarty
      * reset, but leave the files alone
      * @return void
      */
-    private function softResetSmarty()
+    private function soft_reset_smarty()
     {
         $this->smarty = new \Smarty\Smarty();
         $this->smarty->add_template_dir('./templates_tmp');
@@ -47,10 +47,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOn0()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_ON);
 
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
@@ -61,10 +61,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOn1()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_ON);
 
         unlink('./templates_tmp/base.tpl');
@@ -79,10 +79,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOn2()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_ON);
 
         sleep(1);
@@ -96,10 +96,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOff0()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_OFF);
 
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
@@ -110,10 +110,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOff1()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_OFF);
 
         unlink('./templates_tmp/base.tpl');
@@ -127,10 +127,10 @@ class CompileCheckTest extends PHPUnit_Smarty
      */
     public function testCompileCheckOff2()
     {
-        $this->makeFiles();
+        $this->make_files();
         $this->assertEquals('TPL1TPL2', $this->smarty->fetch('base.tpl'));
 
-        $this->softResetSmarty();
+        $this->soft_reset_smarty();
         $this->smarty->set_compile_check(\Smarty\Smarty::COMPILECHECK_OFF);
 
         sleep(1);

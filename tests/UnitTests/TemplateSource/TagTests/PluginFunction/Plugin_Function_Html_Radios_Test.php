@@ -16,11 +16,11 @@ require_once(__DIR__ . '/helpers/_object_tostring.php');
  *
  *
  */
-class PluginFunctionHtmlRadiosTest extends PHPUnit_Smarty
+class Plugin_Function_Html_Radios_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testAssociativeArray()

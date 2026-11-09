@@ -3,7 +3,7 @@
 namespace Smarty\Lexer;
 
 /**
-* Smarty Internal Plugin ConfigfileLexer
+* Smarty Internal Plugin Configfile_Lexer
 *
 * This is the lexer to break the config file source into tokens 
 * @package Smarty
@@ -11,16 +11,16 @@ namespace Smarty\Lexer;
 * @author Uwe Tews 
 */
 /**
-* ConfigfileLexer
+* Configfile_Lexer
 *
 * This is the config file lexer.
-* It is generated from the ConfigfileLexer.plex file
+* It is generated from the Configfile_Lexer.plex file
 *
 * @package Smarty
 * @subpackage Compiler
 * @author Uwe Tews
 */
-class ConfigfileLexer
+class Configfile_Lexer
 {
     /**
      * Source
@@ -182,31 +182,31 @@ naked_string = /[^\n]+?(?=[ \t\r]*\n)/
 %statename START
 
 commentstart {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_COMMENTSTART;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_COMMENTSTART;
     $this->yypushstate(self::COMMENT);
 }
 openB {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_OPENB;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_OPENB;
     $this->yypushstate(self::SECTION);
 }
 closeB {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_CLOSEB;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_CLOSEB;
 }
 equal {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_EQUAL;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_EQUAL;
     $this->yypushstate(self::VALUE);
 }
 whitespace {
     return false;
 }
 newline {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NEWLINE;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NEWLINE;
 }
 id {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_ID;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_ID;
 }
 text {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_OTHER;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_OTHER;
 }
 
 */
@@ -218,23 +218,23 @@ whitespace {
     return false;
 }
 float {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_FLOAT;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_FLOAT;
     $this->yypopstate();
 }
 int {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_INT;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_INT;
     $this->yypopstate();
 }
 tripple_quotes {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_TRIPPLE_QUOTES;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_TRIPPLE_QUOTES;
     $this->yypushstate(self::TRIPPLE);
 }
 single_quoted_string {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_SINGLE_QUOTED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_SINGLE_QUOTED_STRING;
     $this->yypopstate();
 }
 double_quoted_string {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_DOUBLE_QUOTED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_DOUBLE_QUOTED_STRING;
     $this->yypopstate();
 }
 maybe_bool {
@@ -243,16 +243,16 @@ maybe_bool {
         $this->yypushstate(self::NAKED_STRING_VALUE);
         return true; //reprocess in new state
     } else {
-        $this->token = \Smarty\Parser\ConfigfileParser::TPC_BOOL;
+        $this->token = \Smarty\Parser\Configfile_Parser::TPC_BOOL;
         $this->yypopstate();
     }
 }
 naked_string {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NAKED_STRING;
     $this->yypopstate();
 }
 newline {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NAKED_STRING;
     $this->value = '';
     $this->yypopstate();
 }
@@ -263,7 +263,7 @@ newline {
 %statename NAKED_STRING_VALUE
 
 naked_string {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NAKED_STRING;
     $this->yypopstate();
 }
 
@@ -276,10 +276,10 @@ whitespace {
     return false;
 }
 naked_string {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NAKED_STRING;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NAKED_STRING;
 }
 newline {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_NEWLINE;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_NEWLINE;
     $this->yypopstate();
 }
 
@@ -289,10 +289,10 @@ newline {
 %statename SECTION
 
 dot {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_DOT;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_DOT;
 }
 section {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_SECTION;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_SECTION;
     $this->yypopstate();
 }
 
@@ -301,7 +301,7 @@ section {
 %statename TRIPPLE
 
 tripple_quotes_end {
-    $this->token = \Smarty\Parser\ConfigfileParser::TPC_TRIPPLE_QUOTES_END;
+    $this->token = \Smarty\Parser\Configfile_Parser::TPC_TRIPPLE_QUOTES_END;
     $this->yypopstate();
     $this->yypushstate(self::START);
 }
@@ -314,7 +314,7 @@ text {
     $this->compiler->trigger_config_file_error ('missing or misspelled literal closing tag');
   }  
   $this->value = substr($this->data,$this->counter,$to-$this->counter);
-  $this->token = \Smarty\Parser\ConfigfileParser::TPC_TRIPPLE_TEXT;
+  $this->token = \Smarty\Parser\Configfile_Parser::TPC_TRIPPLE_TEXT;
 }
 */
 

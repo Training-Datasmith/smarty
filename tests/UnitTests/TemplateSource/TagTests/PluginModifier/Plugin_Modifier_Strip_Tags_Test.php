@@ -16,11 +16,11 @@ use PHPUnit_Smarty;
  * @preserveGlobalState disabled
  * @backupStaticAttributes enabled
  */
-class PluginModifierStripTagsTest extends PHPUnit_Smarty
+class Plugin_Modifier_Strip_Tags_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testDefault()

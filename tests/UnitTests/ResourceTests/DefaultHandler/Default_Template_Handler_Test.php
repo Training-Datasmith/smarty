@@ -15,18 +15,18 @@ declare(strict_types=1);
  *
  *
  */
-class DefaultTemplateHandlerTest extends PHPUnit_Smarty
+class Default_Template_Handler_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_force_compile(true);
         $this->smarty->disable_security();
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test error on unknow template

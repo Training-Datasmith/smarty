@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class SmartyTemplateObjectTest extends PHPUnit_Smarty
+class Smarty_Template_Object_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test {$smarty.template_objects}

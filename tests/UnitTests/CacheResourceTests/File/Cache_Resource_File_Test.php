@@ -15,19 +15,19 @@ include_once __DIR__ . '/../_shared/Cache_Resource_Test_Common.php';
  */
 class Cache_Resource_File_Test extends Cache_Resource_Test_Common
 {
-    private $directorySeparator;
+    private $directory_separator;
 
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         parent::setUp();
-        $this->directorySeparator = preg_quote(DIRECTORY_SEPARATOR, '/');
-        $this->smarty->set_caching_type('filetest');
+        $this->directory_separator = preg_quote(DIRECTORY_SEPARATOR, '/');
+        $this->smarty->set_cache_resource(new Smarty_CacheResource_Filetest());
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -40,7 +40,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl');
 
-        $pattern = '/.*' . $this->directorySeparator . '([a-f0-9]{2}' . $this->directorySeparator . '){3}.*\.php/';
+        $pattern = '/.*' . $this->directory_separator . '([a-f0-9]{2}' . $this->directory_separator . '){3}.*\.php/';
         $this->assertRegExp($pattern, $tpl->get_cached()->filepath);
     }
 
@@ -54,7 +54,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar');
 
-        $pattern = '/.*' . $this->directorySeparator . 'foo' . $this->directorySeparator . 'bar' . $this->directorySeparator . '([a-f0-9]{2}' . $this->directorySeparator . '){3}.*\.php/';
+        $pattern = '/.*' . $this->directory_separator . 'foo' . $this->directory_separator . 'bar' . $this->directory_separator . '([a-f0-9]{2}' . $this->directory_separator . '){3}.*\.php/';
         $this->assertRegExp($pattern, $tpl->get_cached()->filepath);
     }
 
@@ -68,7 +68,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl', null, 'blar');
 
-        $pattern = '/.*' . $this->directorySeparator . 'blar' . $this->directorySeparator . '([a-f0-9]{2}' . $this->directorySeparator . '){3}.*\.php/';
+        $pattern = '/.*' . $this->directory_separator . 'blar' . $this->directory_separator . '([a-f0-9]{2}' . $this->directory_separator . '){3}.*\.php/';
         $this->assertRegExp($pattern, $tpl->get_cached()->filepath);
     }
 
@@ -82,7 +82,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
 
-        $pattern = '/.*' . $this->directorySeparator . 'foo' . $this->directorySeparator . 'bar' . $this->directorySeparator . 'blar' . $this->directorySeparator . '([a-f0-9]{2}' . $this->directorySeparator . '){3}.*\.php/';
+        $pattern = '/.*' . $this->directory_separator . 'foo' . $this->directory_separator . 'bar' . $this->directory_separator . 'blar' . $this->directory_separator . '([a-f0-9]{2}' . $this->directory_separator . '){3}.*\.php/';
         $this->assertRegExp($pattern, $tpl->get_cached()->filepath);
     }
 
@@ -91,7 +91,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
      */
     public function testClearCacheAllCacheIdCompileId()
     {
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
@@ -108,7 +108,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
@@ -130,7 +130,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(false);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar2', 'blar');
@@ -151,7 +151,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar2', 'blar');
@@ -171,7 +171,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $this->smarty->set_use_sub_dirs(false);
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
@@ -192,7 +192,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
     {
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $this->smarty->set_use_sub_dirs(true);
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
@@ -214,7 +214,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(false);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar2');
@@ -235,7 +235,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar2');
@@ -256,7 +256,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(false);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar2');
@@ -277,7 +277,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', 'foo|bar', 'blar2');
@@ -298,7 +298,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(false);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', null, 'bar');
@@ -323,7 +323,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
         $this->smarty->caching = true;
         $this->smarty->cache_lifetime = 1000;
         $this->smarty->set_use_sub_dirs(true);
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         $tpl = $this->smarty->create_template('helloworld.tpl');
         $this->write_cached_content($tpl);
         $tpl2 = $this->smarty->create_template('helloworld.tpl', null, 'bar');
@@ -348,7 +348,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
      */
     public function testClearCacheAll()
     {
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         file_put_contents($this->smarty->get_cache_dir() . 'dummy.php', 'test');
         $this->assertEquals(1, $this->smarty->clear_all_cache());
     }
@@ -358,7 +358,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
      */
     public function testClearCacheAllNotExpired()
     {
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         file_put_contents($this->smarty->get_cache_dir() . 'dummy.php', 'test');
         touch($this->smarty->get_cache_dir() . 'dummy.php', time() - 1000);
         clearstatcache();
@@ -370,7 +370,7 @@ class Cache_Resource_File_Test extends Cache_Resource_Test_Common
      */
     public function testClearCacheAllExpired()
     {
-        $this->cleanCacheDir();
+        $this->clean_cache_dir();
         file_put_contents($this->smarty->get_cache_dir() . 'dummy.php', 'test');
         touch($this->smarty->get_cache_dir() . 'dummy.php', time() - 1000);
         clearstatcache();

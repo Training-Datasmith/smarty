@@ -12,9 +12,9 @@
 
 namespace Smarty\Parser;
 
-use \Smarty\Lexer\TemplateLexer as Lexer;
+use \Smarty\Lexer\Template_Lexer as Lexer;
 use \Smarty\ParseTree\Template as TemplateParseTree;
-use \Smarty\Compiler\Template as TemplateCompiler;
+use \Smarty\Compiler\Template as Template_Compiler;
 use \Smarty\ParseTree\Code;
 use \Smarty\ParseTree\Dq;
 use \Smarty\ParseTree\DqContent;
@@ -25,11 +25,11 @@ use \Smarty\CompilerException;
 * Smarty Template Parser Class
 *
 * This is the template parser.
-* It is generated from the TemplateParser.y file
+* It is generated from the Template_Parser.y file
 * 
 * @author Uwe Tews <uwe.tews@googlemail.com>
 */
-class TemplateParser
+class Template_Parser
 }
 %include_class
 {
@@ -106,7 +106,7 @@ class TemplateParser
     /**
      * compiler object
      *
-     * @var TemplateCompiler
+     * @var Template_Compiler
      */
     public $compiler = null;
 
@@ -158,7 +158,7 @@ class TemplateParser
      * @param Lexer        $lex
      * @param TemplateCompiler $compiler
      */
-    public function __construct(Lexer $lex, TemplateCompiler $compiler)
+    public function __construct(Lexer $lex, Template_Compiler $compiler)
     {
         $this->lex = $lex;
         $this->compiler = $compiler;
@@ -199,7 +199,7 @@ class TemplateParser
      *
      * @return Tag
      */
-    private function mergePrefixCode($code)
+    private function merge_prefix_code($code)
     {
         $tmp = '';
         foreach ($this->compiler->prefix_code as $preCode) {
@@ -290,9 +290,9 @@ literal_e1(A) ::= . {
 }
                       // Smarty tag
 template       ::= template smartytag(B). {
-     $this->current_buffer->append_subtree($this, $this->mergePrefixCode(B));
+     $this->current_buffer->append_subtree($this, $this->merge_prefix_code(B));
      $this->compiler->has_variable_string = false;
-     $this->block_nesting_level = $this->compiler->getTagStackCount();
+     $this->block_nesting_level = $this->compiler->get_tag_stack_count();
 }
 
 
@@ -336,10 +336,10 @@ smartytag(A)   ::= SMARTYBLOCKCHILDPARENT(i). {
     $j = strrpos(i,'.');
     if (i[$j+1] == 'c') {
         // {$smarty.block.child}
-        A = $this->compiler->compileChildBlock();
+        A = $this->compiler->compile_child_block();
     } else {
         // {$smarty.block.parent}
-       A = $this->compiler->compileParentBlock();
+       A = $this->compiler->compile_parent_block();
      }
 }
 
@@ -638,7 +638,7 @@ expr(res)	::= DOLLARID(i) INCDEC(i2). {
 
                  // resources/streams
 expr(res)        ::= DOLLARID(i) COLON ID(i2). {
-    res = '$_smarty_tpl->getStreamVariable(\''.substr(i,1).'://' . i2 . '\')';
+    res = '$_smarty_tpl->get_stream_variable(\''.substr(i,1).'://' . i2 . '\')';
 }
 
                   // arithmetic expression
@@ -653,7 +653,7 @@ expr(res)        ::= expr(e) UNIMATH(m) value(v). {
 // if expression
                     // special conditions
 expr(res)        ::= expr(e1) tlop(c) value(e2). {
-    res = c['pre']. e1.c['op'].e2 .')';
+    res = c['pre']. e1.c['op'].e2 . (isset(c['suf']) ? c['suf'] : ')');
 }
                     // simple expression
 expr(res)        ::= expr(e1) lop(c) expr(e2). {
@@ -1301,12 +1301,12 @@ lop(res)        ::= SLOGOP(o). {
 }
 tlop(res)        ::= TLOGOP(o). {
      static $tlops = array(
-         'isdivby' => array('op' => ' % ', 'pre' => '!('),
-         'isnotdivby' => array('op' => ' % ', 'pre' => '('),
-         'isevenby' => array('op' => ' / ', 'pre' => '!(1 & '),
-         'isnotevenby' => array('op' => ' / ', 'pre' => '(1 & '),
-         'isoddby' => array('op' => ' / ', 'pre' => '(1 & '),
-         'isnotoddby' => array('op' => ' / ', 'pre' => '!(1 & '),
+         'isdivby' => array('op' => ' % ', 'pre' => '!(', 'suf' => ')'),
+         'isnotdivby' => array('op' => ' % ', 'pre' => '(', 'suf' => ')'),
+         'isevenby' => array('op' => ', ', 'pre' => '!(1 & intdiv(', 'suf' => '))'),
+         'isnotevenby' => array('op' => ', ', 'pre' => '(1 & intdiv(', 'suf' => '))'),
+         'isoddby' => array('op' => ', ', 'pre' => '(1 & intdiv(', 'suf' => '))'),
+         'isnotoddby' => array('op' => ', ', 'pre' => '!(1 & intdiv(', 'suf' => '))'),
          );
      $op = strtolower(preg_replace('/\s*/', '', o));
      res = $tlops[$op];

@@ -11,14 +11,14 @@ declare(strict_types=1);
 /**
  * class for clearing all assigned variables tests
  */
-class ClearAllAssignTest extends PHPUnit_Smarty
+class Clear_All_Assign_Test extends PHPUnit_Smarty
 {
     private $_data = null;
     private $_tpl = null;
 
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
 
         $this->smarty->assign('foo', 'foo');
         $this->_data = $this->smarty->create_data($this->smarty);
@@ -29,7 +29,7 @@ class ClearAllAssignTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test all variables accessable

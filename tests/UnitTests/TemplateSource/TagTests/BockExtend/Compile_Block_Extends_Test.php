@@ -13,22 +13,22 @@ use Smarty\Template;
 /**
  * class for block extends compiler tests
  */
-class CompileBlockExtendsTest extends PHPUnit_Smarty
+class Compile_Block_Extends_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         //$this->smarty->set_merge_compiled_includes(true);
     }
 
-    public function compiledPrefilter($text, Template $tpl)
+    public function compiled_prefilter($text, Template $tpl)
     {
         return str_replace('#', (string) $tpl->get_template_vars('test'), $text);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -62,18 +62,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChild_002(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->set_caching($caching);
@@ -84,7 +84,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         $result = $this->smarty->fetch('002_child.tpl');
         $this->assertStringContainsString('(child|b)content child b(child|/b)', $result, $testName . ' - content');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -95,18 +95,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildPrepend_003(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->set_caching($caching);
@@ -121,7 +121,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -132,18 +132,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockGrandPrepend_003(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -159,7 +159,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -170,18 +170,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildAppend_004(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -197,7 +197,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -208,18 +208,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockGrandAppend_004(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -235,7 +235,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -246,18 +246,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockGrandAppendPrepend_004(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -273,7 +273,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -284,18 +284,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildAppendShortag_005(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->set_caching($caching);
@@ -310,7 +310,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -321,18 +321,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildSmartyChild_006(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->set_caching($caching);
@@ -347,7 +347,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -358,18 +358,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildSmartyParent_007(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -385,7 +385,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -396,18 +396,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildSmartyParent_007_2(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -423,7 +423,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -434,18 +434,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildPlugin_008(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -461,7 +461,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -472,18 +472,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockParentNested_009(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
@@ -497,7 +497,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -508,18 +508,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNested_010(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->set_caching($caching);
@@ -534,7 +534,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -545,18 +545,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNestedInclude_011(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -572,7 +572,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -583,18 +583,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNestedInclude_012(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
         $this->smarty->assign('grand', 'grand', true);
@@ -610,7 +610,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -621,18 +621,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNestedHide_018(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -645,7 +645,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -656,18 +656,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNestedHide_018_2(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -680,7 +680,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -691,18 +691,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockChildNestedHide_018_3(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -715,7 +715,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -726,18 +726,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockStartSubTemplates_020(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -760,7 +760,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - include 1'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1006,18 +1006,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testSmartyBlockVariablePartentInclude_28(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         $this->smarty->set_compile_id(10);
@@ -1028,7 +1028,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         $result = $this->smarty->fetch('028_child.tpl');
         $this->assertStringContainsString('b1-include-1--b1', $result, $testName . ' - content');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1042,13 +1042,13 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
     public function testSmartyBlockVariablePartentInclude_282(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -1058,7 +1058,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         $result = $this->smarty->fetch('028_child.tpl');
         $this->assertStringContainsString('b1-child-i2-include-2--b1', $result, $testName . ' - content');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1069,18 +1069,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockGrandChildNested_030(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -1088,9 +1088,9 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         }
         $result = $this->smarty->fetch('030_grandchild_nested.tpl');
         $this->assertStringContainsString('child pre -grandchild content- child post', $result, $testName . ' - content');
-        $this->assertStringContainsString('include:' . $testNumber, $result, $testName . ' - content 2');
+        $this->assertStringContainsString('include:' . $test_number, $result, $testName . ' - content 2');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1100,18 +1100,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockGrandChildNestedRelative_030(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -1119,9 +1119,9 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         }
         $result = $this->smarty->fetch('sub/030_grandchild_nested_rel.tpl');
         $this->assertStringContainsString('child pre -grandchild content- child post', $result, $testName . ' - content');
-        $this->assertStringContainsString('include:' . $testNumber, $result, $testName . ' - content 2');
+        $this->assertStringContainsString('include:' . $test_number, $result, $testName . ' - content 2');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1131,18 +1131,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
     *
     *
     *
-    * @dataProvider        data
+    * @dataProvider data
     */
     public function testCompileBlockSmartyBlockParent_034_1(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -1151,7 +1151,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         $result = $this->smarty->fetch('034_1child.tpl');
         $this->assertStringContainsString('parent b1', $result, $testName . ' - content');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1162,18 +1162,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockSmartyBlockChild_035_1(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->assign('parenttpl', '035_1parent.tpl');
         $this->smarty->assign('parent', 'parent', true);
         $this->smarty->assign('child', 'child', true);
@@ -1189,7 +1189,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             $testName . ' - content'
         );
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1225,7 +1225,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
             return str_replace("'foo'", "'bar'", $compiled);
         }
 
-        $this->smarty->load_filter('post', 'test031');
+        $this->smarty->register_filter('post', 'smarty_postfilter_test031', 'test031');
         $this->smarty->assign('foo', 'foo');
         $this->smarty->assign('bar', 'bar');
         $this->assertStringContainsString('bar', $this->smarty->fetch('031_post_filter.tpl'));
@@ -1247,18 +1247,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        data
+     * @dataProvider data
      */
     public function testCompileBlockRelativeIncludes_033(
         $caching,
         $merge,
-        $testNumber,
-        $compileTestNumber,
-        $renderTestNumber,
+        $test_number,
+        $compile_Test_Number,
+        $render_Test_Number,
         $testName
     ) {
-        $this->smarty->register_filter('pre', [$this, 'compiledPrefilter']);
-        $this->smarty->assign('test', $testNumber);
+        $this->smarty->register_filter('pre', [$this, 'compiled_prefilter']);
+        $this->smarty->assign('test', $test_number);
         $this->smarty->set_caching($caching);
         $this->smarty->set_merge_compiled_includes($merge);
         if ($merge) {
@@ -1269,7 +1269,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
         $this->assertStringContainsString('include child:content include child', $result, $testName . ' - grand');
         $this->assertStringContainsString('include parent:content include parent', $result, $testName . ' - grand');
         $this->assertStringContainsString(
-            "test:{$testNumber} compiled:{$compileTestNumber} rendered:{$renderTestNumber}",
+            "test:{$test_number} compiled:{$compile_Test_Number} rendered:{$render_Test_Number}",
             $result,
             $testName . ' - fetch() failure'
         );
@@ -1306,14 +1306,14 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'bar');
         $this->assertEquals(
@@ -1326,12 +1326,12 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testBlockSpacingNocache($code, $result, $testName, $testNumber)
+    public function testBlockSpacingNocache($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('VarNocache');
         $this->smarty->set_caching(1);
@@ -1347,12 +1347,12 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test Output nocache spacings
      *
      *
-     * @dataProvider        dataTestSpacing
+     * @dataProvider data_test_spacing
      *
      */
-    public function testBlockSpacingNocache2($code, $result, $testName, $testNumber)
+    public function testBlockSpacingNocache2($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
         $this->smarty->set_compile_id('VarNocache');
         $this->smarty->set_caching(1);
@@ -1368,7 +1368,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*
@@ -1388,18 +1388,18 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test spacings
      *
      *
-     * @dataProvider        dataTestChildSpacing
+     * @dataProvider data_test_child_spacing
      *
      */
-    public function testChildSpacing($code, $result, $testName, $testNumber)
+    public function testChildSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_Parent{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $child = "{extends file='$file'}\n";
         $child .= preg_replace(['/A/','/C/','/[$]foo/','/\s*[{][$]smarty[.]block[.]child[}]\s*/'], ['G','H','$bar','{$bar}'], $code);
         $file = "Spacing_Child{$name}.tpl";
-        $this->makeTemplateFile($file, $child);
+        $this->make_template_file($file, $child);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 'foo');
         $this->smarty->assign('bar', 'bar');
@@ -1413,7 +1413,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestChildSpacing()
+    public function data_test_child_spacing()
     {
         $i = 1;
         /*
@@ -1439,13 +1439,13 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test Block nocache spacings
      *
      *
-     * @dataProvider        dataTestBlockNocache
+     * @dataProvider data_test_block_nocache
      *
      */
-    public function testBlockNocacheSpacing($code, $result, $name, $testNumber)
+    public function testBlockNocacheSpacing($code, $result, $name, $test_number)
     {
         $file = "blockNocache_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_compile_id('BlockNocache');
         $this->smarty->set_caching(1);
         $this->smarty->set_template_dir('./templates_tmp');
@@ -1460,10 +1460,10 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
      * Test Block nocache spacings
      *
      *
-     * @dataProvider        dataTestBlockNocache
+     * @dataProvider data_test_block_nocache
      *
      */
-    public function testBlockNocacheSpacing2($code, $result, $name, $testNumber)
+    public function testBlockNocacheSpacing2($code, $result, $name, $test_number)
     {
         $file = "blockNocache_{$name}.tpl";
         $this->smarty->set_compile_id('BlockNocache');
@@ -1479,7 +1479,7 @@ class CompileBlockExtendsTest extends PHPUnit_Smarty
     /*
       * Data provider for TestBlockNocache
       */
-    public function dataTestBlockNocache()
+    public function data_test_block_nocache()
     {
         $i = 1;
         /*

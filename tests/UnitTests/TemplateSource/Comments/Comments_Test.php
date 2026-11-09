@@ -15,29 +15,29 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CommentsTest extends PHPUnit_Smarty
+class Comments_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
      * Test comments
      *
      *
-     * @dataProvider        dataTestComments
+     * @dataProvider data_test_comments
      */
-    public function testComments($code, $result, $testName, $testNumber)
+    public function testComments($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testComments_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->assertEquals(
             $result,
@@ -49,7 +49,7 @@ class CommentsTest extends PHPUnit_Smarty
     /*
       * Data provider für testComments
       */
-    public function dataTestComments()
+    public function data_test_comments()
     {
         $i = 1;
         /*

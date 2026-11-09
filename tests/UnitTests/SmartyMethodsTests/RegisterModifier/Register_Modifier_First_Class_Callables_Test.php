@@ -11,16 +11,16 @@ if (PHP_VERSION_ID >= 80100) {
      * @preserveGlobalState disabled
      * @backupStaticAttributes enabled
      */
-    class RegisterModifierFirstClassCallablesTest extends PHPUnit_Smarty
+class Register_Modifier_First_Class_Callables_Test extends PHPUnit_Smarty
     {
         public function setUp(): void
         {
-            $this->setUpSmarty(__DIR__);
+            $this->set_up_smarty(__DIR__);
         }
 
         public function testInit()
         {
-            $this->cleanDirs();
+            $this->clean_dirs();
         }
 
         public function testRegisterFirstClassCallable()
@@ -38,8 +38,8 @@ if (PHP_VERSION_ID >= 80100) {
         public function testRegisterFirstClassCallableAsFunc()
         {
             $this->smarty->register_plugin(\Smarty\Smarty::PLUGIN_MODIFIER, 'kprint_r_out', eval('return strrev(...);'));
-            $this->smarty->assign('myVar', 'andersom');
-            $this->assertEquals('mosredna', $this->smarty->fetch('string:{kprint_r_out($myVar)}'));
+            $this->smarty->assign('my_var', 'andersom');
+            $this->assertEquals('mosredna', $this->smarty->fetch('string:{kprint_r_out($my_var)}'));
         }
 
         public function testRegisterFirstClassCallableSameNameAsPhpFunc()

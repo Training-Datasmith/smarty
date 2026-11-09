@@ -1,13 +1,12 @@
 <?php
 
 declare(strict_types=1);
-
-class TernaryTest extends PHPUnit_Smarty
+class Ternary_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(sys_get_temp_dir());
-        $this->cleanDirs();
+        $this->set_up_smarty(sys_get_temp_dir());
+        $this->clean_dirs();
     }
 
     public function testTernaryTrue()

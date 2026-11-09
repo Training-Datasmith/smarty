@@ -15,19 +15,22 @@ declare(strict_types=1);
  *
  *
  */
-class DefaultPluginHandlerTest extends PHPUnit_Smarty
+class Default_Plugin_Handler_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->set_force_compile(true);
         $this->smarty->disable_security();
-        $this->smarty->register_default_plugin_handler('my_plugin_handler');
+        $this->assert_user_deprecation(
+            'register_default_plugin_handler',
+            fn () => $this->smarty->register_default_plugin_handler('my_plugin_handler')
+        );
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     public function testDefaultFunctionScript()
     {
@@ -125,7 +128,7 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                     $callback = 'default_script_compiler_function_tag';
                     return true;
                 case 'compilerobject':
-                    $callback = [new CompilerDefaultPluginClass(), 'compile'];
+                    $callback = [new Compiler_Default_Plugin_Class(), 'compile'];
                     return true;
                 default:
                     return false;
@@ -155,7 +158,7 @@ function my_plugin_handler($tag, $type, $template, &$callback, &$script, &$cacha
                     return true;
                 case 'mydefaultstaticmodifier':
                     $script = './scripts/script_default_static_modifier.php';
-                    $callback = ['DefModifier', 'default_static_modifier'];
+                    $callback = [Def_Modifier::class, 'default_static_modifier'];
 
                     return true;
                 default:
@@ -176,9 +179,9 @@ function default_local_modifier($input)
 {
     return 'localmodifier ' . $input;
 }
-class CompilerDefaultPluginClass
+class Compiler_Default_Plugin_Class
 {
-    public static function statCompile($params, $compiler)
+    public static function stat_compile($params, $compiler)
     {
         return '<?php echo \'Static World\';?>';
     }

@@ -15,17 +15,17 @@ declare(strict_types=1);
  *
  *
  */
-class ModifierTest extends PHPUnit_Smarty
+class Modifier_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->add_template_dir('./templates_tmp');
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -33,14 +33,14 @@ class ModifierTest extends PHPUnit_Smarty
      *
      * @not                 runInSeparateProcess
      *
-     * @dataProvider        dataTestModifier
+     * @dataProvider data_test_modifier
      */
-    public function testModifier($code, $result, $testName, $testNumber)
+    public function testModifier($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testModifier_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
-        $this->smarty->assign_global('file', $file);
+        $this->make_template_file($file, $code);
+        $this->smarty->assign('file', $file);
         $this->smarty->assign('bar', 'buh');
         $this->assertEquals(
             $result,
@@ -52,7 +52,7 @@ class ModifierTest extends PHPUnit_Smarty
     /*
       * Data provider für testModifier
       */
-    public function dataTestModifier()
+    public function data_test_modifier()
     {
         $i = 1;
         /*

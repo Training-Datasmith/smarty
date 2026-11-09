@@ -1,11 +1,11 @@
 <?php
-/* Smarty version 5.8.0, created on 2026-11-09 22:10:35
+/* Smarty version 5.8.0, created on 2026-11-09 23:07:42
   from 'file:helloworld.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->get_compiled()->is_fresh($_smarty_tpl, array (
   'version' => '5.8.0',
-  'unifunc' => 'content_80bc7c640aaecd13e70e17d6',
+  'unifunc' => 'content_9aae7f6bf1a0c61a145f6ad0',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
@@ -20,9 +20,9 @@ if ($_smarty_tpl->get_compiled()->is_fresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_80bc7c640aaecd13e70e17d6 (\Smarty\Template $_smarty_tpl) {
+function content_9aae7f6bf1a0c61a145f6ad0 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/app/tests/UnitTests/CacheResourceTests/_shared/templates';
-$_smarty_tpl->get_compiled()->nocache_hash = '99204bd4b18c3de34415cf9afef5aca2';
+$_smarty_tpl->get_compiled()->nocache_hash = 'd7132c3815942fb8238cf877946ab2df';
 ?>
 hello world<?php }
 }

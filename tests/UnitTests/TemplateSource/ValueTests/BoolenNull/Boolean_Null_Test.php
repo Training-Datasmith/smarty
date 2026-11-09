@@ -15,16 +15,16 @@ declare(strict_types=1);
  *
  *
  */
-class BooleanNullTest extends PHPUnit_Smarty
+class Boolean_Null_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * test true

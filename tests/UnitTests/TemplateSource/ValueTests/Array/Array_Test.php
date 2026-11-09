@@ -15,29 +15,29 @@ declare(strict_types=1);
  *
  *
  */
-class ArrayTest extends PHPUnit_Smarty
+class Array_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
     }
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
     /**
      * Test array access
      *
      *
-     * @dataProvider        dataTestArray
+     * @dataProvider data_test_array
      *
      */
-    public function testArray($code, $result, $testName, $testNumber)
+    public function testArray($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Array_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('foo', 3);
         $this->assertEquals(
@@ -50,7 +50,7 @@ class ArrayTest extends PHPUnit_Smarty
     /*
       * Data provider für testArray
       */
-    public function dataTestArray()
+    public function data_test_array()
     {
         $i = 1;
         /*

@@ -15,12 +15,12 @@ declare(strict_types=1);
  * @preserveGlobalState    disabled
  *
  */
-class CompileIfTest extends PHPUnit_Smarty
+class Compile_If_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
-        $this->smarty->add_plugins_dir('../../../__shared/PHPunitplugins/');
+        $this->set_up_smarty(__DIR__);
+        $this->load_plugins_dir_for_tests('../../../__shared/PHPunitplugins/');
         $this->smarty->add_template_dir('../../../__shared/templates/');
         $this->smarty->add_template_dir('./templates_tmp');
         $this->smarty->register_plugin('modifier', 'var_export', 'var_export');
@@ -28,7 +28,7 @@ class CompileIfTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     /**
@@ -36,13 +36,13 @@ class CompileIfTest extends PHPUnit_Smarty
      *
      * @not                 runInSeparateProcess
      *
-     * @dataProvider        dataTestIf
+     * @dataProvider data_test_if
      */
-    public function testIf($code, $result, $testName, $testNumber)
+    public function testIf($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "testIf_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->assign('file', $file);
         $this->smarty->assign('bar', 'buh');
         $this->assertEquals($result, $this->smarty->fetch($file), "testIf - {$code} - {$name}");
@@ -51,7 +51,7 @@ class CompileIfTest extends PHPUnit_Smarty
     /*
       * Data provider für testIf
       */
-    public function dataTestIf()
+    public function data_test_if()
     {
         $i = 1;
         /*
@@ -184,15 +184,15 @@ class CompileIfTest extends PHPUnit_Smarty
      *
      *
      *
-     * @dataProvider        dataTestIfNocache
+     * @dataProvider data_test_if_nocache
      */
-    public function testIfNocache($var, $value, $code, $result, $testName, $testNumber, $file = null)
+    public function testIfNocache($var, $value, $code, $result, $testName, $test_number, $file = null)
     {
         if (!isset($file)) {
-            $file = "testIfNoCache_{$testNumber}.tpl";
+            $file = "testIfNoCache_{$test_number}.tpl";
         }
         if ($code) {
-            $this->makeTemplateFile($file, $code);
+            $this->make_template_file($file, $code);
         }
         $this->smarty->set_caching(true);
         $this->smarty->assign('file', $file, true);
@@ -208,7 +208,7 @@ class CompileIfTest extends PHPUnit_Smarty
     /*
       * Data provider für testIfNocache
       */
-    public function dataTestIfNocache()
+    public function data_test_if_nocache()
     {
         $i = 1;
         /*
@@ -243,14 +243,14 @@ class CompileIfTest extends PHPUnit_Smarty
     * Test spacings
     *
     *
-    * @dataProvider        dataTestSpacing
+    * @dataProvider data_test_spacing
     *
     */
-    public function testSpacing($code, $result, $testName, $testNumber)
+    public function testSpacing($code, $result, $testName, $test_number)
     {
-        $name = empty($testName) ? $testNumber : $testName;
+        $name = empty($testName) ? $test_number : $testName;
         $file = "Spacing_{$name}.tpl";
-        $this->makeTemplateFile($file, $code);
+        $this->make_template_file($file, $code);
         $this->smarty->set_template_dir('./templates_tmp');
         $this->smarty->assign('bar', 'bar');
         $this->assertEquals(
@@ -263,7 +263,7 @@ class CompileIfTest extends PHPUnit_Smarty
     /*
       * Data provider für testSpacing
       */
-    public function dataTestSpacing()
+    public function data_test_spacing()
     {
         $i = 1;
         /*

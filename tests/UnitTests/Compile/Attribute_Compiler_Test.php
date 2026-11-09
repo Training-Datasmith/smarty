@@ -38,7 +38,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
     /**
      * Create the attribute compiler for testing.
      */
-    private function createAttributeCompiler()
+    private function create_attribute_compiler()
     {
         return new Attribute_Compiler(
             $this->attributes['required_attributes'],
@@ -73,7 +73,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
                 'option' => true,
                 'option_two' => false,
             ],
-            $this->createAttributeCompiler()
+            $this->create_attribute_compiler()
                 ->get_attributes($this->template_compiler, $payload)
         );
     }
@@ -95,13 +95,13 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
             [
                 'optional' => 'optional value',
             ],
-            $this->createAttributeCompiler()
+            $this->create_attribute_compiler()
                 ->get_attributes($this->template_compiler, $payload)
         );
 
         $this->assertEquals(
             [],
-            $this->createAttributeCompiler()
+            $this->create_attribute_compiler()
                 ->get_attributes($this->template_compiler, [])
         );
     }
@@ -127,7 +127,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
                 'optional' => 'optional value',
                 'optional_two' => 'optional value two',
             ],
-            $this->createAttributeCompiler()
+            $this->create_attribute_compiler()
                 ->get_attributes($this->template_compiler, $payload)
         );
     }
@@ -144,7 +144,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('too many shorthand attributes');
 
-        $this->createAttributeCompiler()
+        $this->create_attribute_compiler()
             ->get_attributes($this->template_compiler, $payload);
     }
 
@@ -158,7 +158,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('missing \'required\' attribute');
 
-        $this->createAttributeCompiler()
+        $this->create_attribute_compiler()
             ->get_attributes($this->template_compiler, []);
     }
 
@@ -172,7 +172,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('illegal value');
 
-        $this->createAttributeCompiler()
+        $this->create_attribute_compiler()
             ->get_attributes($this->template_compiler, [0 => ['option' => 'foo']]);
     }
 
@@ -184,7 +184,7 @@ class Attribute_Compiler_Test extends PHPUnit\Framework\TestCase
         $this->expectException(\Smarty\Exception::class);
         $this->expectExceptionMessage('unexpected \'unexpected\' attribute');
 
-        $this->createAttributeCompiler()
+        $this->create_attribute_compiler()
             ->get_attributes($this->template_compiler, [0 => ['unexpected' => 'bar']]);
     }
 }

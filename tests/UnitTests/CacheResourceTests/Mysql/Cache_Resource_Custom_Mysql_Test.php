@@ -27,17 +27,17 @@ if (MysqlCacheEnable == true) {
                 $this->markTestSkipped('mysql tests are disabled');
             }
             if (self::$init) {
-                $this->getConnection();
+                $this->get_connection();
             }
-            $this->setUpSmarty(__DIR__);
+            $this->set_up_smarty(__DIR__);
             parent::setUp();
-            $this->smarty->set_caching_type('mysqltest');
+            $this->smarty->set_cache_resource(new Smarty_CacheResource_Mysqltest());
         }
 
         public function testInit()
         {
-            $this->cleanDirs();
-            $this->initMysqlCache();
+            $this->clean_dirs();
+            $this->init_mysql_cache();
         }
     }
 }

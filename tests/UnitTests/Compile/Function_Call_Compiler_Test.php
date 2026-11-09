@@ -45,13 +45,13 @@ class Function_Call_Compiler_Test extends PHPUnit\Framework\TestCase
                 parent::__construct();
             }
 
-            public function get_function_handler(string $functionName): ?\Smarty\Function_Handler\Function_Handler_Interface
+            public function get_function_handler(string $function_name): ?\Smarty\Function_Handler\Function_Handler_Interface
             {
-                if ($functionName === 'method') {
+                if ($function_name === 'method') {
                     return $this->testHandler;
                 }
 
-                return parent::get_function_handler($functionName);
+                return parent::get_function_handler($function_name);
             }
         };
 

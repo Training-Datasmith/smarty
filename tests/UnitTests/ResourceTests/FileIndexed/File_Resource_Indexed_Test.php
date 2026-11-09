@@ -11,11 +11,11 @@ declare(strict_types=1);
  *
  *
  */
-class FileResourceIndexedTest extends PHPUnit_Smarty
+class File_Resource_Indexed_Test extends PHPUnit_Smarty
 {
     public function setUp(): void
     {
-        $this->setUpSmarty(__DIR__);
+        $this->set_up_smarty(__DIR__);
         $this->smarty->add_template_dir(__DIR__ . '/templates_2');
         // note that 10 is a string!
         $this->smarty->add_template_dir(__DIR__ . '/templates_3', '10');
@@ -24,7 +24,7 @@ class FileResourceIndexedTest extends PHPUnit_Smarty
 
     public function testInit()
     {
-        $this->cleanDirs();
+        $this->clean_dirs();
     }
 
     public function testFetch()
