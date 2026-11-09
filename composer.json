@@ -42,10 +42,7 @@
     },
     "autoload": {
         "psr-4" : {
-            "Smarty\\" : "src/",
-            "Smarty\\Block_Handler\\": "src/BlockHandler/",
-            "Smarty\\Function_Handler\\": "src/FunctionHandler/",
-            "Smarty\\Parse_Tree\\": "src/ParseTree/"
+            "Smarty\\" : "src/"
         },
         "files": [
             "src/functions.php"

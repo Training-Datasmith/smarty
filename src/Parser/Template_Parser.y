@@ -13,13 +13,13 @@
 namespace Smarty\Parser;
 
 use \Smarty\Lexer\Template_Lexer as Lexer;
-use \Smarty\ParseTree\Template as TemplateParseTree;
+use \Smarty\Parse_Tree\Template as TemplateParseTree;
 use \Smarty\Compiler\Template as Template_Compiler;
-use \Smarty\ParseTree\Code;
-use \Smarty\ParseTree\Dq;
-use \Smarty\ParseTree\DqContent;
-use \Smarty\ParseTree\Tag;
-use \Smarty\CompilerException;
+use \Smarty\Parse_Tree\Code;
+use \Smarty\Parse_Tree\Dq;
+use \Smarty\Parse_Tree\Dq_Content;
+use \Smarty\Parse_Tree\Tag;
+use \Smarty\Compiler_Exception;
 
 /**
 * Smarty Template Parser Class
@@ -79,7 +79,7 @@ class Template_Parser
     /**
      * current parse tree object
      *
-     * @var \Smarty\ParseTree\Base
+     * @var \Smarty\Parse_Tree\Base
      */
     public $current_buffer;
 
@@ -141,14 +141,14 @@ class Template_Parser
     /**
      * template prefix array
      *
-     * @var \Smarty\ParseTree\Base[]
+     * @var \Smarty\Parse_Tree\Base[]
      */
     public $template_prefix = array();
 
     /**
      * template prefix array
      *
-     * @var \Smarty\ParseTree\Base[]
+     * @var \Smarty\Parse_Tree\Base[]
      */
     public $template_postfix = array();
 
@@ -256,7 +256,7 @@ template       ::= template  TEXT(B). {
             $this->current_buffer->append_subtree($this, null);
          }
 
-         $this->current_buffer->append_subtree($this, new \Smarty\ParseTree\Text($text, $this->strip));
+         $this->current_buffer->append_subtree($this, new \Smarty\Parse_Tree\Text($text, $this->strip));
 }
                       // strip on
 template       ::= template  STRIPON. {
@@ -269,7 +269,7 @@ template       ::= template STRIPOFF. {
 
                      // Literal
 template       ::= template LITERALSTART literal_e2(B) LITERALEND. {
-       $this->current_buffer->append_subtree($this, new \Smarty\ParseTree\Text(B));
+       $this->current_buffer->append_subtree($this, new \Smarty\Parse_Tree\Text(B));
 }
 
 
@@ -1131,7 +1131,7 @@ function(res)     ::= ns1(f) OPENP variablelist(v) CLOSEP optobjectchain(oc). {
     if (f == 'isset') {
         res = '(true';
         if (count(v) == 0) {
-            throw new CompilerException("Invalid number of arguments for isset. isset expects at least one parameter.");
+            throw new Compiler_Exception("Invalid number of arguments for isset. isset expects at least one parameter.");
         }
         foreach (v as $value) {
             if (is_array($value)) {
@@ -1143,7 +1143,7 @@ function(res)     ::= ns1(f) OPENP variablelist(v) CLOSEP optobjectchain(oc). {
         res .= ')' . oc;
     } elseif (f == 'empty') {
         if (count(v) != 1) {
-            throw new CompilerException("Invalid number of arguments for empty. empty expects at exactly one parameter.");
+            throw new Compiler_Exception("Invalid number of arguments for empty. empty expects at exactly one parameter.");
         }
         if (is_array(v[0])) {
             res = '( !' . v[0][0] . ' || empty(' . v[0][1] . '))' . oc;
@@ -1413,6 +1413,6 @@ doublequotedcontent(res)     ::=  smartytag(st). {
 }
 
 doublequotedcontent(res)           ::=  TEXT(o). {
-    res = new DqContent(o);
+    res = new Dq_Content(o);
 }
 

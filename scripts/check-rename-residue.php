@@ -294,6 +294,59 @@ function test_class_basename_mismatch(string $rel, string $contents): ?string
     return "{$rel}: test class '{$m[1]}' does not match file '{$basename}'";
 }
 
+function scan_src_namespace_path_alignment(string $repoRoot): array
+{
+    $failures = [];
+    $src = $repoRoot . '/src';
+    if (!is_dir($src)) {
+        return ['src/ directory missing'];
+    }
+    $iterator = new RecursiveIteratorIterator(
+        new RecursiveDirectoryIterator($src, FilesystemIterator::SKIP_DOTS)
+    );
+    /** @var SplFileInfo $file */
+    foreach ($iterator as $file) {
+        if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
+            continue;
+        }
+        $rel = str_replace('\\', '/', substr($file->getPathname(), strlen($repoRoot) + 1));
+        $contents = (string) file_get_contents($file->getPathname());
+        if (!preg_match('/^\s*namespace\s+([^;{]+)\s*;/m', $contents, $m)) {
+            continue;
+        }
+        $ns = trim($m[1], " \t\\");
+        if (!str_starts_with($ns, 'Smarty')) {
+            continue;
+        }
+        if ($ns !== 'Smarty' && !str_starts_with($ns, 'Smarty\\')) {
+            continue;
+        }
+        $nsSuffix = $ns === 'Smarty' ? '' : substr($ns, strlen('Smarty\\'));
+        $expectedDir = $nsSuffix === '' ? 'src' : 'src/' . str_replace('\\', '/', $nsSuffix);
+        $fileDir = dirname($rel);
+        if ($fileDir !== $expectedDir) {
+            $failures[] = "{$rel}: PSR-4 directory '{$fileDir}' does not match namespace '{$ns}' (expected '{$expectedDir}')";
+            continue;
+        }
+        $code = preg_replace('/\/\*.*?\*\//s', '', $contents) ?? $contents;
+        $code = preg_replace('/\/\/.*$/m', '', $code) ?? $code;
+        $symbol = null;
+        if (preg_match('/\b(?:abstract\s+|final\s+)?(?:class|interface|trait|enum)\s+([A-Za-z_][A-Za-z0-9_]*)\b/', $code, $typeMatch)) {
+            $symbol = $typeMatch[1];
+        }
+        if ($symbol === null) {
+            continue;
+        }
+        $fqn = $ns === 'Smarty' ? 'Smarty\\' . $symbol : $ns . '\\' . $symbol;
+        $expectedRel = 'src/' . str_replace('\\', '/', substr($fqn, strlen('Smarty\\'))) . '.php';
+        if ($rel !== $expectedRel) {
+            $failures[] = "{$rel}: PSR-4 path mismatch for {$fqn} (expected '{$expectedRel}')";
+        }
+    }
+
+    return $failures;
+}
+
 function scan_test_class_basenames(string $repoRoot): array
 {
     $failures = [];
@@ -554,6 +607,7 @@ foreach (glob($repoRoot . '/src/Parser/*.y') ?: [] as $path) {
 }
 
 $failures = array_merge($failures, scan_camel_case($repoRoot, $allowRules));
+$failures = array_merge($failures, scan_src_namespace_path_alignment($repoRoot));
 
 foreach (array_unique($failures) as $failure) {
     fwrite(STDERR, "check-rename-residue: {$failure}\n");
