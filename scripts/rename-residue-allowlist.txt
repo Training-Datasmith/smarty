@@ -7,3 +7,8 @@ tests/UnitTests/TemplateSource/TagTests/FunctionObjectChain/Function_Object_Chai
 # Isset/empty template fixtures: Smarty assigns and fixture properties for template keys
 tests/UnitTests/TemplateSource/ValueTests/PHPfunctions/Php_Function_Test.php Php_Function_Test::isSet
 tests/UnitTests/TemplateSource/ValueTests/PHPfunctions/Php_Function_Test.php Test_Isset::isNull
+
+# Classes gated by MysqlCacheEnable/MysqlResourceEnable (not loaded during residue scan)
+tests/UnitTests/CacheResourceTests/Mysql/Cache_Resource_Custom_Mysql_Test.php Cache_Resource_Custom_Mysql_Test::setUp
+tests/UnitTests/CacheResourceTests/Registered/Cache_Resource_Custom_Registered_Test.php Cache_Resource_Custom_Registered_Test::setUp
+tests/UnitTests/ResourceTests/Custom/DemoPluginMysql/Resource_Mysql_Plugin_Test.php Resource_Mysql_Plugin_Test::setUp

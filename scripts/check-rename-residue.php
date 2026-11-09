@@ -108,88 +108,6 @@ function is_phpunit_lifecycle_hook(string $name): bool
     return in_array($name, ['setUp', 'tearDown', 'setUpBeforeClass', 'tearDownAfterClass'], true);
 }
 
-function class_name_in_phpunit_framework(string $name): bool
-{
-    return $name === 'PHPUnit_Smarty' || str_starts_with($name, 'PHPUnit\\');
-}
-
-function resolve_class_extends_parent(string $contents, string $shortClass): ?string
-{
-    if (!preg_match('/\bclass\s+' . preg_quote($shortClass, '/') . '\s+extends\s+([A-Za-z0-9_\\\\]+)/', $contents, $m)) {
-        return null;
-    }
-
-    return ltrim($m[1], '\\');
-}
-
-function find_php_class_definition_file(string $repoRoot, string $shortClass): ?string
-{
-    static $cache = [];
-    if (isset($cache[$shortClass])) {
-        return $cache[$shortClass];
-    }
-    foreach (['tests', 'libs', 'src', 'demo'] as $subdir) {
-        $root = $repoRoot . '/' . $subdir;
-        if (!is_dir($root)) {
-            continue;
-        }
-        $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS)
-        );
-        $pattern = '/\bclass\s+' . preg_quote($shortClass, '/') . '\b/';
-        /** @var SplFileInfo $file */
-        foreach ($iterator as $file) {
-            if (!$file->isFile() || !str_ends_with($file->getFilename(), '.php')) {
-                continue;
-            }
-            $contents = file_get_contents($file->getPathname());
-            if ($contents !== false && preg_match($pattern, $contents)) {
-                $cache[$shortClass] = $file->getPathname();
-
-                return $cache[$shortClass];
-            }
-        }
-    }
-    $cache[$shortClass] = null;
-
-    return null;
-}
-
-function class_inherits_phpunit_testcase(string $repoRoot, string $contents, string $shortClass): bool
-{
-    $seen = [];
-    $parent = resolve_class_extends_parent($contents, $shortClass);
-    while ($parent !== null) {
-        if ($parent === 'PHPUnit_Smarty' || $parent === 'PHPUnit\\Framework\\TestCase'
-            || str_starts_with($parent, 'PHPUnit\\Framework\\')) {
-            return true;
-        }
-        if (isset($seen[$parent])) {
-            return false;
-        }
-        $seen[$parent] = true;
-        $parentFile = find_php_class_definition_file($repoRoot, $parent);
-        if ($parentFile === null) {
-            return false;
-        }
-        $parentContents = file_get_contents($parentFile);
-        if ($parentContents === false) {
-            return false;
-        }
-        $parent = resolve_class_extends_parent($parentContents, $parent);
-    }
-
-    return false;
-}
-
-function phpunit_framework_declares_lifecycle_hook(string $methodName): bool
-{
-    ensure_phpunit_test_bootstrap(dirname(__DIR__));
-    $framework = new ReflectionClass(\PHPUnit\Framework\TestCase::class);
-
-    return $framework->hasMethod($methodName);
-}
-
 function reflection_class_from_file(string $absPath, string $className): ?ReflectionClass
 {
     static $loaded = [];
@@ -215,17 +133,6 @@ function reflection_class_from_file(string $absPath, string $className): ?Reflec
     }
 }
 
-function class_extends_phpunit_framework(ReflectionClass $ref): bool
-{
-    for ($cur = $ref; $cur !== false; $cur = $cur->getParentClass()) {
-        if (class_name_in_phpunit_framework($cur->getName())) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
 function ensure_phpunit_test_bootstrap(string $repoRoot): void
 {
     static $done = false;
@@ -243,24 +150,31 @@ function phpunit_lifecycle_hook_overrides_framework(
     string $repoRoot,
     string $absPath,
     string $className,
-    string $methodName,
-    string $contents,
-    string $ownerClassShort
+    string $methodName
 ): bool {
-    if (!is_phpunit_lifecycle_hook($methodName) || !phpunit_framework_declares_lifecycle_hook($methodName)) {
+    if (!is_phpunit_lifecycle_hook($methodName)) {
         return false;
     }
     ensure_phpunit_test_bootstrap($repoRoot);
     $ref = reflection_class_from_file($absPath, $className);
-    if ($ref !== null && $ref->hasMethod($methodName) && class_extends_phpunit_framework($ref)) {
-        for ($parent = $ref->getParentClass(); $parent !== false; $parent = $parent->getParentClass()) {
-            if (class_name_in_phpunit_framework($parent->getName()) && $parent->hasMethod($methodName)) {
-                return true;
-            }
+    if ($ref === null || !$ref->hasMethod($methodName)) {
+        return false;
+    }
+    $method = $ref->getMethod($methodName);
+    if ($method->getDeclaringClass()->getName() !== $ref->getName()) {
+        return false;
+    }
+    for ($parent = $ref->getParentClass(); $parent !== false; $parent = $parent->getParentClass()) {
+        if (!$parent->hasMethod($methodName)) {
+            continue;
+        }
+        $declaring = $parent->getMethod($methodName)->getDeclaringClass()->getName();
+        if (str_starts_with($declaring, 'PHPUnit\\Framework\\')) {
+            return true;
         }
     }
 
-    return class_inherits_phpunit_testcase($repoRoot, $contents, $ownerClassShort);
+    return false;
 }
 
 /**
@@ -285,14 +199,7 @@ function camel_case_method_allowed(
     if ($absPath !== null && $absPath !== '' && is_readable($absPath)) {
         $reflectClass = $ownerFqn ?? $ownerClass;
 
-        return phpunit_lifecycle_hook_overrides_framework(
-            $repoRoot,
-            $absPath,
-            $reflectClass,
-            $token,
-            $contents,
-            $ownerClass
-        );
+        return phpunit_lifecycle_hook_overrides_framework($repoRoot, $absPath, $reflectClass, $token);
     }
 
     return false;
@@ -579,6 +486,11 @@ if ($demo === '--demo-allowlist-site') {
     $hookSnippet = "<?php\nclass Not_A_Test_Fixture {\n    public function setUp(): void {}\n}\n";
     if (scan_camel_case_contents($repoRoot, $okRel, $hookSnippet, $demoRules) === []) {
         fwrite(STDERR, "check-rename-residue: allowlist demo should reject PHPUnit hook name without PHPUnit parent.\n");
+        exit(1);
+    }
+    $unloadableHookSnippet = "<?php\nclass Unloadable_Hook_Demo extends PHPUnit_Smarty {\n    public function setUp(): void {}\n}\n";
+    if (scan_camel_case_contents($repoRoot, $okRel, $unloadableHookSnippet, $demoRules, null) === []) {
+        fwrite(STDERR, "check-rename-residue: allowlist demo should reject unloadable class with hook and no allowlist row.\n");
         exit(1);
     }
     fwrite(STDOUT, "check-rename-residue: demo site-scoped allowlist accepted listed site and rejected other file/class/hook.\n");
