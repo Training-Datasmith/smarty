@@ -1,33 +1,15 @@
-# Upstream / third-party identifiers allowed in repo-owned scan (exact token or Class::method).
-PHPUnit
-TestCase
-setUp
-tearDown
-setUpBeforeClass
-tearDownAfterClass
-assert
-expectException
-markTestSkipped
-PDO
-PDOException
-Exception
-DateTime
-ReflectionClass
-FilesystemIterator
-RecursiveDirectoryIterator
-RecursiveIteratorIterator
-SplFileInfo
-PHPUnit_Smarty::setUp
-PHPUnit_Smarty::tearDown
-Smarty_Resource_AmbiguousPlugin::setSegment
-Smarty_Resource_Db3::getCompiledFilepath
-Chainable_Collection_Fixture::toJson
-Chainable_Collection_Fixture::toArray
-toJson
-toArray
-getName
-getNext
-setSegment
-getCompiledFilepath
-isNull
-isSet
+# Site-scoped camelCase exceptions: <repo-relative-path> <Class>::<method>
+# Path may end with * to match any file under that prefix. Class may be *.
+
+# PHPUnit lifecycle methods on test suite classes
+tests/* *::setUp
+tests/* *::tearDown
+tests/* *::setUpBeforeClass
+tests/* *::tearDownAfterClass
+
+# Template-visible method on chain fixture (same file as class definition)
+tests/UnitTests/TemplateSource/TagTests/FunctionObjectChain/Function_Object_Chain_Test.php Chainable_Collection_Fixture::toJson
+
+# Isset/empty template fixtures: Smarty assigns and fixture props use template keys isSet/isNull
+tests/UnitTests/TemplateSource/ValueTests/PHPfunctions/Php_Function_Test.php *::isSet
+tests/UnitTests/TemplateSource/ValueTests/PHPfunctions/Php_Function_Test.php Test_Isset::isNull

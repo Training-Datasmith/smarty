@@ -60,6 +60,7 @@ php scripts/check-rename-residue.php --demo-inject
 php scripts/check-rename-residue.php --demo-class-mismatch
 php scripts/check-rename-residue.php --demo-grammar-old
 php scripts/check-rename-residue.php --demo-camel
+php scripts/check-rename-residue.php --demo-allowlist-site
 
 php scripts/check-rename-residue.php
 
